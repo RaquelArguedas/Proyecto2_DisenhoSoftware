@@ -28,7 +28,6 @@ fechaActividad date,
 horaInicio time,
 horaFin time, 
 recordatorio int, 
--- responsables 
 medio int, 
 enlace varchar(100),
 estado int, foreign key (estado) references EstadoActividad (idEstadoA),
@@ -94,6 +93,12 @@ numeroOficina int,
 fotografia longblob,
 idAutoridad int,foreign key (idAutoridad) references Autoridad (idAutoridad),
 idEstado int,foreign key (idEstado) references EstadoCuenta (idEstadoC)
+);
+
+create table ResponsableXActividad
+(idResponsableXActividad int primary key not null auto_increment,
+idResponsable int,foreign key (idResponsable) references Profesor (idProfesor),
+idActividad int,foreign key (idActividad) references Actividad (idActividad)
 );
 
 create table EquipoGuia
