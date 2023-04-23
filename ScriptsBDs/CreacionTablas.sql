@@ -5,8 +5,9 @@ Diseño de Software
 Ericka Solano Fernández 
 I Semestre 2023*/
 
-#Creación de tablas 
+#Creación de tablas y bd
 
+CREATE SCHEMA `orientatec` ;
 use orientatec;
 
 create table TipoActividad
