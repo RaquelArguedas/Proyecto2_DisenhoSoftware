@@ -1,8 +1,7 @@
 import React, { Fragment, useState, useRef } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Navbar } from '../../navegacion/Navbar';
 import { BarraLateral } from '../../navegacion/BarraLateral';
-import ListaActividades from './verActividades/ListaActividades';
+import { Actividad } from './verActividades/Actividad'
 
 export function VerActividades() {
 
@@ -11,14 +10,10 @@ export function VerActividades() {
       <div className='container'>
         <Navbar />
 
-        {//Barra lateral
-        }
         <div class="row">
           <div class="col-sm-3">
             <BarraLateral />
           </div>
-          {//Radio button donde se mostraran las opccion ver todas las actividades, ver proximas actividades, actividades realizadas y actividades canceladas
-          }
 
           <div class="col-lg m-3 p-3 bg-light">
             <div className="row mb-4">
@@ -66,18 +61,19 @@ export function VerActividades() {
               </div>
             </div>
 
-            {
-              //Lista de Actividades
-            }
-
-            <ListaActividades />
+            {/* Lista de actividades */}
+            <div class="overflow-auto" id="listaActividades">
+                <Actividad/>
+                <Actividad/>
+                <Actividad/>
+                <Actividad/>
+                <Actividad/>
+                <Actividad/>
+            </div>
 
           </div>
 
         </div>
-
-
-
 
       </div>
     </Fragment>
