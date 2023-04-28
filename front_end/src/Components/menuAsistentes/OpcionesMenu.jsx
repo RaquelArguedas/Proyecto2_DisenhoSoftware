@@ -1,6 +1,11 @@
 import React, {Fragment} from 'react'
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function OpcionesMenu() {
+  let navigate = useNavigate();
+
+  const gotoVerPlanTrabajo = () => { navigate('/verplan', {}); }
+
   return (
     <Fragment>
        <div className="m-3 p-3 bg-light">
@@ -16,7 +21,7 @@ export default function OpcionesMenu() {
               </button>
             </div>
             <div class="col">
-              <button className="btn btn-success h-100 w-100">
+              <button onClick={gotoVerPlanTrabajo} className="btn btn-success h-100 w-100">
                 Ver plan de trabajo
               </button>
             </div>

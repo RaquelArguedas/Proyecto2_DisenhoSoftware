@@ -9,9 +9,7 @@ export function MenuAsistente() {
   return (
     <Fragment>
         <div className='container'>
-            <Router>
-              <Navbar/>
-            </Router>
+            <Navbar/>
 
             <div class="row">
               <div class="col-sm-3">
