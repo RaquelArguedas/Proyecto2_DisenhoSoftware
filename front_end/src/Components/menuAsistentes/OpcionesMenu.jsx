@@ -8,6 +8,8 @@ export default function OpcionesMenu() {
   const gotoInformacionEstudiantes = () => { navigate('/infoestudiantes', {}); }
   const gotoInformacionProfesores = () => { navigate('/infoprofesores', {}); }
   const gotoInformacionEquipo = () => { navigate('/infoequipo', {}); }
+  const gotoAsignarCoordinador = () => { navigate('/asignarcoordinador', {}); }
+  const gotoDarBajaProfesor = () => { navigate('/darbajaprofesor', {}); }
 
   return (
     <Fragment>
@@ -36,12 +38,12 @@ export default function OpcionesMenu() {
               </button>
             </div>
             <div class="col">
-              <button className="btn btn-success h-100 w-100">
+              <button onClick={gotoAsignarCoordinador} className="btn btn-success h-100 w-100">
               Definir al coordinador del equipo
               </button>
             </div>
             <div class="col">
-              <button className="btn btn-success h-100 w-100">
+              <button onClick={gotoDarBajaProfesor} className="btn btn-success h-100 w-100">
                 Dar de baja a un profesor
               </button>
             </div>

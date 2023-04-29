@@ -19,7 +19,7 @@ export function ConsultarEquipo() {
                         <div className="my-3">
                             <h5>Coordinador</h5>
 
-                            <h6>Nombre Apellido Apellido</h6>
+                            <h6 id='nombreCoordinador'>Nombre Apellido Apellido</h6>
 
                             <p id="sedeCoordinador" class="card-text mb-2">
                                 <Icon icon="mdi:office-building" width="24" height="24" />
@@ -36,7 +36,7 @@ export function ConsultarEquipo() {
                                 correo@mail.com
                             </p>
 
-                            <p id="telefCoordinador" class="card-text mb-2">
+                            <p id="oficinaCoordinador" class="card-text mb-2">
                                 <Icon icon="material-symbols:location-on" width="24" height="24" />
                                 A3-01
                             </p>
