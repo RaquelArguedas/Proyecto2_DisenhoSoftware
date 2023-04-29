@@ -5,18 +5,21 @@ export default function OpcionesMenu() {
   let navigate = useNavigate();
 
   const gotoVerPlanTrabajo = () => { navigate('/verplan', {}); }
+  const gotoInformacionEstudiantes = () => { navigate('/infoestudiantes', {}); }
+  const gotoInformacionProfesores = () => { navigate('/infoprofesores', {}); }
+  const gotoInformacionEquipo = () => { navigate('/infoequipo', {}); }
 
   return (
     <Fragment>
        <div className="m-3 p-3 bg-light">
        <div class="row m-5">
             <div class="col">
-              <button className="btn btn-success h-100 w-100">
+              <button onClick={gotoInformacionProfesores} className="btn btn-success h-100 w-100">
                 Consultar profesores
               </button>
             </div>
             <div class="col">
-              <button className="btn btn-success h-100 w-100">
+              <button onClick={gotoInformacionEstudiantes} className="btn btn-success h-100 w-100">
                 Consultar estudiantes
               </button>
             </div>
@@ -45,7 +48,7 @@ export default function OpcionesMenu() {
         </div>
         <div class="row m-5">
             <div class="col">
-              <button className="btn btn-success h-100 w-100">
+              <button onClick={gotoInformacionEquipo} className="btn btn-success h-100 w-100">
                 Consultar equipo guía
               </button>
             </div>

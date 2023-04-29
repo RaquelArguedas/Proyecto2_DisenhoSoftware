@@ -3,7 +3,6 @@ import { Icon } from '@iconify/react';
 import { Navbar } from '../../../navegacion/Navbar';
 import { BarraLateral } from '../../../navegacion/BarraLateral';
 import { Comentario } from '../../../comentarios/Comentario';
-// @ts-ignore
 import { FormComentario } from '../../../comentarios/FormComentario';
 
 export function DetalleActividad() {

@@ -4,7 +4,7 @@ import { BarraLateral } from '../../navegacion/BarraLateral'
 import { FilaProfesor } from './columnasTablas/FilaProfesor'
 import { Icon } from '@iconify/react';
 
-export function ConsultarProfesores() {
+export function ConsultarEquipo() {
     return (
         <Fragment>
             <div className="container">
@@ -14,15 +14,36 @@ export function ConsultarProfesores() {
                         <BarraLateral />
                     </div>
                     <div class="col-lg m-3 p-3 bg-light">
-                        <h4>Información de profesores</h4>
+                        <h4>Composición del Equipo guía</h4>
 
-                        <div className="input-group w-50 my-3">
-                            <span className="input-group-text" >Código</span>
-                            <input id="txtCarnet" type="text" className="form-control" />
-                            <button className="btn btn-primary"> <Icon icon="ic:baseline-search" width="24" height="24" /> Buscar </button>
+                        <div className="my-3">
+                            <h5>Coordinador</h5>
+
+                            <h6>Nombre Apellido Apellido</h6>
+
+                            <p id="sedeCoordinador" class="card-text mb-2">
+                                <Icon icon="mdi:office-building" width="24" height="24" />
+                                Campus Central Cartatgo
+                            </p>
+
+                            <p id="telefCoordinador" class="card-text mb-2">
+                                <Icon icon="mdi:telephone-outline" width="24" height="24" />
+                                8888-8888 (0000)
+                            </p>
+
+                            <p id="correoCoordinador" class="card-text mb-2">
+                                <Icon icon="ic:baseline-email" width="24" height="24" />
+                                correo@mail.com
+                            </p>
+
+                            <p id="telefCoordinador" class="card-text mb-2">
+                                <Icon icon="material-symbols:location-on" width="24" height="24" />
+                                A3-01
+                            </p>
                         </div>
-                        {/* Tabla de profesores */}
+                        {/* Tabla de miembros */}
                         <div class="overflow-auto" id="tablaEstudiantes">
+                            <h5 className="my-2">Miembros</h5>
                             <table class="table">
                                 <thead>
                                     <tr className="table-primary">
