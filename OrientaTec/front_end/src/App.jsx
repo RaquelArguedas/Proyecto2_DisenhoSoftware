@@ -10,7 +10,9 @@ import { ConsultarProfesores } from "./Components/menuAsistentes/AsistenteOpcion
 import  { ConsultarEquipo } from "./Components/menuAsistentes/AsistenteOpciones/ConsultarEquipo"
 import { AsignarCoordinador } from "./Components/menuAsistentes/AsistenteOpciones/AsignarCoordinador";
 import { DarBajaProfesor } from "./Components/menuAsistentes/AsistenteOpciones/DarBajaProfesor";
-
+import { AgregarProfesor } from "./Components/menuAsistentes/AsistenteOpciones/AgregarProfesor";
+import { ModificarProfesor} from "./Components/menuAsistentes/AsistenteOpciones/ModificarProfesor";
+import { Configuracion } from "./Components/navegacion/Configuracion";
 export function App() {
     return (
     <Router>
@@ -24,6 +26,9 @@ export function App() {
                 <Route exact path = "/infoequipo" element = {<ConsultarEquipo/>}/>
                 <Route exact path="/asignarcoordinador" element={<AsignarCoordinador/>}/>
                 <Route exact path="/darbajaprofesor" element={<DarBajaProfesor/>}/>
+                <Route exact path="/agregarprofesor" element={<AgregarProfesor/>}/>
+                <Route exact path="/modificarProfesor" element={<ModificarProfesor/>}/>
+                <Route exact path="/configuracionAsistente" element={<Configuracion/>}/>
 
             </Routes>
         </div>

@@ -10,7 +10,8 @@ export default function OpcionesMenu() {
   const gotoInformacionEquipo = () => { navigate('/infoequipo', {}); }
   const gotoAsignarCoordinador = () => { navigate('/asignarcoordinador', {}); }
   const gotoDarBajaProfesor = () => { navigate('/darbajaprofesor', {}); }
-
+  const gotoAgregarProfesor = () => { navigate('/agregarprofesor', {}); }
+  const gotoModificarProfesor = () => { navigate('/modificarProfesor', {}); }
   return (
     <Fragment>
        <div className="m-3 p-3 bg-light">
@@ -33,7 +34,7 @@ export default function OpcionesMenu() {
         </div>
         <div class="row m-5">
             <div class="col">
-              <button className="btn btn-success h-100 w-100">
+              <button onClick={gotoAgregarProfesor} className="btn btn-success h-100 w-100">
                 Agregar un nuevo profesor
               </button>
             </div>
@@ -55,7 +56,7 @@ export default function OpcionesMenu() {
               </button>
             </div>
             <div class="col">
-              <button className="btn btn-success h-100 w-100">
+              <button onClick={gotoModificarProfesor} className="btn btn-success h-100 w-100">
                 Modificar datos de un profesor
               </button>
             </div>

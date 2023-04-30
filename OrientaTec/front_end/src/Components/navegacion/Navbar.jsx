@@ -1,5 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+
 export  function Navbar() {
   return (
     <div>
@@ -15,7 +17,7 @@ export  function Navbar() {
                 <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div className="navbar-nav">
                         <Link className="nav-link" to='/' >Inicio</Link>
-                        <Link className="nav-link" to = '/configuracionAsistente'>Configuracion</Link>
+                        <Link className="nav-link" to = '/configuracionAsistente' >Configuracion</Link>
                         <Link className="nav-link" to = '/ayudaAsistente'>Ayuda</Link>
                         <Link className="nav-link" to = '/iniciarSesion'>Cerrar sesion</Link>
                     </div>
