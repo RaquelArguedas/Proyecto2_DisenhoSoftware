@@ -137,7 +137,7 @@ idActividad int,foreign key (idActividad) references Actividad (idActividad),
 autor int, 
 fechaHora datetime, 
 contenido varchar(200),
-idComentarioPadre int
+idComentarioPadre int -- si es 0, es un comentario nuevo, no una respuesta
 );
 
 create table Recordatorio

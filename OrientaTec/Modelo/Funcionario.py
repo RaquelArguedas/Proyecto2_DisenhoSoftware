@@ -12,3 +12,4 @@ class Funcionario:
         self.correoElectronico = correoElectronico
         self.fotografia = fotografia #Acá se va a guardar el id de MongoDB
         self.numeroOficina = numeroOficina
+        
