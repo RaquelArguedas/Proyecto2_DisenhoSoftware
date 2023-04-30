@@ -81,8 +81,8 @@ export  function Configuracion() {
                                         <label htmlFor="labelDisableControl" class="form-label"></label>
                                     </div>
                                     <div class="form-floating mb-3">
-                                        <input type="email" class="form-control" 
-                                        id="floatingInputDisabled" placeholder="name@example.com"
+                                        <input type="text" class="form-control" 
+                                        id="floatingInputDisabled"
                                         value={codigo} onChange={handleCodigoChange}  disabled />
                                         <label for="floatingInputDisabled">Código</label>
                                     </div>
@@ -90,24 +90,24 @@ export  function Configuracion() {
                                         <label htmlFor="formGroupInputName" class="form-label">Nombre</label>
                                         <input type="text" className="form-control" id="nameInput"
                                                 placeholder="Ingrese su nombre" value={name} onChange={handleNameChange}
-                                                />
+                                                disabled/>
                                     </div>
                                     <div class="mb-3">
                                         <label htmlFor="formGroupInputApellido1" class="form-label">Primer Apellido</label>
                                         <input type="text" class="form-control" id="formGroupInputApellido1" placeholder="Ingrese su primer apellido"
-                                        value={apellido1} onChange={handleApellido1Change}/>
+                                        value={apellido1} onChange={handleApellido1Change} disabled/>
                                     </div>
                                     <div class="mb-3">
                                         <label htmlFor="formGroupInputApellido2" class="form-label">Segundo Apellido</label>
                                         <input type="text" className="form-control" id="nameInput"
                                                 placeholder="Ingrese su segundo apellido" value={apellido2} onChange={handleApellido2Change}
-                                                />
+                                                disabled/>
                                     </div>
                                     <div class="mb-3">
                                         <label htmlFor="formGroupInputCedula" class="form-label">Cedula</label>
                                         <input type="text" className="form-control" id="nameInput"
                                                 placeholder="Ingrese su cedula" value={cedula} onChange={handleCedulaChange}
-                                                />
+                                                disabled/>
                                     </div>
                                     <div class="mb-3">
                                         <label htmlFor="formGroupInputNumeroCelular" class="form-label">Número de celular</label>
