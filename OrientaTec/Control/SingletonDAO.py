@@ -162,35 +162,21 @@ class SingletonDAO(metaclass=SingletonMeta):
         return self.planesTrabajo
 
     # +getConformacionEquipoGuía():Collection<Profesores>
-    def getConformacionEquipoGuía(self):
-        self.connectServer()
+    def getConformacionEquipoGuia(self):
+        return self.equiposGuia[-1].listaProfesores 
+    
+    # +agregarProfesor(profesor: Profesor): boolean
+    def agregarProfesor(self, profesor, idEquipoGuia):
 
-        try:
-            self.cursor.execute("SELECT * from EquipoGuia")
+        args = [profesor.codigo, idEquipoGuia]
 
-            salida = self.cursor.fetchall()
-
-            ids = []
-
-            for row in salida:
-                ids += [row[0]]
-            
-            #encuentra el ultimo id, osea el equipo mas actual
-            mayor = ids[0]
-            pos = 0
-            for i in range (len(ids)):
-                if (ids[i]>mayor):
-                    mayor = ids[i]
-                    pos = i
-            
-            return self.equiposGuia[pos]
-
-
-            
-        except Exception as ex:
-            print(ex)
-
-        self.closeConnection()
+        #se agrega a la bd
+        id = self.executeStoredProcedure('createprofesoresxequipoguia', args)
+        if(len(id)==1):
+            #se agrega al equipo guia el profesor
+            self.equiposGuia[idEquipoGuia-1].agregarProfesor(profesor)
+        
+        return id
     
     # +verActividad(id): Actividad
     def verActividad(self, id):
@@ -199,6 +185,22 @@ class SingletonDAO(metaclass=SingletonMeta):
                 return self.actividades[i]
         return None 
     
+    #devuelve los comentario de una actividad
+    def verComentariosActividad(self, idActividad):
+        lista = []
+        for i in range (len(self.comentarios)):
+            if (self.comentarios[i].idActividad == idActividad):
+                lista += self.comentarios[i]
+        return lista 
+
+    #devuelve la evidencia de una actividad
+    def verEvidenciasActividad(self, idActividad):
+        lista = []
+        for i in range (len(self.evidencias)):
+            if (self.evidencias[i].idActividad == idActividad):
+                lista += self.evidencias[i]
+        return lista
+
     # +agregarActividad(actividad: Actividad): boolean
     def agregarActividad(self, actividad, idPlan):
         
@@ -212,6 +214,22 @@ class SingletonDAO(metaclass=SingletonMeta):
             for plan in self.planesTrabajo:
                 if (plan.idPlan == idPlan):
                     plan.agregarActividad(actividad)
+        
+        return id
+    
+    def crearPlanTrabajo(self, anno):
+        
+        args = [anno]
+
+        #se agrega a la bd
+        id = self.executeStoredProcedure('createPlanTrabajo', args)
+        
+        if(len(id)==1):
+            #se obtiene el id y se le agrega
+            salida = PlanTrabajo(id[0], anno, []) 
+
+            #se agrega a la lista de planes
+            self.planesTrabajo += [salida]
         
         return id
 
@@ -302,7 +320,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.observaciones += [objeto]
             print(objeto, ", len: ",len(self.observaciones))
         else:
-            print(id)
+            return id
 
     # +publicarActividad(data): boolean
     def publicarActividad(self, idActividad):
@@ -338,8 +356,8 @@ class SingletonDAO(metaclass=SingletonMeta):
         
         return id
 
-    # +agregarProfesor(profesor: Profesor): boolean
-    def agregarProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular,
+
+    def crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular,
                         correoElectronico, numeroOficina,fotografia,autoridad, estado):
 
         args = [cedula, nombre, apellido1, 
