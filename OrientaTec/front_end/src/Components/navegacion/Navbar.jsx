@@ -6,7 +6,7 @@ export  function Navbar() {
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
             <div className="container-fluid">
-                <Link to='/asistente'>
+                <Link to='/'>
                   <img src = './orientatec-logo.jpg' width='100'/>
                 </Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">

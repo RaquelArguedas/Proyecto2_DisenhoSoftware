@@ -41,6 +41,8 @@ export function App() {
                 <Route exact path = "/menuProfesor" element = {<MenuProfesor/>}/>
                 <Route exact path = "/consultarestudiantesp" element = {<ConsultarEstudiantesP/>}/>
                 <Route exact path = "/modificarEstudiante" element = {<ModificarEstudiante/>}/>
+
+                <Route exact path = "/menuCoordinador" element = {<MenuProfesorC/>}/>
                 
                 {/*<Route exact path = "/" element = {<MenuProfesorC/>}/>*/} 
 

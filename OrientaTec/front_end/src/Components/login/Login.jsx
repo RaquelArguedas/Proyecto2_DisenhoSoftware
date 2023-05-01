@@ -1,11 +1,21 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function Login() {
     let navigate = useNavigate();
+    let usuarioVista;
+
+    const refTxtUsuario = useRef()
 
     const gotoMenu = () => {
-        navigate('/asistente', {});
+        const usuario = refTxtUsuario.current.value;
+
+        if (usuario === '1'){ usuarioVista = '/menuAsistente'; }
+        else if (usuario === '2'){ usuarioVista = '/menuProfesor'; }
+        else if (usuario === '3'){ usuarioVista = '/menuCoordinador'; }
+        else{ return }
+
+        navigate(usuarioVista, {});
     }
 
     const gotoRecuperar = () => {
@@ -23,7 +33,7 @@ export function Login() {
 
                         <div className="input-group w-50 my-3 mx-auto">
                             <span className="input-group-text w-25" >Usuario</span>
-                            <input id="txtUsuario" type="text" className="form-control" />
+                            <input ref={refTxtUsuario} id="txtUsuario" type="text" className="form-control" />
                         </div>
 
                         <div className="input-group w-50 my-3 mx-auto">
