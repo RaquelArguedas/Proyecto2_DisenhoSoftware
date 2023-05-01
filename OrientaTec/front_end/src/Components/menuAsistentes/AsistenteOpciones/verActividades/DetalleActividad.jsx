@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react'
+import { useLocation } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import { Navbar } from '../../../navegacion/Navbar';
 import { BarraLateral } from '../../../navegacion/BarraLateral';
 import { Comentario } from '../../../comentarios/Comentario';
 import { FormComentario } from '../../../comentarios/FormComentario';
 
-export function DetalleActividad() {
+export function DetalleActividad({ comentarios }) {
     return (
         <Fragment>
             <div className='container'>
@@ -65,19 +66,24 @@ export function DetalleActividad() {
                         </div>
 
                         {/*Esta parte aparece cuando se llama de profesores, pero no en asistente*/}
-                        <hr/>
-                        <div className="container bg-light">
-                            <h4>Comentarios</h4>
-                        </div>
-                        
-                        <FormComentario/>
 
-                        <div className="overflow-auto" id="listaComentarios">
-                            <Comentario/>
-                            <Comentario/>
-                            <Comentario/>
-                            <Comentario/>
-                        </div>
+                        {comentarios === true &&
+                            <div id="seccionComentarios">
+                                <hr />
+                                <div className="container bg-light">
+                                    <h4>Comentarios</h4>
+                                </div>
+
+                                <FormComentario />
+
+                                <div className="overflow-auto" id="listaComentarios">
+                                    <Comentario />
+                                    <Comentario />
+                                    <Comentario />
+                                    <Comentario />
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
