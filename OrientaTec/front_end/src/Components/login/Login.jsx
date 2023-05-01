@@ -8,6 +8,10 @@ export function Login() {
         navigate('/asistente', {});
     }
 
+    const gotoRecuperar = () => {
+        navigate('/recuperar', {});
+    }
+
     return (
         <Fragment>
             <div style={{marginTop: "10%"}}>
@@ -19,12 +23,12 @@ export function Login() {
 
                         <div className="input-group w-50 my-3 mx-auto">
                             <span className="input-group-text w-25" >Usuario</span>
-                            <input id="txtCarnet" type="text" className="form-control" />
+                            <input id="txtUsuario" type="text" className="form-control" />
                         </div>
 
                         <div className="input-group w-50 my-3 mx-auto">
                             <span className="input-group-text w-25" >Contraseña</span>
-                            <input id="txtCarnet" type="password" className="form-control" />
+                            <input id="txtContrasena" type="password" className="form-control" />
                         </div>
 
                         <div className="row w-50 mx-auto">
@@ -32,7 +36,7 @@ export function Login() {
                                 <button onClick={gotoMenu} className="btn btn-primary">Ingresar</button>
                             </div>
                             <div className="col">
-                                <button className="btn btn-outline-secondary">Olvidé mi contraseña</button>
+                                <button onClick={gotoRecuperar} className="btn btn-outline-secondary">Olvidé mi contraseña</button>
                             </div>
                         </div>
                     </div>
