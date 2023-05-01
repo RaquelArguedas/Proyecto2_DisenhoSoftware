@@ -1,9 +1,12 @@
-import React, { Fragment, useState, useRef } from 'react'
+import React, { Fragment } from 'react'
+import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar';
 import { BarraLateral } from '../../navegacion/BarraLateral';
 import { Actividad } from './verActividades/Actividad'
 
 export function VerActividades() {
+
+  const { state } = useLocation();
 
   return (
     <Fragment>
@@ -63,12 +66,12 @@ export function VerActividades() {
 
             {/* Lista de actividades */}
             <div class="overflow-auto" id="listaActividades">
-                <Actividad/>
-                <Actividad/>
-                <Actividad/>
-                <Actividad/>
-                <Actividad/>
-                <Actividad/>
+                <Actividad comentarios = {state.comentarios} />
+                <Actividad comentarios = {state.comentarios}/>
+                <Actividad comentarios = {state.comentarios}/>
+                <Actividad comentarios = {state.comentarios}/>
+                <Actividad comentarios = {state.comentarios}/>
+                <Actividad comentarios = {state.comentarios}/>
             </div>
 
           </div>

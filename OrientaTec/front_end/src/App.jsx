@@ -19,6 +19,10 @@ import { MenuProfesor } from "./Components/menuProfesor/MenuProfesor";
 import { ConsultarEstudiantesP } from "./Components/menuProfesor/ProfesorOpciones/ConsultarEstudiantesP";
 import { ModificarEstudiante } from "./Components/menuProfesor/ProfesorOpciones/ModificarEstudiante";
 import { MenuProfesorC } from "./Components/menuPC/menuProfesorC";
+import { ModificarActividad } from "./Components/menuPC/CoordinadorOpciones/ModificarActividad";
+import { CrearActividad } from "./Components/menuPC/CoordinadorOpciones/CrearActividad";
+import { DefinirPlan } from "./Components/menuPC/CoordinadorOpciones/DefinirPlan";
+
 export function App() {
     return (
     <Router>
@@ -28,7 +32,7 @@ export function App() {
                 <Route exact path= "/recuperar" element = {<Recuperar/>} />
                 <Route exact path = "/menuAsistente" element = {<MenuAsistente/>}/>
                 <Route exact path = "/verplan" element = {<VerActividades/>}/>
-                <Route exact path = "/verplan/detalle" element = {<DetalleActividad comentarios={false}/>}/>
+                <Route exact path = "/verplan/detalle" element = {<DetalleActividad/>}/>
                 <Route exact path = "/infoestudiantes" element = {<ConsultarEstudiantes/>}/>
                 <Route exact path = "/infoprofesores" element = {<ConsultarProfesores/>}/>
                 <Route exact path = "/infoequipo" element = {<ConsultarEquipo/>}/>
@@ -43,9 +47,9 @@ export function App() {
                 <Route exact path = "/modificarEstudiante" element = {<ModificarEstudiante/>}/>
 
                 <Route exact path = "/menuCoordinador" element = {<MenuProfesorC/>}/>
-                
-                {/*<Route exact path = "/" element = {<MenuProfesorC/>}/>*/} 
-
+                <Route exact path = "/modificarActividad" element = {<ModificarActividad/>}/>
+                <Route exact path = "/crearActividad" element = {<CrearActividad/>}/>
+                <Route exact path = "/definirPlan" element = {<DefinirPlan/>}/>
             </Routes>
         </div>
     </Router>

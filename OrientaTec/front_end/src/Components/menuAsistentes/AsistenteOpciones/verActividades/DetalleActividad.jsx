@@ -6,7 +6,9 @@ import { BarraLateral } from '../../../navegacion/BarraLateral';
 import { Comentario } from '../../../comentarios/Comentario';
 import { FormComentario } from '../../../comentarios/FormComentario';
 
-export function DetalleActividad({ comentarios }) {
+export function DetalleActividad() {
+    const { state } = useLocation();
+
     return (
         <Fragment>
             <div className='container'>
@@ -67,7 +69,7 @@ export function DetalleActividad({ comentarios }) {
 
                         {/*Esta parte aparece cuando se llama de profesores, pero no en asistente*/}
 
-                        {comentarios === true &&
+                        {state.comentarios === true &&
                             <div id="seccionComentarios">
                                 <hr />
                                 <div className="container bg-light">

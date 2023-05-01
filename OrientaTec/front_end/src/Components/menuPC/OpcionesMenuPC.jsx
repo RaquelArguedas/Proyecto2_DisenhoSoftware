@@ -4,11 +4,13 @@ import { useNavigate } from "react-router-dom";
 export function OpcionesMenuPC() {
   let navigate = useNavigate();
 
-  const gotoVerPlanTrabajo = () => {navigate("/verplan", {});};
+  const gotoVerPlanTrabajo = () => {navigate("/verplan", {state:{comentarios: true}});};
   const gotoInformacionEstudiantes = () => {navigate("/consultarestudiantesp", {});};
   const gotoInformacionEquipo = () => {navigate("/infoequipo", {});};
   const gotoModificarEstudiante = () => {navigate("/modificarEstudiante", {});};
-  const gotoModificarProfesor = () => {navigate("/modificarProfesor", {});};
+  const gotoModificarActividad = () => {navigate("/modificarActividad", {});};
+  const gotoCrearActividad = () => {navigate("/crearActividad", {});};
+  const gotoDefinirPlan = () => {navigate("/definirPlan", {});};
 
   return (
     <Fragment>
@@ -36,7 +38,7 @@ export function OpcionesMenuPC() {
                 </div>
                 <div class="col">
                     <button
-                    onClick={gotoVerPlanTrabajo}
+                    onClick={gotoModificarActividad}
                     className="btn btn-success h-100 w-100"
                     >
                     Modificar actividad
@@ -46,7 +48,7 @@ export function OpcionesMenuPC() {
             <div class="row m-5">
                 <div class="col">
                     <button
-                    onClick={gotoInformacionEquipo}
+                    onClick={gotoCrearActividad}
                     className="btn btn-success h-100 w-100"
                     >
                     Definir nueva actividad
@@ -55,7 +57,7 @@ export function OpcionesMenuPC() {
                 
                 <div class="col">
                     <button
-                    onClick={gotoVerPlanTrabajo}
+                    onClick={gotoDefinirPlan}
                     className="btn btn-success h-100 w-100"
                     >
                     Definir plan de trabajo
@@ -88,7 +90,6 @@ export function OpcionesMenuPC() {
             <div class="row m-5">
                 <div class="col">
                     <button
-                    onClick={gotoInformacionEquipo}
                     className="btn btn-success h-100 w-100"
                     >
                     Generar Exel de datos del campus perteneciente
@@ -96,7 +97,6 @@ export function OpcionesMenuPC() {
                 </div>
                 <div class="col">
                     <button
-                    onClick={gotoModificarProfesor}
                     className="btn btn-success h-100 w-100"
                     >
                     Generar Exel de datos de todos los campus

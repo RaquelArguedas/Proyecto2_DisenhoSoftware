@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function OpcionesMenu() {
   let navigate = useNavigate();
 
-  const gotoVerPlanTrabajo = () => { navigate('/verplan', {}); }
+  const gotoVerPlanTrabajo = () => { navigate('/verplan', {state:{comentarios: false}}); }
   const gotoInformacionEstudiantes = () => { navigate('/infoestudiantes', {}); }
   const gotoInformacionProfesores = () => { navigate('/infoprofesores', {}); }
   const gotoInformacionEquipo = () => { navigate('/infoequipo', {}); }

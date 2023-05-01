@@ -1,11 +1,14 @@
 import React, { Fragment } from 'react'
+import { useLocation } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import { useNavigate } from "react-router-dom";
 
 export function Actividad() {
     let navigate = useNavigate();
 
-    const gotoDetalleActividad = () => { navigate('/verplan/detalle', {}); }
+    const { state } = useLocation();
+
+    const gotoDetalleActividad = () => { navigate('/verplan/detalle', {state:{comentarios: state.comentarios}}); }
 
     return (
         <Fragment>
