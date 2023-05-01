@@ -13,12 +13,16 @@ import { DarBajaProfesor } from "./Components/menuAsistentes/AsistenteOpciones/D
 import { AgregarProfesor } from "./Components/menuAsistentes/AsistenteOpciones/AgregarProfesor";
 import { ModificarProfesor} from "./Components/menuAsistentes/AsistenteOpciones/ModificarProfesor";
 import { Configuracion } from "./Components/navegacion/Configuracion";
+import { MenuProfesor } from "./Components/menuProfesor/MenuProfesor";
+import { ConsultarEstudiantesP } from "./Components/menuProfesor/ProfesorOpciones/ConsultarEstudiantesP";
+import { ModificarEstudiante } from "./Components/menuProfesor/ProfesorOpciones/ModificarEstudiante";
+import { MenuProfesorC } from "./Components/menuPC/menuProfesorC";
 export function App() {
     return (
     <Router>
         <div className="App">
             <Routes>
-                <Route exact path = "/" element = {<MenuAsistente/>}/>
+                <Route exact path = "/menuAsistente" element = {<MenuAsistente/>}/>
                 <Route exact path = "/verplan" element = {<VerActividades/>}/>
                 <Route exact path = "/verplan/detalle" element = {<DetalleActividad/>}/>
                 <Route exact path = "/infoestudiantes" element = {<ConsultarEstudiantes/>}/>
@@ -29,6 +33,12 @@ export function App() {
                 <Route exact path="/agregarprofesor" element={<AgregarProfesor/>}/>
                 <Route exact path="/modificarProfesor" element={<ModificarProfesor/>}/>
                 <Route exact path="/configuracionAsistente" element={<Configuracion/>}/>
+
+                <Route exact path = "/menuProfesor" element = {<MenuProfesor/>}/>
+                <Route exact path = "/consultarestudiantesp" element = {<ConsultarEstudiantesP/>}/>
+                <Route exact path = "/modificarEstudiante" element = {<ModificarEstudiante/>}/>
+                
+                <Route exact path = "/" element = {<MenuProfesorC/>}/>
 
             </Routes>
         </div>
