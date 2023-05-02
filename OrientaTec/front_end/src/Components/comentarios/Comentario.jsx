@@ -14,7 +14,7 @@ export function Comentario() {
                             </p>
                         </div>
                         <div className="col-sm-2 d-flex justify-content-end">
-                            <a href="#" className="card-text link-success">Responder</a>
+                            <a href="" className="card-text link-success">Responder</a>
                         </div>
                     </div>
 
