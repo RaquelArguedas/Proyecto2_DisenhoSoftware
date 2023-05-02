@@ -3,9 +3,11 @@ import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar';
 import { BarraLateral } from '../../navegacion/BarraLateral';
 import { Actividad } from './verActividades/Actividad'
-
+import { useNavigate } from "react-router-dom";
 export function VerActividades() {
+  let navigate = useNavigate();
 
+  const gotoMenuProfesor = () => { navigate("/menuProfesor", {}); };
   const { state } = useLocation();
 
   return (
@@ -72,6 +74,12 @@ export function VerActividades() {
                 <Actividad comentarios = {state.comentarios}/>
                 <Actividad comentarios = {state.comentarios}/>
                 <Actividad comentarios = {state.comentarios}/>
+            </div>
+
+            <div class="col">
+                <button type="button" class="btn btn-primary" onClick={gotoMenuProfesor}>
+                    Atrás
+                </button>
             </div>
 
           </div>
