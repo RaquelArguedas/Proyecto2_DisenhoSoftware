@@ -12,13 +12,14 @@ export function DetalleActividad() {
     
     const { state } = useLocation();
     
-    const gotoEvidenciasActividad = () => { navigate('/verplan/detalle/evidencias'); }
+    const gotoEvidenciasActividad = () => { navigate('/verplan/detalle/evidencias',  {state: {comentarios: state.comentarios, linkMenu: state.linkMenu}}); }
 
-    const gotoVerPlan = () => { navigate('/verplan', {state: {comentarios: state.comentarios}}); };
+    const gotoVerPlan = () => { navigate('/verplan', {state: {comentarios: state.comentarios, linkMenu: state.linkMenu}}); };
+
     return (
         <Fragment>
             <div className='container'>
-                <Navbar />
+                <Navbar linkInicio={state.linkMenu}/>
 
                 <div className="row">
                     <div className="col-sm-3">

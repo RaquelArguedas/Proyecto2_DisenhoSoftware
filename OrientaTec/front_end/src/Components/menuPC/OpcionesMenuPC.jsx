@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export function OpcionesMenuPC() {
   let navigate = useNavigate();
 
-  const gotoVerPlanTrabajo = () => {navigate("/verplan", {state:{comentarios: true}});};
+  const gotoVerPlanTrabajo = () => {navigate("/verplan", {state:{comentarios: true, linkMenu: "/menuCoordinador"}});};
   const gotoInformacionEstudiantes = () => {navigate("/consultarestudiantesp", {});};
   const gotoInformacionEquipo = () => {navigate("/infoequipo", {});};
   const gotoModificarEstudiante = () => {navigate("/modificarEstudiante", {});};

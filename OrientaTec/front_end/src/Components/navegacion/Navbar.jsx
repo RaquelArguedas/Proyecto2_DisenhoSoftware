@@ -19,7 +19,7 @@ export function Navbar( { linkInicio } ) {
                         <Link className="nav-link" to= {linkInicio} >Inicio</Link>
                         <Link className="nav-link" to = '/configuracionAsistente' >Configuracion</Link>
                         <Link className="nav-link" to = '/ayudaAsistente'>Ayuda</Link>
-                        <Link className="nav-link" to = '/iniciarSesion'>Cerrar sesion</Link>
+                        <Link className="nav-link" to = '/'>Cerrar sesion</Link>
                     </div>
                 </div>
             </div>
