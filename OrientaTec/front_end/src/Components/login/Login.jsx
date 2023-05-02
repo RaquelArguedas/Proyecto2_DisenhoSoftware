@@ -1,0 +1,57 @@
+import React, { Fragment, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
+export function Login() {
+    let navigate = useNavigate();
+    let usuarioVista;
+
+    const refTxtUsuario = useRef()
+
+    const gotoMenu = () => {
+        const usuario = refTxtUsuario.current.value;
+
+        if (usuario === '1'){ usuarioVista = '/menuAsistente'; }
+        else if (usuario === '2'){ usuarioVista = '/menuProfesor'; }
+        else if (usuario === '3'){ usuarioVista = '/menuCoordinador'; }
+        else{ return }
+
+        navigate(usuarioVista, {});
+    }
+
+    const gotoRecuperar = () => {
+        navigate('/recuperar', {});
+    }
+
+    return (
+        <Fragment>
+            <div style={{marginTop: "10%"}}>
+                <div className="container w-50 h-100">
+                    <div className="mx-auto my-auto">
+                        <img src="./orientatec-logo.jpg" width="200" className="mx-auto d-block"/>
+
+                        <h1 className="text-center">Inicio de sesión</h1>
+
+                        <div className="input-group w-50 my-3 mx-auto">
+                            <span className="input-group-text w-25" >Usuario</span>
+                            <input ref={refTxtUsuario} id="txtUsuario" type="text" className="form-control" />
+                        </div>
+
+                        <div className="input-group w-50 my-3 mx-auto">
+                            <span className="input-group-text w-25" >Contraseña</span>
+                            <input id="txtContrasena" type="password" className="form-control" />
+                        </div>
+
+                        <div className="row w-50 mx-auto">
+                            <div className="col">
+                                <button onClick={gotoMenu} className="btn btn-primary">Ingresar</button>
+                            </div>
+                            <div className="col">
+                                <button onClick={gotoRecuperar} className="btn btn-outline-secondary">Olvidé mi contraseña</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </Fragment>
+    )
+}
