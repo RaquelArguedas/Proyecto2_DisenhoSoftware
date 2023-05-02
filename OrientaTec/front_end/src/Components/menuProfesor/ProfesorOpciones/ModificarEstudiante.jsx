@@ -2,8 +2,11 @@ import React, { Fragment, useState } from 'react'
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
-
+import { useNavigate } from "react-router-dom";
 export  function ModificarEstudiante() {
+    let navigate = useNavigate();
+
+    const gotoMenuProfesor = () => { navigate("/menuProfesor", {}); };
     const [estado, setEstado] = useState("");
     const [name, setName] = useState('');
     const [apellido1, setApellido1] = useState('');
@@ -133,8 +136,8 @@ export  function ModificarEstudiante() {
                                     
                                     </div>
                                     <div class="col">
-                                        <button type="button" class="btn btn-primary" onClick={() => window.location.href = '/'}>
-                                            Atras
+                                        <button type="button" class="btn btn-primary" onClick={gotoMenuProfesor}>
+                                            Atrás
                                         </button>
                                     </div>
                                 </div>

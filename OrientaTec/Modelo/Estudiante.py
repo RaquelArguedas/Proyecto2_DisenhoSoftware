@@ -1,5 +1,5 @@
 class Estudiante:
-    def __init__(self,carnet,nombre,apellido1,
+    def __init__(self,carnet, nombre,apellido1,
     apellido2, sede, correoElectronico,
     numeroCelular):
         self.carnet = carnet

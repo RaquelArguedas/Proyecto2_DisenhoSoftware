@@ -2,8 +2,8 @@ import React, { Fragment, useState } from 'react'
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { ListaResponsables } from './modificarActividad/ListaResponsables';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export function CrearActividad() {
     const [responsables, setResponsables] = useState([]);

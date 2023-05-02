@@ -8,12 +8,13 @@ import { FormComentario } from '../../../comentarios/FormComentario';
 import { useNavigate } from "react-router-dom";
 
 export function DetalleActividad() {
-    const { state } = useLocation();
-
     let navigate = useNavigate();
+    
+    const { state } = useLocation();
     
     const gotoEvidenciasActividad = () => { navigate('/verplan/detalle/evidencias'); }
 
+    const gotoVerPlan = () => { navigate('/verplan', {state: {comentarios: state.comentarios}}); };
     return (
         <Fragment>
             <div className='container'>
@@ -68,7 +69,14 @@ export function DetalleActividad() {
                                         </p>
                                     </div>
                                 </div>
+                                
                                 <btn onClick={gotoEvidenciasActividad} className="btn btn-primary w-25 my-4">Evidencias</btn>
+                                
+                                <div class="col">
+                                    <button type="button" class="btn btn-primary" onClick={gotoVerPlan}>
+                                        Atrás
+                                    </button>
+                                </div>
                             </div>
                         </div>
 

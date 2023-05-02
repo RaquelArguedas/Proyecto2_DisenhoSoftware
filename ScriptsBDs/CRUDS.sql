@@ -148,12 +148,12 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
     if( _nombreActividad is null or _tipoActividad is null or _fechaActividad  is null or
 		_horaInicio  is null or _horaFin is null or _recordatorio  is null or _medio  is null or 
-		_enlace  is null or _estado  is null or _afiche is null or _ultimaModificacion is null)then 
+		_enlace  is null or _estado  is null or _ultimaModificacion is null)then 
         -- si se quiere crear ningún atributo puede ser nulo, solo el id
 		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
 	elseif( (select count(*) from TipoActividad where _tipoActividad = idTActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese tipoActividad no existe";
-	elseif( (select count(*) from Estado where _estado = idEstadoA)=0 )then 
+	elseif( (select count(*) from estadoactividad where _estado = idEstadoA)=0 )then 
 		set _error = 2, _errmsg = "Ese estado no existe";
     else
 		insert into Actividad (nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
@@ -193,9 +193,9 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese idActividad no existe";
-	elseif( (select count(*) from TipoActividad where _tipoActividad = idTActividad)=0 )then 
+	elseif( _tipoActividad is not null and (select count(*) from TipoActividad where _tipoActividad = idTActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese tipoActividad no existe";
-	elseif( (select count(*) from Estado where _estado = idEstadoA)=0 )then 
+	elseif(  _estado is not null and (select count(*) from EstadoActividad where _estado = idEstadoA)=0 )then 
 		set _error = 2, _errmsg = "Ese estado no existe";
     else
 		update Actividad 
@@ -386,7 +386,7 @@ BEGIN
 		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
 	elseif( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese idActividad no existe";
-    elseif( (select count(*) from Plan where _idPlan = idPlan)=0 )then 
+    elseif( (select count(*) from PlanTrabajo where _idPlan = idPlan)=0 )then 
 		set _error = 2, _errmsg = "Ese idPlan no existe";
     else
 		insert into ActividadesxPlan(idActividad, idPlan) values (_idActividad, _idPlan);
@@ -415,11 +415,11 @@ DELIMITER $$
 CREATE PROCEDURE `updateActividadesxPlan`(in _idActividadesxPlan int, in _idActividad int, in _idPlan int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
-	if( (select count(*) from Plan where _idPlan = idPlan)=0 )then 
+	if( (select count(*) from ActividadesxPlan where _idActividadesxPlan = idActividadesxPlan)=0 )then 
 		set _error = 2, _errmsg = "Ese idPlan no existe";
-	elseif( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
+	elseif(  _idActividad is not null and  (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese idActividad no existe";
-    elseif( (select count(*) from Plan where _idPlan = idPlan)=0 )then 
+    elseif(  _idPlan is not null and (select count(*) from Plan where _idPlan = idPlan)=0 )then 
 		set _error = 2, _errmsg = "Ese idPlan no existe";
     else
 		update ActividadesxPlan
@@ -491,7 +491,7 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Observacion where _idObservacion= idObservacion)=0 )then 
 		set _error = 2, _errmsg = "Ese idObservacion no existe";
-	elseif( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
+	elseif( _idActividad is not null and  (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese idActividad no existe";
     else
 		update Observacion
@@ -525,7 +525,7 @@ DELIMITER $$
 CREATE PROCEDURE `createEvidencia`(in _idActividad int, in _linkGrabacion varchar(200))
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
-    if(_idActividad is null or linkGrabacion is null)then 
+    if(_idActividad is null or _linkGrabacion is null)then 
 		-- si se quiere crear ningún atributo puede ser nulo, solo el id
 		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
 	elseif( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
@@ -561,7 +561,7 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Evidencia where _idEvidencia = idEvidencia)=0 )then 
 		set _error = 2, _errmsg = "Ese idEvidencia no existe";
-	elseif( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
+	elseif( _idActividad is not null and  (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese idActividad no existe";
     else
 		update Evidencia
@@ -805,7 +805,7 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
     if(_cedula is null or _nombre is null or _apellido1 is null or _apellido2 is null or
 		_idSede is null or _numeroCelular is null or _correoElectronico is null or _numeroOficina 
-		is null or _fotografia is null or _idAutoridad is null or _idEstado is null)then 
+		is null or _idAutoridad is null or _idEstado is null)then 
 		-- si se quiere crear ningún atributo puede ser nulo, solo el id
 		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
 	elseif( (select count(*) from Sede where _idSede = idSede)=0 )then 
@@ -855,16 +855,15 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Profesor where _idProfesor  = idProfesor )=0 )then 
 		set _error = 2, _errmsg = "Ese idProfesor  no existe";
-	elseif( (select count(*) from Sede where _idSede = idSede)=0 )then 
+	elseif( _idSede is not null and  (select count(*) from Sede where _idSede = idSede)=0 )then 
 		set _error = 2, _errmsg = "Ese idSede no existe";
-	elseif( (select count(*) from EstadoCuenta where _idEstado = idEstadoC)=0 )then 
+	elseif( _idEstado is not null and  (select count(*) from EstadoCuenta where _idEstado = idEstadoC)=0 )then 
 		set _error = 2, _errmsg = "Ese idEstado no existe";
-	elseif( (select count(*) from Autoridad where _idAutoridad = idAutoridad)=0 )then 
+	elseif( _idAutoridad is not null and  (select count(*) from Autoridad where _idAutoridad = idAutoridad)=0 )then 
 		set _error = 2, _errmsg = "Ese idAutoridad no existe";
     else
 		update Profesor 
-		set descripcion = ifnull(_descripcion, descripcion),
-			cedula = ifnull(_cedula, cedula), 
+		set cedula = ifnull(_cedula, cedula), 
             nombre = ifnull(_nombre, nombre), 
             apellido1 = ifnull(_apellido1, apellido1), 
             apellido2 = ifnull(_apellido2, apellido2), 
@@ -912,7 +911,7 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
     if(_cedula is null or _nombre is null or _apellido1 is null or _apellido2 is null or
 		_idSede is null or _numeroCelular is null or _correoElectronico is null or _numeroOficina 
-		is null or _fotografia is null)then 
+		is null)then 
 		-- si se quiere crear ningún atributo puede ser nulo, solo el id
 		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
 	elseif( (select count(*) from Sede where _idSede = idSede)=0 )then 
@@ -951,12 +950,13 @@ CREATE PROCEDURE `updateAsistenteAdministrativo`(in _idAsistente int,
 								 in _cedula int,  in _nombre varchar(50),
 								 in _apellido1 varchar(50), in _apellido2 varchar(50),
 								 in _idSede int,  in _numeroCelular int,
-								 in _correoElectronico varchar(200))
+								 in _correoElectronico varchar(200), in _numeroOficina int,
+								 in _fotografia longblob)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Asistente where _idAsistente  = idAsistente )=0 )then 
 		set _error = 2, _errmsg = "Ese idAsistente  no existe";
-	elseif( (select count(*) from Sede where _idSede = idSede)=0 )then 
+	elseif( _idSede is not null and  (select count(*) from Sede where _idSede = idSede)=0 )then 
 		set _error = 2, _errmsg = "Ese idSede no existe";
 	else
 		update AsistenteAdministrativo 
@@ -994,7 +994,7 @@ DELIMITER ;
 #____________________________________________________Estudiante
 #Create
 DELIMITER $$
-CREATE PROCEDURE `createEstudiante`(in _cedula int, in _nombre varchar(50),
+CREATE PROCEDURE `createEstudiante`(in _carnet int, in _nombre varchar(50),
 								 in _apellido1 varchar(50), in _apellido2 varchar(50),
 								 in _idSede int, in _numeroCelular int,
 								 in _correoElectronico varchar(200), in _idEstado int)
@@ -1009,9 +1009,9 @@ BEGIN
 	elseif( (select count(*) from EstadoCuenta where _idEstado = idEstadoC)=0 )then 
 		set _error = 2, _errmsg = "Ese idEstado no existe";
 	else
-		insert into Profesor(cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
+		insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
 								correoElectronico, idEstado) 
-						values (_cedula, _nombre, _apellido1, _apellido2, _idSede, _numeroCelular,
+						values (_carnet, _nombre, _apellido1, _apellido2, _idSede, _numeroCelular,
 								_correoElectronico, _idEstado);
 		select @@identity;
 	end if;
@@ -1027,7 +1027,7 @@ BEGIN
 	if( (select count(*) from Estudiante where _idEstudiante = idEstudiante)=0 )then 
 		set _error = 2, _errmsg = "Ese idEstudiante no existe";
 	else
-		select idEstudiante, cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
+		select idEstudiante, carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
 				correoElectronico, idEstado 
 		from Estudiante  
         where _idEstudiante = idEstudiante;
@@ -1038,30 +1038,28 @@ DELIMITER ;
 
 #Update
 DELIMITER $$
-CREATE PROCEDURE `updateEstudiante`(in _idEstudiante int,  in _cedula int, in _nombre varchar(50),
+CREATE PROCEDURE `updateEstudiante`(in _carnet int, in _nombre varchar(50),
 								 in _apellido1 varchar(50), in _apellido2 varchar(50),
 								 in _idSede int, in _numeroCelular int,
 								 in _correoElectronico varchar(200), in _idEstado int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
-	if( (select count(*) from Estudiante where _idEstudiante = idEstudiante )=0 )then 
+	if( (select count(*) from Estudiante where _carnet = carnet )=0 )then 
 		set _error = 2, _errmsg = "Ese idEstudiante no existe";
-	elseif( (select count(*) from Sede where _idSede = idSede)=0 )then 
+	elseif(  _idSede is not null and  (select count(*) from Sede where _idSede = idSede)=0 )then 
 		set _error = 2, _errmsg = "Ese idSede no existe";
-	elseif( (select count(*) from EstadoCuenta where _idEstado = idEstadoC)=0 )then 
+	elseif( _idEstado is not null and   (select count(*) from EstadoCuenta where _idEstado = idEstadoC)=0 )then 
 		set _error = 2, _errmsg = "Ese idEstado no existe";
 	else
 		update Estudiante 
-		set descripcion = ifnull(_descripcion, descripcion),
-			cedula = ifnull(_cedula, cedula), 
-            nombre = ifnull(_nombre, nombre), 
+		set nombre = ifnull(_nombre, nombre), 
             apellido1 = ifnull(_apellido1, apellido1), 
             apellido2 = ifnull(_apellido2, apellido2), 
             idSede = ifnull(_idSede, idSede), 
             numeroCelular = ifnull(_numeroCelular, numeroCelular),
             correoElectronico = ifnull(_correoElectronico, correoElectronico), 
             idEstado = ifnull(_idEstado, idEstado)
-		where _idEstudiante  = idEstudiante; 
+		where _carnet  = carnet; 
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
 END$$
@@ -1130,9 +1128,9 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from ResponsableXActividad where _idResponsableXActividad = idResponsableXActividad )=0 )then 
 		set _error = 2, _errmsg = "Ese idResponsableXActividad no existe";
-	elseif( (select count(*) from Profesor where _idResponsable = idProfesor)=0 )then 
+	elseif( _idResponsable is not null and  (select count(*) from Profesor where _idResponsable = idProfesor)=0 )then 
 		set _error = 2, _errmsg = "Ese idResponsable no existe";
-	elseif( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
+	elseif( _idActividad is not null and  (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese idActividad no existe";
 	else
 		update ResponsableXActividad 
@@ -1207,9 +1205,9 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from ProfesoresXEquipoGuia where _idProfesoresXEquipoGuia = idProfesoresXEquipoGuia )=0 )then 
 		set _error = 2, _errmsg = "Ese idProfesoresXEquipoGuia no existe";
-	elseif( (select count(*) from Profesor where _idProfesor = idProfesor)=0 )then 
+	elseif( _idProfesor is not null and (select count(*) from Profesor where _idProfesor = idProfesor)=0 )then 
 		set _error = 2, _errmsg = "Ese idProfesor no existe";
-	elseif( (select count(*) from EquipoGuia  where _idEquipoGuia  = idEquipoGuia )=0 )then 
+	elseif( _idEquipoGuia is not null and (select count(*) from EquipoGuia  where _idEquipoGuia  = idEquipoGuia )=0 )then 
 		set _error = 2, _errmsg = "Ese idEquipoGuia  no existe";
 	else
 		update ProfesoresXEquipoGuia 
@@ -1284,9 +1282,9 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from BitacoraXEquipoGuia where _idBitacoraXEquipoGuia = idBitacoraXEquipoGuia)=0 )then 
 		set _error = 2, _errmsg = "Ese idBitacoraXEquipoGuia no existe";
-	elseif( (select count(*) from Bitacora where _idBitacora = idBitacora)=0 )then 
+	elseif(  _idBitacora is not null and (select count(*) from Bitacora where _idBitacora = idBitacora)=0 )then 
 		set _error = 2, _errmsg = "Ese idBitacora no existe";
-	elseif( (select count(*) from EquipoGuia  where _idEquipoGuia  = idEquipoGuia )=0 )then 
+	elseif(  _idEquipoGuia is not null and (select count(*) from EquipoGuia  where _idEquipoGuia  = idEquipoGuia )=0 )then 
 		set _error = 2, _errmsg = "Ese idEquipoGuia  no existe";
 	else
 		update idBitacoraXEquipoGuia  
@@ -1361,9 +1359,9 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from BitacoraXActividades where _idBitacoraXActividades = idBitacoraXActividades)=0 )then 
 		set _error = 2, _errmsg = "Ese idBitacoraXActividades no existe";
-	elseif( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
+	elseif( _idActividad is not null and (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese idActividad no existe";
-	elseif( (select count(*) from Bitacora  where _idBitacora  = idBitacora )=0 )then 
+	elseif( _idBitacora is not null and (select count(*) from Bitacora  where _idBitacora  = idBitacora )=0 )then 
 		set _error = 2, _errmsg = "Ese idBitacora  no existe";
 	else
 		update BitacoraXActividades 
@@ -1432,7 +1430,7 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from EquipoGuia where _idEquipoGuia = idEquipoGuia)=0 )then 
 		set _error = 2, _errmsg = "Ese idEquipoGuia no existe";
-	elseif( (select count(*) from Profesor where _idCoordinador = idProfesor)=0 )then 
+	elseif( _idCoordinador is not null and (select count(*) from Profesor where _idCoordinador = idProfesor)=0 )then 
 		set _error = 2, _errmsg = "Ese idProfesor no existe";
 	else
 		update EquipoGuia 
@@ -1502,7 +1500,7 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Bitacora where _idBitacora = idBitacora)=0 )then 
 		set _error = 2, _errmsg = "Ese idBitacora no existe";
-	elseif( (select count(*) from Profesor where _idAutor = idProfesor)=0 )then 
+	elseif( _idAutor is not null and (select count(*) from Profesor where _idAutor = idProfesor)=0 )then 
 		set _error = 2, _errmsg = "Ese idAutor no existe";
 	else
 		update Bitacora 
@@ -1547,7 +1545,7 @@ BEGIN
 	elseif( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese idActividad no existe";
 	else
-		insert into Bitacora(idActividad, autor, fechaHora, contenido, idComentarioPadre) 
+		insert into Comentario(idActividad, autor, fechaHora, contenido, idComentarioPadre) 
 						values (_idActividad, _autor, _fechaHora, _contenido, _idComentarioPadre);
 		select @@identity;
 	end if;
@@ -1580,7 +1578,7 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Comentario where  _idComentario = idComentario)=0 )then 
 		set _error = 2, _errmsg = "Ese idComentario no existe";
-	elseif( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
+	elseif( _idActividad is not null and(select count(*) from Actividad where _idActividad = idActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese idActividad no existe";
 	else
 		update Comentario 
@@ -1653,7 +1651,7 @@ BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Recordatorio where  _idRecordatorio= idRecordatorio)=0 )then 
 		set _error = 2, _errmsg = "Ese idRecordatorio no existe";
-	elseif( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
+	elseif( _idActividad is not null and(select count(*) from Actividad where _idActividad = idActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese idActividad no existe";
 	else
 		update Recordatorio 

@@ -1,13 +1,14 @@
 import Actividad
 class PlanTrabajo:
     actividades = []
-    def __init__(self,anno,actividades):
-        self.anno =anno
+    def __init__(self,idPlan, anno,actividades):
+        self.idPlan = idPlan
+        self.anno = anno
         self.actividades= actividades
     def agregarActividad(self, actividad):
         #validacion de datos
-        if isinstance(actividad,Actividad):
+        if type(actividad) is Actividad.Actividad:
             self.actividades.append(actividad)
-            return true
+            return True
         else:
-            return false
+            return False
