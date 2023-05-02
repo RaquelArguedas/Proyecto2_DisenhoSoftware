@@ -1,10 +1,12 @@
 import React, { Fragment } from 'react'
+import { useLocation } from "react-router-dom";
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Navbar } from '../../navegacion/Navbar'
 import { FilaEstudiante } from '../../menuAsistentes/AsistenteOpciones/columnasTablas/FilaEstudiante'
 import { Icon } from '@iconify/react';
 
 export function ConsultarEstudiantesP() {
+    const { state } = useLocation();
 
     const handleSubmit = (event) => {
         event.preventDefault();  
@@ -13,7 +15,7 @@ export function ConsultarEstudiantesP() {
     return (
         <Fragment>
             <div className="container">
-                <Navbar />
+                <Navbar linkInicio={state.linkMenu}/>
 
                 <div class="row">
                     <div class="col-sm-3">

@@ -5,9 +5,9 @@ export function OpcionesMenuPC() {
   let navigate = useNavigate();
 
   const gotoVerPlanTrabajo = () => {navigate("/verplan", {state:{comentarios: true, linkMenu: "/menuCoordinador"}});};
-  const gotoInformacionEstudiantes = () => {navigate("/consultarestudiantesp", {});};
-  const gotoInformacionEquipo = () => {navigate("/infoequipo", {});};
-  const gotoModificarEstudiante = () => {navigate("/modificarEstudiante", {});};
+  const gotoInformacionEstudiantes = () => {navigate("/consultarestudiantesp", {state: {linkMenu: "/menuCoordinador"}});};
+  const gotoInformacionEquipo = () => {navigate("/infoequipo", {state: {linkMenu: "/menuCoordinador"}});};
+  const gotoModificarEstudiante = () => {navigate("/modificarEstudiante", {state: {linkMenu: "/menuCoordinador"}});};
   const gotoModificarActividad = () => {navigate("/modificarActividad", {});};
   const gotoCrearActividad = () => {navigate("/crearActividad", {});};
   const gotoDefinirPlan = () => {navigate("/definirPlan", {});};

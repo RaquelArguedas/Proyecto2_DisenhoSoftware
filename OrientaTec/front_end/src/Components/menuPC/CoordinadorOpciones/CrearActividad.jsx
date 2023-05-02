@@ -19,7 +19,7 @@ export function CrearActividad() {
     return (
         <Fragment>
             <div className="container">
-                <Navbar />
+                <Navbar linkInicio='/menuCoordinador'/>
                 <div class="row">
                     <div class="col-sm-3">
                         <BarraLateral />

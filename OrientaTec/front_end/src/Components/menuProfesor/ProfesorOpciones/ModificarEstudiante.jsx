@@ -1,12 +1,14 @@
 import React, { Fragment, useState } from 'react'
+import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
 import { useNavigate } from "react-router-dom";
 export function ModificarEstudiante() {
-    let navigate = useNavigate();
+    //let navigate = useNavigate();
 
-    const gotoMenuProfesor = () => { navigate("/menuProfesor", {}); };
+    const { state } = useLocation();
+
     const [estado, setEstado] = useState("");
     const [name, setName] = useState('');
     const [apellido1, setApellido1] = useState('');
@@ -57,7 +59,7 @@ export function ModificarEstudiante() {
     return (
         <Fragment>
             <div className="container">
-                <Navbar />
+                <Navbar linkInicio={state.linkMenu} />
                 <div class="row">
                     <div class="col-sm-3">
                         <BarraLateral />
