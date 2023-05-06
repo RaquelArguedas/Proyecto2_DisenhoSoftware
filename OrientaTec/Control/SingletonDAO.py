@@ -1,7 +1,8 @@
 # basado en codigo de Refactoring.Guru, adjuntamos el enlace a continuacion
 # https://refactoring.guru/design-patterns/singleton/python/example#:~:text=Singleton%20is%20a%20creational%20design,the%20modularity%20of%20your%20code.
 
-import mysql.connector 
+import mysql.connector
+import pymongo 
 from datetime import datetime, date, timedelta
 
 import sys
@@ -9,7 +10,7 @@ import sys
 sys.path.append('./Modelo')
 #Importo la Clase
 from Usuario import *
-from Estudiante import *
+from Estudiante import * 
 from EquipoGuia import *
 from Actividad import *
 from Profesor import *
@@ -41,7 +42,22 @@ class SingletonDAO(metaclass=SingletonMeta):
     #Atributos de conexión
     connection = None
     cursor = None
-
+    #Atributos para conetarse a MONGO
+    """ MONGO_HOST = None 
+    MONGO_PORT = None 
+    MONGO_TIMEOUT = None 
+    MONGO_URI = None 
+    MONGO_DATABASE = None 
+    MONGO_CLIENT = None 
+    """
+    #MONGO_HOST = "localhost"
+    #MONGO_PORT = "27017"
+    #MONGO_TIMEOUT = 30000 #MILISEGUNDOS
+    #MONGO_URI = "mongodb://"+MONGO_HOST+":"+MONGO_PORT+"/"
+    
+    MONGO_CLIENT = pymongo.MongoClient('localhost',27017)
+    MONGO_DATABASE = MONGO_CLIENT.FotosOrientaTEC
+    
     #Atributos del modelo
     usuarios = []
     estudiantes = []
@@ -516,7 +532,40 @@ class SingletonDAO(metaclass=SingletonMeta):
 
         self.closeConnection()
 
+    #-----------------------------------------------------------------#
+    #CONEXION A MONGODB
+    def connectMongoServer(self):
+        try:
+            self.MONGO_CLIENT = pymongo.MongoClient('localhost',27017)
+            self.MONGO_DATABASE = MONGO_CLIENT.FotosOrientaTEC
+            print("Conexión a Mongo exitosa.")
+        except Exception as ex:
+            print("Error:" + ex)
+        
 
+    def closeMongoConnection(self):
+        try:
+         pymongo.MongoClient.close()
+        except Exception as ex:
+            print("Error: "+ ex)
 
+    #CRUD "FotosProfesores"
+    #CRUD "AfichesActividad"
+    #CRUD "EvListaAsistencia"
+    #CRUD "EvFotosParticipantes"
+    def buscarFotosProfesores(self, idBuscado):
+        try:
+            self.connectMongoServer() #Se abre la conexión
+            collection= self.MONGO_DATABASE.FotosProfesores
+            cursor = collection.find({"idProfesor": idBuscado})
+            for registro in cursor:
+                print(registro)
+            self.closeMongoConnection() #Cerrar la conexión después de el proceso
+        except Exception as ex:
+            print(ex)
 
-
+    #Agrega fotos a Mongo
+    def crearRegistro(self,flag):
+        print("Algo")
+    def actualizarRegistro(self,flag):
+        print("Doing")
