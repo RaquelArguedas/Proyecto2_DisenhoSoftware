@@ -133,19 +133,54 @@ insert into AsistenteAdministrativo(cedula, nombre, apellido1, apellido2, idSede
 			 values (1, "Asistente1", "Hidalgo", "Ramirez", 2, 90,
 						"as@gmail.com", 23);
 
-insert into Estudiante(nombre, apellido1, apellido2, idSede, numeroCelular,
+
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
 						correoElectronico, idEstado)
-			 values ("Daniela", "Mendez", "Arias", 1, 83090909,
+			 values (202103257,"Daniela", "Mendez", "Arias", 2, 83090909,
 						"dani@gmail.com", 1);
-insert into Estudiante(nombre, apellido1, apellido2, idSede, numeroCelular,
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
 						correoElectronico, idEstado)
-			 values ("Mariana", "Mendez", "Arias", 1, 834635609,
+			 values (202094,"Mariana", "Mendez", "Arias", 2, 834635609,
 						"Mariana@gmail.com", 1);
-insert into Estudiante(nombre, apellido1, apellido2, idSede, numeroCelular,
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
 						correoElectronico, idEstado)
-			 values ("Roberto", "Gutierrez", "Sanchez", 1, 72648432,
+			 values (20198,"Roberto", "Gutierrez", "Sanchez", 3, 72648432,
 						"Roberto@gmail.com", 1);
-insert into Estudiante(nombre, apellido1, apellido2, idSede, numeroCelular,
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
 						correoElectronico, idEstado)
-			 values ("Olman", "Laguna", "Blop", 1, 784902884,
+			 values (37492,"Roberto", "Gutierrez", "Sanchez", 5, 72648432,
+						"Roberto@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (20210324,"Olman", "Laguna", "Blop", 5, 784902884,
 						"blop@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (204323,"Daniela", "Mendez", "Arias", 1, 83090909,
+						"dani@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (202143,"Mariana", "Mendez", "Arias", 1, 834635609,
+						"Mariana@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (20290, "Roberto", "Gutierrez", "Sanchez", 1, 72648432,
+						"Roberto@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (201803,"Olman", "Laguna", "Blop", 1, 784902884,
+						"blop@gmail.com", 1);
+					
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (28422,"Olman", "Laguna", "Blop", 3, 784902884,
+						"blop@gmail.com", 1);
+                        
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (20240,"Daniela", "Mendez", "Arias", 4, 83090909,
+						"dani@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (20220,"Mariana", "Mendez", "Arias", 5, 834635609,
+						"Mariana@gmail.com", 1);

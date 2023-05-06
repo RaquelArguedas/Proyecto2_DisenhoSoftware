@@ -43,3 +43,12 @@ class AdminActividades:
         if (respuesta == None):#crea las evidencias
             return self.dao.crearEvidencia(idActividad,linkGrabacion)
         return respuesta #si hay un error actualizando la actividad no crea evidencias y devuelve el error
+    
+    def agregarResponsablesActividad(self, idActividad, responsablesNuevos):
+        return self.dao.agregarResponsablesActividad(idActividad, responsablesNuevos)
+
+    def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
+        return self.dao.quitarResponsablesActividad(idActividad, responsablesEliminados)
+            
+    def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
+        return self.dao.bitacoraActividad(idActividad, fecha, hora, idAutor, descripcion)

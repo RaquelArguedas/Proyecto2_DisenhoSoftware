@@ -8,3 +8,7 @@ class Estudiante:
         self.sede = sede
         self.numeroCelular = numeroCelular
         self.correoElectronico = correoElectronico
+
+    def __str__(self):
+        return f'Carnet: {self.carnet} ,  nombre: {self.nombre},  apellido1: {self.apellido1},  apellido2: {self.apellido2},  sede: {self.sede},  numeroCelular: {self.numeroCelular},  correoElectronico: {self.correoElectronico}'
+    

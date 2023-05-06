@@ -15,9 +15,20 @@ if __name__ == "__main__":
 
     print("\n")
     dao = SingletonDAO()
-    print(len(dao.bitacoras))
-    print(len(dao.verActividad(1).modificaciones))
-    dao.bitacoraActividad(1, date.today(), '13:00:00', 1, "descripcion")
-    print(len(dao.bitacoras))
-    print(len(dao.verActividad(1).modificaciones))
+
+    estudiantes = control.consultarEstudiantes(Ordenamiento.SEDE)
+
+    estudiantes = control.consultarEstudiantes(Ordenamiento.CARNET)
+    
+    estudiantes = control.consultarEstudiantes(Ordenamiento.ALFABETICAMENTE)
+
+
+    for estudiante in estudiantes:
+        print(str(estudiante))
+
+    
+
+
+    
+    #control.consultarEstudiantes(int(Ordenamiento['SEDE']))
     

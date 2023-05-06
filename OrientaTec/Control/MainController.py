@@ -43,9 +43,12 @@ class MainController:
     def getEquipoGuia(self):
         return self.controlEquipoGuia.getEquipoGuia()
     
+    def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
+        return self.controlEquipoGuia.bitacoraEquipoGuia(fecha, hora, idAutor, descripcion)
+    
     #AdminEstudiantes
-    def consultarEstudiantes(self):
-        return self.controlEstudiante.consultarEstudiantes()
+    def consultarEstudiantes(self, ordenamiento):
+        return self.controlEstudiante.consultarEstudiantes(ordenamiento)
     
     def modificarEstudiante(self, carnet, nombre,apellido1, apellido2, sede, correoElectronico, 
                             numeroCelular, estado):
@@ -91,6 +94,15 @@ class MainController:
     def finalizarActividad(self, idActividad,linkGrabacion):
         return self.controlActividades.finalizarActividad(idActividad,linkGrabacion)
     
+    def agregarResponsablesActividad(self, idActividad, responsablesNuevos):
+        return self.controlActividades.agregarResponsablesActividad(idActividad, responsablesNuevos)
+
+    def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
+        return self.controlActividades.quitarResponsablesActividad(idActividad, responsablesEliminados)
+            
+    def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
+        return self.controlActividades.bitacoraActividad(idActividad, fecha, hora, idAutor, descripcion)
+    
 
     #AdminPlanActividades
     def consultarProximaActividad(self):
@@ -105,6 +117,7 @@ class MainController:
     def crearPlanActividades(self, anno):
         return self.controlPlanActividades.crearPlanActividades(anno)
     
+        
 
     #AdminUsuario
     def exists(self, correo, contrasenha):

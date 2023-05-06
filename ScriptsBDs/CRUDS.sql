@@ -1000,11 +1000,13 @@ CREATE PROCEDURE `createEstudiante`(in _carnet int, in _nombre varchar(50),
 								 in _correoElectronico varchar(200), in _idEstado int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
-    if(_cedula is null or _nombre is null or _apellido1 is null or _apellido2 is null or
+    if(_carnet is null or _nombre is null or _apellido1 is null or _apellido2 is null or
 		_idSede is null or _numeroCelular is null or _correoElectronico is null or _idEstado is null)then 
 		-- si se quiere crear ningún atributo puede ser nulo, solo el id
 		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
-	elseif( (select count(*) from Sede where _idSede = idSede)=0 )then 
+	elseif ( (select count(*) from Estudiante where _carnet = carnet)>0 )then 
+		set _error = 2, _errmsg = "Ese carnet ya existe";
+    elseif( (select count(*) from Sede where _idSede = idSede)=0 )then 
 		set _error = 2, _errmsg = "Ese idSede no existe";
 	elseif( (select count(*) from EstadoCuenta where _idEstado = idEstadoC)=0 )then 
 		set _error = 2, _errmsg = "Ese idEstado no existe";
@@ -1027,7 +1029,7 @@ BEGIN
 	if( (select count(*) from Estudiante where _idEstudiante = idEstudiante)=0 )then 
 		set _error = 2, _errmsg = "Ese idEstudiante no existe";
 	else
-		select idEstudiante, carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+		select carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
 				correoElectronico, idEstado 
 		from Estudiante  
         where _idEstudiante = idEstudiante;
@@ -1067,13 +1069,13 @@ DELIMITER ;
 
 #Delete
 DELIMITER $$
-CREATE PROCEDURE `deleteEstudiante`(in _idEstudiante int)
+CREATE PROCEDURE `deleteEstudiante`(in _carnet int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
-	if( (select count(*) from Estudiante  where _idEstudiante = idEstudiante )=0 )then 
+	if( (select count(*) from Estudiante  where _carnet = carnet )=0 )then 
 		set _error = 2, _errmsg = "Ese idEstudiante  no existe";
 	else
-		delete from Estudiante  where _idEstudiante= idEstudiante; 
+		delete from Estudiante  where _carnet = carnet; 
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
 END$$

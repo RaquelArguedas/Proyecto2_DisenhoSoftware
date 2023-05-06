@@ -166,7 +166,7 @@ numeroOficina int
 );
 
 create table Estudiante
-(carnet int primary key not null auto_increment,
+(carnet int primary key not null,
 nombre varchar(50),
 apellido1 varchar(50),
 apellido2 varchar(50),
