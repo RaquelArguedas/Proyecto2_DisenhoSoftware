@@ -1,9 +1,10 @@
 import Profesor
 class EquipoGuia:
-    def __init__(self, coordinador,ultimaModificacion, listaProfesores):
+    def __init__(self, coordinador,modificaciones, listaProfesores, anho):
         self.coordinador = coordinador
-        self.ultimaModificacion = ultimaModificacion
+        self.modificaciones = modificaciones
         self.listaProfesores = listaProfesores
+        self.anho = anho
 
     def agregarProfesor(self, profesor):
         #validacion de datos
@@ -12,3 +13,6 @@ class EquipoGuia:
             return True
         else:
             return False
+        
+    def agregarModificacion(self, modificacion):
+        self.modificaciones += [modificacion]

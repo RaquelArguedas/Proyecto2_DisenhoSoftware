@@ -3,7 +3,7 @@ from Funcionario import Funcionario
 class AsistenteAdministrativo(Funcionario):
     def __init__(self,codigo,cedula,nombre,
     apellido1, apellido2, sede, numeroCelular,
-    correoElectronico, fotografia, numeroOficina):
+    correoElectronico,numeroOficina):
         super().__init__(codigo,cedula,nombre,
         apellido1, apellido2, sede, numeroCelular,
-        correoElectronico, fotografia, numeroOficina)
+        correoElectronico, numeroOficina)

@@ -143,7 +143,7 @@ CREATE PROCEDURE `createActividad`(in _nombreActividad varchar(50), in _tipoActi
 									in _fechaActividad date, in _horaInicio time,
 									in _horaFin time,  in _recordatorio int, 
 									in _medio int,  in _enlace varchar(100),
-									in _estado int, in _afiche blob, in _ultimaModificacion date)
+									in _estado int, in _ultimaModificacion date)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
     if( _nombreActividad is null or _tipoActividad is null or _fechaActividad  is null or
@@ -157,9 +157,9 @@ BEGIN
 		set _error = 2, _errmsg = "Ese estado no existe";
     else
 		insert into Actividad (nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-							  recordatorio, medio, enlace, estado, afiche, ultimaModificacion) 
+							  recordatorio, medio, enlace, estado, ultimaModificacion) 
 					values (_nombreActividad, _tipoActividad, _fechaActividad, _horaInicio, _horaFin, 
-							  _recordatorio, _medio, _enlace, _estado, _afiche, _ultimaModificacion);
+							  _recordatorio, _medio, _enlace, _estado, _ultimaModificacion);
 		select @@identity;
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -175,7 +175,7 @@ BEGIN
 		set _error = 2, _errmsg = "Ese idActividad no existe";
 	else
 		select idActividad, nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-				recordatorio, medio, enlace, estado, afiche, ultimaModificacion 
+				recordatorio, medio, enlace, estado, ultimaModificacion 
 		from Actividad where _idActividad = idActividad;
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -188,7 +188,7 @@ CREATE PROCEDURE `updateActividad`(in _idActividad int, in _nombreActividad varc
 									in _tipoActividad int, in _fechaActividad date, 
                                     in _horaInicio time, in _horaFin time,  in _recordatorio int, 
 									in _medio int,  in _enlace varchar(100),
-									in _estado int, in _afiche blob, in _ultimaModificacion date)
+									in _estado int, in _ultimaModificacion date)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
@@ -208,7 +208,6 @@ BEGIN
             medio = ifnull(_medio, medio),  
             enlace = ifnull(_enlace, enlace),
             estado = ifnull(_estado, estado),
-            afiche = ifnull(_afiche, afiche),
             ultimaModificacion = ifnull(_ultimaModificacion, ultimaModificacion)
 		where _idActividad = idActividad; 
 	end if;
@@ -248,14 +247,16 @@ DELIMITER ;
 #____________________________________________________Usuario
 #Create
 DELIMITER $$
-CREATE PROCEDURE `createUsuario`(in _correo varchar(100), in _contrasenha varchar(50))
+CREATE PROCEDURE `createUsuario`(in _correo varchar(100), in _contrasenha varchar(50), in _idRol int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
-    if(_correo is null or contrasenha is null )then 
+    if(_correo is null or _contrasenha is null )then 
 		-- si se quiere crear ningún atributo puede ser nulo, solo el id
 		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
-	else
-		insert into Usuario(correo, contrasenha) values (_correo, _contrasenha);
+	elseif( (select count(*) from Rol where _idRol = idRol)=0 )then 
+		set _error = 2, _errmsg = "Ese idRol no existe"; 
+    else
+		insert into Usuario(correo, contrasenha, idRol) values (_correo, _contrasenha, _idRol);
 		select @@identity;
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -270,7 +271,7 @@ BEGIN
 	if( (select count(*) from Usuario where _idUsuario = idUsuario)=0 )then 
 		set _error = 2, _errmsg = "Ese idUsuario no existe";
 	else
-		select correo, contrasenha from Usuario where _idUsuario = idUsuario;
+		select correo, contrasenha, idRol from Usuario where _idUsuario = idUsuario;
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
 END$$
@@ -279,15 +280,18 @@ DELIMITER ;
 #Update
 DELIMITER $$
 CREATE PROCEDURE `updateUsuario`(in _idUsuario int, in _correo varchar(100), 
-								 in _contrasenha varchar(50))
+								 in _contrasenha varchar(50), in _idRol int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Usuario where _idUsuario = idUsuario)=0 )then 
 		set _error = 2, _errmsg = "Ese idUsuario no existe";
+	elseif( _idRol is not null and (select count(*) from Rol where _idRol = idRol)=0 )then 
+		set _error = 2, _errmsg = "Ese idRol no existe";
 	else
 		update Usuario 
 		set correo = ifnull(_correo, correo),
-			contrasenha = ifnull(_contrasenha, contrasenha)
+			contrasenha = ifnull(_contrasenha, contrasenha),
+            idRol = ifnull(_idRol, idRol)
 		where _idUsuario = idUsuario; 
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -800,7 +804,7 @@ CREATE PROCEDURE `createProfesor`(in _cedula int, in _nombre varchar(50),
 								 in _apellido1 varchar(50), in _apellido2 varchar(50),
 								 in _idSede int, in _numeroCelular int,
 								 in _correoElectronico varchar(200), in _numeroOficina int,
-								 in _fotografia longblob, in _idAutoridad int, in _idEstado int)
+                                 in _idAutoridad int, in _idEstado int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
     if(_cedula is null or _nombre is null or _apellido1 is null or _apellido2 is null or
@@ -816,10 +820,10 @@ BEGIN
 		set _error = 2, _errmsg = "Ese idAutoridad no existe";
     else
 		insert into Profesor(cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
-								correoElectronico, numeroOficina, fotografia, idAutoridad, 
+								correoElectronico, numeroOficina, idAutoridad, 
                                 idEstado) 
 						values (_cedula, _nombre, _apellido1, _apellido2, _idSede, _numeroCelular,
-								_correoElectronico, _numeroOficina, _fotografia, _idAutoridad, 
+								_correoElectronico, _numeroOficina, _idAutoridad, 
                                 _idEstado);
 		select @@identity;
 	end if;
@@ -836,7 +840,7 @@ BEGIN
 		set _error = 2, _errmsg = "Ese idProfesor no existe";
 	else
 		select idProfesor, cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
-				correoElectronico, numeroOficina, fotografia, idAutoridad, idEstado 
+				correoElectronico, numeroOficina, idAutoridad, idEstado 
 		from profesor  
         where _idProfesor = idProfesor ;
 	end if;
@@ -850,7 +854,7 @@ CREATE PROCEDURE `updateProfesor`(in _idProfesor int,  in _cedula int,  in _nomb
 								 in _apellido1 varchar(50), in _apellido2 varchar(50),
 								 in _idSede int,  in _numeroCelular int,
 								 in _correoElectronico varchar(200), in _numeroOficina int,
-								 in _fotografia longblob, in _idAutoridad int, in _idEstado int)
+								 in _idAutoridad int, in _idEstado int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Profesor where _idProfesor  = idProfesor )=0 )then 
@@ -871,7 +875,6 @@ BEGIN
             numeroCelular = ifnull(_numeroCelular, numeroCelular),
             correoElectronico = ifnull(_correoElectronico, correoElectronico), 
             numeroOficina = ifnull(_numeroOficina, numeroOficina), 
-            fotografia = ifnull(_fotografia, fotografia), 
             idAutoridad = ifnull(_idAutoridad, idAutoridad), 
             idEstado = ifnull(_idEstado, idEstado)
 		where _idProfesor  = idProfesor ; 
@@ -905,8 +908,7 @@ DELIMITER $$
 CREATE PROCEDURE `createAsistenteAdministrativo`(in _cedula int, in _nombre varchar(50),
 								 in _apellido1 varchar(50), in _apellido2 varchar(50),
 								 in _idSede int, in _numeroCelular int,
-								 in _correoElectronico varchar(200), in _numeroOficina int,
-								 in _fotografia longblob)
+								 in _correoElectronico varchar(200), in _numeroOficina int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
     if(_cedula is null or _nombre is null or _apellido1 is null or _apellido2 is null or
@@ -918,9 +920,9 @@ BEGIN
 		set _error = 2, _errmsg = "Ese idSede no existe";
 	else
 		insert into asistenteadministrativo(cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
-								correoElectronico, numeroOficina, fotografia) 
+								correoElectronico, numeroOficina) 
 						values (_cedula, _nombre, _apellido1, _apellido2, _idSede, _numeroCelular,
-								_correoElectronico, _numeroOficina, _fotografia);
+								_correoElectronico, _numeroOficina);
 		select @@identity;
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -936,7 +938,7 @@ BEGIN
 		set _error = 2, _errmsg = "Ese idAsistente no existe";
 	else
 		select idAsistente, cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
-				correoElectronico, numeroOficina, fotografia
+				correoElectronico, numeroOficina
 		from AsistenteAdministrativo  
         where _idAsistente = idAsistente ;
 	end if;
@@ -950,8 +952,7 @@ CREATE PROCEDURE `updateAsistenteAdministrativo`(in _idAsistente int,
 								 in _cedula int,  in _nombre varchar(50),
 								 in _apellido1 varchar(50), in _apellido2 varchar(50),
 								 in _idSede int,  in _numeroCelular int,
-								 in _correoElectronico varchar(200), in _numeroOficina int,
-								 in _fotografia longblob)
+								 in _correoElectronico varchar(200), in _numeroOficina int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Asistente where _idAsistente  = idAsistente )=0 )then 
@@ -968,8 +969,7 @@ BEGIN
             idSede = ifnull(_idSede, idSede), 
             numeroCelular = ifnull(_numeroCelular, numeroCelular),
             correoElectronico = ifnull(_correoElectronico, correoElectronico), 
-            numeroOficina = ifnull(_numeroOficina, numeroOficina), 
-            fotografia = ifnull(_fotografia, fotografia)
+            numeroOficina = ifnull(_numeroOficina, numeroOficina)
 		where _idAsistente  = idAsistente ; 
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -1203,7 +1203,7 @@ CREATE PROCEDURE `updateProfesoresXEquipoGuia`(in _idProfesoresXEquipoGuia int,
 											   in _idProfesor varchar(50))
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
-	if( (select count(*) from ProfesoresXEquipoGuia where _idProfesoresXEquipoGuia = idProfesoresXEquipoGuia )=0 )then 
+	if( (select count(*) from ProfesoresXEquipoGuia where _idProfesoresXEquipoGuia = idProfesorXEquipoGuia )=0 )then 
 		set _error = 2, _errmsg = "Ese idProfesoresXEquipoGuia no existe";
 	elseif( _idProfesor is not null and (select count(*) from Profesor where _idProfesor = idProfesor)=0 )then 
 		set _error = 2, _errmsg = "Ese idProfesor no existe";
@@ -1213,7 +1213,7 @@ BEGIN
 		update ProfesoresXEquipoGuia 
 		set idProfesor = ifnull(_idProfesor, idProfesor),
 			idEquipoGuia = ifnull(_idEquipoGuia, idEquipoGuia)
-		where _idProfesoresXEquipoGuia = idProfesoresXEquipoGuia; 
+		where _idProfesoresXEquipoGuia = idProfesorXEquipoGuia; 
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
 END$$
@@ -1390,17 +1390,17 @@ DELIMITER ;
 #____________________________________________________EquipoGuia
 #Create
 DELIMITER $$
-CREATE PROCEDURE `createEquipoGuia`(in _idCoordinador int)
+CREATE PROCEDURE `createEquipoGuia`(in _idCoordinador int, in _anho int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
-    if(_idCoordinador is null)then 
+    if(_idCoordinador is null or _anho is null)then 
 		-- si se quiere crear ningún atributo puede ser nulo, solo el id
 		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
 	elseif( (select count(*) from Profesor where _idCoordinador = idProfesor)=0 )then 
 		set _error = 2, _errmsg = "Ese idCoordinador no existe";
 	else
-		insert into EquipoGuia(idCoordinador) 
-						values (_idCoordinador);
+		insert into EquipoGuia(idCoordinador, anho) 
+						values (_idCoordinador, _anho);
 		select @@identity;
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -1415,7 +1415,7 @@ BEGIN
 	if( (select count(*) from EquipoGuia where _idEquipoGuia = idEquipoGuia)=0 )then 
 		set _error = 2, _errmsg = "Ese idEquipoGuia no existe";
 	else
-		select idEquipoGuia, idCoordinador
+		select idEquipoGuia, idCoordinador, anho
 		from EquipoGuia
         where _idEquipoGuia = idEquipoGuia;
 	end if;
@@ -1425,7 +1425,7 @@ DELIMITER ;
 
 #Update
 DELIMITER $$
-CREATE PROCEDURE `updateEquipoGuia`(in _idEquipoGuia int, in _idCoordinador int)
+CREATE PROCEDURE `updateEquipoGuia`(in _idEquipoGuia int, in _idCoordinador int, in _anho int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from EquipoGuia where _idEquipoGuia = idEquipoGuia)=0 )then 
@@ -1434,7 +1434,8 @@ BEGIN
 		set _error = 2, _errmsg = "Ese idProfesor no existe";
 	else
 		update EquipoGuia 
-		set idCoordinador = ifnull(_idCoordinador, idCoordinador)
+		set idCoordinador = ifnull(_idCoordinador, idCoordinador),
+			anho = ifnull(_anho, anho)
 		where _idEquipoGuia = idEquipoGuia; 
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -1460,17 +1461,17 @@ DELIMITER ;
 #____________________________________________________Bitacora
 #Create
 DELIMITER $$
-CREATE PROCEDURE `createBitacora`(in _fecha date, in _hora time, in _idAutor int)
+CREATE PROCEDURE `createBitacora`(in _fecha date, in _hora time, in _idAutor int, in _descripcion varchar(100))
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
-    if(_fecha is null or _hora is null or _idAutor is null)then 
+    if(_fecha is null or _hora is null or _idAutor is null or _descripcion is null)then 
 		-- si se quiere crear ningún atributo puede ser nulo, solo el id
 		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
 	elseif( (select count(*) from Profesor where _idAutor = idProfesor)=0 )then 
 		set _error = 2, _errmsg = "Ese idAutor no existe";
 	else
-		insert into Bitacora(fecha , hora, idAutor) 
-						values (_fecha , _hora, _idAutor);
+		insert into Bitacora(fecha , hora, idAutor, descripcion) 
+						values (_fecha , _hora, _idAutor, _descripcion);
 		select @@identity;
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -1485,7 +1486,7 @@ BEGIN
 	if( (select count(*) from Bitacora where _idBitacora = idBitacora)=0 )then 
 		set _error = 2, _errmsg = "Ese idBitacora no existe";
 	else
-		select idBitacora, fecha, hora, idAutor
+		select idBitacora, fecha, hora, idAutor, descripcion
 		from Bitacora
         where _idBitacora = idBitacora;
 	end if;
@@ -1495,7 +1496,7 @@ DELIMITER ;
 
 #Update
 DELIMITER $$
-CREATE PROCEDURE `updateBitacora`(in _idBitacora int, in _fecha date, in _hora time, in _idAutor int)
+CREATE PROCEDURE `updateBitacora`(in _idBitacora int, in _fecha date, in _hora time, in _idAutor int, in _descripcion varchar(100))
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Bitacora where _idBitacora = idBitacora)=0 )then 
@@ -1505,7 +1506,8 @@ BEGIN
 	else
 		update Bitacora 
 		set fecha = ifnull(_fecha, fecha), hora = ifnull(_hora, hora), 
-			idAutor = ifnull(_idAutor, idAutor)
+			idAutor = ifnull(_idAutor, idAutor),
+            descripcion = ifnull(_descripcion, descripcion)
 		where _idBitacora = idBitacora; 
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;

@@ -1,8 +1,8 @@
 class Funcionario:
-    def __init__(self,codigo,cedula,nombre,
+    def __init__(self,id,cedula,nombre,
     apellido1, apellido2, sede, numeroCelular,
-    correoElectronico, fotografia, numeroOficina):
-        self.codigo = codigo
+    correoElectronico, numeroOficina):
+        self.id = id
         self.cedula = cedula
         self.nombre = nombre
         self.apellido1 = apellido1
@@ -10,6 +10,5 @@ class Funcionario:
         self.sede = sede
         self.numeroCelular = numeroCelular
         self.correoElectronico = correoElectronico
-        self.fotografia = fotografia #Acá se va a guardar el id de MongoDB
         self.numeroOficina = numeroOficina
         
