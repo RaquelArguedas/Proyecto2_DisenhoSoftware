@@ -1,5 +1,7 @@
 from SingletonDAO import *
 from MainController import *
+from datetime import time
+from SingletonSesionActual import *
 
 if __name__ == "__main__":
     
@@ -10,8 +12,6 @@ if __name__ == "__main__":
     else:
         print("sad")
 
-    #print(control.buscarEstudiante(1).nombre)
-    #print(control.crearProfesor(4, "Raquel", "Arguedas", "Sanchez", 1, 8989, "r.arguedas@gmail.com", 999, None, 1,1))
 
     print("\n")
     dao = SingletonDAO()
@@ -21,9 +21,7 @@ if __name__ == "__main__":
     print(control.getEquipoGuia())
     """
 
-    '''
-    s1 = SingletonDAO()
-    s1.printIt()
+    estudiantes = control.consultarEstudiantes(Ordenamiento.SEDE)
 
     s2 = SingletonDAO()
 

@@ -10,22 +10,42 @@ insert into EstadoActividad(descripcion) values ("REALIZADA");
 insert into EstadoActividad(descripcion) values ("CANCELADA");
 
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, afiche, ultimaModificacion)
+						recordatorio, medio, enlace, estado, ultimaModificacion)
 			 values ("Actividad1", 1, "2023-09-09", "13:00", "15:00", 
-						3, 2, "link", 1, null, "2023-10-09");
+						3, 2, "link", 1,"2023-10-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, afiche, ultimaModificacion)
+						recordatorio, medio, enlace, estado, ultimaModificacion)
 			 values ("Actividad2", 3, "2023-08-08", "11:00", "13:00", 
-						3, 2, "link", 1, null, "2023-10-09");
+						3, 2, "link", 1, "2023-10-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, afiche, ultimaModificacion)
+						recordatorio, medio, enlace, estado, ultimaModificacion)
 			 values ("Actividad3", 2, "2023-02-01", "09:00", "11:00", 
-						3, 2, "link", 1, null, "2023-10-09");
-                        
-insert into Usuario(correo, contrasenha)
-			 values ("user1@gmail.com", "con1");
-insert into Usuario(correo, contrasenha)
-			 values ("user2@gmail.com", "con2");
+						3, 2, "link", 1, "2023-10-09");
+
+insert into Rol(descripcion) values("PROFESOR");
+insert into Rol(descripcion) values("PROFESOR_COORDINADOR");
+insert into Rol(descripcion) values("ASISTENTE");
+insert into Rol(descripcion) values("ASISTENTE_CARTAGO");
+insert into Rol(descripcion) values("ESTUDIANTE");
+
+insert into Usuario(correo, contrasenha, idRol)
+			 values ("rafa@gmail.com", "rafa", 2);
+insert into Usuario(correo, contrasenha, idRol)
+			 values ("pau@gmail.com", "pau", 1);
+insert into Usuario(correo, contrasenha, idRol)
+			 values ("hugo@gmail.com","hugo", 1);
+insert into Usuario(correo, contrasenha, idRol)
+			 values ("as@gmail.com","as", 4); 
+insert into Usuario(correo, contrasenha, idRol)
+			 values ("dani@gmail.com", "dani", 5);
+insert into Usuario(correo, contrasenha, idRol)
+			 values ("Mariana@gmail.com", "Mariana", 5);
+insert into Usuario(correo, contrasenha, idRol)
+			 values ("Roberto@gmail.com","Roberto", 5);
+insert into Usuario(correo, contrasenha, idRol)
+			 values ("blop@gmail.com","blop", 5); 
+
+
              
 insert into PlanTrabajo(anno) values(2019);
 insert into PlanTrabajo(anno) values(2020);
@@ -59,17 +79,17 @@ insert into Sede(descripcion) values ("AL");
 insert into Sede(descripcion) values ("LI");
 
 insert into Profesor(cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
-						correoElectronico, numeroOficina, fotografia, idAutoridad, idEstado)
+						correoElectronico, numeroOficina, idAutoridad, idEstado)
 			 values (1, "Rafael", "Bonilla", "Vargas", 1, 83082888,
-						"rafa@gmail.com", 22334455, null, 1, 1);
+						"rafa@gmail.com", 22334455, 1, 1);
 insert into Profesor(cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
-						correoElectronico, numeroOficina, fotografia, idAutoridad, idEstado)
+						correoElectronico, numeroOficina, idAutoridad, idEstado)
 			 values (2, "Paula", "Venegas", "Jimenez", 1, 83082889,
-						"pau@gmail.com", 89897813, null, 2, 1);
+						"pau@gmail.com", 89897813, 2, 1);
 insert into Profesor(cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
-						correoElectronico, numeroOficina, fotografia, idAutoridad, idEstado)
+						correoElectronico, numeroOficina, idAutoridad, idEstado)
 			 values (3, "Hugo", "Rodriguez", "Romero", 1, 83082877,
-						"hugo@gmail.com", 23423, null, 2, 1);
+						"hugo@gmail.com", 23423, 2, 1);
 
 insert into ResponsableXActividad(idResponsable, idActividad) 
 						   values(1, 1);
@@ -78,15 +98,15 @@ insert into ResponsableXActividad(idResponsable, idActividad)
 insert into ResponsableXActividad(idResponsable, idActividad) 
 						   values(2, 1);
 
-insert into EquipoGuia(idCoordinador) values (1);
+insert into EquipoGuia(idCoordinador, anho) values (1,2023);
 
 insert into ProfesoresXEquipoGuia(idEquipoGuia, idProfesor) values (1, 1);
 insert into ProfesoresXEquipoGuia(idEquipoGuia, idProfesor) values (1, 2);
 insert into ProfesoresXEquipoGuia(idEquipoGuia, idProfesor) values (1, 3);
 
-insert into Bitacora(fecha, hora, idAutor) values ("2023-09-09", "12:30", 1);
-insert into Bitacora(fecha, hora, idAutor) values ("2023-02-02", "13:30", 1);
-insert into Bitacora(fecha, hora, idAutor) values ("2023-03-03", "14:30", 2);
+insert into Bitacora(fecha, hora, idAutor, descripcion) values ("2023-09-09", "12:30", 1, "se hizo un cambio");
+insert into Bitacora(fecha, hora, idAutor, descripcion) values ("2023-02-02", "13:30", 1, "se hizo un cambio");
+insert into Bitacora(fecha, hora, idAutor, descripcion) values ("2023-03-03", "14:30", 2, "se hizo un cambio");
 
 insert into BitacoraXEquipoGuia(idEquipoGuia, idBitacora) values (1, 1);
 insert into BitacoraXEquipoGuia(idEquipoGuia, idBitacora) values (1, 2);
@@ -109,23 +129,58 @@ insert into Recordatorio (idActividad, fechas) values (1, "fechas1");
 insert into Recordatorio (idActividad, fechas) values (2, "fechas2");
 
 insert into AsistenteAdministrativo(cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
-						correoElectronico, numeroOficina, fotografia)
-			 values (1, "Asistente1", "Hidalgo", "Ramirez", 1, 90,
-						"as@gmail.com", 23, null);
+						correoElectronico, numeroOficina)
+			 values (1, "Asistente1", "Hidalgo", "Ramirez", 2, 90,
+						"as@gmail.com", 23);
 
-insert into Estudiante(nombre, apellido1, apellido2, idSede, numeroCelular,
+
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
 						correoElectronico, idEstado)
-			 values ("Daniela", "Mendez", "Arias", 1, 83090909,
+			 values (202103257,"Daniela", "Mendez", "Arias", 2, 83090909,
 						"dani@gmail.com", 1);
-insert into Estudiante(nombre, apellido1, apellido2, idSede, numeroCelular,
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
 						correoElectronico, idEstado)
-			 values ("Mariana", "Mendez", "Arias", 1, 834635609,
+			 values (202094,"Mariana", "Mendez", "Arias", 2, 834635609,
 						"Mariana@gmail.com", 1);
-insert into Estudiante(nombre, apellido1, apellido2, idSede, numeroCelular,
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
 						correoElectronico, idEstado)
-			 values ("Roberto", "Gutierrez", "Sanchez", 1, 72648432,
+			 values (20198,"Roberto", "Gutierrez", "Sanchez", 3, 72648432,
 						"Roberto@gmail.com", 1);
-insert into Estudiante(nombre, apellido1, apellido2, idSede, numeroCelular,
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
 						correoElectronico, idEstado)
-			 values ("Olman", "Laguna", "Blop", 1, 784902884,
+			 values (37492,"Roberto", "Gutierrez", "Sanchez", 5, 72648432,
+						"Roberto@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (20210324,"Olman", "Laguna", "Blop", 5, 784902884,
 						"blop@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (204323,"Daniela", "Mendez", "Arias", 1, 83090909,
+						"dani@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (202143,"Mariana", "Mendez", "Arias", 1, 834635609,
+						"Mariana@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (20290, "Roberto", "Gutierrez", "Sanchez", 1, 72648432,
+						"Roberto@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (201803,"Olman", "Laguna", "Blop", 1, 784902884,
+						"blop@gmail.com", 1);
+					
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (28422,"Olman", "Laguna", "Blop", 3, 784902884,
+						"blop@gmail.com", 1);
+                        
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (20240,"Daniela", "Mendez", "Arias", 4, 83090909,
+						"dani@gmail.com", 1);
+insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, idEstado)
+			 values (20220,"Mariana", "Mendez", "Arias", 5, 834635609,
+						"Mariana@gmail.com", 1);
