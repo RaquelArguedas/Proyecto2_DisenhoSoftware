@@ -44,14 +44,18 @@ class SingletonDAO(metaclass=SingletonMeta):
     connection = None
     cursor = None
     #Atributos para conetarse a MONGO
-    """ 
-        MONGO_HOST="localhost"
-        MONGO_PUERTO="27017"
-        MONGO_TIEMPO_FUERA=1000
-        MONGO_URI="mongodb://"+MONGO_HOST+":"+MONGO_PUERTO+"/"
-        MONGO_BASEDATOS="FotosOrientaTEC"
-        MONGO_COLECCION="FotosProfesores"
-    """    
+
+    MONGO_HOST="localhost"
+    MONGO_PUERTO="27017"
+    MONGO_TIEMPO_FUERA=1000
+    MONGO_URI="mongodb://"+MONGO_HOST+":"+MONGO_PUERTO+"/"
+    MONGO_CLIENTE = None
+    MONGO_BASEDATOS = None
+    collecFtProf = None
+    collecAfiche = None 
+    collecEvLista = None
+    collecEvFoto= None
+   
     #Atributos del modelo
     usuarios = []
     estudiantes = []
@@ -530,36 +534,144 @@ class SingletonDAO(metaclass=SingletonMeta):
     #CONEXION A MONGODB
     def connectMongoServer(self):
         try:
-            self.MONGO_CLIENT = pymongo.MongoClient('localhost',27017)
-            self.MONGO_DATABASE = MONGO_CLIENT.FotosOrientaTEC
-            print("Conexión a Mongo exitosa.")
+            self.MONGO_CLIENTE = pymongo.MongoClient(self.MONGO_URI,serverSelectionTimeoutMS=self.MONGO_TIEMPO_FUERA)
+            self.MONGO_BASEDATOS = self.MONGO_CLIENTE["FotosOrientaTEC"]   
+            self.collecFtProf = self.MONGO_BASEDATOS["FotosProfesores"]
+            self.collecAfiche = self.MONGO_BASEDATOS["AficheActividad"]
+            self.collecEvLista = self.MONGO_BASEDATOS["EvListaAsistencia"]
+            self.collecEvFoto= self.MONGO_BASEDATOS["EvFotosParticipantes"]
+            print("Conexion a Mongo exitosa.")
         except Exception as ex:
-            print("Error:" + ex)
-        
-
+            print(ex)
+ 
     def closeMongoConnection(self):
         try:
-         pymongo.MongoClient.close()
-        except Exception as ex:
-            print("Error: "+ ex)
-
-    #CRUD "FotosProfesores"
-    #CRUD "AfichesActividad"
-    #CRUD "EvListaAsistencia"
-    #CRUD "EvFotosParticipantes"
-    def buscarFotosProfesores(self, idBuscado):
-        try:
-            self.connectMongoServer() #Se abre la conexión
-            collection= self.MONGO_DATABASE.FotosProfesores
-            cursor = collection.find({"idProfesor": idBuscado})
-            for registro in cursor:
-                print(registro)
-            self.closeMongoConnection() #Cerrar la conexión después de el proceso
+            self.MONGO_CLIENTE.close()
         except Exception as ex:
             print(ex)
 
-    #Agrega fotos a Mongo
-    def crearRegistro(self,flag):
-        print("Algo")
-    def actualizarRegistro(self,flag):
-        print("Doing")
+    #-----------MÉTODOS PARA BUSCAR FOTOS DE MONGO--------------------------#
+    #Registrar NUEVOS archivos 
+    def registrarFotoProfesor(self,idProfe,nuevaFoto):
+        try:
+            self.connectMongoServer()
+            #revisar que no exista el registro 
+            cantRegistros = self.collecFtProf.count_documents({'idProfe':idProfe})
+            if(cantRegistros > 0):
+                print("El registro ya existe, NO SE PUEDE actualizar.")
+            else:
+                self.collecFtProf.insert_one({'idProfe':idProfe, 'foto': nuevaFoto})
+                print("Se ha insertado la foto exitosamente.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+
+    def registrarFotoAfiche(self,idActividad,nuevaFoto):
+        try:
+            self.connectMongoServer()
+            self.collecAfiche.insert_one({'idActividad':idActividad, 'foto': nuevaFoto})
+            print("Foto registrada con exito.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+
+    def registrarFotoEvLista(self,idEvidencia,nuevaFoto):
+        try:
+            self.connectMongoServer()
+            self.collecEvLista.insert_one({'idEvidencia':idEvidencia, 'foto': nuevaFoto})
+            print("Foto registrada con exito.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+    def registrarFotoEv(self,idEvidencia,nuevaFoto):
+        try:
+            self.connectMongoServer()
+            self.collecEvFoto.insert_one({'idEvidencia':idEvidencia, 'foto': nuevaFoto})
+            print("Foto registrada con exito.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+    #-------------------------------REGISTRAR-------------------------------
+    #-------------------------------SET-------------------------------
+    def setFotoProfesor(self,idBuscado, nuevaFoto):
+        try:
+            self.connectMongoServer()
+            #Revisar que exista el registro 
+            cantRegistros = self.collecFtProf.count_documents({'idProfe':idBuscado})
+            if(cantRegistros > 0):
+                self.collecFtProf.update_one({'idProfe':idBuscado},{'$set':{'foto':nuevaFoto}})
+                print("Se ha actualizado la foto exitosamente. ")
+            else:
+                print("El registro que intenta actualizar NO existe.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+    """
+        El profesor es el único que necesita actualizar registros porque mantiene UNA única foto, 
+        pueden existir n fotos de una evidencia, n fotos de un afiche para una actividad. 
+    """
+    #-------------------------------SET-------------------------------
+    #-------------------------------GETTERS-------------------------------
+    def getFotoProfesor(self,idBuscado):
+        try:
+            self.connectMongoServer()
+            #revisar que el profesor exista
+            cantRegistros = self.collecFtProf.count_documents({'idProfe':idBuscado})
+            if cantRegistros > 0 :
+                for documento in self.collecFtProf.find({"idProfe": idBuscado},{ "idProfe": 0, "_id":0}):
+                    return documento["foto"]
+                self.closeMongoConnection()
+            else:
+                print("El registro que intenta obtener NO existe.")
+        except Exception as ex:
+            print(ex)
+    def getFotoAfiche(self,idBuscado):
+        try:
+            self.connectMongoServer()
+            #revisar que el registro exista
+            cantRegistros = self.collecAfiche.count_documents({'idActividad':idBuscado})
+            if cantRegistros > 0 :
+                for documento in self.collecAfiche.find({"idActividad": idBuscado},{ "idActividad": 0, "_id":0}):
+                    return documento["foto"]
+                self.closeMongoConnection()
+            else:
+                print("La actividad que busca NO existe.")
+        except Exception as ex:
+            print(ex)
+
+    def getFotoEvLista(self,idBuscado):
+        try:
+            self.connectMongoServer()
+            #revisar que el registro exista
+            cantRegistros = self.collecEvLista.count_documents({'idEvidencia':idBuscado})
+            if cantRegistros > 0 :
+                for documento in self.collecEvLista.find({"idEvidencia": idBuscado}):
+                    return documento["foto"]
+                self.closeMongoConnection()
+            else:
+                print("La evidencia que busca NO existe.")
+        except Exception as ex:
+            print(ex) 
+
+    def getALLEvLista(self):
+        try:
+            self.connectMongoServer()
+            for documento in self.collecEvLista.find():
+                print(documento)
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex) 
+
+    def getFotoEv(self, idBuscado):
+        try:
+            self.connectMongoServer()
+            cantRegistros = self.collecEvFoto.count_documents({'idEvidencia':idBuscado})
+            if cantRegistros > 0 :
+                for documento in self.collecEvFoto.find({"idEvidencia": idBuscado},{ "idEvidencia": 0, "_id":0}):
+                    return documento["foto"]
+                self.closeMongoConnection()
+            else:
+                print("La evidencia que busca NO existe.")
+        except Exception as ex:
+            print(ex)
+    #-------------------------------GETTERS-------------------------------

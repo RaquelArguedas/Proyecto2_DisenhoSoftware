@@ -30,54 +30,126 @@ def closeMongoConnection():
         print(ex)
 #-----------MÉTODOS PARA BUSCAR FOTOS DE MONGO--------------------------#
 #Registrar NUEVOS archivos 
-def registrarFotoProfesor(idProfe)
-#Setters fotos 
-def setFotoProfesor(idBuscado, nuevaFoto):
+def registrarFotoProfesor(idProfe,nuevaFoto):
     try:
         connectMongoServer()
-        collecFtProf.update_one({'idProfe':idBuscado},{'$set':{'foto':nuevaFoto}})
-        print("Se ha actualizado la foto exitosamente. ")
+        #revisar que no exista el registro 
+        cantRegistros = collecFtProf.count_documents({'idProfe':idProfe})
+        if(cantRegistros > 0):
+            print("El registro ya existe, NO SE PUEDE actualizar.")
+        else:
+            collecFtProf.insert_one({'idProfe':idProfe, 'foto': nuevaFoto})
+            print("Se ha insertado la foto exitosamente.")
         closeMongoConnection()
     except Exception as ex:
         print(ex)
 
-#Getters fotos
+def registrarFotoAfiche(idActividad,nuevaFoto):
+    try:
+        connectMongoServer()
+        collecAfiche.insert_one({'idActividad':idActividad, 'foto': nuevaFoto})
+        print("Foto registrada con exito.")
+        closeMongoConnection()
+    except Exception as ex:
+        print(ex)
+
+def registrarFotoEvLista(idEvidencia,nuevaFoto):
+    try:
+        connectMongoServer()
+        collecEvLista.insert_one({'idEvidencia':idEvidencia, 'foto': nuevaFoto})
+        print("Foto registrada con exito.")
+        closeMongoConnection()
+    except Exception as ex:
+        print(ex)
+
+def registrarFotoEv(idEvidencia,nuevaFoto):
+    try:
+        connectMongoServer()
+        collecEvFoto.insert_one({'idEvidencia':idEvidencia, 'foto': nuevaFoto})
+        print("Foto registrada con exito.")
+        closeMongoConnection()
+    except Exception as ex:
+        print(ex)
+#-------------------------------REGISTRAR-------------------------------
+
+#-------------------------------SET-------------------------------
+def setFotoProfesor(idBuscado, nuevaFoto):
+    try:
+        connectMongoServer()
+        #Revisar que exista el registro 
+        cantRegistros = collecFtProf.count_documents({'idProfe':idBuscado})
+        if(cantRegistros > 0):
+            collecFtProf.update_one({'idProfe':idBuscado},{'$set':{'foto':nuevaFoto}})
+            print("Se ha actualizado la foto exitosamente. ")
+        else:
+            print("El registro que intenta actualizar NO existe.")
+        closeMongoConnection()
+    except Exception as ex:
+        print(ex)
+"""
+    El profesor es el único que necesita actualizar registros porque mantiene UNA única foto, 
+    pueden existir n fotos de una evidencia, n fotos de un afiche para una actividad. 
+"""
+#-------------------------------SET-------------------------------
+
+#-------------------------------GETTERS-------------------------------
 def getFotoProfesor(idBuscado):
     try:
         connectMongoServer()
-        for documento in collecFtProf.find({"idProfe": idBuscado},{ "idProfe": 0, "_id":0}):
-            return documento["foto"]
-        closeMongoConnection()
+        #revisar que el profesor exista
+        cantRegistros = collecFtProf.count_documents({'idProfe':idBuscado})
+        if cantRegistros > 0 :
+            for documento in collecFtProf.find({"idProfe": idBuscado},{ "idProfe": 0, "_id":0}):
+                return documento["foto"]
+            closeMongoConnection()
+        else:
+            print("El registro que intenta obtener NO existe.")
+
     except Exception as ex:
         print(ex)
 
 def getFotoAfiche(idBuscado):
     try:
         connectMongoServer()
-        for documento in collecAfiche.find({"idActividad": idBuscado},{ "idActividad": 0, "_id":0}):
-            return documento["foto"]
-        closeMongoConnection()
+        #revisar que el registro exista
+        cantRegistros = collecAfiche.count_documents({'idActividad':idBuscado})
+        if cantRegistros > 0 :
+            for documento in collecAfiche.find({"idActividad": idBuscado},{ "idActividad": 0, "_id":0}):
+                return documento["foto"]
+            closeMongoConnection()
+        else:
+            print("La actividad que busca NO existe.")
     except Exception as ex:
         print(ex)
+
 def getFotoEvLista(idBuscado):
     try:
         connectMongoServer()
-        for documento in collecEvLista.find({"idEvidencia": idBuscado},{ "idEvidencia": 0, "_id":0}):
-            return documento["foto"]
-        closeMongoConnection()
+        #revisar que el registro exista
+        cantRegistros = collecEvLista.count_documents({'idActividad':idBuscado})
+        if cantRegistros > 0 :
+            for documento in collecEvLista.find({"idEvidencia": idBuscado},{ "idEvidencia": 0, "_id":0}):
+                return documento["foto"]
+            closeMongoConnection()
+        else:
+            print("La evidencia que busca NO existe.")
     except Exception as ex:
         print(ex) 
 
 def getFotoEv(idBuscado):
     try:
         connectMongoServer()
-        for documento in collecEvFoto.find({"idEvidencia": idBuscado},{ "idEvidencia": 0, "_id":0}):
-            return documento["foto"]
-        closeMongoConnection()
+        cantRegistros = collecEvFoto.count_documents({'idActividad':idBuscado})
+        if cantRegistros > 0 :
+            for documento in collecEvFoto.find({"idEvidencia": idBuscado},{ "idEvidencia": 0, "_id":0}):
+                return documento["foto"]
+            closeMongoConnection()
+        else:
+            print("La evidencia que busca NO existe.")
     except Exception as ex:
         print(ex)
+#-------------------------------GETTERS-------------------------------
 
-
-#print(getFotoProfesor(1))
-setFotoProfesor(1, "Puppy Mini")
-print(getFotoProfesor(1))
+#setFotoProfesor(1, "Puppy Mini")
+#setFotoProfesor(3, "Puppy Mini")
+#print(getFotoProfesor(3))

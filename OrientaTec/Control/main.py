@@ -15,10 +15,11 @@ if __name__ == "__main__":
 
     print("\n")
     dao = SingletonDAO()
-    prof = dao.profesores[0]
-    print(control.getEquipoGuia())
+    #prof = dao.profesores[0]
+    """print(control.getEquipoGuia())
     print(control.agregarProfesor(prof, 1))
     print(control.getEquipoGuia())
+    """
 
     '''
     s1 = SingletonDAO()
@@ -29,4 +30,10 @@ if __name__ == "__main__":
     if s1 == s2:
         print("Todo sano")
     '''
-    
+    #Pruebas Mongo
+    #dao.registrarFotoEvLista(2,"La nueva foto 2")
+    dao.getALLEvLista()
+   #dao.getFotoEvLista(2)
+    #print(dao.getFotoProfesor(1))
+
+
