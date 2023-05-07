@@ -33,5 +33,5 @@ if __name__ == "__main__":
     dao.getALLEvLista()
    #dao.getFotoEvLista(2)
     #print(dao.getFotoProfesor(1))
-
+    '''
 
