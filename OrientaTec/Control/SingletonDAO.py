@@ -9,6 +9,7 @@ import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
 sys.path.append('./Modelo')
 #Importo la Clase
+
 from Usuario import *
 from Estudiante import * 
 from EquipoGuia import *
@@ -43,17 +44,15 @@ class SingletonDAO(metaclass=SingletonMeta):
     connection = None
     cursor = None
     #Atributos para conetarse a MONGO
-    """ MONGO_HOST = None 
-    MONGO_PORT = None 
-    MONGO_TIMEOUT = None 
-    MONGO_URI = None 
-    MONGO_DATABASE = None 
-    MONGO_CLIENT = None 
+    """ 
+        MONGO_HOST="localhost"
+        MONGO_PUERTO="27017"
+        MONGO_TIEMPO_FUERA=1000
+        MONGO_URI="mongodb://"+MONGO_HOST+":"+MONGO_PUERTO+"/"
+        MONGO_BASEDATOS="FotosOrientaTEC"
+        MONGO_COLECCION="FotosProfesores"
     """
-    #MONGO_HOST = "localhost"
-    #MONGO_PORT = "27017"
-    #MONGO_TIMEOUT = 30000 #MILISEGUNDOS
-    #MONGO_URI = "mongodb://"+MONGO_HOST+":"+MONGO_PORT+"/"
+
     
     MONGO_CLIENT = pymongo.MongoClient('localhost',27017)
     MONGO_DATABASE = MONGO_CLIENT.FotosOrientaTEC
