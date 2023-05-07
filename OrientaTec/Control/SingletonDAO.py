@@ -51,12 +51,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         MONGO_URI="mongodb://"+MONGO_HOST+":"+MONGO_PUERTO+"/"
         MONGO_BASEDATOS="FotosOrientaTEC"
         MONGO_COLECCION="FotosProfesores"
-    """
-
-    
-    MONGO_CLIENT = pymongo.MongoClient('localhost',27017)
-    MONGO_DATABASE = MONGO_CLIENT.FotosOrientaTEC
-    
+    """    
     #Atributos del modelo
     usuarios = []
     estudiantes = []
