@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState, useRef} from 'react';
 import { Navbar } from '../navegacion/Navbar';
 import { BarraLateral } from '../navegacion/BarraLateral';
 import { OpcionesMenuPC } from './OpcionesMenuPC';
@@ -9,7 +9,7 @@ export  function MenuProfesorC() {
   return (
     <Fragment>
         <div className='container'>
-            <Navbar linkInicio='/menuCoordinador'/>
+            <Navbar/>
 
             <div class="row">
             <div class="col-sm-3">

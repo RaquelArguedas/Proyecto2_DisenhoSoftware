@@ -1,5 +1,5 @@
 //Ventana de Menú Asistente
-import React, { Fragment } from 'react';
+import React, {Fragment} from 'react';
 import { Navbar } from '../navegacion/Navbar';
 import { BarraLateral } from '../navegacion/BarraLateral';
 import OpcionesMenu from './OpcionesMenu';
@@ -9,7 +9,7 @@ export function MenuAsistente() {
   return (
     <Fragment>
         <div className='container'>
-            <Navbar linkInicio='/menuAsistente'/>
+            <Navbar/>
 
             <div class="row">
               <div class="col-sm-3">

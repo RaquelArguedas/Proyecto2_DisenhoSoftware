@@ -1,11 +1,8 @@
 import React, { Fragment, useState, useEffect  } from 'react'
-import { useLocation } from "react-router-dom";
 import { Navbar } from './Navbar'
 import { BarraLateral } from './BarraLateral'
 
 export  function Configuracion() {
-    const state = useLocation().state
-
     const [name, setName] = useState('');
     const [apellido1, setApellido1] = useState('');
     const [apellido2, setApellido2] = useState('');
@@ -70,7 +67,7 @@ export  function Configuracion() {
   return (
     <Fragment>
          <div className="container">
-                <Navbar linkInicio={state.configLinkInicio}/>
+                <Navbar />
                 <div class="row">
                     <div class="col-sm-3">
                         <BarraLateral />

@@ -3,18 +3,15 @@ import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar';
 import { BarraLateral } from '../../navegacion/BarraLateral';
 import { Actividad } from './verActividades/Actividad'
-import { useNavigate } from "react-router-dom";
 
 export function VerActividades() {
-  let navigate = useNavigate();
 
-  const gotoMenuProfesor = () => { navigate("/menuProfesor", {}); };
   const { state } = useLocation();
 
   return (
     <Fragment>
       <div className='container'>
-        <Navbar linkInicio={state.linkMenu} />
+        <Navbar />
 
         <div class="row">
           <div class="col-sm-3">
@@ -69,18 +66,12 @@ export function VerActividades() {
 
             {/* Lista de actividades */}
             <div class="overflow-auto" id="listaActividades">
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
-            </div>
-
-            <div class="col">
-                <button type="button" class="btn btn-primary" onClick={gotoMenuProfesor}>
-                    Atrás
-                </button>
+                <Actividad comentarios = {state.comentarios} />
+                <Actividad comentarios = {state.comentarios}/>
+                <Actividad comentarios = {state.comentarios}/>
+                <Actividad comentarios = {state.comentarios}/>
+                <Actividad comentarios = {state.comentarios}/>
+                <Actividad comentarios = {state.comentarios}/>
             </div>
 
           </div>
