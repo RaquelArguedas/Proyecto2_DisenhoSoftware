@@ -9,7 +9,7 @@ export  function MenuProfesor() {
   return (
     <Fragment>
         <div className='container'>
-            <Navbar/>
+            <Navbar linkInicio='/menuProfesor'/>
 
             <div class="row">
             <div class="col-sm-3">

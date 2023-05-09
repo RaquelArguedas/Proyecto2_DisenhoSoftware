@@ -3,11 +3,11 @@ import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
-import { useNavigate } from "react-router-dom";
+
 export function ModificarEstudiante() {
-    //let navigate = useNavigate();
 
     const { state } = useLocation();
+    
 
     const [estado, setEstado] = useState("");
     const [name, setName] = useState('');
