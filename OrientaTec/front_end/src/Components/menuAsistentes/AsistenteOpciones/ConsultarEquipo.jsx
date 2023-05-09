@@ -1,14 +1,17 @@
 import React, { Fragment } from 'react'
+import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { FilaProfesor } from './columnasTablas/FilaProfesor'
 import { Icon } from '@iconify/react';
 
 export function ConsultarEquipo() {
+    const { state } = useLocation();
+
     return (
         <Fragment>
             <div className="container">
-                <Navbar />
+                <Navbar linkInicio={state.linkMenu}/>
                 <div class="row">
                     <div class="col-sm-3">
                         <BarraLateral />

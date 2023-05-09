@@ -1,5 +1,4 @@
-import React, {Fragment, useState, useRef} from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import React, {Fragment} from 'react';
 import { Navbar } from '../navegacion/Navbar';
 import { BarraLateral } from '../navegacion/BarraLateral';
 import { OpcionesMenuProfesor } from './OpcionesMenuProfesor';
@@ -10,7 +9,7 @@ export  function MenuProfesor() {
   return (
     <Fragment>
         <div className='container'>
-            <Navbar/>
+            <Navbar linkInicio='/menuProfesor'/>
 
             <div class="row">
             <div class="col-sm-3">
