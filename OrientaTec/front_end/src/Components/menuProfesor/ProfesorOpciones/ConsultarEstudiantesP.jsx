@@ -4,22 +4,10 @@ import { Navbar } from '../../navegacion/Navbar'
 import { FilaEstudiante } from '../../menuAsistentes/AsistenteOpciones/columnasTablas/FilaEstudiante'
 import { Icon } from '@iconify/react';
 
-const API = process.env.REACT_APP_API;
-
 export function ConsultarEstudiantesP() {
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();  
-        console.log("hola")
-        console.log(API)
-        const res = await fetch(`${API}/users`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            }
-        });
-        const data = await res.json()
-        console.log(data)
         // Aquí puedes enviar los datos a tu backend o hacer lo que necesites con ellos
       }
     return (
