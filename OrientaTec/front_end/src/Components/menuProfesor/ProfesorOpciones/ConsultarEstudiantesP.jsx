@@ -10,17 +10,23 @@ export function ConsultarEstudiantesP() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();  
-        console.log("hola")
-        console.log(API)
-        const res = await fetch(`${API}/getEstudiante/${1}`, {
+        
+        // const res = await fetch(`${API}/getEstudiante/${20198}`, { //busca estudiante por carnet, 20198 es el carnet
+        //     method: "GET",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     }
+        // });
+
+        const res = await fetch(`${API}/consultarEstudiantes/${1}`, { //buscar por enum, 1 es el enum
             method: "GET",
             headers: {
               "Content-Type": "application/json",
             }
         });
-        const data = await res.json()
-        console.log(data)
-        // Aquí puedes enviar los datos a tu backend o hacer lo que necesites con ellos
+
+        const data = await res.json() //resultado de la consulta
+        console.log(data) // imprime en consola web
       }
     return (
         <Fragment>
