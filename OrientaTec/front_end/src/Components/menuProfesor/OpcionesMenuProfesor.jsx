@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 export function OpcionesMenuProfesor() {
     let navigate = useNavigate();
 
-    const gotoVerPlanTrabajo = () => { navigate("/verplan", {state:{comentarios: true}}); };
-    const gotoInformacionEstudiantes = () => { navigate("/consultarestudiantesp", {}); };
-    const gotoInformacionEquipo = () => { navigate("/infoequipo", {}); };
-    const gotoModificarEstudiante = () => { navigate("/modificarEstudiante", {}); };
+    const gotoVerPlanTrabajo = () => { navigate("/verplan", {state:{comentarios: true, linkMenu: "/menuProfesor"}}); };
+    const gotoInformacionEstudiantes = () => { navigate("/consultarestudiantesp", {state: {linkMenu: "/menuCoordinador"}}); };
+    const gotoInformacionEquipo = () => { navigate("/infoequipo", {state: {linkMenu: "/menuProfesor"}}); };
+    const gotoModificarEstudiante = () => { navigate("/modificarEstudiante", {state: {linkMenu: "/menuProfesor"}}); };
     const gotoModificarProfesor = () => { navigate("/modificarProfesor", {}); };
 
     return (
