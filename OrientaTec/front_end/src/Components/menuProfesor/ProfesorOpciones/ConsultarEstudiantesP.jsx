@@ -12,8 +12,8 @@ export function ConsultarEstudiantesP() {
         event.preventDefault();  
         console.log("hola")
         console.log(API)
-        const res = await fetch(`${API}/users`, {
-            method: "POST",
+        const res = await fetch(`${API}/getEstudiante/${1}`, {
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
             }

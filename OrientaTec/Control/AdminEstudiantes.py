@@ -5,7 +5,9 @@ class AdminEstudiantes:
         self.dao = SingletonDAO()
 
     #Metodos
-    def consultarEstudiantes(self, ordenamiento):
+    def consultarEstudiantes(self, ordenamiento):        
+        if (type (ordenamiento) == int):
+            ordenamiento = Ordenamiento(ordenamiento) 
         if (ordenamiento == Ordenamiento.SEDE):
             salida = sorted(self.dao.consultarEstudiantes(), key=lambda estudiante : estudiante.sede)
             return salida

@@ -645,7 +645,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +buscarEstudiante(id:int) : Estudiante
     def buscarEstudiante(self, carnet):
         for estudiante in self.estudiantes:
-            if (carnet == estudiante.carnet):
+            if (int(carnet) == estudiante.carnet):
                 return estudiante
         return None
 
