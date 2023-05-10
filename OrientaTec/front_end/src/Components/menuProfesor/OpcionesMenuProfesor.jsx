@@ -1,5 +1,9 @@
 import React, { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import GenerarExel from "./ProfesorOpciones/GenerarExel";
+import GenerarExelPorCampus from "./ProfesorOpciones/GenerarExelPorCampus";
+
+//import  from 
 
 export function OpcionesMenuProfesor() {
     let navigate = useNavigate();
@@ -9,7 +13,13 @@ export function OpcionesMenuProfesor() {
     const gotoInformacionEquipo = () => { navigate("/infoequipo", {state: {linkMenu: "/menuProfesor"}}); };
     const gotoModificarEstudiante = () => { navigate("/modificarEstudiante", {state: {linkMenu: "/menuProfesor"}}); };
     const gotoModificarProfesor = () => { navigate("/modificarProfesor", {}); };
-
+    function handleDownloadExcelCampus() {
+        GenerarExel();
+      }
+    function handleDownloadExcelPorCampus() {
+        GenerarExelPorCampus();
+      }
+    
     return (
         <Fragment>
             <div className="m-3 p-3 bg-light">
@@ -60,6 +70,7 @@ export function OpcionesMenuProfesor() {
                 <div class="row m-5">
                     <div class="col">
                         <button 
+                            onClick={handleDownloadExcelCampus}
                             className="btn btn-success h-100 w-100"
                         >
                             Generar Exel de datos del campus perteneciente
@@ -67,6 +78,7 @@ export function OpcionesMenuProfesor() {
                     </div>
                     <div class="col">
                         <button 
+                            onClick={handleDownloadExcelPorCampus}
                             className="btn btn-success h-100 w-100"
                         >
                             Generar Exel de datos de todos los campus

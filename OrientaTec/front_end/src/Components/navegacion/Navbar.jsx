@@ -21,7 +21,7 @@ export function Navbar( { linkInicio } ) {
                 <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div className="navbar-nav">
                         <Link className="nav-link" to= {linkInicio} >Inicio</Link>
-                        <Link className="nav-link" to = '/configuracionAsistente' state={{ configLinkInicio: S }}>Configuracion</Link>
+                        <Link className="nav-link" to = '/configuracionAsistente' state={{ configLinkInicio: linkInicio }}>Configuracion</Link>
                         <Link className="nav-link" to="/ayudaAsistente">Ayuda</Link>
                         <Link className="nav-link" to = '/'>Cerrar sesion</Link>
                     </div>
