@@ -73,7 +73,7 @@ export function OpcionesMenuProfesor() {
                             onClick={handleDownloadExcelCampus}
                             className="btn btn-success h-100 w-100"
                         >
-                            Generar Exel de datos del campus perteneciente
+                            Generar Excel de datos del campus perteneciente
                         </button>
                     </div>
                     <div class="col">
@@ -81,7 +81,7 @@ export function OpcionesMenuProfesor() {
                             onClick={handleDownloadExcelPorCampus}
                             className="btn btn-success h-100 w-100"
                         >
-                            Generar Exel de datos de todos los campus
+                            Generar Excel de datos de todos los campus
                         </button>
                     </div>
 
