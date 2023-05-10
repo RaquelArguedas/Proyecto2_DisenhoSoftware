@@ -37,8 +37,8 @@ class MainController:
                         correoElectronico, numeroOficina,autoridad, estado)
     
     #AdminEquipoGuia
-    def agregarProfesor(self, profesor, idEquipoGuia):
-        return self.controlEquipoGuia.agregarProfesor(profesor, idEquipoGuia)
+    def agregarProfesor(self, profesor):
+        return self.controlEquipoGuia.agregarProfesor(profesor)
     
     def getEquipoGuia(self):
         return self.controlEquipoGuia.getEquipoGuia()

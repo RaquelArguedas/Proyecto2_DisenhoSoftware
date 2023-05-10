@@ -274,9 +274,10 @@ class SingletonDAO(metaclass=SingletonMeta):
         return self.equiposGuia[-1].listaProfesores 
     
     # +agregarProfesor(profesor: Profesor): boolean
-    def agregarProfesor(self, profesor, idEquipoGuia):
+    def agregarProfesor(self, profesor):
 
-        args = [profesor.id, idEquipoGuia]
+        idEquipoGuia = len(self.equiposGuia) #es el ultimo equipo guia
+        args = [idEquipoGuia, profesor.id ]
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createprofesoresxequipoguia', args)
@@ -537,10 +538,10 @@ class SingletonDAO(metaclass=SingletonMeta):
         id = self.executeStoredProcedure('createProfesor', args)
         if(len(id)==1):
             #se obtiene el id y se le agrega
-            prof = Profesor(self.generarCodigoProfesor(sede,id[0]), id[0], cedula, nombre, apellido1, 
-                apellido2, sede, numeroCelular, correoElectronico, 
-                numeroOficina, autoridad, estado) 
-            #se agrega a la lista de Actividades
+            prof = Profesor(self.generarCodigoProfesor(int(sede),id[0]), id[0], int(cedula), nombre, apellido1, 
+                apellido2, int(sede), int(numeroCelular), correoElectronico, 
+                int(numeroOficina), int(autoridad), int(estado)) 
+            #se agrega a la lista de profesores
             self.profesores += [prof]
         
         return id
@@ -635,7 +636,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +getProfesor(id:int):profesor:Profesor
     def getProfesor(self, idProfesor):
         for prof in self.profesores:
-            if(prof.id == idProfesor):
+            if(prof.id == int(idProfesor)):
                 return prof
 
     # +consultarEstudiantes(ordenamiento: enum): Collection<Estudiante>

@@ -27,7 +27,7 @@ export function ConsultarEstudiantesP() {
 
         const data = await res.json() //resultado de la consulta
         console.log(data) // imprime en consola web
-      }
+    }
     return (
         <Fragment>
             <div className="container">

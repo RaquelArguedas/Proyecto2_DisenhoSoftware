@@ -58,11 +58,22 @@ def buscarEstudiante(carnet):
 # def getProfesor(self, idProfesor):
 #     return self.controlProfesor.getProfesor(idProfesor)
 
-# def crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular,
-#                     correoElectronico, numeroOficina,autoridad, estado):
-#     return self.controlProfesor.crearProfesor(cedula,nombre,apellido1, apellido2, sede, numeroCelular,
-#                     correoElectronico, numeroOficina,autoridad, estado)
+# crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular, correoElectronico, numeroOficina,autoridad, estado):
+@app.route('/crearProfesor', methods=['POST'])
+def crearProfesor():
+  print(request.json)
+
+  #descomentar cuando se envie bien la sede
+  # id = control.crearProfesor(request.json['cedula'], request.json['name'], request.json['apellido1'], 
+  #                            request.json['apellido2'], request.json['sede'], request.json['numeroTelefono'], 
+  #                            request.json['correo'], request.json['numeroOficina'],2,1)
+
+  id = control.crearProfesor(request.json['cedula'], request.json['name'], request.json['apellido1'], 
+                             request.json['apellido2'], request.json['sede'], request.json['numeroTelefono'], 
+                             request.json['correo'], request.json['numeroOficina'],2,1)
   
+  control.agregarProfesor(control.getProfesor(id[0]))
+  return jsonify(str(id))
 
 
 #AdminEquipoGuia
