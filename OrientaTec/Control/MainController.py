@@ -31,6 +31,9 @@ class MainController:
     def getProfesor(self, idProfesor):
         return self.controlProfesor.getProfesor(idProfesor)
     
+    def getProfesorCodigo(self, codigo):
+        return self.controlProfesor.getProfesorCodigo(codigo)
+    
     def crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular,
                         correoElectronico, numeroOficina,autoridad, estado):
         return self.controlProfesor.crearProfesor(cedula,nombre,apellido1, apellido2, sede, numeroCelular,

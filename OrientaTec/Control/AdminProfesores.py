@@ -19,6 +19,9 @@ class AdminProfesores:
         
     def getProfesor(self, idProfesor):
         return self.dao.getProfesor(idProfesor)
+    
+    def getProfesorCodigo(self, codigo):
+        return self.dao.getProfesorCodigo(codigo)
 
     def crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular,
                         correoElectronico, numeroOficina,autoridad, estado):

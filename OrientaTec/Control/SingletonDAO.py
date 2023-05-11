@@ -638,6 +638,11 @@ class SingletonDAO(metaclass=SingletonMeta):
         for prof in self.profesores:
             if(prof.id == int(idProfesor)):
                 return prof
+            
+    def getProfesorCodigo(self, codigo):
+        for prof in self.profesores:
+            if(prof.codigo == codigo):
+                return prof
 
     # +consultarEstudiantes(ordenamiento: enum): Collection<Estudiante>
     def consultarEstudiantes(self):

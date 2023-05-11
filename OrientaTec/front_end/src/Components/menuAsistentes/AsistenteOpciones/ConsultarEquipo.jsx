@@ -4,7 +4,25 @@ import { BarraLateral } from '../../navegacion/BarraLateral'
 import { FilaProfesor } from './columnasTablas/FilaProfesor'
 import { Icon } from '@iconify/react';
 
+const API = process.env.REACT_APP_API;
+
 export function ConsultarEquipo() {
+
+    //la siguiente llamada obtiene la info del equipo guia
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();  
+
+    //     const res = await fetch(`${API}/getEquipoGuia`, { 
+    //         method: "GET",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         }
+    //     });
+
+    //     const data = await res.json() //resultado de la consulta
+    //     console.log(data) // imprime en consola web
+    // }
+
     return (
         <Fragment>
             <div className="container">

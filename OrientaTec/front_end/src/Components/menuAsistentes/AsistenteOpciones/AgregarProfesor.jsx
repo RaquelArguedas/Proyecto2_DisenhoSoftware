@@ -19,16 +19,25 @@ export function AgregarProfesor() {
     const handleSubmit = async (event) => {
         event.preventDefault();  
 
-        const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
+        // real
+        // const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({
+        //         cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, // poner el valor de la sede, y descomentar en app.py donde se envia la sede
+        //         numeroOficina
+        //     }),
+        //   });
+
+        //para probar con el boton
+        const res = await fetch(`${API}/darBajaProfesor/${7}`, {  //falta cambiar el idProfesor por el deseado
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, // poner el valor de la sede, y descomentar en app.py donde se envia la sede
-                numeroOficina
-            }),
-          });
+            }
+        });
 
         const data = await res.json() //resultado de la consulta
         console.log(data) // imprime en consola web

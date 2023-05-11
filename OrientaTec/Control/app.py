@@ -43,11 +43,17 @@ def buscarEstudiante(carnet):
 
 
 #AdminProfesores
-# def darBajaProfesor(self, idProfesor):
-#     return self.controlProfesor.darBajaProfesor(idProfesor)
+# darBajaProfesor(self, idProfesor)
+@app.route('/darBajaProfesor/<idProfesor>', methods=['POST'])
+def darBajaProfesor(idProfesor):
+  res = control.darBajaProfesor(idProfesor)
+  return jsonify(str(res))
 
-# def designarCoordinador(self, idProfesor):
-#     return self.controlProfesor.designarCoordinador(idProfesor)
+# designarCoordinador(self, idProfesor):
+@app.route('/designarCoordinador/<idProfesor>', methods=['POST'])
+def designarCoordinador(idProfesor):
+  res = control.designarCoordinador(idProfesor)
+  return jsonify(str(res))
 
 # def modificarProfesor(self, codigo, cedula,nombre,apellido1, apellido2, sede, numeroCelular,
 #                     correoElectronico, numeroOficina,autoridad, estado):
@@ -55,8 +61,17 @@ def buscarEstudiante(carnet):
 #                                            numeroCelular, correoElectronico, numeroOficina,
 #                                            autoridad, estado)
 
-# def getProfesor(self, idProfesor):
-#     return self.controlProfesor.getProfesor(idProfesor)
+# getProfesorCodigo(self, idProfesor):
+@app.route('/getProfesorCodigo/<codigo>', methods=['GET'])
+def getProfesorCodigo(codigo):
+  prof = control.getProfesorCodigo(codigo)
+
+  if (prof == None):
+     jsonStr = "No existe"
+  else:
+    jsonStr = json.dumps(prof.__dict__)
+
+  return jsonify(jsonStr)
 
 # crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular, correoElectronico, numeroOficina,autoridad, estado):
 @app.route('/crearProfesor', methods=['POST'])
@@ -80,8 +95,15 @@ def crearProfesor():
 # def agregarProfesor(self, profesor, idEquipoGuia):
 #     return self.controlEquipoGuia.agregarProfesor(profesor, idEquipoGuia)
 
-# def getEquipoGuia(self):
-#     return self.controlEquipoGuia.getEquipoGuia()
+# getEquipoGuia(self):
+@app.route('/getEquipoGuia', methods=['GET'])
+def getEquipoGuia():
+  listaProfesores = control.getEquipoGuia()
+  listaSalida = []
+  for p in listaProfesores:
+    listaSalida += [json.dumps(p.__dict__)]
+  jsonLista = json.dumps(listaSalida)
+  return jsonify(jsonLista)
 
 # def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
 #     return self.controlEquipoGuia.bitacoraEquipoGuia(fecha, hora, idAutor, descripcion)

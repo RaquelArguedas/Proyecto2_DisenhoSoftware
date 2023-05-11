@@ -3,6 +3,8 @@ import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
 
+const API = process.env.REACT_APP_API;
+
 export  function ModificarProfesor() {
     const [estado, setEstado] = useState("");
     const [name, setName] = useState('');
@@ -19,10 +21,20 @@ export  function ModificarProfesor() {
         event.preventDefault();  
         // Aquí puedes enviar los datos a tu backend o hacer lo que necesites con ellos
       }
-    const handleSearch = () => {
-        // Aquí podrías agregar la lógica para buscar la información
-        // y asignarla 
-        setName("Adolfo")
+    const handleSearch = async () => { //esto ignorelo lo estoy arreglando
+        const res = await fetch(`${API}/getProfesorCodigo/${"SJ-1"}`); //darle el codigo
+        const data = await res.json();//resultado de la consulta
+        console.log(data) // imprime en consola web
+        console.log(data) 
+        console.log(data['nombre']) 
+        console.log(data["nombre"]) 
+        console.log(data.nombre) 
+        console.log(data[0]) 
+        if(data.nombre == undefined ) {
+            console.log("new title is");
+         }
+            
+        setName(data.nombre)
         setApellido1("Corrales")
         setApellido2('Perez')
         setCedula(11230034)
@@ -81,7 +93,7 @@ export  function ModificarProfesor() {
                          y porsterior se tocara el boton */}
                         <div className="input-group w-50 my-3">
                             <span className="input-group-text" >Código</span>
-                            <input id="txtCarnet" type="text" className="form-control" />
+                            <input id="txtCodigo" type="text" className="form-control" />
                             <button onClick={handleSearch} className="btn btn-primary"> <Icon icon="ic:baseline-search" width="24" height="24" /> Buscar </button>
                         </div>
                         {/*La seguiente seccion tendra los formGroupInput, al tocar el boton de buscar 

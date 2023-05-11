@@ -19,5 +19,10 @@ if __name__ == "__main__":
 
 
     print(int(1))
+
+    prof = control.getProfesor(1)
+    print(prof.codigo, " ", prof.nombre)
+    prof = control.getProfesorCodigo("SJ-1")
+    print(prof.codigo, " ", prof.nombre)
     #control.consultarEstudiantes(int(Ordenamiento['SEDE']))
     
