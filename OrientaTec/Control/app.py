@@ -20,8 +20,9 @@ def consultarEstudiantes(ordenamiento):
   listaSalida = []
   for e in listaEstudiantes:
     listaSalida += [json.dumps(e.__dict__)]
-  jsonLista = json.dumps(listaSalida)
-  return jsonify(jsonLista)
+  #jsonLista = json.dumps(listaSalida)
+  #return jsonify(jsonLista)
+  return listaSalida
 
 # modificarEstudiante(self, carnet, nombre,apellido1, apellido2, sede, correoElectronico, numeroCelular, estado)
 
@@ -31,12 +32,17 @@ def buscarEstudiante(carnet):
   est = control.buscarEstudiante(carnet)
   print(est) #esto se imprime en la terminar de VS
 
-  if (est == None):
-     jsonStr = "No existe"
-  else:
-    jsonStr = json.dumps(est.__dict__)
+  # if (est == None):
+  #    jsonStr = "No existe"
+  # else:
+  #   jsonStr = json.dumps(est.__dict__)
 
-  return jsonify(jsonStr)
+  if (est == None):
+     return jsonify("No existe")
+  
+  return json.dumps(est.__dict__)
+
+  #return jsonify(jsonStr)
 
 #PENDIENTE generarExcelEstudiantes():
 
@@ -67,11 +73,9 @@ def getProfesorCodigo(codigo):
   prof = control.getProfesorCodigo(codigo)
 
   if (prof == None):
-     jsonStr = "No existe"
-  else:
-    jsonStr = json.dumps(prof.__dict__)
-
-  return jsonify(jsonStr)
+     return jsonify("No existe")
+  
+  return json.dumps(prof.__dict__)
 
 # crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular, correoElectronico, numeroOficina,autoridad, estado):
 @app.route('/crearProfesor', methods=['POST'])

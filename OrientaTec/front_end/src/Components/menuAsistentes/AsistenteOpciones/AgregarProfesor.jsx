@@ -32,8 +32,8 @@ export function AgregarProfesor() {
         //   });
 
         //para probar con el boton
-        const res = await fetch(`${API}/darBajaProfesor/${7}`, {  //falta cambiar el idProfesor por el deseado
-            method: "POST",
+        const res = await fetch(`${API}/getEquipoGuia`, { 
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
             }

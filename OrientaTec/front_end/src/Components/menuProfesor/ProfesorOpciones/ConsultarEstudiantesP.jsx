@@ -27,6 +27,9 @@ export function ConsultarEstudiantesP() {
 
         const data = await res.json() //resultado de la consulta
         console.log(data) // imprime en consola web
+        console.log(data[0])
+        const obj = JSON.parse(data[0]); 
+        console.log(obj.nombre) //aqui se obtiene el elemento de cada json
     }
     return (
         <Fragment>
