@@ -1,17 +1,32 @@
 import React, { Fragment } from 'react'
-import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { FilaProfesor } from './columnasTablas/FilaProfesor'
 import { Icon } from '@iconify/react';
 
+const API = process.env.REACT_APP_API;
+
 export function ConsultarEquipo() {
-    const { state } = useLocation();
+
+    //la siguiente llamada obtiene la info del equipo guia
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();  
+
+    //     const res = await fetch(`${API}/getEquipoGuia`, { 
+    //         method: "GET",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         }
+    //     });
+
+    //     const data = await res.json() //resultado de la consulta
+    //     console.log(data) // imprime en consola web
+    // }
 
     return (
         <Fragment>
             <div className="container">
-                <Navbar linkInicio={state.linkMenu}/>
+                <Navbar />
                 <div class="row">
                     <div class="col-sm-3">
                         <BarraLateral />

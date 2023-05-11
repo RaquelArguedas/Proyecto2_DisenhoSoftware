@@ -1,17 +1,40 @@
 import React, { Fragment } from 'react'
-import { useLocation } from "react-router-dom";
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Navbar } from '../../navegacion/Navbar'
 import { FilaEstudiante } from './columnasTablas/FilaEstudiante';
 import { Icon } from '@iconify/react';
 
-export function ConsultarEstudiantes() {
-    const { state } = useLocation();
+const API = process.env.REACT_APP_API;
 
+export function ConsultarEstudiantes() {
+
+    // comente lo siguiente porque no esta la funcion del boton
+
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();  
+        
+    //     // const res = await fetch(`${API}/getEstudiante/${20198}`, { //busca estudiante por carnet, 20198 es el carnet
+    //     //     method: "GET",
+    //     //     headers: {
+    //     //       "Content-Type": "application/json",
+    //     //     }
+    //     // });
+
+    //     const res = await fetch(`${API}/consultarEstudiantes/${1}`, { //como sale la lista de estudiantes hay que utilizar esto para traer la lista de estudiantes
+    //         method: "GET",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         }
+    //     });
+
+    //     const data = await res.json() //resultado de la consulta
+    //     console.log(data) // imprime en consola web
+    // }
+    
     return (
         <Fragment>
             <div className="container">
-                <Navbar linkInicio={state.linkMenu}/>
+                <Navbar />
 
                 <div class="row">
                     <div class="col-sm-3">

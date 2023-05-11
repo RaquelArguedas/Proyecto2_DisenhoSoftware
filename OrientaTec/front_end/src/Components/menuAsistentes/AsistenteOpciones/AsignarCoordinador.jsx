@@ -4,7 +4,35 @@ import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
 import { CardProf } from './asignarQuitarCoord/CardProfesor';
 
+const API = process.env.REACT_APP_API;
+
 export function AsignarCoordinador() {
+    // comente lo siguiente porque no esta la funcion del boton
+    
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();  
+
+        //aca se busca un profesor por un codigo
+        // const res = await fetch(`${API}/getProfesorCodigo/${"SJ-1"}`, {  //falta cambiar el codigo por el deseado
+        //     method: "GET",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     }
+        //   });
+
+        //aca se le asigna como cordinador
+        // const res = await fetch(`${API}/designarCoordinador/${2}`, {  //falta cambiar el idProfesor por el deseado
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     }
+        // });
+
+        // const data = await res.json() //resultado de la consulta
+        // console.log(data) // imprime en consola web
+
+    // }
+
     return (
         <Fragment>
             <div className="container">

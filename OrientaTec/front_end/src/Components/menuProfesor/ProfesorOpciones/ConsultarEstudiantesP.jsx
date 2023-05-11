@@ -1,21 +1,37 @@
 import React, { Fragment } from 'react'
-import { useLocation } from "react-router-dom";
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Navbar } from '../../navegacion/Navbar'
 import { FilaEstudiante } from '../../menuAsistentes/AsistenteOpciones/columnasTablas/FilaEstudiante'
 import { Icon } from '@iconify/react';
 
-export function ConsultarEstudiantesP() {
-    const { state } = useLocation();
+const API = process.env.REACT_APP_API;
 
-    const handleSubmit = (event) => {
+export function ConsultarEstudiantesP() {
+
+    const handleSubmit = async (event) => {
         event.preventDefault();  
-        // Aquí puedes enviar los datos a tu backend o hacer lo que necesites con ellos
-      }
+        
+        // const res = await fetch(`${API}/getEstudiante/${20198}`, { //busca estudiante por carnet, 20198 es el carnet
+        //     method: "GET",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     }
+        // });
+
+        const res = await fetch(`${API}/consultarEstudiantes/${1}`, { //buscar por enum, 1 es el enum
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            }
+        });
+
+        const data = await res.json() //resultado de la consulta
+        console.log(data) // imprime en consola web
+    }
     return (
         <Fragment>
             <div className="container">
-                <Navbar linkInicio={state.linkMenu}/>
+                <Navbar />
 
                 <div class="row">
                     <div class="col-sm-3">

@@ -31,14 +31,17 @@ class MainController:
     def getProfesor(self, idProfesor):
         return self.controlProfesor.getProfesor(idProfesor)
     
+    def getProfesorCodigo(self, codigo):
+        return self.controlProfesor.getProfesorCodigo(codigo)
+    
     def crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular,
                         correoElectronico, numeroOficina,autoridad, estado):
         return self.controlProfesor.crearProfesor(cedula,nombre,apellido1, apellido2, sede, numeroCelular,
                         correoElectronico, numeroOficina,autoridad, estado)
     
     #AdminEquipoGuia
-    def agregarProfesor(self, profesor, idEquipoGuia):
-        return self.controlEquipoGuia.agregarProfesor(profesor, idEquipoGuia)
+    def agregarProfesor(self, profesor):
+        return self.controlEquipoGuia.agregarProfesor(profesor)
     
     def getEquipoGuia(self):
         return self.controlEquipoGuia.getEquipoGuia()

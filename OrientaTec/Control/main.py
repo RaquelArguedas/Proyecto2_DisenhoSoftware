@@ -2,33 +2,27 @@ from SingletonDAO import *
 from MainController import *
 from datetime import time
 from SingletonSesionActual import *
+import json
 
 if __name__ == "__main__":
     
     control = MainController()
-    #esto solamente lo puse para que vean que el singleton funciona
-    if id(control.controlActividades.dao) == id(control.controlEquipoGuia.dao):
-        print("Funciona")
-    else:
-        print("sad")
 
 
-    print("\n")
-    dao = SingletonDAO()
+    e=control.buscarEstudiante(20198)
 
-    estudiantes = control.consultarEstudiantes(Ordenamiento.SEDE)
-
-    estudiantes = control.consultarEstudiantes(Ordenamiento.CARNET)
+    jsonStr = json.dumps(e.__dict__)
+    print (jsonStr)
     
-    estudiantes = control.consultarEstudiantes(Ordenamiento.ALFABETICAMENTE)
-
-
-    for estudiante in estudiantes:
-        print(str(estudiante))
 
     
 
 
-    
+    print(int(1))
+
+    prof = control.getProfesor(1)
+    print(prof.codigo, " ", prof.nombre)
+    prof = control.getProfesorCodigo("SJ-1")
+    print(prof.codigo, " ", prof.nombre)
     #control.consultarEstudiantes(int(Ordenamiento['SEDE']))
     
