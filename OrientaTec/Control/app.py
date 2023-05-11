@@ -106,8 +106,10 @@ def getEquipoGuia():
   listaSalida = []
   for p in listaProfesores:
     listaSalida += [json.dumps(p.__dict__)]
-  jsonLista = json.dumps(listaSalida)
-  return jsonify(jsonLista)
+  # jsonLista = json.dumps(listaSalida)
+  # return jsonify(jsonLista)
+  return listaSalida
+
 
 # def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
 #     return self.controlEquipoGuia.bitacoraEquipoGuia(fecha, hora, idAutor, descripcion)
