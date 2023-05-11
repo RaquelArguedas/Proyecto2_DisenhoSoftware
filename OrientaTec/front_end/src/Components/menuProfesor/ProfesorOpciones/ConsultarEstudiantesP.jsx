@@ -1,4 +1,5 @@
 import React, { Fragment, useRef, useState } from 'react'
+import { useLocation } from "react-router-dom";
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Navbar } from '../../navegacion/Navbar'
 import { FilaEstudiante } from '../../menuAsistentes/AsistenteOpciones/columnasTablas/FilaEstudiante'
@@ -7,6 +8,8 @@ import { Icon } from '@iconify/react';
 const API = 'http://localhost:5000'; //process.env.REACT_APP_API;
 
 export function ConsultarEstudiantesP() {
+    const { state } = useLocation();
+
     const carnetRef = useRef();
     let opcionFiltro = 1;
     const [estudiantes, setEstudiantes] = useState([[]]);
@@ -47,7 +50,7 @@ export function ConsultarEstudiantesP() {
             const data = await res.text();
             setEstudiantes(() => {
                 clearEstudiantes();
-                return [[data]]
+                return (data[0] === ['"No existe"\n'] ? [[]] : [[data]])
             })
 
 
@@ -57,7 +60,7 @@ export function ConsultarEstudiantesP() {
     return (
         <Fragment>
             <div className="container">
-                <Navbar />
+                <Navbar linkInicio={state.linkMenu}/>
 
                 <div class="row">
                     <div class="col-sm-3">
@@ -75,7 +78,7 @@ export function ConsultarEstudiantesP() {
                             <div className="row mt-4">
                                 <div className="col">
                                     <div className="form-check">
-                                        <input className="form-check-input" onClick={setFiltro} value={1} type="radio" name="rgFiltro" defaultChecked />
+                                        <input className="form-check-input" onChange={setFiltro} value={1} type="radio" name="rgFiltro" defaultChecked />
                                         <label className="form-check-label" htmlFor="flexRadioDefault1">
                                             Orden alfabético
                                         </label>
@@ -83,7 +86,7 @@ export function ConsultarEstudiantesP() {
                                 </div>
                                 <div className="col">
                                     <div className="form-check">
-                                        <input className="form-check-input" onClick={setFiltro} value={3} type="radio" name="rgFiltro" />
+                                        <input className="form-check-input" onChange={setFiltro} value={3} type="radio" name="rgFiltro" />
                                         <label className="form-check-label" htmlFor="flexRadioDefault2">
                                             Orden por campus
                                         </label>
@@ -91,7 +94,7 @@ export function ConsultarEstudiantesP() {
                                 </div>
                                 <div className="col">
                                     <div className="form-check">
-                                        <input className="form-check-input" onClick={setFiltro} value={2} type="radio" name="rgFiltro" />
+                                        <input className="form-check-input" onChange={setFiltro} value={2} type="radio" name="rgFiltro" />
                                         <label className="form-check-label" htmlFor="flexRadioDefault3">
                                             Orden por número de carnet
                                         </label>
@@ -119,6 +122,7 @@ export function ConsultarEstudiantesP() {
                                 <tbody id="tblEstudiantes" style={{ background: "white" }}>
                                     { console.log(estudiantes) }
                                     {estudiantes[0].map((estudiante) => (
+                                        JSON.parse(estudiante).carnet != undefined && 
                                         <FilaEstudiante
                                             carnet={JSON.parse(estudiante).carnet}
                                             nombreCompleto={JSON.parse(estudiante).nombre + ' ' + JSON.parse(estudiante).apellido1 + ' ' + JSON.parse(estudiante).apellido2}
