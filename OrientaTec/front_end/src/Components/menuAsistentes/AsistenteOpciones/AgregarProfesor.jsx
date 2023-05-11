@@ -26,7 +26,7 @@ export function AgregarProfesor() {
         //       "Content-Type": "application/json",
         //     },
         //     body: JSON.stringify({
-        //         cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, // poner el valor de la sede, y descomentar en app.py donde se envia la sede
+        //         cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
         //         numeroOficina
         //     }),
         //   });

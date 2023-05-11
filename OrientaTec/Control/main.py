@@ -18,7 +18,7 @@ if __name__ == "__main__":
     
 
 
-    print(int(1))
+    print(int(None))
 
     prof = control.getProfesor(1)
     print(prof.codigo, " ", prof.nombre)

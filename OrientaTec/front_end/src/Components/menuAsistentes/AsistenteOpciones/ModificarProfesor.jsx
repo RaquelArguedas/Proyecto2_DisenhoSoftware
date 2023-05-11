@@ -17,10 +17,21 @@ export  function ModificarProfesor() {
     const [sede, setSede] = useState('');
     const [image, setImage] = useState(null);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();  
-        // Aquí puedes enviar los datos a tu backend o hacer lo que necesites con ellos
-      }
+        const res = await fetch(`${API}/modificarProfesor`, { //queda pendiente lo de agregar una foto
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ //pendiente lo del codigo
+                // codigo, cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, numeroOficina 
+                cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, numeroOficina
+            }),
+          });
+        const data = await res.json() //resultado de la consulta
+        console.log(data) // imprime en consola web
+    }
     const handleSearch = async () => { 
         const res = await fetch(`${API}/getProfesorCodigo/${"SJ-1"}`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta

@@ -561,9 +561,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         if (respuesta == None):
             #se modifica en lista
             for i in range(len(self.profesores)):
-                if (self.profesores[i].id == id):
+                if (self.profesores[i].id == int(id)):
                     if (cedula != None):
-                        self.profesores[i].cedula = cedula
+                        self.profesores[i].cedula = int(cedula)
                     if (nombre != None):
                         self.profesores[i].nombre = nombre
                     if (apellido1 != None):
@@ -571,19 +571,19 @@ class SingletonDAO(metaclass=SingletonMeta):
                     if (apellido2 != None):
                         self.profesores[i].apellido2 = apellido2
                     if (sede != None):
-                        self.profesores[i].sede = sede
+                        self.profesores[i].sede = int(sede)
                         self.profesores[i].codigo = self.generarCodigoProfesor(sede,self.profesores[i].id)
                     if (numeroCelular != None):
-                        self.profesores[i].numeroCelular = numeroCelular
+                        self.profesores[i].numeroCelular = int(numeroCelular)
                     if (correoElectronico != None):
                         self.modificarUsuarioCorreo(self.profesores[i].correoElectronico, correoElectronico)
                         self.profesores[i].correoElectronico = correoElectronico
                     if (numeroOficina != None):
-                        self.profesores[i].numeroOficina = numeroOficina
+                        self.profesores[i].numeroOficina = int(numeroOficina)
                     if (autoridad != None):
-                        self.profesores[i].autoridad = autoridad
+                        self.profesores[i].autoridad = int(autoridad)
                     if (estado != None):
-                        self.profesores[i].estado = estado
+                        self.profesores[i].estado = int(estado)
         return respuesta
 
     # +darBajaProfesor(idProfesor: int): boolean

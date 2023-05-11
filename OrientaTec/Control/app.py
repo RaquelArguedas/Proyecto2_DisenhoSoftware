@@ -61,11 +61,20 @@ def designarCoordinador(idProfesor):
   res = control.designarCoordinador(idProfesor)
   return jsonify(str(res))
 
-# def modificarProfesor(self, codigo, cedula,nombre,apellido1, apellido2, sede, numeroCelular,
-#                     correoElectronico, numeroOficina,autoridad, estado):
-#     return self.controlProfesor.modificarProfesor(codigo, cedula,nombre,apellido1, apellido2, sede, 
-#                                            numeroCelular, correoElectronico, numeroOficina,
-#                                            autoridad, estado)
+# modificarProfesor(self, codigo, cedula,nombre,apellido1, apellido2, sede, numeroCelular, 
+#                   correoElectronico, numeroOficina,autoridad, estado):
+@app.route('/modificarProfesor', methods=['POST'])
+def modificarProfesor():
+  print(request.json)
+
+  #Descomentar cuando se envie el codigo y borrar el otro
+  #prof = control.getProfesorCodigo(request.json['codigo'])
+
+  prof = control.getProfesorCodigo("SJ-1")
+  id = control.modificarProfesor(prof.id,request.json['cedula'], request.json['name'], 
+                             request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
+                             request.json['numeroTelefono'], request.json['correo'], request.json['numeroOficina'],None,None)
+  return jsonify(str(id))
 
 # getProfesorCodigo(self, idProfesor):
 @app.route('/getProfesorCodigo/<codigo>', methods=['GET'])
@@ -82,11 +91,6 @@ def getProfesorCodigo(codigo):
 def crearProfesor():
   print(request.json)
 
-  #descomentar cuando se envie bien la sede
-  # id = control.crearProfesor(request.json['cedula'], request.json['name'], request.json['apellido1'], 
-  #                            request.json['apellido2'], request.json['sede'], request.json['numeroTelefono'], 
-  #                            request.json['correo'], request.json['numeroOficina'],2,1)
-
   id = control.crearProfesor(request.json['cedula'], request.json['name'], request.json['apellido1'], 
                              request.json['apellido2'], request.json['sede'], request.json['numeroTelefono'], 
                              request.json['correo'], request.json['numeroOficina'],2,1)
@@ -96,9 +100,6 @@ def crearProfesor():
 
 
 #AdminEquipoGuia
-# def agregarProfesor(self, profesor, idEquipoGuia):
-#     return self.controlEquipoGuia.agregarProfesor(profesor, idEquipoGuia)
-
 # getEquipoGuia(self):
 @app.route('/getEquipoGuia', methods=['GET'])
 def getEquipoGuia():
