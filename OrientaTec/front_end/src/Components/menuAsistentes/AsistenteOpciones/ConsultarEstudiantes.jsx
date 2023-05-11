@@ -20,7 +20,7 @@ export function ConsultarEstudiantes() {
     //     //     }
     //     // });
 
-    //     const res = await fetch(`${API}/consultarEstudiantes/${1}`, { //como sale la lista de estudiantes hay que utilizar esto para traer la lista de estudiantes
+    //     const res = await fetch(`${API}/consultarEstudiantes/${1}`, { //buscar por enum, 1 es el enum
     //         method: "GET",
     //         headers: {
     //           "Content-Type": "application/json",
@@ -29,6 +29,9 @@ export function ConsultarEstudiantes() {
 
     //     const data = await res.json() //resultado de la consulta
     //     console.log(data) // imprime en consola web
+    //     console.log(data[0])
+    //     const obj = JSON.parse(data[0]); 
+    //     console.log(obj.nombre) //aqui se obtiene el elemento de cada json
     // }
     
     return (

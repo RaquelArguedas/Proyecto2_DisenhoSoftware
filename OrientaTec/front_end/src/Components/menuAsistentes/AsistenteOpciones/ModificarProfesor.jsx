@@ -21,28 +21,20 @@ export  function ModificarProfesor() {
         event.preventDefault();  
         // Aquí puedes enviar los datos a tu backend o hacer lo que necesites con ellos
       }
-    const handleSearch = async () => { //esto ignorelo lo estoy arreglando
-        const res = await fetch(`${API}/getProfesorCodigo/${"SJ-1"}`); //darle el codigo
+    const handleSearch = async () => { 
+        const res = await fetch(`${API}/getProfesorCodigo/${"SJ-1"}`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta
         console.log(data) // imprime en consola web
-        console.log(data) 
-        console.log(data['nombre']) 
-        console.log(data["nombre"]) 
-        console.log(data.nombre) 
-        console.log(data[0]) 
-        if(data.nombre == undefined ) {
-            console.log("new title is");
-         }
             
         setName(data.nombre)
-        setApellido1("Corrales")
-        setApellido2('Perez')
-        setCedula(11230034)
-        setNumeroTelefono(87655432)
-        setNumeroOficina(22341265)
-        setCorreo('Adolfo23@estudiantec.cr')
-        setSede("2")
-        setEstado("1");
+        setApellido1(data.apellido1)
+        setApellido2(data.apellido2)
+        setCedula(data.cedula)
+        setNumeroTelefono(data.numeroCelular)
+        setNumeroOficina(data.numeroOficina)
+        setCorreo(data.correoElectronico)
+        setSede(data.sede)
+        setEstado(data.estado);
     };
 
     const handleNameChange = (event) => {
