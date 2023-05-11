@@ -1,9 +1,13 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+
 
 export function Navbar( { linkInicio } ) {
-  console.log("Navbar");
-  console.log(linkInicio);
+
+  let navigate = useNavigate();
+
+    const gotoConfig = () => { navigate("/ayudaAsistente", {state:{comentarios: true, linkMenu: "/menuProfesor"}}); };
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -17,8 +21,8 @@ export function Navbar( { linkInicio } ) {
                 <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div className="navbar-nav">
                         <Link className="nav-link" to= {linkInicio} >Inicio</Link>
-                        <Link className="nav-link" to = '/configuracionAsistente' >Configuracion</Link>
-                        <Link className="nav-link" to = '/ayudaAsistente'>Ayuda</Link>
+                        <Link className="nav-link" to = '/configuracionAsistente' state={{ configLinkInicio: linkInicio }}>Configuracion</Link>
+                        <Link className="nav-link" to="/ayudaAsistente">Ayuda</Link>
                         <Link className="nav-link" to = '/'>Cerrar sesion</Link>
                     </div>
                 </div>
