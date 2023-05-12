@@ -6,6 +6,13 @@ import { Actividad } from './verActividades/Actividad'
 
 export function VerActividades() {
 
+  //lo comente porque no esta la funcion de los botones
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();  
+
+  
+  // }
+
   const { state } = useLocation();
 
   return (

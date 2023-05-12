@@ -2,6 +2,7 @@ import json
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from MainController import *
+from datetime import datetime, timedelta
 
 # Instantiation
 app = Flask(__name__)
@@ -44,8 +45,18 @@ def buscarEstudiante(carnet):
 
   #return jsonify(jsonStr)
 
-#PENDIENTE generarExcelEstudiantes():
+#PENDIENTE como las dos pendientes solamente interactuan a nivel de BD no deberia modificarse nada aca
+# generarExcelEstudiantes():
+@app.route('/generarExcelEstudiantes', methods=['POST'])
+def generarExcelEstudiantes():
+  res = control.generarExcelEstudiantes()
+  return jsonify(str(res))
 
+# cargarExcelEstudiantes()
+@app.route('/cargarExcelEstudiantes', methods=['POST'])
+def cargarExcelEstudiantes():
+  res = control.cargarExcelEstudiantes()
+  return jsonify(str(res))
 
 
 #AdminProfesores
@@ -111,7 +122,6 @@ def getEquipoGuia():
   # return jsonify(jsonLista)
   return listaSalida
 
-
 # def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
 #     return self.controlEquipoGuia.bitacoraEquipoGuia(fecha, hora, idAutor, descripcion)
   
@@ -162,7 +172,22 @@ def getEquipoGuia():
 
 #AdminPlanActividades
 # def consultarProximaActividad(self):
-#     return self.controlPlanActividades.consultarProximaActividad()
+@app.route('/consultarProximaActividad', methods=['GET'])
+def consultarProximaActividad():
+  ac = control.consultarProximaActividad()
+  print(ac)
+
+  if (ac == None):
+     return jsonify("No existe")
+  
+  acDic = ac.__dict__
+
+  for clave in acDic:
+    print(acDic[clave], " ", type(acDic[clave]))
+    if (type(acDic[clave]) == datetime):
+      print(acDic[clave])
+  
+  return json.dumps(acDic)
 
 # def consultarActividades(self):
 #     return self.controlPlanActividades.consultarActividades()

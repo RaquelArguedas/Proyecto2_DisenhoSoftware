@@ -18,11 +18,11 @@ if __name__ == "__main__":
     
 
 
-    print(int(None))
-
-    prof = control.getProfesor(1)
-    print(prof.codigo, " ", prof.nombre)
-    prof = control.getProfesorCodigo("SJ-1")
-    print(prof.codigo, " ", prof.nombre)
+    ac = control.consultarProximaActividad()
+    acDic = ac.__dict__
+    for clave in acDic:
+        #print(acDic[clave], " ", type(acDic[clave]))
+        if (type(acDic[clave]) != list and type(acDic[clave]) != int and type(acDic[clave]) != str):
+            print(acDic[clave])
     #control.consultarEstudiantes(int(Ordenamiento['SEDE']))
     

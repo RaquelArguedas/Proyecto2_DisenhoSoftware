@@ -32,7 +32,7 @@ export function AgregarProfesor() {
         //   });
 
         //para probar con el boton
-        const res = await fetch(`${API}/getEquipoGuia`, { 
+        const res = await fetch(`${API}/consultarProximaActividad`, { 
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -40,9 +40,9 @@ export function AgregarProfesor() {
         });
         const data = await res.json() //resultado de la consulta
         console.log(data) // imprime en consola web
-        console.log(data[0])
-        const obj = JSON.parse(data[0]); 
-        console.log(obj.nombre) //aqui se obtiene el elemento de cada json
+        // console.log(data[0])
+        // const obj = JSON.parse(data[0]); 
+        // console.log(obj.fecha) //aqui se obtiene el elemento de cada json
     }
     const handleNameChange = (event) => {
     setName(event.target.value);

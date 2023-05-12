@@ -62,6 +62,9 @@ class MainController:
     def generarExcelEstudiantes(self):
         return self.controlEstudiante.generarExcelEstudiantes()
     
+    def cargarExcelEstudiantes(self):
+        return self.controlEstudiante.cargarExcelEstudiantes()
+    
     def buscarEstudiante(self, carnet):
         return self.controlEstudiante.buscarEstudiante(carnet)
 

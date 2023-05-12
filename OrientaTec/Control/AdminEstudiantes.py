@@ -42,5 +42,8 @@ class AdminEstudiantes:
     def generarExcelEstudiantes(self):
         return False
     
+    def cargarExcelEstudiantes(self):
+        return False
+    
     def buscarEstudiante(self, carnet):
         return self.dao.buscarEstudiante(carnet)
