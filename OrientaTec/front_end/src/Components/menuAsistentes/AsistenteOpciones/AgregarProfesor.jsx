@@ -20,29 +20,19 @@ export function AgregarProfesor() {
         event.preventDefault();  
 
         // real
-        // const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
-        //         numeroOficina
-        //     }),
-        //   });
-
-        //para probar con el boton
-        const res = await fetch(`${API}/consultarActividadesEstado/${1}`, {  //aca se cambia el 1 por el estado deseado, asi se sacan las canceladas y las realizadas
-            method: "GET",
+        const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
-            }
-        });
+            },
+            body: JSON.stringify({
+                cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
+                numeroOficina
+            }),
+          });
+
         const data = await res.json() //resultado de la consulta
         console.log(data) // imprime en consola web
-        console.log(data[0])//ejemplo
-        const obj = JSON.parse(data[0]); //aca toma la actividad en la posicion x y lo convierte en un JSON
-        console.log(obj.tipoActividad) 
     }
     const handleNameChange = (event) => {
     setName(event.target.value);
