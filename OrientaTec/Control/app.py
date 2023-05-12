@@ -178,19 +178,29 @@ def consultarProximaActividad():
   print(ac)
 
   if (ac == None):
-     return jsonify("No existe")
-  
-  acDic = ac.__dict__
+     return jsonify("No existe")       
 
-  for clave in acDic:
-    print(acDic[clave], " ", type(acDic[clave]))
-    if (type(acDic[clave]) == datetime):
-      print(acDic[clave])
-  
-  return json.dumps(acDic)
+  return actividadToJSON(ac)
 
 # def consultarActividades(self):
-#     return self.controlPlanActividades.consultarActividades()
+@app.route('/consultarActividades', methods=['GET'])
+def consultarActividades():
+  actividades = control.consultarActividades()
+  listaSalida = []
+
+  for ac in actividades:
+    listaSalida += [actividadToJSON(ac)]
+  return listaSalida
+
+@app.route('/consultarActividadesEstado/<estado>', methods=['GET'])
+def consultarActividadesEstado(estado):
+  actividades = control.consultarActividadesEstado(estado)
+  listaSalida = []
+
+  for ac in actividades:
+    listaSalida += [actividadToJSON(ac)]
+
+  return listaSalida
 
 # def definirPlanActividades(self, idPlan, listaActividades):
 #     self.controlPlanActividades.definirPlanActividades(idPlan, listaActividades)
@@ -198,7 +208,19 @@ def consultarProximaActividad():
 # def crearPlanActividades(self, anno):
 #     return self.controlPlanActividades.crearPlanActividades(anno)
   
-      
+#funcion auxiliar que convierte una actividad a un JSON aceptable
+def actividadToJSON(ac):
+  acDic = ac.__dict__
+
+  for clave in acDic:
+    if (type(acDic[clave]) != int and type(acDic[clave]) != str):
+      acDic[clave] = str(acDic[clave])
+    if (type(acDic[clave]) == list):
+      for p in acDic[clave]:
+        listaSalida += [json.dumps(p.__dict__)]
+      acDic[clave] = listaSalida
+
+  return json.dumps(acDic)
 
 #AdminUsuario
 # def exists(self, correo, contrasenha):

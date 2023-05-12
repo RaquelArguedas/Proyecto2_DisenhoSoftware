@@ -18,11 +18,8 @@ if __name__ == "__main__":
     
 
 
-    ac = control.consultarProximaActividad()
-    acDic = ac.__dict__
-    for clave in acDic:
-        #print(acDic[clave], " ", type(acDic[clave]))
-        if (type(acDic[clave]) != list and type(acDic[clave]) != int and type(acDic[clave]) != str):
-            print(acDic[clave])
+    lista = control.consultarActividadesEstado(4)
+    for a in lista:
+        print(a.estado)
     #control.consultarEstudiantes(int(Ordenamiento['SEDE']))
     

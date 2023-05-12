@@ -117,6 +117,9 @@ class MainController:
     def consultarActividades(self):
         return self.controlPlanActividades.consultarActividades()
     
+    def consultarActividadesEstado(self, estado):
+        return self.controlPlanActividades.consultarActividadesEstado(estado)
+    
     def definirPlanActividades(self, idPlan, listaActividades):
         self.controlPlanActividades.definirPlanActividades(idPlan, listaActividades)
 
