@@ -3,10 +3,12 @@ import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { FilaProfesor } from './columnasTablas/FilaProfesor'
 import { Icon } from '@iconify/react';
+import { useLocation } from "react-router-dom";
 
 const API = process.env.REACT_APP_API;
 
 export function ConsultarEquipo() {
+    const { state } = useLocation();
 
     //la siguiente llamada obtiene la info del equipo guia
     // const handleSubmit = async (event) => {
@@ -29,7 +31,7 @@ export function ConsultarEquipo() {
     return (
         <Fragment>
             <div className="container">
-                <Navbar />
+                <Navbar Navbar linkInicio={state.linkMenu}/>
                 <div class="row">
                     <div class="col-sm-3">
                         <BarraLateral />
