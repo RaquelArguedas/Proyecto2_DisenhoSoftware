@@ -2,6 +2,7 @@ import json
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from MainController import *
+from SingletonSesionActual import *
 from datetime import datetime, timedelta
 
 # Instantiation
@@ -25,7 +26,22 @@ def consultarEstudiantes(ordenamiento):
   #return jsonify(jsonLista)
   return listaSalida
 
-# modificarEstudiante(self, carnet, nombre,apellido1, apellido2, sede, correoElectronico, numeroCelular, estado)
+# modificarEstudiante(self, carnet, nombre,apellido1, apellido2, sede, correoElectronico, numeroCelular, 
+# estado)
+@app.route('/modificarEstudiante', methods=['POST'])
+def modificarEstudiante():
+  print(request.json)
+
+  #Descomentar cuando se envie el carnet y borrar el otro
+  # id = control.modificarEstudiante(request.json['carnet'], request.json['name'], 
+  #                            request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
+  #                           request.json['correo'], request.json['numeroTelefono'],  request.json['estado'])
+  
+  id = control.modificarEstudiante(20198, request.json['name'], 
+                             request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
+                            request.json['correo'], request.json['numeroTelefono'],  request.json['estado'])
+  
+  return jsonify(str(id))
 
 # buscarEstudiante(self, carnet)
 @app.route('/getEstudiante/<carnet>', methods=['GET'])
@@ -64,12 +80,16 @@ def cargarExcelEstudiantes():
 @app.route('/darBajaProfesor/<idProfesor>', methods=['POST'])
 def darBajaProfesor(idProfesor):
   res = control.darBajaProfesor(idProfesor)
+  control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+                             SingletonSesionActual().getUsuario(), "se dio de baja al id =" + str(idProfesor))
   return jsonify(str(res))
 
 # designarCoordinador(self, idProfesor):
 @app.route('/designarCoordinador/<idProfesor>', methods=['POST'])
 def designarCoordinador(idProfesor):
   res = control.designarCoordinador(idProfesor)
+  control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+                             SingletonSesionActual().getUsuario(), "se designo al coordinador con id =" + str(idProfesor))
   return jsonify(str(res))
 
 # modificarProfesor(self, codigo, cedula,nombre,apellido1, apellido2, sede, numeroCelular, 
@@ -107,6 +127,8 @@ def crearProfesor():
                              request.json['correo'], request.json['numeroOficina'],2,1)
   
   control.agregarProfesor(control.getProfesor(id[0]))
+  control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+                             SingletonSesionActual().getUsuario(), "nuevo profesor con id=" + str(id[0]))
   return jsonify(str(id))
 
 
@@ -121,11 +143,6 @@ def getEquipoGuia():
   # jsonLista = json.dumps(listaSalida)
   # return jsonify(jsonLista)
   return listaSalida
-
-# def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
-#     return self.controlEquipoGuia.bitacoraEquipoGuia(fecha, hora, idAutor, descripcion)
-  
-
 
 
 #AdminActividades

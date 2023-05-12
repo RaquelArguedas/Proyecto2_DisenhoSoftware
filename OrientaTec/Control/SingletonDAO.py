@@ -104,7 +104,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         if (tablaBD == "Usuario"):
             objeto = Usuario(lista[0], lista[1], lista[2], lista[3])
         elif (tablaBD == "Estudiante"):
-            objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6])
+            objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7])
         elif (tablaBD == "EquipoGuia"):
             objeto = EquipoGuia(lista[1], self.generarBitacorasEquipoGuia(lista[0]), self.generarProfesores(str(lista[0])), lista[2])
         elif (tablaBD == "Actividad"):    
@@ -685,6 +685,8 @@ class SingletonDAO(metaclass=SingletonMeta):
                         self.estudiantes[i].correoElectronico = correoElectronico
                     if (numeroCelular != None):
                         self.estudiantes[i].numeroCelular = numeroCelular
+                    if (estado != None):
+                        self.estudiantes[i].estado = estado
         return respuesta
 
     #modificarUsuario(data):id

@@ -31,8 +31,7 @@ export function AgregarProfesor() {
             }),
           });
 
-        const data = await res.json() //resultado de la consulta
-        console.log(data) // imprime en consola web
+
     }
     const handleNameChange = (event) => {
     setName(event.target.value);
