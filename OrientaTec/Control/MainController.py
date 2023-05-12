@@ -62,6 +62,9 @@ class MainController:
     def generarExcelEstudiantes(self):
         return self.controlEstudiante.generarExcelEstudiantes()
     
+    def cargarExcelEstudiantes(self):
+        return self.controlEstudiante.cargarExcelEstudiantes()
+    
     def buscarEstudiante(self, carnet):
         return self.controlEstudiante.buscarEstudiante(carnet)
 
@@ -70,19 +73,19 @@ class MainController:
         return self.controlActividades.verActividad(idActividad)
     
     def modificarActividad(self, idActividad, nombreActividad,tipoActividad, fechaActividad, horaInicio,
-                    horaFin, recordatorio,responsables, medio, enlace,estado):
+                    horaFin, recordatorio, medio, enlace,estado):
         return self.controlActividades.modificarActividad(idActividad, nombreActividad,tipoActividad, 
                                                           fechaActividad, horaInicio,horaFin, recordatorio,
-                                                          responsables, medio, enlace,estado)
+                                                          medio, enlace,estado)
 
     def cancelarActividad(self, idActividad):
         return self.controlActividades.cancelarActividad(idActividad)
     
     def crearActividad(self, nombreActividad, tipoActividad, fechaActividad,horaInicio, horaFin, 
-                       recordatorio, medio,enlace, estado, ultimaModificacion):
+                       recordatorio, responsables, medio,enlace, estado):
         return self.controlActividades.crearActividad(nombreActividad, tipoActividad, fechaActividad,
-                                                      horaInicio, horaFin, recordatorio, medio,enlace, 
-                                                      estado, ultimaModificacion)
+                                                      horaInicio, horaFin, recordatorio, responsables, medio,enlace, 
+                                                      estado)
     
     def cambiarEstado(self, idActividad, idEstado):
         return self.controlActividades.cambiarEstado(idActividad, idEstado)
@@ -114,6 +117,9 @@ class MainController:
     def consultarActividades(self):
         return self.controlPlanActividades.consultarActividades()
     
+    def consultarActividadesEstado(self, estado):
+        return self.controlPlanActividades.consultarActividadesEstado(estado)
+    
     def definirPlanActividades(self, idPlan, listaActividades):
         self.controlPlanActividades.definirPlanActividades(idPlan, listaActividades)
 
@@ -135,5 +141,8 @@ class MainController:
     
     def getUsuario(self, idUsuario):
         return self.controlUsuario.getUsuario(idUsuario)
+    
+    def getUsuarioRol(self, correo, contrasenha):
+        return self.controlUsuario.getUsuarioRol(correo, contrasenha)
     
         

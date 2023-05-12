@@ -20,29 +20,26 @@ export function AgregarProfesor() {
         event.preventDefault();  
 
         // real
-        // const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, // poner el valor de la sede, y descomentar en app.py donde se envia la sede
-        //         numeroOficina
-        //     }),
-        //   });
-
-        //para probar con el boton
-        const res = await fetch(`${API}/getEquipoGuia`, { 
-            method: "GET",
+        const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
-            }
-        });
-        const data = await res.json() //resultado de la consulta
-        console.log(data) // imprime en consola web
-        console.log(data[0])
-        const obj = JSON.parse(data[0]); 
-        console.log(obj.nombre) //aqui se obtiene el elemento de cada json
+            },
+            body: JSON.stringify({
+                cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
+                numeroOficina
+            }),
+          });
+
+        // // base para front_end
+        // //`${API}/nombreFuncion/${parametro1}/${parametro2}`
+        // const res = await fetch(`${API}/getUsuarioRol/${"as@gmail.com"}/${"as"}`, {
+        //     method: "GET",
+        // });
+        // const data = await res.json();//resultado de la consulta
+        // console.log(data) // imprime en consola web
+
+
     }
     const handleNameChange = (event) => {
     setName(event.target.value);

@@ -15,6 +15,26 @@ export function CrearActividad() {
         });
     };
 
+    //queda pendiente la funcion del boton
+
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();  
+
+    //     const res = await fetch(`${API}/crearActividad`, { //queda pendiente lo de agregar una foto
+    //         method: "POST",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //         }, //descomentar cuando le envien valores
+    //         // body: JSON.stringify({ 
+    //         //     nombre, tipo, fecha, horaInicio, horaFin, recordatorio, medio, enlace, estado
+    //         // }),
+    //     });
+
+    //     const data = await res.json() //resultado de la consulta
+    //     console.log(data) // imprime en consola web
+
+    // }
+
 
     return (
         <Fragment>

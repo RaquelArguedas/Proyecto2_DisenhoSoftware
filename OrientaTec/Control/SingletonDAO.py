@@ -104,7 +104,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         if (tablaBD == "Usuario"):
             objeto = Usuario(lista[0], lista[1], lista[2], lista[3])
         elif (tablaBD == "Estudiante"):
-            objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6])
+            objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7])
         elif (tablaBD == "EquipoGuia"):
             objeto = EquipoGuia(lista[1], self.generarBitacorasEquipoGuia(lista[0]), self.generarProfesores(str(lista[0])), lista[2])
         elif (tablaBD == "Actividad"):    
@@ -244,7 +244,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = 'localhost',
                 port = 3306,
                 user = 'root',
-                password = 'abd00123',
+                password = '123456',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
@@ -290,7 +290,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +verActividad(id): Actividad
     def verActividad(self, id):
         for i in range (len(self.actividades)):
-            if (self.actividades[i].idActividad == id):
+            if (self.actividades[i].idActividad == int(id)):
                 return self.actividades[i]
         return None 
     
@@ -507,9 +507,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         
         ultimaModificacion = date.today()
 
-        args = [nombreActividad, tipoActividad, fechaActividad,
-                horaInicio, horaFin, recordatorio, medio,  
-                enlace, estado, ultimaModificacion]
+        args = [nombreActividad, int(tipoActividad), fechaActividad,
+                horaInicio, horaFin, int(recordatorio), int(medio),  
+                enlace, int(estado), ultimaModificacion]
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createActividad', args)
@@ -561,9 +561,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         if (respuesta == None):
             #se modifica en lista
             for i in range(len(self.profesores)):
-                if (self.profesores[i].id == id):
+                if (self.profesores[i].id == int(id)):
                     if (cedula != None):
-                        self.profesores[i].cedula = cedula
+                        self.profesores[i].cedula = int(cedula)
                     if (nombre != None):
                         self.profesores[i].nombre = nombre
                     if (apellido1 != None):
@@ -571,19 +571,19 @@ class SingletonDAO(metaclass=SingletonMeta):
                     if (apellido2 != None):
                         self.profesores[i].apellido2 = apellido2
                     if (sede != None):
-                        self.profesores[i].sede = sede
+                        self.profesores[i].sede = int(sede)
                         self.profesores[i].codigo = self.generarCodigoProfesor(sede,self.profesores[i].id)
                     if (numeroCelular != None):
-                        self.profesores[i].numeroCelular = numeroCelular
+                        self.profesores[i].numeroCelular = int(numeroCelular)
                     if (correoElectronico != None):
                         self.modificarUsuarioCorreo(self.profesores[i].correoElectronico, correoElectronico)
                         self.profesores[i].correoElectronico = correoElectronico
                     if (numeroOficina != None):
-                        self.profesores[i].numeroOficina = numeroOficina
+                        self.profesores[i].numeroOficina = int(numeroOficina)
                     if (autoridad != None):
-                        self.profesores[i].autoridad = autoridad
+                        self.profesores[i].autoridad = int(autoridad)
                     if (estado != None):
-                        self.profesores[i].estado = estado
+                        self.profesores[i].estado = int(estado)
         return respuesta
 
     # +darBajaProfesor(idProfesor: int): boolean
@@ -685,6 +685,8 @@ class SingletonDAO(metaclass=SingletonMeta):
                         self.estudiantes[i].correoElectronico = correoElectronico
                     if (numeroCelular != None):
                         self.estudiantes[i].numeroCelular = numeroCelular
+                    if (estado != None):
+                        self.estudiantes[i].estado = estado
         return respuesta
 
     #modificarUsuario(data):id

@@ -4,6 +4,8 @@ import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
 
+const API = process.env.REACT_APP_API;
+
 export function ModificarEstudiante() {
 
     const { state } = useLocation();
@@ -17,20 +19,33 @@ export function ModificarEstudiante() {
     const [correo, setCorreo] = useState('');
     const [sede, setSede] = useState('');
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        // Aquí puedes enviar los datos a tu backend o hacer lo que necesites con ellos
+        const res = await fetch(`${API}/modificarEstudiante`, { //queda pendiente lo de agregar una foto
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ //pendiente lo del carnet
+                // carnet, name,apellido1, apellido2, sede, numeroTelefono, correo, estado
+                name,apellido1, apellido2, sede, numeroTelefono, correo, estado
+            }),
+          });
+        const data = await res.json() //resultado de la consulta
+        console.log(data) // imprime en consola web
     }
-    const handleSearch = () => {
-        // Aquí podrías agregar la lógica para buscar la información
-        // y asignarla 
-        setName("Adolfo")
-        setApellido1("Corrales")
-        setApellido2('Perez')
-        setNumeroTelefono(87655432)
-        setCorreo('Adolfo23@estudiantec.cr')
-        setSede("2")
-        setEstado('1')
+    const handleSearch = async () => {
+        const res = await fetch(`${API}/getEstudiante/${20198}`); //PENDIENTE : debe de darle el carnet
+        const data = await res.json();//resultado de la consulta
+        console.log(data.estado) // imprime en consola web
+
+        setName(data.nombre)
+        setApellido1(data.apellido1)
+        setApellido2(data.apellido2)
+        setNumeroTelefono(data.numeroCelular)
+        setCorreo(data.correoElectronico)
+        setSede(data.sede)
+        setEstado(data.estado)
     };
 
     const handleNameChange = (event) => {

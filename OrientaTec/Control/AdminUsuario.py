@@ -21,3 +21,10 @@ class AdminUsuario:
     
     def getUsuario(self, idUsuario):
         return self.dao.getUsuario(idUsuario)
+    
+    def getUsuarioRol(self, correo, contrasenha):
+        usuarios = self.dao.getUsuarios()
+        for user in usuarios:
+            if (user.correo == correo and user.contrasenha == contrasenha):
+                return user.idRol
+        return -1

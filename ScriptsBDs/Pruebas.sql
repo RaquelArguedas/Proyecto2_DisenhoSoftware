@@ -21,6 +21,42 @@ insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio
 						recordatorio, medio, enlace, estado, ultimaModificacion)
 			 values ("Actividad3", 2, "2023-02-01", "09:00", "11:00", 
 						3, 2, "link", 1, "2023-10-09");
+insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
+						recordatorio, medio, enlace, estado, ultimaModificacion)
+			 values ("Actividad1", 1, "2023-09-09", "13:00", "15:00", 
+						3, 2, "link", 2,"2023-10-09");
+insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
+						recordatorio, medio, enlace, estado, ultimaModificacion)
+			 values ("Actividad2", 3, "2023-08-08", "11:00", "13:00", 
+						3, 2, "link", 2, "2023-10-09");
+insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
+						recordatorio, medio, enlace, estado, ultimaModificacion)
+			 values ("Actividad3", 2, "2023-02-01", "09:00", "11:00", 
+						3, 2, "link", 2, "2023-10-09");
+insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
+						recordatorio, medio, enlace, estado, ultimaModificacion)
+			 values ("Actividad1", 1, "2023-09-09", "13:00", "15:00", 
+						3, 2, "link", 3,"2023-10-09");
+insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
+						recordatorio, medio, enlace, estado, ultimaModificacion)
+			 values ("Actividad2", 3, "2023-08-08", "11:00", "13:00", 
+						3, 2, "link", 3, "2023-10-09");
+insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
+						recordatorio, medio, enlace, estado, ultimaModificacion)
+			 values ("Actividad3", 2, "2023-02-01", "09:00", "11:00", 
+						3, 2, "link", 3, "2023-10-09");
+insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
+						recordatorio, medio, enlace, estado, ultimaModificacion)
+			 values ("Actividad1", 1, "2023-09-09", "13:00", "15:00", 
+						3, 2, "link", 4,"2023-10-09");
+insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
+						recordatorio, medio, enlace, estado, ultimaModificacion)
+			 values ("Actividad2", 3, "2023-08-08", "11:00", "13:00", 
+						3, 2, "link", 4, "2023-10-09");
+insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
+						recordatorio, medio, enlace, estado, ultimaModificacion)
+			 values ("Actividad3", 2, "2023-02-01", "09:00", "11:00", 
+						3, 2, "link", 4, "2023-10-09");
 
 insert into Rol(descripcion) values("PROFESOR");
 insert into Rol(descripcion) values("PROFESOR_COORDINADOR");
