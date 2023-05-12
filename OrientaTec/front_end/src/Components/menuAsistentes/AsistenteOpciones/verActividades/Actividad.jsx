@@ -8,7 +8,7 @@ export function Actividad() {
 
     const { state } = useLocation();
 
-    const gotoDetalleActividad = () => { navigate('/verplan/detalle', {state:{comentarios: state.comentarios}}); }
+    const gotoDetalleActividad = () => { navigate('/verplan/detalle', {state:{comentarios: state.comentarios, linkMenu: state.linkMenu}}); }
 
     return (
         <Fragment>

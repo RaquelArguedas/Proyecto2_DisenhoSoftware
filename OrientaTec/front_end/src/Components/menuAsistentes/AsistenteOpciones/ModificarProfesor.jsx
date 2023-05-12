@@ -85,7 +85,7 @@ export  function ModificarProfesor() {
   return (
     <Fragment>
         <div className="container">
-                <Navbar />
+                <Navbar linkInicio='/menuAsistente'/>
                 <div class="row">
                     <div class="col-sm-3">
                         <BarraLateral />

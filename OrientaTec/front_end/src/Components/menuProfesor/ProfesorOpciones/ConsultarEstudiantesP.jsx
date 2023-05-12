@@ -1,40 +1,66 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useRef, useState } from 'react'
+import { useLocation } from "react-router-dom";
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Navbar } from '../../navegacion/Navbar'
 import { FilaEstudiante } from '../../menuAsistentes/AsistenteOpciones/columnasTablas/FilaEstudiante'
 import { Icon } from '@iconify/react';
 
-const API = process.env.REACT_APP_API;
+const API = 'http://localhost:5000'; //process.env.REACT_APP_API;
 
 export function ConsultarEstudiantesP() {
+    const { state } = useLocation();
+
+    const carnetRef = useRef();
+    let opcionFiltro = 1;
+    const [estudiantes, setEstudiantes] = useState([[]]);
+
+    const setFiltro = (event) => {
+        opcionFiltro = event.target.value
+    }
+
+    const clearEstudiantes = () => {
+        setEstudiantes([[]]);
+    };
 
     const handleSubmit = async (event) => {
-        event.preventDefault();  
-        
-        // const res = await fetch(`${API}/getEstudiante/${20198}`, { //busca estudiante por carnet, 20198 es el carnet
-        //     method: "GET",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     }
-        // });
+        event.preventDefault();
 
-        const res = await fetch(`${API}/consultarEstudiantes/${1}`, { //buscar por enum, 1 es el enum
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            }
-        });
+        if (carnetRef.current.value === '') {
+            const res = await fetch(`${API}/consultarEstudiantes/${opcionFiltro}`, { //buscar por enum, 1 es el enum
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
 
-        const data = await res.json() //resultado de la consulta
-        console.log(data) // imprime en consola web
-        console.log(data[0])
-        const obj = JSON.parse(data[0]); 
-        console.log(obj.nombre) //aqui se obtiene el elemento de cada json
+            const data = await res.json() //resultado de la consulta
+            setEstudiantes(() => {
+                clearEstudiantes();
+                return [data]
+            })
+
+        } else {
+            const res = await fetch(`${API}/getEstudiante/${carnetRef.current.value}`, { //busca estudiante por carnet, 20198 es el carnet
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            const data = await res.text();
+            setEstudiantes(() => {
+                clearEstudiantes();
+                return (data[0] === ['"No existe"\n'] ? [[]] : [[data]])
+            })
+
+
+        }
     }
+
     return (
         <Fragment>
             <div className="container">
-                <Navbar />
+                <Navbar linkInicio={state.linkMenu}/>
 
                 <div class="row">
                     <div class="col-sm-3">
@@ -46,46 +72,38 @@ export function ConsultarEstudiantesP() {
                         <form onSubmit={handleSubmit}>
                             <div class="col-12">
                                 <label for="inputCarnet" class="form-label">Carnet:</label>
-                                <input type="text" class="form-control" id="inputCarnet" placeholder="Ingrese el número de carnet a buscar"/>
+                                <input ref={carnetRef} type="text" class="form-control" id="inputCarnet" placeholder="Ingrese el número de carnet a buscar" />
                             </div>
 
                             <div className="row mt-4">
                                 <div className="col">
                                     <div className="form-check">
-                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"defaultChecked />
-                                    <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                        Orden alfabético
-                                    </label>
+                                        <input className="form-check-input" onChange={setFiltro} value={1} type="radio" name="rgFiltro" defaultChecked />
+                                        <label className="form-check-label" htmlFor="flexRadioDefault1">
+                                            Orden alfabético
+                                        </label>
                                     </div>
                                 </div>
                                 <div className="col">
                                     <div className="form-check">
-                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
-                                    <label className="form-check-label" htmlFor="flexRadioDefault2">
-                                        Orden por campus
-                                    </label>
+                                        <input className="form-check-input" onChange={setFiltro} value={3} type="radio" name="rgFiltro" />
+                                        <label className="form-check-label" htmlFor="flexRadioDefault2">
+                                            Orden por campus
+                                        </label>
                                     </div>
                                 </div>
                                 <div className="col">
                                     <div className="form-check">
-                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" />
-                                    <label className="form-check-label" htmlFor="flexRadioDefault3">
-                                        Orden por número de carnet
-                                    </label>
+                                        <input className="form-check-input" onChange={setFiltro} value={2} type="radio" name="rgFiltro" />
+                                        <label className="form-check-label" htmlFor="flexRadioDefault3">
+                                            Orden por número de carnet
+                                        </label>
                                     </div>
                                 </div>
-                                <div className="col">
-                                    <div className="form-check">
-                                    <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4" />
-                                    <label className="form-check-label" htmlFor="flexRadioDefault4">
-                                        Por solo un estudiante
-                                    </label>
-                                    </div>
-                                </div>
-                                <div className="mb-3">
+                                <div className="my-3">
                                     <button type="submit" class="btn btn-primary" > <Icon icon="ic:baseline-search" width="24" height="24" /> Buscar</button>
                                 </div>
-                            
+
                             </div>
                         </form>
 
@@ -102,14 +120,16 @@ export function ConsultarEstudiantesP() {
                                     </tr>
                                 </thead>
                                 <tbody id="tblEstudiantes" style={{ background: "white" }}>
-                                    <FilaEstudiante />
-                                    <FilaEstudiante />
-                                    <FilaEstudiante />
-                                    <FilaEstudiante />
-                                    <FilaEstudiante />
-                                    <FilaEstudiante />
-                                    <FilaEstudiante />
-                                    <FilaEstudiante />
+                                    { console.log(estudiantes) }
+                                    {estudiantes[0].map((estudiante) => (
+                                        JSON.parse(estudiante).carnet != undefined && 
+                                        <FilaEstudiante
+                                            carnet={JSON.parse(estudiante).carnet}
+                                            nombreCompleto={JSON.parse(estudiante).nombre + ' ' + JSON.parse(estudiante).apellido1 + ' ' + JSON.parse(estudiante).apellido2}
+                                            telefono={JSON.parse(estudiante).numeroCelular}
+                                            correo={JSON.parse(estudiante).correoElectronico}
+                                            sede={JSON.parse(estudiante).sede} />
+                                    ))}
                                 </tbody>
                             </table>
                         </div>

@@ -36,7 +36,7 @@ export function DarBajaProfesor() {
     return (
         <Fragment>
             <div className="container">
-                <Navbar />
+                <Navbar linkInicio='/menuAsistente'/>
                 <div className="row">
                     <div className="col-sm-3">
                         <BarraLateral />

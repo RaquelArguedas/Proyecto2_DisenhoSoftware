@@ -8,10 +8,10 @@ export function DefinirPlan() {
     return (
         <Fragment>
             <div className="container">
-                <Navbar />
+                <Navbar linkInicio='/menuCoordinador'/>
                 <div className="row">
                     <div className="col-sm-3">
-                        <BarraLateral />
+                        <BarraLateral linkInicio='/menuCoordinador'/>
                     </div>
                     <div className="col-lg m-3 p-3 bg-light">
                         <div className="row">

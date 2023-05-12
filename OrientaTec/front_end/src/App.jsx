@@ -22,6 +22,7 @@ import { MenuProfesorC } from "./Components/menuPC/menuProfesorC";
 import { ModificarActividad } from "./Components/menuPC/CoordinadorOpciones/ModificarActividad";
 import { CrearActividad } from "./Components/menuPC/CoordinadorOpciones/CrearActividad";
 import { DefinirPlan } from "./Components/menuPC/CoordinadorOpciones/DefinirPlan";
+import { EvidenciasActividad } from "./Components/menuAsistentes/AsistenteOpciones/verActividades/EvidenciasActividad";
 
 export function App() {
     return (
@@ -33,6 +34,7 @@ export function App() {
                 <Route exact path = "/menuAsistente" element = {<MenuAsistente/>}/>
                 <Route exact path = "/verplan" element = {<VerActividades/>}/>
                 <Route exact path = "/verplan/detalle" element = {<DetalleActividad/>}/>
+                <Route exact path = "/verplan/detalle/evidencias" element = {<EvidenciasActividad/>}/>
                 <Route exact path = "/infoestudiantes" element = {<ConsultarEstudiantes/>}/>
                 <Route exact path = "/infoprofesores" element = {<ConsultarProfesores/>}/>
                 <Route exact path = "/infoequipo" element = {<ConsultarEquipo/>}/>
