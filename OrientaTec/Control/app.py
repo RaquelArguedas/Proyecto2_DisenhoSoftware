@@ -81,7 +81,7 @@ def cargarExcelEstudiantes():
 def darBajaProfesor(idProfesor):
   res = control.darBajaProfesor(idProfesor)
   control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
-                             SingletonSesionActual().getUsuario(), "se dio de baja al id =" + str(idProfesor))
+                             SingletonSesionActual().getUsuario().idUsuario, "se dio de baja al id =" + str(idProfesor))
   return jsonify(str(res))
 
 # designarCoordinador(self, idProfesor):
@@ -89,7 +89,7 @@ def darBajaProfesor(idProfesor):
 def designarCoordinador(idProfesor):
   res = control.designarCoordinador(idProfesor)
   control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
-                             SingletonSesionActual().getUsuario(), "se designo al coordinador con id =" + str(idProfesor))
+                             SingletonSesionActual().getUsuario().idUsuario, "se designo al coordinador con id =" + str(idProfesor))
   return jsonify(str(res))
 
 # modificarProfesor(self, codigo, cedula,nombre,apellido1, apellido2, sede, numeroCelular, 
@@ -128,7 +128,7 @@ def crearProfesor():
   
   control.agregarProfesor(control.getProfesor(id[0]))
   control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
-                             SingletonSesionActual().getUsuario(), "nuevo profesor con id=" + str(id[0]))
+                             SingletonSesionActual().getUsuario().idUsuario, "nuevo profesor con id=" + str(id[0]))
   return jsonify(str(id))
 
 
@@ -147,7 +147,15 @@ def getEquipoGuia():
 
 #AdminActividades
 # def verActividad(self, idActividad):
-#     return self.controlActividades.verActividad(idActividad)
+@app.route('/verActividad/<idActividad>', methods=['GET'])
+def verActividad(idActividad):
+  ac = control.verActividad(idActividad)
+  print(ac)
+
+  if (ac == None):
+     return jsonify("No existe")       
+
+  return actividadToJSON(ac)
 
 # def modificarActividad(self, idActividad, nombreActividad,tipoActividad, fechaActividad, horaInicio,
 #                 horaFin, recordatorio,responsables, medio, enlace,estado):
@@ -179,7 +187,7 @@ def cancelarActividad(idActividad):
 
   res = control.cancelarActividad(int(idActividad))
   control.bitacoraActividad(int(idActividad),datetime.now().date(), datetime.now().time().strftime('%H:%M'),
-                             SingletonSesionActual().getUsuario(), "se cancelo la actividad con id = " + str(idActividad))
+                             SingletonSesionActual().getUsuario().idUsuario, "se cancelo la actividad con id = " + str(idActividad))
   print(res)
   return str(res)
 
@@ -202,7 +210,7 @@ def crearActividad():
   print(id)
   
   control.bitacoraActividad(id[0], datetime.now().date(), datetime.now().time().strftime('%H:%M'),
-                             SingletonSesionActual().getUsuario(), "nueva actividad")
+                             SingletonSesionActual().getUsuario().idUsuario, "nueva actividad")
   return jsonify(str(id))
 
 # def cambiarEstado(self, idActividad, idEstado):
@@ -210,25 +218,88 @@ def crearActividad():
 def cambiarEstado(idActividad, idEstado):
   res = control.cambiarEstado(idActividad, idEstado)
   control.bitacoraActividad(int(idActividad),datetime.now().date(), datetime.now().time().strftime('%H:%M'),
-                             SingletonSesionActual().getUsuario(), "se cambio el estado de la actividad con id = " + str(idActividad))
+                             SingletonSesionActual().getUsuario().idUsuario, "se cambio el estado de la actividad con id = " + str(idActividad))
   print(res)
   return str(res)
 
 # def getDetalleActividad(self, idActividad):
-#     return self.controlActividades.getDetalleActividad(idActividad)
+@app.route('/getDetalleActividad/<idActividad>', methods=['GET'])
+def getDetalleActividad(idActividad):
+  lista = control.getDetalleActividad(int(idActividad))
+  listaComentarios = []
+  listaEvidencias = []
+
+  if (lista[0] == None):
+     return jsonify("No existe")       
+  
+  for comment in lista[1]:
+    listaComentarios += [actividadToJSON(comment)] 
+  for evidencia in lista[2]:
+    listaEvidencias += [evidencia.__dict__]
+    
+  listaSalida = [actividadToJSON(lista[0])] + [listaComentarios] + [listaEvidencias]
+  #print(listaSalida)
+  return listaSalida
 
 # def escribirComentario(self, idActividad,autor,fechaHora, contenido, idComentarioPadre):
-#     return self.controlActividades.escribirComentario(idActividad,autor,fechaHora, contenido,
-#                                                      idComentarioPadre)
+@app.route('/escribirComentario', methods=['POST'])
+def escribirComentario():
+  #print(request.json)
+
+  #borrar este y descomentar el otro con los JSON adecuados
+  # id = control.escribirComentario(request.json['idActividad'],
+  #                                 SingletonSesionActual().getUsuario().idUsuario, datetime.now(), 
+  #                                 request.json['contenido'], request.json['idComentarioPadre'])
+  
+  
+  id = control.escribirComentario(1, 1, datetime.now(), "contenido", 1)
+  print(id)
+  
+  # decomentar cuando este listo
+  # control.bitacoraActividad(int(request.json['idActividad']), datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+  #                            SingletonSesionActual().getUsuario().idUsuario, "comentario agregado")
+  return jsonify(str(id))
 
 # def finalizarActividad(self, idActividad,linkGrabacion):
-#     return self.controlActividades.finalizarActividad(idActividad,linkGrabacion)
+@app.route('/finalizarActividad/<idActividad>/<linkGrabacion>', methods=['POST'])
+def finalizarActividad(idActividad, linkGrabacion):
+  res = control.finalizarActividad(int(idActividad), linkGrabacion)
+  control.bitacoraActividad(int(idActividad),datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+                             SingletonSesionActual().getUsuario().idUsuario, "se finalizo la actividad con id = " + str(idActividad))
+  print(res)
+  return str(res)
 
 # def agregarResponsablesActividad(self, idActividad, responsablesNuevos):
-#     return self.controlActividades.agregarResponsablesActividad(idActividad, responsablesNuevos)
+@app.route('/agregarResponsablesActividad/<idActividad>/<idResponsableNuevo>', methods=['POST'])
+def agregarResponsablesActividad(idActividad, idResponsableNuevo):
+
+  #si le pasan el codigo y no el id usan la que esta comentada y borran la otra
+  #id = control.agregarResponsablesActividad(idActividad, [control.getProfesorCodigo(idResponsableNuevo)])
+
+  id = control.agregarResponsablesActividad(int(idActividad), [control.getProfesor(int(idResponsableNuevo))])
+  
+  print(id)
+  ac = control.verActividad(int(idActividad))
+  for p in ac.responsables:
+    print(p.id, " ", p.nombre)
+  
+  return jsonify(str(id))
 
 # def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
-#     return self.controlActividades.quitarResponsablesActividad(idActividad, responsablesEliminados)
+@app.route('/quitarResponsablesActividad/<idActividad>/<idResponsableEliminado>', methods=['POST'])
+def quitarResponsablesActividad(idActividad, idResponsableEliminado):
+
+  #si le pasan el codigo y no el id usan la que esta comentada y borran la otra
+  #id = control.agregarResponsablesActividad(idActividad, [control.getProfesorCodigo(idResponsableNuevo)])
+
+  id = control.quitarResponsablesActividad(int(idActividad), [control.getProfesor(int(idResponsableEliminado))])
+  
+  print(id)
+  ac = control.verActividad(int(idActividad))
+  for p in ac.responsables:
+    print(p.id, " ", p.nombre)
+  
+  return jsonify(str(id))
         
 
 #AdminPlanActividades
@@ -281,25 +352,57 @@ def actividadToJSON(ac):
       for p in acDic[clave]:
         listaSalida += [json.dumps(p.__dict__)]
       acDic[clave] = listaSalida
-
   return json.dumps(acDic)
 
 #AdminUsuario
 # def exists(self, correo, contrasenha):
-#     return self.controlUsuario.exists(correo, contrasenha)
+@app.route('/exists/<correo>/<contrasenha>', methods=['GET'])
+def exists(correo, contrasenha):
+  print(control.exists(correo, contrasenha))
+  return json.dumps(control.exists(correo, contrasenha))
 
 # def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol):
-#     return self.controlUsuario.modificarUsuario(idUsuario, correoElectronico, contrasenha, idRol)
+@app.route('/modificarUsuario', methods=['POST'])
+def modificarUsuario():
+  #print(request.json)
+
+  #Descomentar cuando se envie el codigo y borrar el otro
+  
+  # id = control.modificarUsuario(int(request.json['idUsuario']), request.json['correoElectronico'], 
+  #                            request.json['contrasenha'], request.json['idRol'])
+
+  id = control.modificarUsuario(1, None, None, 1)
+  
+  print(id)
+  
+  return jsonify(str(id))
 
 
 # def crearUsuario(self, correoElectronico, contrasenha, idRol):
-#     return self.controlUsuario.crearUsuario(correoElectronico, contrasenha, idRol)
+@app.route('/crearUsuario', methods=['POST'])
+def crearUsuario():
+  #print(request.json)
+
+  #borrar este y descomentar el otro con los JSON adecuados
+  # id = control.crearUsuario(request.json['correoElectronico'], request.json['contrasenha'], 
+  #                             request.json['idRol'])
+  
+  
+  id = control.crearUsuario('correoElectronico', 'contrasenha', 2)
+  print(id)
+  return jsonify(str(id))
 
 # def getUsuario(self, idUsuario):
-#     return self.controlUsuario.getUsuario(idUsuario)
+@app.route('/getUsuario/<idUsuario>', methods=['GET'])
+def getUsuario(idUsuario):
+  user = control.getUsuario(int(idUsuario))
 
+  return user.__dict__
 
-
+# def getUsuarioRol(self, correo, contrasenha):
+@app.route('/getUsuarioRol/<correo>/<contrasenha>', methods=['GET'])
+def getUsuarioRol(correo, contrasenha):
+  return json.dumps(control.getUsuarioRol(correo, contrasenha))
 
 
 

@@ -31,12 +31,19 @@ export function AgregarProfesor() {
         //     }),
         //   });
 
-        const res = await fetch(`${API}/cambiarEstado/${1}/${2}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            }
+        // base para front_end
+        //`${API}/nombreFuncion/${parametro1}/${parametro2}`
+        const res = await fetch(`${API}/getUsuarioRol/${"as@gmail.com"}/${"as"}`, {
+            method: "GET",
+            // headers: {
+            //   "Content-Type": "application/json",
+            // },
+            // body: JSON.stringify({
+            //     idUsuario, correoElectronico, contrasenha, idRol
+            // }),
         });
+        const data = await res.json();//resultado de la consulta
+        console.log(data) // imprime en consola web
 
 
     }

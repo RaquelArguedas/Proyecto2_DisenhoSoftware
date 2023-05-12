@@ -12,8 +12,6 @@ if __name__ == "__main__":
     e=control.buscarEstudiante(20198)
 
     jsonStr = json.dumps(e.__dict__)
-    control.modificarActividad(1,'nombreActividad', 1, 
-                             datetime.now().date(), datetime.now().time(), datetime.now().time(), 
-                             1, 1,'enlace',1)
+    print(control.getUsuarioRol("as@gmail.com", "rafa"))
     #control.consultarEstudiantes(int(Ordenamiento['SEDE']))
     

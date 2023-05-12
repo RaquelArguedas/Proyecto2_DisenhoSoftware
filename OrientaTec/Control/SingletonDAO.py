@@ -290,7 +290,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +verActividad(id): Actividad
     def verActividad(self, id):
         for i in range (len(self.actividades)):
-            if (self.actividades[i].idActividad == id):
+            if (self.actividades[i].idActividad == int(id)):
                 return self.actividades[i]
         return None 
     
