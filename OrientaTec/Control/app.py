@@ -151,21 +151,68 @@ def getEquipoGuia():
 
 # def modificarActividad(self, idActividad, nombreActividad,tipoActividad, fechaActividad, horaInicio,
 #                 horaFin, recordatorio,responsables, medio, enlace,estado):
-#     return self.controlActividades.modificarActividad(idActividad, nombreActividad,tipoActividad, 
-#                                                       fechaActividad, horaInicio,horaFin, recordatorio,
-#                                                       responsables, medio, enlace,estado)
+@app.route('/modificarActividad', methods=['POST'])
+def modificarActividad():
+  #print(request.json)
+
+  #Descomentar cuando se envie el codigo y borrar el otro
+  #ac = control.verActividad(int(request.json['idActividad']))
+
+  ac = control.verActividad(1)
+  
+  # id = control.modificarActividad(ac.idActividad,request.json['nombreActividad'], int(request.json['tipoActividad']), 
+  #                            request.json['fechaActividad'], request.json['horaInicio'], request.json['horaFin'], 
+  #                            int(request.json['recordatorio']), int(request.json['medio']),
+  #                            request.json['enlace'],int(request.json['estado']))
+
+  id = control.modificarActividad(ac.idActividad,'nonname', 1, 
+                             datetime.now().date(), datetime.now().time(), datetime.now().time(), 
+                             1, 1,'enlace',1)
+  
+  print(id)
+  
+  return jsonify(str(id))
 
 # def cancelarActividad(self, idActividad):
-#     return self.controlActividades.cancelarActividad(idActividad)
+@app.route('/cancelarActividad/<idActividad>', methods=['POST'])
+def cancelarActividad(idActividad):
+
+  res = control.cancelarActividad(int(idActividad))
+  control.bitacoraActividad(int(idActividad),datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+                             SingletonSesionActual().getUsuario(), "se cancelo la actividad con id = " + str(idActividad))
+  print(res)
+  return str(res)
 
 # def crearActividad(self, nombreActividad, tipoActividad, fechaActividad,horaInicio, horaFin, 
 #                    recordatorio, medio,enlace, estado, ultimaModificacion):
-#     return self.controlActividades.crearActividad(nombreActividad, tipoActividad, fechaActividad,
-#                                                   horaInicio, horaFin, recordatorio, medio,enlace, 
-#                                                   estado, ultimaModificacion)
+@app.route('/crearActividad', methods=['POST'])
+def crearActividad():
+  #print(request.json)
+
+  #borrar este y descomentar el otro con los JSON adecuados
+  # id = control.crearActividad(request.json['nombre'], request.json['tipo'], request.json['fecha'], 
+  #                             request.json['horaInicio'], request.json['horaFin'], request.json['recordatorio'], 
+  #                             request.json['medio'], request.json['enlace'], request.json['estado'])
+  
+  
+  responsablesNuevos = [] #eliminar cuando envien la lista de responsables
+  id = control.crearActividad("nombre", 1, datetime.now().date(), 
+                              datetime.now().time().strftime('%H:%M'), datetime.now().time().strftime('%H:%M'),
+                              1,responsablesNuevos, 1, "enlace", 1)
+  print(id)
+  
+  control.bitacoraActividad(id[0], datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+                             SingletonSesionActual().getUsuario(), "nueva actividad")
+  return jsonify(str(id))
 
 # def cambiarEstado(self, idActividad, idEstado):
-#     return self.controlActividades.cambiarEstado(idActividad, idEstado)
+@app.route('/cambiarEstado/<idActividad>/<idEstado>', methods=['POST'])
+def cambiarEstado(idActividad, idEstado):
+  res = control.cambiarEstado(idActividad, idEstado)
+  control.bitacoraActividad(int(idActividad),datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+                             SingletonSesionActual().getUsuario(), "se cambio el estado de la actividad con id = " + str(idActividad))
+  print(res)
+  return str(res)
 
 # def getDetalleActividad(self, idActividad):
 #     return self.controlActividades.getDetalleActividad(idActividad)
@@ -183,9 +230,6 @@ def getEquipoGuia():
 # def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
 #     return self.controlActividades.quitarResponsablesActividad(idActividad, responsablesEliminados)
         
-# def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
-#     return self.controlActividades.bitacoraActividad(idActividad, fecha, hora, idAutor, descripcion)
-  
 
 #AdminPlanActividades
 # def consultarProximaActividad(self):
@@ -220,11 +264,12 @@ def consultarActividadesEstado(estado):
   return listaSalida
 
 # def definirPlanActividades(self, idPlan, listaActividades):
-#     self.controlPlanActividades.definirPlanActividades(idPlan, listaActividades)
+@app.route('/definirPlanActividades/<idActividad>', methods=['POST'])
+def definirPlanActividades(idActividad):
 
-# def crearPlanActividades(self, anno):
-#     return self.controlPlanActividades.crearPlanActividades(anno)
-  
+  control.definirPlanActividades(1, [control.verActividad(int(idActividad))])
+  return "Definido"
+
 #funcion auxiliar que convierte una actividad a un JSON aceptable
 def actividadToJSON(ac):
   acDic = ac.__dict__

@@ -507,9 +507,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         
         ultimaModificacion = date.today()
 
-        args = [nombreActividad, tipoActividad, fechaActividad,
-                horaInicio, horaFin, recordatorio, medio,  
-                enlace, estado, ultimaModificacion]
+        args = [nombreActividad, int(tipoActividad), fechaActividad,
+                horaInicio, horaFin, int(recordatorio), int(medio),  
+                enlace, int(estado), ultimaModificacion]
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createActividad', args)

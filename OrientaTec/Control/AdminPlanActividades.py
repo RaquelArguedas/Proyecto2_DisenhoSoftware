@@ -23,5 +23,7 @@ class AdminPlanActividades:
         for actividad in listaActividades:
             self.dao.agregarActividad(actividad, idPlan)
 
+        
+
     def crearPlanActividades(self, anno):
         return self.dao.crearPlanTrabajo(anno)

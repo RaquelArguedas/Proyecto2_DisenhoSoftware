@@ -10,22 +10,20 @@ class AdminActividades:
         return self.dao.verActividad(idActividad)
     
     def modificarActividad(self, idActividad, nombreActividad,tipoActividad, fechaActividad, horaInicio,
-                    horaFin, recordatorio,responsables, medio, enlace,estado):
+                    horaFin, recordatorio, medio, enlace,estado):
         return self.dao.modificarActividad(idActividad, nombreActividad,tipoActividad, fechaActividad, horaInicio,
-                    horaFin, recordatorio,responsables, medio, enlace,estado)
+                    horaFin, recordatorio, medio, enlace,estado)
     
     def cancelarActividad(self, idActividad):
-        return self.dao.modificarActividad(idActividad, None,None, None, None,
-                    None, None,None, None, None,4, None)
+        return self.dao.modificarActividad(idActividad, None,None, None, None, None, None, None, None, 4)
     
     def crearActividad(self, nombreActividad, tipoActividad, fechaActividad,horaInicio, horaFin, 
-                       recordatorio, medio,enlace, estado, ultimaModificacion ):
+                       recordatorio, responsables, medio,enlace, estado):
         return self.dao.crearActividad(nombreActividad, tipoActividad, fechaActividad,horaInicio, horaFin, 
-                       recordatorio, medio,enlace, estado, ultimaModificacion)
+                       recordatorio, responsables, medio,enlace, estado)
     
     def cambiarEstado(self, idActividad, idEstado):
-        return self.dao.modificarActividad(idActividad, None,None, None, None,
-                    None, None,None, None, None, idEstado, None)
+        return self.dao.modificarActividad(idActividad, None,None, None, None, None, None, None, None, idEstado)
 
     #devuelve una Actividad, sus comentarios e evidencias
     def getDetalleActividad(self, idActividad):

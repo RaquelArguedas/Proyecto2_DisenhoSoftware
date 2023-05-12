@@ -20,16 +20,23 @@ export function AgregarProfesor() {
         event.preventDefault();  
 
         // real
-        const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
+        // const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({
+        //         cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
+        //         numeroOficina
+        //     }),
+        //   });
+
+        const res = await fetch(`${API}/cambiarEstado/${1}/${2}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
-                numeroOficina
-            }),
-          });
+            }
+        });
 
 
     }
