@@ -31,7 +31,7 @@ export function ModificarEstudiante() {
                 carnet, name, apellido1, apellido2, sede, numeroTelefono, correo, estado
             }),
         });
-        const data = await res.text() //resultado de la consulta
+        const data = await res.json() //resultado de la consulta
         console.log(data) // imprime en consola web
         if (carnet===''||name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||estado===''){
             alert("Ha dejado campos en blanco.");

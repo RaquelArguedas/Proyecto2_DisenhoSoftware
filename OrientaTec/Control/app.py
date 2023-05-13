@@ -98,10 +98,7 @@ def designarCoordinador(idProfesor):
 def modificarProfesor():
   print(request.json)
 
-  #Descomentar cuando se envie el codigo y borrar el otro
-  #prof = control.getProfesorCodigo(request.json['codigo'])
-
-  prof = control.getProfesorCodigo("SJ-1")
+  prof = control.getProfesorCodigo(request.json['codigo'])
   id = control.modificarProfesor(prof.id,request.json['cedula'], request.json['name'], 
                              request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
                              request.json['numeroTelefono'], request.json['correo'], request.json['numeroOficina'],None,None)
