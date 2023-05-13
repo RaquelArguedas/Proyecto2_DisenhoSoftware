@@ -32,9 +32,14 @@ def consultarEstudiantes(ordenamiento):
 def modificarEstudiante():
   print(request.json)
 
-  id = control.modificarEstudiante(request.json['carnet'], request.json['name'], 
-                             request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
-                            request.json['correo'], request.json['numeroTelefono'],  request.json['estado'])
+  id = control.modificarEstudiante(request.json['carnet'] if request.json['carnet'] != '' else None, 
+                                  request.json['name'] if request.json['name'] != '' else None, 
+                                  request.json['apellido1'] if request.json['apellido1'] != '' else None, 
+                                  request.json['apellido2'] if request.json['apellido2'] != '' else None, 
+                                  request.json['sede'] if request.json['sede'] != '' else None, 
+                                  request.json['correo'] if request.json['correo'] != '' else None, 
+                                  request.json['numeroTelefono'] if request.json['numeroTelefono'] != '' else None,  
+                                  request.json['estado'] if request.json['estado'] != '' else None)
   
   return jsonify(str(id))
 

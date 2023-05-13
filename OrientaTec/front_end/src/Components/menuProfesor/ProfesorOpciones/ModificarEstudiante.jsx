@@ -31,9 +31,13 @@ export function ModificarEstudiante() {
                 carnet, name, apellido1, apellido2, sede, numeroTelefono, correo, estado
             }),
         });
-        const data = await res.json() //resultado de la consulta
+        const data = await res.text() //resultado de la consulta
         console.log(data) // imprime en consola web
-        alert("La información del estudiante se ha modificado.");
+        if (carnet===''||name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||estado===''){
+            alert("Ha dejado campos en blanco.");
+        }else{
+            alert("La información del estudiante se ha modificado.");
+        }
     }
     const handleSearch = async () => {
         const res = await fetch(`${API}/getEstudiante/${carnetRef.current.value}`); //PENDIENTE : debe de darle el carnet
