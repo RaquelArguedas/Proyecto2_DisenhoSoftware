@@ -224,7 +224,7 @@ def generarExcel(sede):
         #Headers de los archivos 
          
          #Se recorren los estudiantes y se van guardando 
-        '''
+
         for i in range(len(estudiantes)):
             registro = i+2
             sede = None
@@ -240,9 +240,7 @@ def generarExcel(sede):
             wb[sede]['E'+ str(registro)] = estudiantes[i][4]
             wb[sede]['F'+ str(registro)] = estudiantes[i][5]
             wb[sede]['G'+ str(registro)] = estudiantes[i][6]
-            '''
-        for est in estudiantes:
-            ws1.append[est]    
+      
     else:
         pass
     wb.save('listaEstudiantes.xlsx')
