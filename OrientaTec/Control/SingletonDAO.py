@@ -935,13 +935,13 @@ class SingletonDAO(metaclass=SingletonMeta):
         for i in range(lenght):            
             if (est[i][3] == sede):
                 #La info de ese registro se guarda 
-                wb[sede]['A'+ str(registro)] = est[i][0]  #Carne
-                wb[sede]['B'+ str(registro)] = est[i][1] #Nombre
-                wb[sede]['C'+ str(registro)] = est[i][2] #App 1
-                wb[sede]['D'+ str(registro)] = est[i][3] #App 2
-                wb[sede]['E'+ str(registro)] = est[i][4]
-                wb[sede]['F'+ str(registro)] = est[i][5]
-                wb[sede]['G'+ str(registro)] = est[i][6]
+                wb['Sheet']['A'+ str(registro)] = est[i][0]  #Carne
+                wb['Sheet']['B'+ str(registro)] = est[i][1] #Nombre
+                wb['Sheet']['C'+ str(registro)] = est[i][2] #App 1
+                wb['Sheet']['D'+ str(registro)] = est[i][3] #App 2
+                wb['Sheet']['E'+ str(registro)] = est[i][4]
+                wb['Sheet']['F'+ str(registro)] = est[i][5]
+                wb['Sheet']['G'+ str(registro)] = est[i][6]
         wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
         return load_workbook('listaEstudiantes.xlsx')
         
