@@ -1,10 +1,32 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useRef, useState } from 'react'
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
 import { CardProf } from './asignarQuitarCoord/CardProfesor';
 
+const API = 'http://localhost:5000'; //process.env.REACT_APP_API;
+
 export function AsignarCoordinador() {
+    const codigoRef = useRef();
+    const [datosProfesor, setDatosProfesor] = useState({});
+    const [idProfesor, setIdProfesor] = useState(undefined);
+
+    const handleBuscarProfesor = async (event) => {
+        event.preventDefault();
+
+        //aca se busca un profesor por un codigo
+        const res = await fetch(`${API}/getProfesorCodigo/${(codigoRef.current.value === '' ? 0 : codigoRef.current.value)}`, {  //falta cambiar el codigo por el deseado
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+
+        const data = await res.json() //resultado de la consulta
+        setIdProfesor((data === undefined ? 0 : data.id))
+        setDatosProfesor(data)
+    }
+
     return (
         <Fragment>
             <div className="container">
@@ -18,12 +40,27 @@ export function AsignarCoordinador() {
 
                         <div className="input-group w-50 my-3">
                             <span className="input-group-text" >Código</span>
-                            <input id="txtCarnet" type="text" className="form-control" />
-                            <button className="btn btn-primary"> <Icon icon="ic:baseline-search" width="24" height="24" /> Buscar </button>
+                            <input ref={codigoRef} id="txtCarnet" type="text" className="form-control" />
+                            <button onClick={handleBuscarProfesor} className="btn btn-primary"> <Icon icon="ic:baseline-search" width="24" height="24" /> Buscar </button>
                         </div>
 
                         {/* Esto aparece sólo luego de darle a Buscar */}
-                        <CardProf btnColor={"success"} btnText={"Asignar"} />
+                        {idProfesor !== undefined && <div>
+                            <CardProf
+                                codigo={datosProfesor.codigo}
+                                cedula={datosProfesor.cedula}
+                                nombreCompleto={datosProfesor.nombre+' '+datosProfesor.apellido1+' '+datosProfesor.apellido2}
+                                telefono={datosProfesor.numeroCelular}
+                                correo={datosProfesor.correoElectronico}
+                                oficina={datosProfesor.numeroOficina}
+                                sede={datosProfesor.sede} 
+                                btnColor={"success"} 
+                                btnText={"Asignar"} 
+                                id={idProfesor}
+                            />
+                            
+                        </div>
+                        }
                     </div>
                 </div>
             </div>

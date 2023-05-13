@@ -1,15 +1,15 @@
 from Funcionario import Funcionario
 #Asistente y profesor heredan de funcionario
 class Profesor(Funcionario):
-    def __init__(self,codigo,cedula,nombre,
+    def __init__(self,codigo,id,cedula,nombre,
     apellido1, apellido2, sede, numeroCelular,
-    correoElectronico, fotografia, numeroOficina,
+    correoElectronico, numeroOficina,
     autoridad, estado):
         
-        super().__init__(codigo,cedula,nombre,
+        super().__init__(id,cedula,nombre,
         apellido1, apellido2, sede, numeroCelular,
-        correoElectronico, fotografia, numeroOficina)
-        
+        correoElectronico, numeroOficina)
+        self.codigo = codigo
         self.autoridad = autoridad
         self.estado = estado
 

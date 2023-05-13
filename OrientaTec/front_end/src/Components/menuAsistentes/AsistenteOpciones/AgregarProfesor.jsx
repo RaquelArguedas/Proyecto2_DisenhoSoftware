@@ -2,6 +2,8 @@ import React, { Fragment, useState } from 'react'
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 
+const API = process.env.REACT_APP_API;
+
 export function AgregarProfesor() {
     const [name, setName] = useState('');
     const [apellido1, setApellido1] = useState('');
@@ -14,10 +16,31 @@ export function AgregarProfesor() {
     const [sede, setSede] = useState('');
     const [image, setImage] = useState(null);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();  
-        // Aquí puedes enviar los datos a tu backend o hacer lo que necesites con ellos
-      }
+
+        // real
+        const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
+                numeroOficina
+            }),
+          });
+
+        // // base para front_end
+        // //`${API}/nombreFuncion/${parametro1}/${parametro2}`
+        // const res = await fetch(`${API}/getUsuarioRol/${"as@gmail.com"}/${"as"}`, {
+        //     method: "GET",
+        // });
+        // const data = await res.json();//resultado de la consulta
+        // console.log(data) // imprime en consola web
+
+
+    }
     const handleNameChange = (event) => {
     setName(event.target.value);
     }; 

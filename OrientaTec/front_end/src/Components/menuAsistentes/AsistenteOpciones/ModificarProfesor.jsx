@@ -3,6 +3,8 @@ import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
 
+const API = process.env.REACT_APP_API;
+
 export  function ModificarProfesor() {
     const [estado, setEstado] = useState("");
     const [name, setName] = useState('');
@@ -15,22 +17,35 @@ export  function ModificarProfesor() {
     const [sede, setSede] = useState('');
     const [image, setImage] = useState(null);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();  
-        // Aquí puedes enviar los datos a tu backend o hacer lo que necesites con ellos
-      }
-    const handleSearch = () => {
-        // Aquí podrías agregar la lógica para buscar la información
-        // y asignarla 
-        setName("Adolfo")
-        setApellido1("Corrales")
-        setApellido2('Perez')
-        setCedula(11230034)
-        setNumeroTelefono(87655432)
-        setNumeroOficina(22341265)
-        setCorreo('Adolfo23@estudiantec.cr')
-        setSede("2")
-        setEstado("1");
+        const res = await fetch(`${API}/modificarProfesor`, { //queda pendiente lo de agregar una foto
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ //pendiente lo del codigo
+                // codigo, cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, numeroOficina 
+                cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, numeroOficina
+            }),
+          });
+        const data = await res.json() //resultado de la consulta
+        console.log(data) // imprime en consola web
+    }
+    const handleSearch = async () => { 
+        const res = await fetch(`${API}/getProfesorCodigo/${"SJ-1"}`); //PENDIENTE : debe de darle el codigo
+        const data = await res.json();//resultado de la consulta
+        console.log(data) // imprime en consola web
+            
+        setName(data.nombre)
+        setApellido1(data.apellido1)
+        setApellido2(data.apellido2)
+        setCedula(data.cedula)
+        setNumeroTelefono(data.numeroCelular)
+        setNumeroOficina(data.numeroOficina)
+        setCorreo(data.correoElectronico)
+        setSede(data.sede)
+        setEstado(data.estado);
     };
 
     const handleNameChange = (event) => {
@@ -81,7 +96,7 @@ export  function ModificarProfesor() {
                          y porsterior se tocara el boton */}
                         <div className="input-group w-50 my-3">
                             <span className="input-group-text" >Código</span>
-                            <input id="txtCarnet" type="text" className="form-control" />
+                            <input id="txtCodigo" type="text" className="form-control" />
                             <button onClick={handleSearch} className="btn btn-primary"> <Icon icon="ic:baseline-search" width="24" height="24" /> Buscar </button>
                         </div>
                         {/*La seguiente seccion tendra los formGroupInput, al tocar el boton de buscar 

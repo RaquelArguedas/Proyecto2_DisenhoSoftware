@@ -20,6 +20,8 @@ from Recordatorio import *
 from Evidencia import *
 from Observacion import *
 from Comentario import *
+from Sede import *
+from Ordenamiento import *
 
 
 
@@ -58,25 +60,25 @@ class SingletonDAO(metaclass=SingletonMeta):
 
     #Constructor que instancia los objetos necesarios del modelo
     def __init__(self):
-        self.usuarios = self.setFromBD("Usuario")
-        self.estudiantes = self.setFromBD("Estudiante")
-        self.equiposGuia = self.setFromBD("EquipoGuia")
-        self.actividades = self.setFromBD("Actividad")
-        self.profesores = self.setFromBD("Profesor")
-        self.asistentes = self.setFromBD("AsistenteAdministrativo")
-        self.bitacoras = self.setFromBD("Bitacora")
-        self.planesTrabajo = self.setFromBD("PlanTrabajo")
-        self.recordatorios = self.setFromBD("Recordatorio")
-        self.evidencias = self.setFromBD("Evidencia")
-        self.observaciones = self.setFromBD("Observacion")
-        self.comentarios = self.setFromBD("Comentario")
+        self.usuarios = self.setFromBD("SELECT * from ", "Usuario")
+        self.estudiantes = self.setFromBD("SELECT * from ", "Estudiante")
+        self.bitacoras = self.setFromBD("SELECT * from ", "Bitacora")
+        self.profesores = self.setFromBD("SELECT * from ", "Profesor")
+        self.equiposGuia = self.setFromBD("SELECT * from ", "EquipoGuia")
+        self.actividades = self.setFromBD("SELECT * from ", "Actividad")
+        self.asistentes = self.setFromBD("SELECT * from ", "AsistenteAdministrativo")
+        self.planesTrabajo = self.setFromBD("SELECT * from ", "PlanTrabajo")
+        self.recordatorios = self.setFromBD("SELECT * from ", "Recordatorio")
+        self.evidencias = self.setFromBD("SELECT * from ", "Evidencia")
+        self.observaciones = self.setFromBD("SELECT * from ", "Observacion")
+        self.comentarios = self.setFromBD("SELECT * from ", "Comentario")
     
     #Auxiliar del constructor 
-    def setFromBD(self, tablaBD):
+    def setFromBD(self, command, tablaBD):
         self.connectServer()
 
         try:
-            self.cursor.execute("SELECT * from " + tablaBD)
+            self.cursor.execute(command + tablaBD)
 
             salida = self.cursor.fetchall()
 
@@ -100,25 +102,25 @@ class SingletonDAO(metaclass=SingletonMeta):
         objeto = None
         
         if (tablaBD == "Usuario"):
-            objeto = Usuario(lista[0], lista[1])
+            objeto = Usuario(lista[0], lista[1], lista[2], lista[3])
         elif (tablaBD == "Estudiante"):
-            objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6])
+            objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7])
         elif (tablaBD == "EquipoGuia"):
-            objeto = EquipoGuia(lista[1], Bitacora(None, None, None, None), [])#PENDIENTE: generar la lista de profesores correspondientes
-        elif (tablaBD == "Actividad"):
-            objeto = Actividad.Actividad(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], [], lista[8], lista[9], lista[10], lista[11])#PENDIENTE: generar responsables 
+            objeto = EquipoGuia(lista[1], self.generarBitacorasEquipoGuia(lista[0]), self.generarProfesores(str(lista[0])), lista[2])
+        elif (tablaBD == "Actividad"):    
+            objeto = Actividad.Actividad(lista[0], lista[1],lista[2], lista[3], lista[4],lista[5], lista[6],self.generarResposables(lista[0]), lista[7], lista[8],lista[9], lista[10],self.generarBitacorasActividades(lista[0]))
         elif (tablaBD == "Profesor"):
-            objeto = Profesor(lista[0],lista[1],lista[2],lista[3], lista[4], lista[5], lista[6],lista[7], lista[8], lista[9], lista[10], lista[11])
+            objeto = Profesor(self.generarCodigoProfesor(lista[5],lista[0]), lista[0],lista[1],lista[2],lista[3], lista[4], lista[5], lista[6],lista[7], lista[8], lista[9], lista[10])
         elif (tablaBD == "AsistenteAdministrativo"):
-            objeto = AsistenteAdministrativo(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8], lista[9])
+            objeto = AsistenteAdministrativo(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7], lista[8])
         elif (tablaBD == "Bitacora"):
-            objeto = Bitacora(lista[0], lista[1], lista[2], lista[3])
+            objeto = Bitacora(lista[0], lista[1], lista[2], lista[3], lista[4])
         elif (tablaBD == "PlanTrabajo"):
-            objeto = PlanTrabajo(lista[0], lista[1], [])
+            objeto = PlanTrabajo(lista[0], lista[1], self.obtenerActividadesPlan(lista[0]))
         elif (tablaBD == "Recordatorio"):
             objeto = Recordatorio(lista[0], lista[1])
         elif (tablaBD == "Evidencia"):
-            objeto = Evidencia(lista[0], [], lista[1], [])
+            objeto = Evidencia(lista[0], lista[1])
         elif (tablaBD == "Observacion"):
             objeto = Observacion(lista[0], lista[1], lista[2])
         elif (tablaBD == "Comentario"):
@@ -126,7 +128,113 @@ class SingletonDAO(metaclass=SingletonMeta):
 
         return objeto
 
+    def generarProfesores(self, idEquipoGuia):
+        self.connectServer()
 
+        try:
+            self.cursor.execute("select profesor.idProfesor from profesoresxequipoguia  inner join profesor on profesor.idProfesor = profesoresxequipoguia.idProfesor where idEquipoGuia = " + str(idEquipoGuia))
+
+            salida = self.cursor.fetchall()
+
+            lista = []
+            for row in salida:
+                lista += [self.getProfesor(row[0])]
+            return lista
+            
+            
+        except Exception as ex:
+            print(ex)
+
+        self.closeConnection()
+
+    def generarCodigoProfesor(self, idSede, id):
+        return Sede(idSede).name +"-"+str(id)
+
+    def generarResposables(self, idActividad):
+        self.connectServer()
+
+        try:
+            self.cursor.execute("select profesor.idProfesor from responsablexactividad  inner join profesor on profesor.idProfesor = responsablexactividad.idResponsable where idActividad = " + str(idActividad))
+
+            salida = self.cursor.fetchall()
+
+            lista = []
+            for row in salida:
+                lista += [self.getProfesor(row[0])]
+
+            return lista
+            
+            
+        except Exception as ex:
+            print(ex)
+
+        self.closeConnection()
+
+    def obtenerActividadesPlan(self, idPlan):
+        self.connectServer()
+
+        try:
+            self.cursor.execute("select idActividad from actividadesxplan where idPlan = " + str(idPlan))
+
+            salida = self.cursor.fetchall()
+
+            lista = []
+            for row in salida:
+                lista += [self.verActividad(row[0])]
+
+            return lista
+            
+            
+        except Exception as ex:
+            print(ex)
+
+        self.closeConnection()
+
+    def generarBitacorasEquipoGuia(self, idEquipoGuia):
+        self.connectServer()
+
+        try:
+            self.cursor.execute("select idBitacora from bitacoraxequipoguia where idEquipoGuia = " + str(idEquipoGuia))
+
+            salida = self.cursor.fetchall()
+
+            lista = []
+            for row in salida:
+                lista += [self.getBitacora(row[0])]
+
+            return lista
+            
+            
+        except Exception as ex:
+            print(ex)
+
+        self.closeConnection()
+
+    def generarBitacorasActividades(self, idActividad):
+        self.connectServer()
+
+        try:
+            self.cursor.execute("select idBitacora from bitacoraxactividades where idActividad= " + str(idActividad))
+
+            salida = self.cursor.fetchall()
+
+            lista = []
+            for row in salida:
+                lista += [self.getBitacora(row[0])]
+
+            return lista
+            
+            
+        except Exception as ex:
+            print(ex)
+
+        self.closeConnection()
+
+    def getBitacora(self, idBitacora):
+        for i in range (len(self.bitacoras)):
+            if (self.bitacoras[i].idBitacora == idBitacora):
+                return self.bitacoras[i]
+        return None 
 
     #Métodos
     #función que realiza la conexión a MySQL
@@ -136,7 +244,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = 'localhost',
                 port = 3306,
                 user = 'root',
-                password = '123456',
+                password = 'abd00123',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
@@ -159,21 +267,22 @@ class SingletonDAO(metaclass=SingletonMeta):
 
     # +getPlanTrabajo():planTrabajo: PlanTrabajo 
     def getPlanTrabajo(self):
-        return self.planesTrabajo
+        return self.planesTrabajo[-1]
 
     # +getConformacionEquipoGuía():Collection<Profesores>
     def getConformacionEquipoGuia(self):
         return self.equiposGuia[-1].listaProfesores 
     
     # +agregarProfesor(profesor: Profesor): boolean
-    def agregarProfesor(self, profesor, idEquipoGuia):
+    def agregarProfesor(self, profesor):
 
-        args = [profesor.codigo, idEquipoGuia]
+        idEquipoGuia = len(self.equiposGuia) #es el ultimo equipo guia
+        args = [idEquipoGuia, profesor.id ]
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createprofesoresxequipoguia', args)
         if(len(id)==1):
-            #se agrega al equipo guia el profesor
+            #se agrega al equipo guia del año actual el profesor
             self.equiposGuia[idEquipoGuia-1].agregarProfesor(profesor)
         
         return id
@@ -181,7 +290,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +verActividad(id): Actividad
     def verActividad(self, id):
         for i in range (len(self.actividades)):
-            if (self.actividades[i].idActividad == id):
+            if (self.actividades[i].idActividad == int(id)):
                 return self.actividades[i]
         return None 
     
@@ -190,7 +299,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         lista = []
         for i in range (len(self.comentarios)):
             if (self.comentarios[i].idActividad == idActividad):
-                lista += self.comentarios[i]
+                lista += [self.comentarios[i]]
         return lista 
 
     #devuelve la evidencia de una actividad
@@ -198,7 +307,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         lista = []
         for i in range (len(self.evidencias)):
             if (self.evidencias[i].idActividad == idActividad):
-                lista += self.evidencias[i]
+                lista += [self.evidencias[i]]
         return lista
 
     # +agregarActividad(actividad: Actividad): boolean
@@ -260,20 +369,19 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +modificarActividad(data): boolean
     def modificarActividad(self, idActividad, nombreActividad,
                             tipoActividad, fechaActividad, horaInicio,
-                            horaFin, recordatorio,responsables, medio, enlace,
-                            estado, afiche, ultimaModificacion):
+                            horaFin, recordatorio, medio, enlace,
+                            estado):
+        
+        ultimaModificacion = date.today()
         
         args = [idActividad, nombreActividad, tipoActividad, fechaActividad, horaInicio,
-                horaFin, recordatorio, medio, enlace, estado, afiche, ultimaModificacion]
+                horaFin, recordatorio, medio, enlace, estado, ultimaModificacion]
 
         #se modifica en la bd
         respuesta = self.executeStoredProcedure('updateActividad', args)
 
         #Si no hubo errores dentro de la BD, realiza las modificaciones correspondientes
         if (respuesta == None):
-            #if (responsables != None):
-            #PENDIENTE: Si los responsables hay que actualizarlos es necesario actualizar la bd
-
             #se modifica en lista
             for i in range(len(self.actividades)):
                 if (self.actividades[i].idActividad == idActividad):
@@ -289,19 +397,78 @@ class SingletonDAO(metaclass=SingletonMeta):
                         self.actividades[i].horaFin = horaFin
                     if (recordatorio != None):
                         self.actividades[i].recordatorio = recordatorio
-                    if (responsables != None):
-                        self.actividades[i].responsables = responsables
                     if (medio != None):
                         self.actividades[i].medio = medio
                     if (enlace != None):
                         self.actividades[i].enlace = enlace
                     if (estado != None):
                         self.actividades[i].estado = estado
-                    if (afiche != None):
-                        self.actividades[i].afiche = afiche
                     if (ultimaModificacion != None):
                         self.actividades[i].ultimaModificacion = ultimaModificacion
+                
         return respuesta
+    
+    def agregarResponsablesActividad(self, idActividad, responsablesNuevos):
+        actividad = None
+        #se obtiene la actividad
+        for ac in self.actividades:
+            if (ac.idActividad == idActividad):
+                actividad = ac
+
+        for responsable in responsablesNuevos:
+            #agregar en tabla responsablexactividad
+            self.executeStoredProcedure("createResponsableXActividad", [responsable.id, idActividad])
+
+            #agregar a la actividad el responsable
+            actividad.agregarResponsable(responsable)
+
+    def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
+        actividad = None
+        #se obtiene la actividad
+        for ac in self.actividades:
+            if (ac.idActividad == idActividad):
+                actividad = ac
+
+        for responsable in responsablesEliminados:
+            #quitar en tabla responsablexactividad
+            self.executeStoredProcedure("quitarResponsablesActividad", [responsable.id, idActividad])
+
+            #quita a la actividad el responsable
+            actividad.quitarResponsable(responsable)
+            
+    def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
+        #crear bitacora
+        idBitacora = self.executeStoredProcedure("createBitacora", [fecha, hora, idAutor, descripcion])
+
+        if (len(idBitacora) == 1):
+            #insertar en la lista del singleton
+            bitacora = Bitacora(idBitacora[0], fecha, hora, idAutor, descripcion)
+
+            self.bitacoras += [bitacora]
+
+            #crear bitacoraxequipoguia
+            self.executeStoredProcedure("modificarEquipoGuia", [date.today().year, idBitacora[0]])
+
+            #insertar en modificaciones del equipo guia
+            self.equiposGuia[-1].agregarModificacion(bitacora)
+
+    def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
+        #crear bitacora
+        idBitacora = self.executeStoredProcedure("createBitacora", [fecha, hora, idAutor, descripcion])
+
+        if (len(idBitacora) == 1):
+            #insertar en la lista del singleton
+            bitacora = Bitacora(idBitacora[0], fecha, hora, idAutor, descripcion)
+
+            self.bitacoras += [bitacora]
+
+            #crear bitacoraxactividad
+            self.executeStoredProcedure("createbitacoraxactividades", [idActividad, idBitacora[0]])
+
+            #insertar en modificaciones de la actividad
+            self.verActividad(idActividad).agregarModificacion(bitacora)
+
+
 
     # +cancelarActividad(): boolean, se hizo crear observacion, ya que para modificar el estado de una actividad se hace con modificarActividad()
     def crearObservacion(self, idActividad, fechaCancelacion, detalle):
@@ -324,65 +491,68 @@ class SingletonDAO(metaclass=SingletonMeta):
 
     # +publicarActividad(data): boolean
     def publicarActividad(self, idActividad):
-        respuesta = self.modificarActividad(idActividad, None, None, None, None, None, None,None, None, None, 2, None, None)
+        respuesta = self.modificarActividad(idActividad, None, None, None, None, None, None,None, None, None, 2, None)
 
         if (respuesta == None):
             for actividad in self.actividades:
                 if (actividad.idActividad == idActividad):
-                    actividad.idActividad = 2
+                    actividad.estado = 2
 
         return respuesta
 
     # +crearActividad(data): void
     def crearActividad(self, nombreActividad, tipoActividad, fechaActividad,
-                horaInicio, horaFin, recordatorio, medio,  
-                enlace, estado, afiche, ultimaModificacion):
+                horaInicio, horaFin, recordatorio, responsables, medio,  
+                enlace, estado):
         
-        args = [nombreActividad, tipoActividad, fechaActividad,
-                horaInicio, horaFin, recordatorio, medio,  
-                enlace, estado, afiche, ultimaModificacion]
+        ultimaModificacion = date.today()
+
+        args = [nombreActividad, int(tipoActividad), fechaActividad,
+                horaInicio, horaFin, int(recordatorio), int(medio),  
+                enlace, int(estado), ultimaModificacion]
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createActividad', args)
-        
         if(len(id)==1):
             #se obtiene el id y se le agrega
             salida = Actividad.Actividad(id[0], nombreActividad, tipoActividad, fechaActividad,
                     horaInicio, horaFin, recordatorio, [], medio,  
-                    enlace, estado, afiche, ultimaModificacion) #PENDIENTE: generar responsables
+                    enlace, estado, ultimaModificacion, [])
 
             #se agrega a la lista de Actividades
             self.actividades += [salida]
+
+            self.agregarResponsablesActividad(id[0], responsables)
         
         return id
 
 
     def crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular,
-                        correoElectronico, numeroOficina,fotografia,autoridad, estado):
+                        correoElectronico, numeroOficina,autoridad, estado):
 
         args = [cedula, nombre, apellido1, 
                 apellido2, sede, numeroCelular, correoElectronico, 
-                numeroOficina, fotografia, autoridad, estado]
+                numeroOficina, autoridad, estado]
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createProfesor', args)
         if(len(id)==1):
             #se obtiene el id y se le agrega
-            objeto = Profesor(id[0], cedula, nombre, apellido1, 
-                apellido2, sede, numeroCelular, correoElectronico, 
-                fotografia, numeroOficina, autoridad, estado) 
-            #se agrega a la lista de Actividades
-            self.profesores += [objeto]
+            prof = Profesor(self.generarCodigoProfesor(int(sede),id[0]), id[0], int(cedula), nombre, apellido1, 
+                apellido2, int(sede), int(numeroCelular), correoElectronico, 
+                int(numeroOficina), int(autoridad), int(estado)) 
+            #se agrega a la lista de profesores
+            self.profesores += [prof]
         
         return id
 
     
     # +modificarProfesor(idProfesor, ): boolean
-    def modificarProfesor(self, codigo, cedula,nombre,apellido1, apellido2, sede, numeroCelular,
-                        correoElectronico, numeroOficina,fotografia,autoridad, estado):
+    def modificarProfesor(self, id, cedula,nombre,apellido1, apellido2, sede, numeroCelular,
+                        correoElectronico, numeroOficina,autoridad, estado):
         
-        args = [codigo,cedula,nombre,apellido1, apellido2, sede, numeroCelular,
-                correoElectronico, numeroOficina,fotografia,autoridad, estado]
+        args = [id,cedula,nombre,apellido1, apellido2, sede, numeroCelular,
+                correoElectronico, numeroOficina,autoridad, estado]
 
         #se modifica en la bd
         respuesta = self.executeStoredProcedure('updateProfesor', args)
@@ -391,9 +561,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         if (respuesta == None):
             #se modifica en lista
             for i in range(len(self.profesores)):
-                if (self.profesores[i].codigo == codigo):
+                if (self.profesores[i].id == int(id)):
                     if (cedula != None):
-                        self.profesores[i].cedula = cedula
+                        self.profesores[i].cedula = int(cedula)
                     if (nombre != None):
                         self.profesores[i].nombre = nombre
                     if (apellido1 != None):
@@ -401,24 +571,36 @@ class SingletonDAO(metaclass=SingletonMeta):
                     if (apellido2 != None):
                         self.profesores[i].apellido2 = apellido2
                     if (sede != None):
-                        self.profesores[i].sede = sede
+                        self.profesores[i].sede = int(sede)
+                        self.profesores[i].codigo = self.generarCodigoProfesor(sede,self.profesores[i].id)
                     if (numeroCelular != None):
-                        self.profesores[i].numeroCelular = numeroCelular
+                        self.profesores[i].numeroCelular = int(numeroCelular)
                     if (correoElectronico != None):
+                        self.modificarUsuarioCorreo(self.profesores[i].correoElectronico, correoElectronico)
                         self.profesores[i].correoElectronico = correoElectronico
                     if (numeroOficina != None):
-                        self.profesores[i].numeroOficina = numeroOficina
-                    if (fotografia != None):
-                        self.profesores[i].fotografia = fotografia
+                        self.profesores[i].numeroOficina = int(numeroOficina)
                     if (autoridad != None):
-                        self.profesores[i].autoridad = autoridad
+                        self.profesores[i].autoridad = int(autoridad)
                     if (estado != None):
-                        self.profesores[i].estado = estado
+                        self.profesores[i].estado = int(estado)
         return respuesta
 
     # +darBajaProfesor(idProfesor: int): boolean
     def darBajaProfesor(self, idProfesor):
-        self.modificarProfesor(idProfesor, None,None,None, None, None, None, None, None,None,None, 2)
+        
+        #borra en la BD que un profesor corresponda al equipo guia actual
+        respuesta = self.executeStoredProcedure("darDeBaja", [idProfesor])
+
+        #borar al profesor de la lista del equipo guia actual
+        for profesor in self.equiposGuia[-1].listaProfesores:
+            if (profesor.id == idProfesor):
+                self.equiposGuia[-1].listaProfesores.remove(profesor)
+
+        #cambia el estado del profesor
+        self.modificarProfesor(idProfesor, None,None,None, None, None, None, None, None,None, 2)
+
+        return respuesta
     
     # +crearComentario(comentario):void
     def crearComentario(self, idActividad,autor,fechaHora, contenido, idComentarioPadre):
@@ -427,7 +609,6 @@ class SingletonDAO(metaclass=SingletonMeta):
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createComentario', args)
-        
         if(len(id)==1):
             #se obtiene el id y se le agrega
             salida = Comentario(idActividad,autor,fechaHora,contenido, idComentarioPadre)
@@ -438,14 +619,14 @@ class SingletonDAO(metaclass=SingletonMeta):
         return id
 
     # +crearEvidencia(): boolean
-    def crearEvidencia(self, idActividad,fotografias,linkGrabacion,listaAsistencia):
+    def crearEvidencia(self, idActividad,linkGrabacion):
         args = [idActividad,linkGrabacion]
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createEvidencia', args)
         
         if(len(id)==1):
-            salida = Evidencia(idActividad,fotografias,linkGrabacion,listaAsistencia)
+            salida = Evidencia(idActividad,linkGrabacion)
 
             #se agrega a la lista de Actividades
             self.evidencias += [salida]
@@ -455,7 +636,12 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +getProfesor(id:int):profesor:Profesor
     def getProfesor(self, idProfesor):
         for prof in self.profesores:
-            if(prof.codigo == idProfesor):
+            if(prof.id == int(idProfesor)):
+                return prof
+            
+    def getProfesorCodigo(self, codigo):
+        for prof in self.profesores:
+            if(prof.codigo == codigo):
                 return prof
 
     # +consultarEstudiantes(ordenamiento: enum): Collection<Estudiante>
@@ -465,7 +651,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +buscarEstudiante(id:int) : Estudiante
     def buscarEstudiante(self, carnet):
         for estudiante in self.estudiantes:
-            if (carnet == estudiante.carnet):
+            if (int(carnet) == estudiante.carnet):
                 return estudiante
         return None
 
@@ -495,10 +681,66 @@ class SingletonDAO(metaclass=SingletonMeta):
                     if (sede != None):
                         self.estudiantes[i].sede = sede
                     if (correoElectronico != None):
+                        self.modificarUsuarioCorreo(self.estudiantes[i].correoElectronico, correoElectronico)
                         self.estudiantes[i].correoElectronico = correoElectronico
                     if (numeroCelular != None):
                         self.estudiantes[i].numeroCelular = numeroCelular
+                    if (estado != None):
+                        self.estudiantes[i].estado = estado
         return respuesta
+
+    #modificarUsuario(data):id
+    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol):
+        
+        args = [idUsuario, correoElectronico, contrasenha, idRol]
+        
+        #se modifica en la bd
+        respuesta = self.executeStoredProcedure('updateUsuario', args)
+
+        #Si no hubo errores dentro de la BD, realiza las modificaciones correspondientes
+        if (respuesta == None):
+            #se modifica en lista
+
+            for i in range(len(self.usuarios)):
+                if (self.usuarios[i].idUsuario == idUsuario):
+                    if (correoElectronico != None):
+                        self.usuarios[i].correo = correoElectronico
+                    if (contrasenha != None):
+                        self.usuarios[i].contrasenha = contrasenha
+                    if (idRol != None):
+                        self.usuarios[i].idRol = idRol
+        return respuesta
+
+    #+crearUsuario(data):id
+    def crearUsuario(self, correoElectronico, contrasenha, idRol):
+        args = [correoElectronico, contrasenha, idRol]
+
+        #se agrega a la bd
+        id = self.executeStoredProcedure('createUsuario', args)
+        
+        if(len(id)==1):
+            salida = Usuario(id[0], correoElectronico, contrasenha, idRol)
+
+            #se agrega a la lista de Actividades
+            self.usuarios += [salida]
+        
+        return id
+
+    #+getUsuario(id):usuario
+    def getUsuario(self, idUsuario):
+        for user in self.usuarios:
+            if(user.idUsuario == idUsuario):
+                return user
+
+    #getUsuarios():Collection<Usuario>
+    def getUsuarios(self):
+        return self.usuarios
+    
+    def modificarUsuarioCorreo(self, correoAnterior, correoNuevo):        
+        for user in self.usuarios:
+            if (user.correo == correoAnterior):
+                self.modificarUsuario(user.idUsuario, correoNuevo, None, None)
+
 
     #ejecuta un procedimiento almacenado y devuelve una lista con resultados
     def executeStoredProcedure(self, storedProcName, args):

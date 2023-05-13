@@ -5,9 +5,12 @@ class AdminEquipoGuia:
         self.dao = SingletonDAO()
 
     #Metodos    
-    def agregarProfesor(self, profesor, idEquipoGuia):
-        return self.dao.agregarProfesor(profesor, idEquipoGuia)
+    def agregarProfesor(self, profesor):
+        return self.dao.agregarProfesor(profesor)
         
 
     def getEquipoGuia(self):
         return self.dao.getConformacionEquipoGuia()
+    
+    def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
+        return self.dao.bitacoraEquipoGuia(fecha, hora, idAutor, descripcion)

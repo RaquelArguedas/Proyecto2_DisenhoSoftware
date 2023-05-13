@@ -4,7 +4,36 @@ import { BarraLateral } from '../../navegacion/BarraLateral'
 import { FilaProfesor } from './columnasTablas/FilaProfesor'
 import { Icon } from '@iconify/react';
 
+const API = process.env.REACT_APP_API;
+
 export function ConsultarProfesores() {
+
+    // esta pendiente la accion del boton
+    
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();  
+
+        //aca se busca un profesor por un codigo
+        // const res = await fetch(`${API}/getProfesorCodigo/${"SJ-1"}`, {  //falta cambiar el codigo por el deseado
+        //     method: "GET",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     }
+        //   });
+
+        //aca se buscan todos los profesores del equipo guia
+        //     const res = await fetch(`${API}/getEquipoGuia`, { 
+        //         method: "GET",
+        //         headers: {
+        //           "Content-Type": "application/json",
+        //         }
+        //     });
+
+        // const data = await res.json() //resultado de la consulta
+        // console.log(data) // imprime en consola web
+
+    // }
+
     return (
         <Fragment>
             <div className="container">

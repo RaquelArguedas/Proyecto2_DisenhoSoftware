@@ -5,11 +5,12 @@ import GenerarExelPorCampus from "./ProfesorOpciones/GenerarExelPorCampus";
 
 //import  from 
 
+
 export function OpcionesMenuProfesor() {
     let navigate = useNavigate();
 
     const gotoVerPlanTrabajo = () => { navigate("/verplan", {state:{comentarios: true, linkMenu: "/menuProfesor"}}); };
-    const gotoInformacionEstudiantes = () => { navigate("/consultarestudiantesp", {state: {linkMenu: "/menuCoordinador"}}); };
+    const gotoInformacionEstudiantes = () => { navigate("/consultarestudiantesp", {state: {linkMenu: "/menuProfesor"}}); };
     const gotoInformacionEquipo = () => { navigate("/infoequipo", {state: {linkMenu: "/menuProfesor"}}); };
     const gotoModificarEstudiante = () => { navigate("/modificarEstudiante", {state: {linkMenu: "/menuProfesor"}}); };
     const gotoModificarProfesor = () => { navigate("/modificarProfesor", {}); };

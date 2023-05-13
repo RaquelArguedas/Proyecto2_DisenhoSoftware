@@ -1,4 +1,6 @@
 class Usuario:
-    def __init__(self, correo, contrasenna):
+    def __init__(self, idUsuario, correo, contrasenha, idRol):
+        self.idUsuario = idUsuario
         self.correo = correo
-        self.contrasenna = contrasenna
+        self.contrasenha = contrasenha
+        self.idRol = idRol

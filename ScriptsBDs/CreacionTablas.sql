@@ -31,14 +31,19 @@ recordatorio int,
 medio int, 
 enlace varchar(100),
 estado int, foreign key (estado) references EstadoActividad (idEstadoA),
-afiche blob,
 ultimaModificacion date
+);
+
+create table Rol
+(idRol int primary key not null auto_increment,
+descripcion varchar(50)
 );
 
 create table Usuario
 (idUsuario int primary key not null auto_increment,
 correo varchar(100),
-contrasenha varchar(50)
+contrasenha varchar(50),
+idRol int, foreign key (idRol) references Rol (idRol)
 );
 
 create table PlanTrabajo
@@ -90,7 +95,6 @@ idSede int,foreign key (idSede) references Sede (idSede),
 numeroCelular int,
 correoElectronico varchar(200),
 numeroOficina int,
-fotografia longblob,
 idAutoridad int,foreign key (idAutoridad) references Autoridad (idAutoridad),
 idEstado int,foreign key (idEstado) references EstadoCuenta (idEstadoC)
 );
@@ -103,7 +107,8 @@ idActividad int,foreign key (idActividad) references Actividad (idActividad)
 
 create table EquipoGuia
 (idEquipoGuia int primary key not null auto_increment,
-idCoordinador int,foreign key (idCoordinador) references Profesor (idProfesor)
+idCoordinador int,foreign key (idCoordinador) references Profesor (idProfesor),
+anho int
 );
 
 create table ProfesoresXEquipoGuia
@@ -116,7 +121,8 @@ create table Bitacora
 (idBitacora int primary key not null auto_increment,
 fecha date, 
 hora time,
-idAutor int
+idAutor int,
+descripcion varchar(100)
 );
 
 create table BitacoraXEquipoGuia
@@ -156,12 +162,11 @@ apellido2 varchar(50),
 idSede int,foreign key (idSede) references Sede (idSede),
 numeroCelular int,
 correoElectronico varchar(200),
-numeroOficina int,
-fotografia longblob
+numeroOficina int
 );
 
 create table Estudiante
-(carnet int primary key not null auto_increment,
+(carnet int primary key not null,
 nombre varchar(50),
 apellido1 varchar(50),
 apellido2 varchar(50),

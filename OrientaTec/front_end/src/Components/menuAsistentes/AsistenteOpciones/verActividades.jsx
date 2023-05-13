@@ -8,6 +8,52 @@ import { useNavigate } from "react-router-dom";
 export function VerActividades() {
   let navigate = useNavigate();
 
+  //lo comente porque no esta la funcion de los botones
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();  
+  
+      // esta consulta la proxima actividad
+    // const res = await fetch(`${API}/consultarProximaActividad`, { 
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   }
+    // });
+    // const data = await res.json() //resultado de la consulta
+    // console.log(data) // imprime en consola web
+    // console.log(data.tipoActividad)//ejemplo
+
+
+      //esta obtiene todas las actividades
+    // const res = await fetch(`${API}/consultarActividades`, { 
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     }
+    // });
+    // const data = await res.json() //resultado de la consulta
+    // console.log(data) // imprime en consola web
+    // console.log(data[0])//ejemplo
+    // const obj = JSON.parse(data[0]); //aca toma la actividad en la posicion x y lo convierte en un JSON
+    // console.log(obj.tipoActividad) 
+  
+
+      //aca se obtienen las actividades dependiendo del estado
+    // const res = await fetch(`${API}/consultarActividadesEstado/${1}`, {  //aca se cambia el 1 por el estado deseado, asi se sacan las canceladas y las realizadas
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     }
+    // });
+    // const data = await res.json() //resultado de la consulta
+    // console.log(data) // imprime en consola web
+    // console.log(data[0])//ejemplo
+    // const obj = JSON.parse(data[0]); //aca toma la actividad en la posicion x y lo convierte en un JSON
+    // console.log(obj.tipoActividad) 
+
+  
+  // }
+
   const gotoMenuProfesor = () => { navigate("/menuProfesor", {}); };
   const { state } = useLocation();
 
