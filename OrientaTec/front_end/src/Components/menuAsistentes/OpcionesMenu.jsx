@@ -15,12 +15,12 @@ export default function OpcionesMenu() {
   const gotoAgregarProfesor = () => { navigate('/agregarprofesor', {}); }
   const gotoModificarProfesor = () => { navigate('/modificarProfesor', {}); }
 
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);//Donde se almacena temporalmente el archivo
 
-  const handleFileSelect = event => {
-    const file = event.target.files[0];
-    setSelectedFile(file);
-    uploadFile(file);
+  const handleFileSelect = event => {  // Define una función llamada handleFileSelect que se ejecuta cuando el usuario selecciona un archivo
+    const file = event.target.files[0]; // Obtener el archivo seleccionado del objeto de evento y almacenarlo en una variable llamada file
+    setSelectedFile(file); // Actualizar el estado de la aplicación con el archivo seleccionado
+    uploadFile(file); // Llamar a una función que maneja la carga del archivo al servidor
   }
 
   return (

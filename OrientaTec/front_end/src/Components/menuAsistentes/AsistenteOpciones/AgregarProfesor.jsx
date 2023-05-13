@@ -30,6 +30,7 @@ export function AgregarProfesor() {
             }),
           });
 
+          alert("Se ha ingreado un nuevo profesor")
         // // base para front_end
         // //`${API}/nombreFuncion/${parametro1}/${parametro2}`
         // const res = await fetch(`${API}/getUsuarioRol/${"as@gmail.com"}/${"as"}`, {
