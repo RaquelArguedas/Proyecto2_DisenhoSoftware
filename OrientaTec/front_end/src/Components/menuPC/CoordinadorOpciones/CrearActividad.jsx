@@ -8,11 +8,16 @@ import 'react-datepicker/dist/react-datepicker.css';
 export function CrearActividad() {
     const [responsables, setResponsables] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
+    const [esVirtual, setVirtual] = useState(false);
 
     const handleAddResponsable = () => {
         setResponsables((prevResponsables) => {
             return [...prevResponsables, { nombre: "Nombre Apellido Apellido" }];
         });
+    };
+
+    const handleModalidadChange = (event) => {
+        setVirtual(Boolean(event.target.value - 1))
     };
 
     //queda pendiente la funcion del boton
@@ -39,7 +44,7 @@ export function CrearActividad() {
     return (
         <Fragment>
             <div className="container">
-                <Navbar linkInicio='/menuCoordinador'/>
+                <Navbar linkInicio='/menuCoordinador' />
                 <div class="row">
                     <div class="col-sm-3">
                         <BarraLateral />
@@ -49,7 +54,7 @@ export function CrearActividad() {
 
                         <div className="input-group w-50 my-3">
                             <span className="input-group-text" >ID de la actividad</span>
-                            <input id="txtCarnet" type="text" className="form-control" readOnly disabled value={1}/>
+                            <input id="txtCarnet" type="text" className="form-control" readOnly disabled value={1} />
                         </div>
 
                         <div className="row">
@@ -82,7 +87,7 @@ export function CrearActividad() {
 
                                 <div className="input-group w-100 my-3">
                                     <span className="input-group-text w-25">Modalidad</span>
-                                    <select class="form-select" aria-label="ModalidadActividad">
+                                    <select class="form-select" aria-label="ModalidadActividad" onChange={handleModalidadChange}>
                                         <option value="1">Presencial</option>
                                         <option value="2">Virtual</option>
                                     </select>
@@ -100,17 +105,31 @@ export function CrearActividad() {
 
                                 <div className="input-group w-100 my-3">
                                     <button className="btn btn-success w-25 text-light">Subir Afiche</button>
+
+                                    {esVirtual &&
+                                        <input type="text" className="form-control" placeholder="Enlace a la actividad" />
+                                    }
+
                                 </div>
 
                                 <div className="input-group w-100 my-3">
-                                    <p>Fecha y hora</p>
-                                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date) } showTimeSelect dateFormat="dd/MM/yyyy hh:mm aa"/>
+                                    <div className='row'>
+                                        <div className='col-sm-5'><span className="input-group-text w-100" >Fecha y hora</span></div>
+                                        <div className='col-sm-7'><DatePicker selected={startDate} onChange={(date) => setStartDate(date)} showTimeSelect dateFormat="dd/MM/yyyy hh:mm aa" className="form-control w-100" /></div>
+                                    </div>
                                 </div>
 
-                                <div className="input-group w-100 my-3">
+                                <div className="input-group w-50 my-3">
                                     <span className="input-group-text" >Duración</span>
                                     <input id="txtCarnet" type="text" className="form-control" placeholder="horas" />
                                 </div>
+
+                                <div className="input-group w-100 my-3">
+                                <span className="input-group-text" >Cantidad de recordatorios</span>
+                                    <input id="txtCarnet" type="number" min={0} className="form-control" />
+                                </div>
+
+                                <br /><br /><br /><br /><br />
 
                                 <div className="input-group w-100 my-3">
                                     <button className="btn btn-success w-50">Actualizar</button>
