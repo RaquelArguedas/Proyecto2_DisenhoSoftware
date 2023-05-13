@@ -32,12 +32,7 @@ def consultarEstudiantes(ordenamiento):
 def modificarEstudiante():
   print(request.json)
 
-  #Descomentar cuando se envie el carnet y borrar el otro
-  # id = control.modificarEstudiante(request.json['carnet'], request.json['name'], 
-  #                            request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
-  #                           request.json['correo'], request.json['numeroTelefono'],  request.json['estado'])
-  
-  id = control.modificarEstudiante(20198, request.json['name'], 
+  id = control.modificarEstudiante(request.json['carnet'], request.json['name'], 
                              request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
                             request.json['correo'], request.json['numeroTelefono'],  request.json['estado'])
   

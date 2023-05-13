@@ -19,6 +19,7 @@ export function CardProf({ btnColor, btnText, nombreCompleto, telefono, correo, 
                 }
             });
             console.log('dado de baja');
+            alert("Se ha dado de baja al profesor.");
         } else {
             //aca se le asigna como cordinador
             const res = await fetch(`${API}/designarCoordinador/${id}`, {  //falta cambiar el idProfesor por el deseado
@@ -31,6 +32,7 @@ export function CardProf({ btnColor, btnText, nombreCompleto, telefono, correo, 
 
             const data = await res.json() //resultado de la consulta
             console.log(data) // imprime en consola web
+            alert("El profesor ha sido asignado como coordinador.");
         }
     }
 
