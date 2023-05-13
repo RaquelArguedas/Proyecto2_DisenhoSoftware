@@ -8,7 +8,7 @@ export function DarBajaProfesor() {
     return (
         <Fragment>
             <div className="container">
-                <Navbar linkInicio='/menuAsistente'/>
+                <Navbar />
                 <div className="row">
                     <div className="col-sm-3">
                         <BarraLateral />

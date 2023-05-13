@@ -5,21 +5,14 @@ import { Navbar } from '../../../navegacion/Navbar';
 import { BarraLateral } from '../../../navegacion/BarraLateral';
 import { Comentario } from '../../../comentarios/Comentario';
 import { FormComentario } from '../../../comentarios/FormComentario';
-import { useNavigate } from "react-router-dom";
 
 export function DetalleActividad() {
-    let navigate = useNavigate();
-    
     const { state } = useLocation();
-    
-    const gotoEvidenciasActividad = () => { navigate('/verplan/detalle/evidencias',  {state: {comentarios: state.comentarios, linkMenu: state.linkMenu}}); }
-
-    const gotoVerPlan = () => { navigate('/verplan', {state: {comentarios: state.comentarios, linkMenu: state.linkMenu}}); };
 
     return (
         <Fragment>
             <div className='container'>
-                <Navbar linkInicio={state.linkMenu}/>
+                <Navbar />
 
                 <div className="row">
                     <div className="col-sm-3">
@@ -70,14 +63,7 @@ export function DetalleActividad() {
                                         </p>
                                     </div>
                                 </div>
-                                
-                                <btn onClick={gotoEvidenciasActividad} className="btn btn-primary w-25 my-4">Evidencias</btn>
-                                
-                                <div class="col">
-                                    <button type="button" class="btn btn-primary" onClick={gotoVerPlan}>
-                                        Atrás
-                                    </button>
-                                </div>
+                                <btn href="#" className="btn btn-primary w-25 my-4">Evidencias</btn>
                             </div>
                         </div>
 

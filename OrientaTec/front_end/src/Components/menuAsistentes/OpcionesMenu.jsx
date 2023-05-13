@@ -6,10 +6,10 @@ import { uploadFile } from './AsistenteOpciones/CargarExel';
 export default function OpcionesMenu() {
   let navigate = useNavigate();
 
-  const gotoVerPlanTrabajo = () => { navigate('/verplan', {state:{comentarios: false, linkMenu: "/menuAsistente"}}); }
-  const gotoInformacionEstudiantes = () => { navigate('/infoestudiantes', {state: {linkMenu: "/menuAsistente"}}); }
+  const gotoVerPlanTrabajo = () => { navigate('/verplan', {state:{comentarios: false}}); }
+  const gotoInformacionEstudiantes = () => { navigate('/infoestudiantes', {}); }
   const gotoInformacionProfesores = () => { navigate('/infoprofesores', {}); }
-  const gotoInformacionEquipo = () => { navigate('/infoequipo', {state: {linkMenu: "/menuAsistente"}}); }
+  const gotoInformacionEquipo = () => { navigate('/infoequipo', {}); }
   const gotoAsignarCoordinador = () => { navigate('/asignarcoordinador', {}); }
   const gotoDarBajaProfesor = () => { navigate('/darbajaprofesor', {}); }
   const gotoAgregarProfesor = () => { navigate('/agregarprofesor', {}); }
