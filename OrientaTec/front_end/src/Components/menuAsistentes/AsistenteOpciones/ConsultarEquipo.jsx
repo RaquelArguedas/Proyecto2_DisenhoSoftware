@@ -1,37 +1,50 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState  } from 'react'
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { FilaProfesor } from './columnasTablas/FilaProfesor'
 import { Icon } from '@iconify/react';
 import { useLocation } from "react-router-dom";
 
-const API = process.env.REACT_APP_API;
+const API = 'http://localhost:5000'; //process.env.REACT_APP_API;
 
 export function ConsultarEquipo() {
     const { state } = useLocation();
+    const [profesores, setProfesores] = useState([[]]);
+
+    const clearProfesores = () => {
+        setProfesores([[]]);
+    };
 
     //la siguiente llamada obtiene la info del equipo guia
-    // const handleSubmit = async (event) => {
-    //     event.preventDefault();  
+    const handleSubmit = async () => {
+        const res = await fetch(`${API}/getEquipoGuia`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
 
-    //     const res = await fetch(`${API}/getEquipoGuia`, { 
-    //         method: "GET",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         }
-    //     });
+        const data = await res.json(); //resultado de la consulta
 
-    //     const data = await res.json() //resultado de la consulta
-    //     console.log(data) // imprime en consola web
-    //     console.log(data[0])
-    //     const obj = JSON.parse(data[0]); 
-    //     console.log(obj.nombre) //aqui se obtiene el elemento de cada json
-    // }
+        setProfesores(() => {
+            clearProfesores();
+            return [data]
+        })
+
+        console.log(data); // imprime en consola web
+        console.log(data[0]);
+        const obj = JSON.parse(data[0]);
+        console.log(obj.nombre); //aqui se obtiene el elemento de cada json
+    };
+
+    React.useEffect(() => {
+        handleSubmit()
+    }, []);
 
     return (
         <Fragment>
             <div className="container">
-                <Navbar Navbar linkInicio={state.linkMenu}/>
+                <Navbar Navbar linkInicio={state.linkMenu} />
                 <div class="row">
                     <div class="col-sm-3">
                         <BarraLateral />
@@ -80,14 +93,16 @@ export function ConsultarEquipo() {
                                     </tr>
                                 </thead>
                                 <tbody id="tblProfesores" style={{ background: "white" }}>
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
+                                    {profesores[0].map((profesor) => (
+                                        <FilaProfesor
+                                            codigo={JSON.parse(profesor).codigo}
+                                            cedula={JSON.parse(profesor).cedula}
+                                            nombreCompleto={JSON.parse(profesor).nombre + ' ' + JSON.parse(profesor).apellido1 + ' ' + JSON.parse(profesor).apellido2}
+                                            telefono={JSON.parse(profesor).numeroCelular}
+                                            correo={JSON.parse(profesor).correoElectronico} 
+                                            oficina={JSON.parse(profesor).numeroOficina}
+                                            sede={JSON.parse(profesor).sede} />
+                                    ))}
                                 </tbody>
                             </table>
                         </div>

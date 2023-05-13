@@ -1,16 +1,16 @@
 import React, { Fragment } from 'react'
 
-export function FilaProfesor() {
+export function FilaProfesor({codigo, cedula, nombreCompleto, telefono, correo, oficina, sede}) {
     return (
         <Fragment>
             <tr>
-                <th id="regCodigo" scope="row">XX-0000</th>
-                <td id="regCedula">012345678</td>
-                <td id="regNombre">Nombre Apellido Apellido</td>
-                <td id="regTelef">8888-8888 (0000)</td>
-                <td id="regCorreo">correo@mail.com</td>
-                <td id="regOficina">XX00</td>
-                <td id="regSede">CA</td>
+                <th id="regCodigo" scope="row"> {codigo} </th>
+                <td id="regCedula"> {cedula} </td>
+                <td id="regNombre"> {nombreCompleto} </td>
+                <td id="regTelef"> {telefono} </td>
+                <td id="regCorreo"> {correo} </td>
+                <td id="regOficina"> {oficina} </td>
+                <td id="regSede"> {sede} </td>
             </tr>
         </Fragment>
     )

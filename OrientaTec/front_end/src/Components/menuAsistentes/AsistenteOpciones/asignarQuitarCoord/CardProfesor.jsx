@@ -2,8 +2,25 @@ import React, { Fragment } from 'react'
 import { Icon } from '@iconify/react';
 import { useNavigate } from "react-router-dom";
 
-export function CardProf({btnColor, btnText}) {
-    let navigate = useNavigate();
+const API = 'http://localhost:5000'; //process.env.REACT_APP_API;
+
+export function CardProf({ btnColor, btnText, nombreCompleto, telefono, correo, oficina, sede, id }) {
+
+    const handleBtnAccion = async (event) => {
+        event.preventDefault();
+
+        if (btnColor === "danger") {
+            //aqui se le da de baja
+            const res = await fetch(`${API}/darBajaProfesor/${id}`, {  //falta cambiar el idProfesor por el deseado
+                mode: "no-cors",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+            console.log('dado de baja');
+        }
+    }
 
     return (
         <Fragment>
@@ -11,29 +28,29 @@ export function CardProf({btnColor, btnText}) {
                 <div className="card-body">
                     <h5 className="card-title m-2">Datos del profesor</h5>
 
-                    <p id="nombreCoordinador" className='card-text m-2'>Nombre Apellido Apellido</p>
+                    <p id="nombre" className='card-text m-2'> {nombreCompleto} </p>
 
-                    <p id="sedeCoordinador" className="card-text m-2">
+                    <p id="sede" className="card-text m-2">
                         <Icon icon="mdi:office-building" width="24" height="24" />
-                        Campus Central Cartatgo
+                        {sede}
                     </p>
 
-                    <p id="telefCoordinador" className="card-text m-2">
+                    <p id="telef" className="card-text m-2">
                         <Icon icon="mdi:telephone-outline" width="24" height="24" />
-                        8888-8888 (0000)
+                        {telefono}
                     </p>
 
-                    <p id="correoCoordinador" className="card-text m-2">
+                    <p id="correo" className="card-text m-2">
                         <Icon icon="ic:baseline-email" width="24" height="24" />
-                        correo@mail.com
+                        {correo}
                     </p>
 
-                    <p id="oficinaCoordinador" className="card-text m-2">
+                    <p id="oficina" className="card-text m-2">
                         <Icon icon="material-symbols:location-on" width="24" height="24" />
-                        A3-01
+                        {oficina}
                     </p>
 
-                    <btn class={"my-3 btn btn-" + btnColor}>{btnText}</btn>
+                    <button onClick={handleBtnAccion} class={"mx-3 btn btn-" + btnColor}> {btnText} </button>
                 </div>
             </div>
         </Fragment>
