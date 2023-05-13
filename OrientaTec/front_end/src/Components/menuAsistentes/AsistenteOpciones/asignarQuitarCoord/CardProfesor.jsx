@@ -19,6 +19,18 @@ export function CardProf({ btnColor, btnText, nombreCompleto, telefono, correo, 
                 }
             });
             console.log('dado de baja');
+        } else {
+            //aca se le asigna como cordinador
+            const res = await fetch(`${API}/designarCoordinador/${id}`, {  //falta cambiar el idProfesor por el deseado
+                mode: "no-cors",
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            const data = await res.json() //resultado de la consulta
+            console.log(data) // imprime en consola web
         }
     }
 
