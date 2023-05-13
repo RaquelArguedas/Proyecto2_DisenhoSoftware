@@ -12,7 +12,6 @@ export function AgregarProfesor() {
     const [numeroTelefono, setNumeroTelefono] = useState('');
     const [numeroOficina, setNumeroOficina] = useState('');
     const [correo, setCorreo] = useState('');
-    const [codigo, setCodigo] = useState('');
     const [sede, setSede] = useState('');
     const [image, setImage] = useState(null);
 
@@ -31,6 +30,7 @@ export function AgregarProfesor() {
             }),
           });
 
+          alert("Se ha ingreado un nuevo profesor")
         // // base para front_end
         // //`${API}/nombreFuncion/${parametro1}/${parametro2}`
         // const res = await fetch(`${API}/getUsuarioRol/${"as@gmail.com"}/${"as"}`, {
@@ -38,9 +38,14 @@ export function AgregarProfesor() {
         // });
         // const data = await res.json();//resultado de la consulta
         // console.log(data) // imprime en consola web
-
-
     }
+    // const handleSearch = async () => {
+    //     const res = await fetch(`${API}/getProfesorCodigo/${codigoRef.current.value}`); //PENDIENTE : debe de darle el codigo
+    //     const data = await res.json();//resultado de la consulta
+
+    // }
+
+
     const handleNameChange = (event) => {
     setName(event.target.value);
     }; 
@@ -62,9 +67,6 @@ export function AgregarProfesor() {
     }; 
     const handleCorreoChange = (event) => {
         setCorreo(event.target.value);
-    }; 
-    const handleCodigoChange = (event) => {
-        setCodigo(event.target.value);
     }; 
     const handleSedeChange = (event) => {
         setSede(event.target.value);
@@ -129,13 +131,7 @@ export function AgregarProfesor() {
                                         placeholder="Ingrese el correo" value={correo} onChange={handleCorreoChange}
                                         />
                             </div>
-                            <div class="mb-3">
-                                <label htmlFor="formGroupInputCodigo" class="form-label">Código</label>
-                                <input type="text" className="form-control" id="nameInput"
-                                        placeholder="Ingrese el código que tendra el profesor"
-                                        value={codigo} onChange={handleCodigoChange}
-                                        />
-                            </div>
+                            
                             <div class="mb-3">
                                 <label htmlFor="autoSizingSelect" class="form-label">Sede: </label>
                                 
@@ -145,7 +141,9 @@ export function AgregarProfesor() {
                                 <option value="">Seleccionar</option>
                                 <option value="1">Cartago</option>
                                 <option value="2">Alajuela</option>
-                                <option value="3">Limon</option>
+                                <option value="3">Limón</option>
+                                <option value="4">San José</option>
+                                <option value="5">San Carlos</option>
                                 </select>
                             </div>
                             <div className="mb-3">

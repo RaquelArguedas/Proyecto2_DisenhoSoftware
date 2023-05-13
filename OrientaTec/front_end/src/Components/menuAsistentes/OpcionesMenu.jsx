@@ -1,5 +1,7 @@
-import React, {Fragment} from 'react'
+import React, {Fragment, useState} from 'react'
 import { useNavigate } from "react-router-dom";
+import { uploadFile } from './AsistenteOpciones/CargarExel';
+
 
 export default function OpcionesMenu() {
   let navigate = useNavigate();
@@ -12,6 +14,15 @@ export default function OpcionesMenu() {
   const gotoDarBajaProfesor = () => { navigate('/darbajaprofesor', {}); }
   const gotoAgregarProfesor = () => { navigate('/agregarprofesor', {}); }
   const gotoModificarProfesor = () => { navigate('/modificarProfesor', {}); }
+
+  const [selectedFile, setSelectedFile] = useState(null);//Donde se almacena temporalmente el archivo
+
+  const handleFileSelect = event => {  // Define una función llamada handleFileSelect que se ejecuta cuando el usuario selecciona un archivo
+    const file = event.target.files[0]; // Obtener el archivo seleccionado del objeto de evento y almacenarlo en una variable llamada file
+    setSelectedFile(file); // Actualizar el estado de la aplicación con el archivo seleccionado
+    uploadFile(file); // Llamar a una función que maneja la carga del archivo al servidor
+  }
+
   return (
     <Fragment>
        <div className="m-3 p-3 bg-light">
@@ -61,9 +72,16 @@ export default function OpcionesMenu() {
               </button>
             </div>
             <div class="col">
-              <button className="btn btn-success h-100 w-100">
+              <label htmlFor="fileInput" className="btn btn-success h-100 w-100">
                 Cargar datos de estudiantes
-              </button>
+              </label>
+              <input 
+                id="fileInput"
+                type="file" 
+                onChange={handleFileSelect}
+                accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
+                style={{ display: "none" }} 
+              />
             </div>
         </div>
        </div>
