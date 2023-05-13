@@ -404,6 +404,21 @@ def getUsuario(idUsuario):
 def getUsuarioRol(correo, contrasenha):
   return json.dumps(control.getUsuarioRol(correo, contrasenha))
 
+# def iniciarSesion(self, correo, contrasenha):
+@app.route('/iniciarSesion/<correo>/<contrasenha>', methods=['POST'])
+def iniciarSesion(correo, contrasenha):
+  SingletonSesionActual().setUsuario(control.getUsuarioCorreo(correo, contrasenha))
+  
+  return str(SingletonSesionActual().getUsuario().idUsuario)
+
+# def getUsuarioSesionActual(self):
+@app.route('/getUsuarioSesionActual', methods=['GET'])
+def getUsuarioSesionActual():
+  SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
+  user = SingletonSesionActual().getUsuario()
+
+  return user.__dict__
+
 
 
 

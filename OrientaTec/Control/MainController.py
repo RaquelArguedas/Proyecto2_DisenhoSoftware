@@ -142,7 +142,9 @@ class MainController:
     def getUsuario(self, idUsuario):
         return self.controlUsuario.getUsuario(idUsuario)
     
+    def getUsuarioCorreo(self, correo, contrasenha):
+        return self.controlUsuario.getUsuarioCorreo(correo, contrasenha)
+    
     def getUsuarioRol(self, correo, contrasenha):
         return self.controlUsuario.getUsuarioRol(correo, contrasenha)
     
-        
