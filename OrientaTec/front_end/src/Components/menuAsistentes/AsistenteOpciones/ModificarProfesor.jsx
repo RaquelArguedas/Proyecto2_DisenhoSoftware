@@ -1,11 +1,15 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useRef, useState } from 'react'
+import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
 
-const API = process.env.REACT_APP_API;
+const API = 'http://localhost:5000';
 
 export  function ModificarProfesor() {
+    const { state } = useLocation();
+    
+    const codigoRef = useRef();
     const [estado, setEstado] = useState("");
     const [name, setName] = useState('');
     const [apellido1, setApellido1] = useState('');
@@ -33,7 +37,7 @@ export  function ModificarProfesor() {
         console.log(data) // imprime en consola web
     }
     const handleSearch = async () => { 
-        const res = await fetch(`${API}/getProfesorCodigo/${"SJ-1"}`); //PENDIENTE : debe de darle el codigo
+        const res = await fetch(`${API}/getProfesorCodigo/${codigoRef.current.value}`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta
         console.log(data) // imprime en consola web
             
@@ -96,7 +100,7 @@ export  function ModificarProfesor() {
                          y porsterior se tocara el boton */}
                         <div className="input-group w-50 my-3">
                             <span className="input-group-text" >Código</span>
-                            <input id="txtCodigo" type="text" className="form-control" />
+                            <input ref={codigoRef} type="text" className="form-control"  id="inputCarnet" placeholder="Ingrese el código de prfofesor buscar"/>
                             <button onClick={handleSearch} className="btn btn-primary"> <Icon icon="ic:baseline-search" width="24" height="24" /> Buscar </button>
                         </div>
                         {/*La seguiente seccion tendra los formGroupInput, al tocar el boton de buscar 
@@ -154,7 +158,9 @@ export  function ModificarProfesor() {
                                     <option value="">Seleccionar</option>
                                     <option value="1">Cartago</option>
                                     <option value="2">Alajuela</option>
-                                    <option value="3">Limon</option>
+                                    <option value="3">Limón</option>
+                                    <option value="4">San José</option>
+                                    <option value="5">San Carlos</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">

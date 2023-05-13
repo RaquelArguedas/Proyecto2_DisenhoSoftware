@@ -1,38 +1,55 @@
-import React, { Fragment } from 'react'
+import React, { Fragment , useRef, useState} from 'react'
+import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { FilaProfesor } from './columnasTablas/FilaProfesor'
 import { Icon } from '@iconify/react';
 
-const API = process.env.REACT_APP_API;
+const API =  'http://localhost:5000'; 
+
 
 export function ConsultarProfesores() {
+    const { state } = useLocation();
 
-    // esta pendiente la accion del boton
-    
-    // const handleSubmit = async (event) => {
-    //     event.preventDefault();  
+    const codigoRef = useRef();
+    const [profesores, setProfesores] = useState([[]]);
 
-        //aca se busca un profesor por un codigo
-        // const res = await fetch(`${API}/getProfesorCodigo/${"SJ-1"}`, {  //falta cambiar el codigo por el deseado
-        //     method: "GET",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     }
-        //   });
+    const clearProfesores = () => {
+        setProfesores([[]]);
+    };
 
-        //aca se buscan todos los profesores del equipo guia
-        //     const res = await fetch(`${API}/getEquipoGuia`, { 
-        //         method: "GET",
-        //         headers: {
-        //           "Content-Type": "application/json",
-        //         }
-        //     });
+    const handleSubmit = async (event) => {
+        event.preventDefault();  
 
-        // const data = await res.json() //resultado de la consulta
-        // console.log(data) // imprime en consola web
-
-    // }
+    //    aca se busca un profesor por un codigo
+        if(codigoRef.current.value===''){
+            const res = await fetch(`${API}/getProfesorCodigo/${1}`, {  //falta cambiar el codigo por el deseado
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                }
+              });
+              const data = await res.json()
+              setProfesores(() => {
+                clearProfesores();
+                return [data]
+            })
+        }else{
+            //    aca se buscan todos los profesores del equipo guia
+            const res = await fetch(`${API}/getEquipoGuia`, { 
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                }
+            });
+            const data = await res.text() //resultado de la consulta
+            setProfesores(()=>{
+                clearProfesores();
+                return(data[0]===['"No existe"\n'] ? [[]] : [[data]])
+            } )
+        }
+        
+    }
 
     return (
         <Fragment>
@@ -44,12 +61,14 @@ export function ConsultarProfesores() {
                     </div>
                     <div class="col-lg m-3 p-3 bg-light">
                         <h4>Información de profesores</h4>
+                        <form onSubmit={handleSubmit}>
 
-                        <div className="input-group w-50 my-3">
-                            <span className="input-group-text" >Código</span>
-                            <input id="txtCarnet" type="text" className="form-control" />
-                            <button className="btn btn-primary"> <Icon icon="ic:baseline-search" width="24" height="24" /> Buscar </button>
-                        </div>
+                            <div className="input-group w-50 my-3">
+                                <span className="input-group-text" >Código</span>
+                                <input ref={codigoRef} type="text" className="form-control" id='inputCodigo' placeholder='Ingrese el código del profesor a buscar' />
+                                <button className="btn btn-primary"> <Icon icon="ic:baseline-search" width="24" height="24" /> Buscar </button>
+                            </div>
+                        </form>
                         {/* Tabla de profesores */}
                         <div class="overflow-auto" id="tablaEstudiantes">
                             <table class="table">
@@ -65,14 +84,17 @@ export function ConsultarProfesores() {
                                     </tr>
                                 </thead>
                                 <tbody id="tblProfesores" style={{ background: "white" }}>
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
-                                    <FilaProfesor />
+                                    {profesores[0].map((profesor) => (
+                                        JSON.parse(profesor).codigo != undefined &&
+                                        <FilaProfesor
+                                            codigo={JSON.parse(profesor).codigo}
+                                            cedula={JSON.parse(profesor).cedula}
+                                            nombreCompleto={JSON.parse(profesor).nombre + ' ' + JSON.parse(profesor).apellido1 + ' ' + JSON.parse(profesor).apellido2}
+                                            telefono={JSON.parse(profesor).numeroCelular}
+                                            correo={JSON.parse(profesor).correoElectronico}
+                                            numeroOficina={JSON.parse(profesor).numeroOficina}
+                                            sede={JSON.parse(profesor).sede} />
+                                    ))}
                                 </tbody>
                             </table>
                         </div>
