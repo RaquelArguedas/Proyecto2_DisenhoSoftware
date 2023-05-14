@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useRef } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
@@ -69,6 +69,9 @@ export function CrearActividad() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        setModalidad(Number(medio) + 1);
+        console.log(medio);
 
         if (responsables.length <= 0) {
             alert("Debe registrar responsables.")
