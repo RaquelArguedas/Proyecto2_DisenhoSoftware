@@ -1,6 +1,7 @@
 # basado en codigo de Refactoring.Guru, adjuntamos el enlace a continuacion
 # https://refactoring.guru/design-patterns/singleton/python/example#:~:text=Singleton%20is%20a%20creational%20design,the%20modularity%20of%20your%20code.
 
+from operator import attrgetter
 import mysql.connector 
 from datetime import datetime, date, timedelta
 
@@ -149,6 +150,14 @@ class SingletonDAO(metaclass=SingletonMeta):
 
     def generarCodigoProfesor(self, idSede, id):
         return Sede(idSede).name +"-"+str(id)
+    
+    def getProfesorCedula(self, cedula):
+        for prof in self.profesores:
+            if(prof.cedula == cedula):
+                return prof
+
+    def getAllProfesores(self):
+        return self.profesores
 
     def generarResposables(self, idActividad):
         self.connectServer()
@@ -263,7 +272,9 @@ class SingletonDAO(metaclass=SingletonMeta):
     
     #+getActividades():Collection<Actividad>
     def getActividades(self):
-        return self.actividades
+        listaSalida = sorted(self.actividades, key=attrgetter('fechaActividad'))
+        return listaSalida
+
 
     # +getPlanTrabajo():planTrabajo: PlanTrabajo 
     def getPlanTrabajo(self):

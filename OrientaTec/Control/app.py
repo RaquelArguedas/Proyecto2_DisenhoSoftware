@@ -113,6 +113,22 @@ def getProfesorCodigo(codigo):
      return jsonify("No existe")
   
   return json.dumps(prof.__dict__)
+# getProfesorCedula(self, idProfesor):
+@app.route('/getProfesorCedula/<cedula>', methods=['GET'])
+def getProfesorCedula(cedula):
+  prof = control.getProfesorCedula(int(cedula))
+
+  if (prof == None):
+     return jsonify("No existe")
+
+# getAllProfesores(self):
+@app.route('/getAllProfesores', methods=['GET'])
+def getAllProfesores():
+  listaProfesores = control.getAllProfesores()
+  listaSalida = []
+  for p in listaProfesores:
+    listaSalida += [json.dumps(p.__dict__)]
+  return listaSalida
 
 # crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular, correoElectronico, numeroOficina,autoridad, estado):
 @app.route('/crearProfesor', methods=['POST'])

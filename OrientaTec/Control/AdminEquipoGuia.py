@@ -8,7 +8,9 @@ class AdminEquipoGuia:
     def agregarProfesor(self, profesor):
         return self.dao.agregarProfesor(profesor)
         
-
+    def getAllProfesores(self):
+        return self.dao.getAllProfesores()
+    
     def getEquipoGuia(self):
         return self.dao.getConformacionEquipoGuia()
     
