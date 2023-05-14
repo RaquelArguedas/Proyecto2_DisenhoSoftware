@@ -11,6 +11,6 @@ if __name__ == "__main__":
 
     e=control.buscarEstudiante(20198)
 
-    print(control.getAllProfesores())
+    print(control.getProfesorCedula(189).nombre)
     #control.consultarEstudiantes(int(Ordenamiento['SEDE']))
     

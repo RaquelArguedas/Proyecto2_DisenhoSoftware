@@ -33,7 +33,7 @@ export function AgregarProfesor() {
 
         // // base para front_end
         //`${API}/nombreFuncion/${parametro1}/${parametro2}`
-        const res = await fetch(`${API}/getAllProfesores`, {
+        const res = await fetch(`${API}/getProfesorCedula/${189}`, {
             method: "GET",
         });
         const data = await res.json();//resultado de la consulta
