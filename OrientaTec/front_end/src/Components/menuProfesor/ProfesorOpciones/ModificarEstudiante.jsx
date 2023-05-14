@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useRef, useState } from 'react'
 import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
@@ -7,9 +7,9 @@ import { Icon } from '@iconify/react';
 const API = process.env.REACT_APP_API;
 
 export function ModificarEstudiante() {
+    const carnetRef = useRef()
 
     const { state } = useLocation();
-    
 
     const [estado, setEstado] = useState("");
     const [name, setName] = useState('');
@@ -21,21 +21,26 @@ export function ModificarEstudiante() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const carnet = carnetRef.current.value;
         const res = await fetch(`${API}/modificarEstudiante`, { //queda pendiente lo de agregar una foto
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify({ //pendiente lo del carnet
-                // carnet, name,apellido1, apellido2, sede, numeroTelefono, correo, estado
-                name,apellido1, apellido2, sede, numeroTelefono, correo, estado
+            body: JSON.stringify({
+                carnet, name, apellido1, apellido2, sede, numeroTelefono, correo, estado
             }),
-          });
+        });
         const data = await res.json() //resultado de la consulta
         console.log(data) // imprime en consola web
+        if (carnet===''||name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||estado===''){
+            alert("Ha dejado campos en blanco.");
+        }else{
+            alert("La información del estudiante se ha modificado.");
+        }
     }
     const handleSearch = async () => {
-        const res = await fetch(`${API}/getEstudiante/${20198}`); //PENDIENTE : debe de darle el carnet
+        const res = await fetch(`${API}/getEstudiante/${carnetRef.current.value}`); //PENDIENTE : debe de darle el carnet
         const data = await res.json();//resultado de la consulta
         console.log(data.estado) // imprime en consola web
 
@@ -85,7 +90,7 @@ export function ModificarEstudiante() {
                          y porsterior se tocara el boton */}
                         <div className="input-group w-50 my-3">
                             <span className="input-group-text" >Carnet</span>
-                            <input id="txtCarnet" type="text" className="form-control" />
+                            <input ref={carnetRef} id="txtCarnet" type="text" className="form-control" />
                             <button onClick={handleSearch} className="btn btn-primary"> <Icon icon="ic:baseline-search" width="24" height="24" /> Buscar </button>
                         </div>
                         {/*La seguiente seccion tendra los formGroupInput, al tocar el boton de buscar 
@@ -131,9 +136,11 @@ export function ModificarEstudiante() {
                                     <div class="mb-3">
                                         <select id="mySelect" value={sede} onChange={handleSedeChange}>
                                             <option value="">Seleccionar</option>
-                                            <option value="1">Cartago</option>
-                                            <option value="2">Alajuela</option>
-                                            <option value="3">Limon</option>
+                                            <option value="1">San José</option>
+                                            <option value="2">Cartago</option>
+                                            <option value="3">San Carlos</option>
+                                            <option value="4">Alajuela</option>
+                                            <option value="5">Limón</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">
@@ -147,7 +154,7 @@ export function ModificarEstudiante() {
                                             <option value="2">Inactivo</option>
                                         </select>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Modificar información</button>
+                                    <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Modificar información</button>
                                 </div>
                             </div>
                         </form>

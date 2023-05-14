@@ -32,14 +32,14 @@ def consultarEstudiantes(ordenamiento):
 def modificarEstudiante():
   print(request.json)
 
-  #Descomentar cuando se envie el carnet y borrar el otro
-  # id = control.modificarEstudiante(request.json['carnet'], request.json['name'], 
-  #                            request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
-  #                           request.json['correo'], request.json['numeroTelefono'],  request.json['estado'])
-  
-  id = control.modificarEstudiante(20198, request.json['name'], 
-                             request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
-                            request.json['correo'], request.json['numeroTelefono'],  request.json['estado'])
+  id = control.modificarEstudiante(request.json['carnet'] if request.json['carnet'] != '' else None, 
+                                  request.json['name'] if request.json['name'] != '' else None, 
+                                  request.json['apellido1'] if request.json['apellido1'] != '' else None, 
+                                  request.json['apellido2'] if request.json['apellido2'] != '' else None, 
+                                  request.json['sede'] if request.json['sede'] != '' else None, 
+                                  request.json['correo'] if request.json['correo'] != '' else None, 
+                                  request.json['numeroTelefono'] if request.json['numeroTelefono'] != '' else None,  
+                                  request.json['estado'] if request.json['estado'] != '' else None)
   
   return jsonify(str(id))
 
@@ -98,13 +98,10 @@ def designarCoordinador(idProfesor):
 def modificarProfesor():
   print(request.json)
 
-  #Descomentar cuando se envie el codigo y borrar el otro
-  #prof = control.getProfesorCodigo(request.json['codigo'])
-
-  prof = control.getProfesorCodigo("SJ-1")
+  prof = control.getProfesorCodigo(request.json['codigo'])
   id = control.modificarProfesor(prof.id,request.json['cedula'], request.json['name'], 
                              request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
-                             request.json['numeroTelefono'], request.json['correo'], request.json['numeroOficina'],None,None)
+                             request.json['numeroTelefono'], request.json['correo'], request.json['numeroOficina'],None,request.json['estado'])
   return jsonify(str(id))
 
 # getProfesorCodigo(self, idProfesor):
@@ -215,16 +212,9 @@ def cancelarActividad(idActividad):
 def crearActividad():
   #print(request.json)
 
-  #borrar este y descomentar el otro con los JSON adecuados
-  # id = control.crearActividad(request.json['nombre'], request.json['tipo'], request.json['fecha'], 
-  #                             request.json['horaInicio'], request.json['horaFin'], request.json['recordatorio'], 
-  #                             request.json['medio'], request.json['enlace'], request.json['estado'])
-  
-  
-  responsablesNuevos = [] #eliminar cuando envien la lista de responsables
-  id = control.crearActividad("nombre", 1, datetime.now().date(), 
-                              datetime.now().time().strftime('%H:%M'), datetime.now().time().strftime('%H:%M'),
-                              1,responsablesNuevos, 1, "enlace", 1)
+  id = control.crearActividad(request.json['nombre'], request.json['tipo'], request.json['fecha'], 
+                               request.json['horaInicio'], request.json['horaFin'], request.json['recordatorio'], 
+                               request.json['responsables'], request.json['medio'], request.json['enlace'], request.json['estado'])
   print(id)
   
   control.bitacoraActividad(id[0], datetime.now().date(), datetime.now().time().strftime('%H:%M'),

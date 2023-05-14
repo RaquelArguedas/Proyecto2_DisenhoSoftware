@@ -60,7 +60,7 @@ export function ConsultarEstudiantesP() {
     return (
         <Fragment>
             <div className="container">
-                <Navbar linkInicio={state.linkMenu}/>
+                <Navbar linkInicio={state.linkMenu} />
 
                 <div class="row">
                     <div class="col-sm-3">
@@ -120,9 +120,8 @@ export function ConsultarEstudiantesP() {
                                     </tr>
                                 </thead>
                                 <tbody id="tblEstudiantes" style={{ background: "white" }}>
-                                    { console.log(estudiantes) }
                                     {estudiantes[0].map((estudiante) => (
-                                        JSON.parse(estudiante).carnet != undefined && 
+                                        JSON.parse(estudiante).carnet != undefined &&
                                         <FilaEstudiante
                                             carnet={JSON.parse(estudiante).carnet}
                                             nombreCompleto={JSON.parse(estudiante).nombre + ' ' + JSON.parse(estudiante).apellido1 + ' ' + JSON.parse(estudiante).apellido2}

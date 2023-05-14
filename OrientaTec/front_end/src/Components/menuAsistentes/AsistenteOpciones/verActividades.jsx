@@ -1,65 +1,83 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Navbar } from '../../navegacion/Navbar';
-import { BarraLateral } from '../../navegacion/BarraLateral';
-import { Actividad } from './verActividades/Actividad'
+import { Navbar } from "../../navegacion/Navbar";
+import { BarraLateral } from "../../navegacion/BarraLateral";
+import { Actividad } from "./verActividades/Actividad";
 import { useNavigate } from "react-router-dom";
+
+const API = "http://localhost:5000"; //process.env.REACT_APP_API;
 
 export function VerActividades() {
   let navigate = useNavigate();
 
-  //lo comente porque no esta la funcion de los botones
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault();  
-  
-      // esta consulta la proxima actividad
-    // const res = await fetch(`${API}/consultarProximaActividad`, { 
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   }
-    // });
-    // const data = await res.json() //resultado de la consulta
-    // console.log(data) // imprime en consola web
-    // console.log(data.tipoActividad)//ejemplo
+  const [actividades, setActividades] = useState([]);
+  const clearActividad = () => {
+    setActividades([]);
+  };
 
+  const handleVerProximaActividad = async (event) => {
+    event.preventDefault();
+    //  esta consulta la proxima actividad
+    const res = await fetch(`${API}/consultarProximaActividad`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json(); //resultado de la consulta
+    console.log(data); // imprime en consola web
+    console.log(data.tipoActividad); //ejemplo
+  };
 
-      //esta obtiene todas las actividades
-    // const res = await fetch(`${API}/consultarActividades`, { 
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     }
-    // });
-    // const data = await res.json() //resultado de la consulta
-    // console.log(data) // imprime en consola web
-    // console.log(data[0])//ejemplo
-    // const obj = JSON.parse(data[0]); //aca toma la actividad en la posicion x y lo convierte en un JSON
-    // console.log(obj.tipoActividad) 
-  
+  const handleVerTodasActividades = async (event) => {
+    event.preventDefault();
 
-      //aca se obtienen las actividades dependiendo del estado
-    // const res = await fetch(`${API}/consultarActividadesEstado/${1}`, {  //aca se cambia el 1 por el estado deseado, asi se sacan las canceladas y las realizadas
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     }
-    // });
-    // const data = await res.json() //resultado de la consulta
-    // console.log(data) // imprime en consola web
-    // console.log(data[0])//ejemplo
-    // const obj = JSON.parse(data[0]); //aca toma la actividad en la posicion x y lo convierte en un JSON
-    // console.log(obj.tipoActividad) 
+    //esta obtiene todas las actividades
+    const res = await fetch(`${API}/consultarActividades`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json(); //resultado de la consulta
+    setActividades(() => {
+      clearActividad();
+      return [data]
+    })
+    console.log(data); // imprime en consola web
+    console.log(data[0]); //ejemplo
+    const obj = JSON.parse(data[0]); //aca toma la actividad en la posicion x y lo convierte en un JSON
+    console.log(obj.tipoActividad);
+  };
 
-  
-  // }
+  const handleVerActividadesEstado = async (estad,event) => {
+    event.preventDefault();
+    // Obtener las actividades dependiendo del estado
+    const res = await fetch(`${API}/consultarActividadesEstado/${estad}`, {  //aca se cambia el 1 por el estado deseado, asi se sacan las canceladas y las realizadas
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+    });
+    const data = await res.json() //resultado de la consulta
+    setActividades(() => {
+      clearActividad();
+      return [data]
+    })
+    console.log(data) // imprime en consola web
+    console.log(data[0])//ejemplo
+    const obj = JSON.parse(data[0]); //aca toma la actividad en la posicion x y lo convierte en un JSON
+    console.log(obj.tipoActividad)
+  };
 
-  const gotoMenuProfesor = () => { navigate("/menuProfesor", {}); };
+  const gotoMenuProfesor = () => {
+    navigate("/menuProfesor", {});
+  };
   const { state } = useLocation();
 
   return (
     <Fragment>
-      <div className='container'>
+      <div className="container">
         <Navbar linkInicio={state.linkMenu} />
 
         <div class="row">
@@ -69,7 +87,9 @@ export function VerActividades() {
 
           <div class="col-lg m-3 p-3 bg-light">
             <div className="row mb-4">
-              <div className="col-lg"><h4>Actividades del plan de trabajo</h4></div>
+              <div className="col-lg">
+                <h4>Actividades del plan de trabajo</h4>
+              </div>
               <div className="col-sm-3">
                 <p>Inicio: 06/02/2023</p>
               </div>
@@ -81,32 +101,69 @@ export function VerActividades() {
             <div className="row mt-4">
               <div className="col">
                 <div className="form-check">
-                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" />
-                  <label className="form-check-label" htmlFor="flexRadioDefault1">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault1"
+                    onChange={handleVerTodasActividades} // Agrega el controlador de eventos onChange
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault1"
+                  >
                     Ver todas las actividades
                   </label>
                 </div>
               </div>
               <div className="col">
                 <div className="form-check">
-                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
-                  <label className="form-check-label" htmlFor="flexRadioDefault2">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault2"
+                    onChange={handleVerProximaActividad} // Agrega el controlador de eventos onChange
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault2"
+                  >
                     Proximas actividades
                   </label>
                 </div>
               </div>
               <div className="col">
                 <div className="form-check">
-                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" />
-                  <label className="form-check-label" htmlFor="flexRadioDefault3">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault3"
+                    onChange={(event) => handleVerActividadesEstado(3,event)}
+                    
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault3"
+                  >
                     Actividades Realizadas
                   </label>
                 </div>
               </div>
               <div className="col">
                 <div className="form-check">
-                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault4" />
-                  <label className="form-check-label" htmlFor="flexRadioDefault4">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault4"
+                    onChange={(event) => handleVerActividadesEstado(4,event)}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="flexRadioDefault4"
+                  >
                     Actividades Canceladas
                   </label>
                 </div>
@@ -115,25 +172,19 @@ export function VerActividades() {
 
             {/* Lista de actividades */}
             <div class="overflow-auto" id="listaActividades">
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
-                <Actividad comentarios = {state.comentarios} linkMenu = {state.linkMenu} />
+              {actividades.length > 0 && 
+                actividades[0].map((act) =>
+                  JSON.parse(act).idActividad != undefined && (
+                    <Actividad datos={act} />
+                  )
+                )
+              }
             </div>
 
-            <div class="col">
-                <button type="button" class="btn btn-primary" onClick={gotoMenuProfesor}>
-                    Atrás
-                </button>
-            </div>
-
+            
           </div>
-
         </div>
-
       </div>
     </Fragment>
-  )
+  );
 }
