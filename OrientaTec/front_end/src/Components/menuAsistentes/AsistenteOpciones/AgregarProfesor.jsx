@@ -17,7 +17,10 @@ export function AgregarProfesor() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+        console.log(JSON.stringify({
+            cedula, name, apellido1, apellido2, sede, numeroTelefono, correo,
+            numeroOficina
+        }));
         // real
         const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
             method: "POST",

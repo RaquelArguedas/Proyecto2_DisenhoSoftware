@@ -1,13 +1,17 @@
 import React, { Fragment, useState, useRef } from 'react'
+import { useNavigate } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { ListaResponsables } from './modificarActividad/ListaResponsables';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const API = 'http://localhost:5000'; //process.env.REACT_APP_API;
+const API = process.env.REACT_APP_API;
 
 export function CrearActividad() {
+    let navigate = useNavigate();
+    const gotoMenu = () => { navigate('/menuCoordinador', {}); }
+
     const [startDate, setStartDate] = useState(new Date());
     const [esVirtual, setVirtual] = useState(false);
 
@@ -19,7 +23,7 @@ export function CrearActividad() {
     const [nombre, setNombre] = useState(''); const handleNombreChange = (event) => { setNombre(event.target.value); };
     const [tipo, setTipo] = useState(0); const handleTipoChange = (event) => { setTipo(event.target.value); };
     const [medio, setModalidad] = useState(0); const handleModalidadChange = (event) => { setModalidad(event.target.value); setVirtual(Boolean(event.target.value - 1)); };
-    const [enlace, setEnlace] = useState(''); const handleEnlaceChange = (event) => { setEnlace(event.target.value); };
+    const [enlaceR, setEnlace] = useState(''); const handleEnlaceChange = (event) => { setEnlace(event.target.value); };
     const [estado, setEstado] = useState(0); const handleEstadoChange = (event) => { setEstado(event.target.value); };
     const [fecha, setFecha] = useState(''); const handleFechaChange = (event) => { setFecha(event.target.value); };
     const [horaInicio, setHoraInicio] = useState('');
@@ -66,20 +70,24 @@ export function CrearActividad() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const responsablesJSon = JSON.stringify(responsables);
-
-        const res = await fetch(`${API}/crearActividad`, { //queda pendiente lo de agregar una foto
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                nombre, tipo, fecha, horaInicio, horaFin, recordatorio, responsablesJSon, medio, enlace, estado
-            })
-        });
-
-        const data = await res.text();
-        console.log(data);
+        if (responsables.length <= 0) {
+            alert("Debe registrar responsables.")
+        }else if (nombre===''||horaFin===horaInicio||recordatorio===''){
+            alert("Faltan datos por registrar.")
+        } else {
+            alert("Actividad ingresada correctamente")
+            const enlace = (esVirtual) ? enlaceR : ''
+            const res = await fetch(`${API}/crearActividad`, { //queda pendiente lo de agregar una foto
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "http://localhost:3000",
+                },
+                body: JSON.stringify({
+                    nombre, tipo, fecha, horaInicio, horaFin, recordatorio, responsables, medio, enlace, estado
+                }),
+            });
+        }
     }
 
     React.useEffect(() => {
@@ -178,7 +186,7 @@ export function CrearActividad() {
 
                                     <div className="input-group w-100 my-3">
                                         <button className="btn btn-success w-50" type='submit'>Agregar</button>
-                                        <button className="btn btn-danger w-50">Cancelar</button>
+                                        <button className="btn btn-danger w-50" onClick={gotoMenu}>Cancelar</button>
                                     </div>
                                 </div>
                             </div>
