@@ -10,6 +10,16 @@ export function CrearActividad() {
     const [startDate, setStartDate] = useState(new Date());
     const [esVirtual, setVirtual] = useState(false);
 
+    const [name, setName] = useState('');
+    const [apellido1, setApellido1] = useState('');
+    const [apellido2, setApellido2] = useState('');
+    const [cedula, setCedula] = useState('');
+    const [numeroTelefono, setNumeroTelefono] = useState('');
+    const [numeroOficina, setNumeroOficina] = useState('');
+    const [correo, setCorreo] = useState('');
+    const [sede, setSede] = useState('');
+    const [image, setImage] = useState(null);
+
     const handleAddResponsable = () => {
         setResponsables((prevResponsables) => {
             return [...prevResponsables, { nombre: "Nombre Apellido Apellido" }];
@@ -20,8 +30,6 @@ export function CrearActividad() {
         setVirtual(Boolean(event.target.value - 1))
     };
 
-    //queda pendiente la funcion del boton
-
     // const handleSubmit = async (event) => {
     //     event.preventDefault();  
 
@@ -31,13 +39,12 @@ export function CrearActividad() {
     //           "Content-Type": "application/json",
     //         }, //descomentar cuando le envien valores
     //         // body: JSON.stringify({ 
-    //         //     nombre, tipo, fecha, horaInicio, horaFin, recordatorio, medio, enlace, estado
+    //         //     nombre, tipo, fecha, horaInicio, horaFin, recordatorio, responsables, medio, enlace, estado
     //         // }),
     //     });
 
     //     const data = await res.json() //resultado de la consulta
     //     console.log(data) // imprime en consola web
-
     // }
 
 
@@ -132,7 +139,7 @@ export function CrearActividad() {
                                 <br /><br /><br /><br /><br />
 
                                 <div className="input-group w-100 my-3">
-                                    <button className="btn btn-success w-50">Actualizar</button>
+                                    <button className="btn btn-success w-50">Agregar</button>
                                     <button className="btn btn-danger w-50">Cancelar</button>
                                 </div>
                             </div>

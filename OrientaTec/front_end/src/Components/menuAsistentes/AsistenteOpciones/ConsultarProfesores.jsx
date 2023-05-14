@@ -23,7 +23,8 @@ export function ConsultarProfesores() {
 
     //    aca se busca un profesor por un codigo
         if(codigoRef.current.value===''){
-            const res = await fetch(`${API}/getProfesorCodigo/${1}`, {  //falta cambiar el codigo por el deseado
+            console.log(codigoRef.current.value);
+            const res = await fetch(`${API}/getEquipoGuia`, {  //falta cambiar el codigo por el deseado
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",
@@ -34,9 +35,11 @@ export function ConsultarProfesores() {
                 clearProfesores();
                 return [data]
             })
+            console.log(data)
         }else{
+            console.log(codigoRef.current.value);
             //    aca se buscan todos los profesores del equipo guia
-            const res = await fetch(`${API}/getEquipoGuia`, { 
+            const res = await fetch(`${API}/getProfesorCodigo/${codigoRef.current.value}`, { 
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",
@@ -62,7 +65,6 @@ export function ConsultarProfesores() {
                     <div class="col-lg m-3 p-3 bg-light">
                         <h4>Información de profesores</h4>
                         <form onSubmit={handleSubmit}>
-
                             <div className="input-group w-50 my-3">
                                 <span className="input-group-text" >Código</span>
                                 <input ref={codigoRef} type="text" className="form-control" id='inputCodigo' placeholder='Ingrese el código del profesor a buscar' />
@@ -92,7 +94,7 @@ export function ConsultarProfesores() {
                                             nombreCompleto={JSON.parse(profesor).nombre + ' ' + JSON.parse(profesor).apellido1 + ' ' + JSON.parse(profesor).apellido2}
                                             telefono={JSON.parse(profesor).numeroCelular}
                                             correo={JSON.parse(profesor).correoElectronico}
-                                            numeroOficina={JSON.parse(profesor).numeroOficina}
+                                            oficina={JSON.parse(profesor).numeroOficina}
                                             sede={JSON.parse(profesor).sede} />
                                     ))}
                                 </tbody>

@@ -194,16 +194,9 @@ def cancelarActividad(idActividad):
 def crearActividad():
   #print(request.json)
 
-  #borrar este y descomentar el otro con los JSON adecuados
-  # id = control.crearActividad(request.json['nombre'], request.json['tipo'], request.json['fecha'], 
-  #                             request.json['horaInicio'], request.json['horaFin'], request.json['recordatorio'], 
-  #                             request.json['medio'], request.json['enlace'], request.json['estado'])
-  
-  
-  responsablesNuevos = [] #eliminar cuando envien la lista de responsables
-  id = control.crearActividad("nombre", 1, datetime.now().date(), 
-                              datetime.now().time().strftime('%H:%M'), datetime.now().time().strftime('%H:%M'),
-                              1,responsablesNuevos, 1, "enlace", 1)
+  id = control.crearActividad(request.json['nombre'], request.json['tipo'], request.json['fecha'], 
+                               request.json['horaInicio'], request.json['horaFin'], request.json['recordatorio'], 
+                               request.json['responsables'], request.json['medio'], request.json['enlace'], request.json['estado'])
   print(id)
   
   control.bitacoraActividad(id[0], datetime.now().date(), datetime.now().time().strftime('%H:%M'),
