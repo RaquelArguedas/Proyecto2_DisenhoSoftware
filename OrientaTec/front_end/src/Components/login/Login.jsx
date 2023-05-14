@@ -18,21 +18,49 @@ export function Login() {
         const res = await fetch(`${API}/exists/${correo}/${contrasenha}`, {  
             method: "GET"
           });
-        const boolValue = res === "true"; //convierte el texto a un valor booleando disponible para el frontend
+        const data = await res.json(); // Esperar a que la promesa se resuelva y obtener el resultado
+
+        // console.log(data);
+
+        // if (data === true) {
+        // console.log("true");
+        // } else {
+        // console.log("false");
+        // }
+
+        // const boolValue = res === "true"; //convierte el texto a un valor booleando disponible para el frontend
         
-        console.log(typeof boolValue)
+        console.log(correo,  contrasenha, data)
 
 
-        if (boolValue === false){ 
+        if (data === false){ 
             Swal.fire({
                 icon: 'error',
                 title: '¡Error!',
-                text: 'Se produjo un error en la operación.',
+                text: 'El correo no corresponde a la contraseña.',
               });
         }
-        else{ return }
+        else{ 
+            fetch(`${API}/iniciarSesion/${correo}/${contrasenha}`, {  
+                method: "POST"
+            });
+            const rol = await fetch(`${API}/getUsuarioActualRol`, {  
+                method: "GET",
+                headers: {
+                "Content-Type": "application/json",
+            }
+            });
+            const usuario = await rol.json();
+            console.log(usuario)
+            if (usuario === 1){ usuarioVista = '/menuProfesor'; }
+            else if (usuario === 2){ usuarioVista = '/menuCoordinador'; }
+            else if (usuario === 5){ Swal.fire({icon: 'info',title: 'Menu no disponible',
+                                                text: 'El menu del estudiante no se encuentra habilitado.'}); }
+            else { usuarioVista = '/menuAsistente'; } 
+        }
 
-        //navigate(usuarioVista, {});
+        navigate(usuarioVista, {});
+        
     }
 
     const gotoRecuperar = () => {

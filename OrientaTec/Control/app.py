@@ -399,7 +399,7 @@ def actividadToJSON(ac):
 def exists(correo, contrasenha):
   res = control.exists(correo, contrasenha)
   print(res)
-  return str(res)
+  return jsonify(res)
 
 # def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol):
 @app.route('/modificarUsuario', methods=['POST'])
@@ -440,24 +440,25 @@ def getUsuario(idUsuario):
   return user.__dict__
 
 # def getUsuarioRol(self, correo, contrasenha):
-@app.route('/getUsuarioRol/<correo>/<contrasenha>', methods=['GET'])
-def getUsuarioRol(correo, contrasenha):
-  return json.dumps(control.getUsuarioRol(correo, contrasenha))
+@app.route('/getUsuarioActualRol', methods=['GET'])
+def getUsuarioActualRol():
+  user = SingletonSesionActual().getUsuario()
+  return json.dumps(control.getUsuarioRol(user.correo, user.contrasenha))
 
 # def iniciarSesion(self, correo, contrasenha):
 @app.route('/iniciarSesion/<correo>/<contrasenha>', methods=['POST'])
 def iniciarSesion(correo, contrasenha):
   SingletonSesionActual().setUsuario(control.getUsuarioCorreo(correo, contrasenha))
-  
+  print("....",SingletonSesionActual().getUsuario().idUsuario)
   return str(SingletonSesionActual().getUsuario().idUsuario)
 
 # def getUsuarioSesionActual(self):
 @app.route('/getUsuarioSesionActual', methods=['GET'])
 def getUsuarioSesionActual():
-  SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
+  #SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
   user = SingletonSesionActual().getUsuario()
-
-  return user.__dict__
+  print("---", user.__dict__)
+  return jsonify(user.__dict__)
 
 
 
