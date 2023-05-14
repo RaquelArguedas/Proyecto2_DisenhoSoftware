@@ -244,7 +244,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = 'localhost',
                 port = 3306,
                 user = 'root',
-                password = 'abd00123',
+                password = 'Michelle.18',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
