@@ -158,21 +158,11 @@ def verActividad(idActividad):
 #                 horaFin, recordatorio,responsables, medio, enlace,estado):
 @app.route('/modificarActividad', methods=['POST'])
 def modificarActividad():
-  #print(request.json)
-
-  #Descomentar cuando se envie el codigo y borrar el otro
-  #ac = control.verActividad(int(request.json['idActividad']))
-
-  ac = control.verActividad(1)
-  
-  # id = control.modificarActividad(ac.idActividad,request.json['nombreActividad'], int(request.json['tipoActividad']), 
-  #                            request.json['fechaActividad'], request.json['horaInicio'], request.json['horaFin'], 
-  #                            int(request.json['recordatorio']), int(request.json['medio']),
-  #                            request.json['enlace'],int(request.json['estado']))
-
-  id = control.modificarActividad(ac.idActividad,'nonname', 1, 
-                             datetime.now().date(), datetime.now().time(), datetime.now().time(), 
-                             1, 1,'enlace',1)
+  print(request.json)
+  id = control.modificarActividad(request.json['id'],request.json['nombre'], int(request.json['tipo']), 
+                             request.json['fecha'], request.json['horaInicio'], request.json['horaFin'], 
+                             int(request.json['recordatorio']), int(request.json['medio']),
+                             request.json['enlace'],int(request.json['estado']))
   
   print(id)
   

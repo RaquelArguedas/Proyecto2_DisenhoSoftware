@@ -376,6 +376,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         
         args = [idActividad, nombreActividad, tipoActividad, fechaActividad, horaInicio,
                 horaFin, recordatorio, medio, enlace, estado, ultimaModificacion]
+        print(args)
 
         #se modifica en la bd
         respuesta = self.executeStoredProcedure('updateActividad', args)

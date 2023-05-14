@@ -27,19 +27,20 @@ export function ModificarActividad() {
     const [medio, setModalidad] = useState(0); const handleModalidadChange = (event) => { setModalidad(event.target.value); setVirtual(Boolean(event.target.value - 1)); };
     const [enlaceR, setEnlace] = useState(''); const handleEnlaceChange = (event) => { setEnlace(event.target.value); };
     const [estado, setEstado] = useState(0); const handleEstadoChange = (event) => { setEstado(event.target.value); };
-    const [fecha, setFecha] = useState(''); const handleFechaChange = (event) => { setFecha(event.target.value); };
+    const [fecha, setFecha] = useState('');
     const [horaInicio, setHoraInicio] = useState('');
 
     const [horaFin, setHoraFin] = useState('');
 
-    const [duracion, setDuracion] = useState(0)
+    let [duracion, setDuracion] = useState(0)
 
     const handleHoraFinChange = (event) => {
+        setDuracion(event.target.value);
         setHoraInicio(startDate.getHours() + ':' + (startDate.getMinutes() === 0 ? '00' : startDate.getMinutes()));
         const subHoraFin = Number(startDate.getHours()) + Number(event.target.value);
         setHoraFin(((subHoraFin < 24) ? subHoraFin : subHoraFin - 24) + ':' + (startDate.getMinutes() == 0 ? '00' : startDate.getMinutes()));
-        console.log(startDate.getMonth() + '/' + startDate.getDate() + '/' + startDate.getFullYear());
-        setFecha(startDate.getMonth() + '/' + startDate.getDate() + '/' + startDate.getFullYear())
+        setFecha((startDate.getMonth()<101 ? '0'+startDate.getMonth() : startDate.getMonth()) + '/' + 
+        (startDate.getDate().length<10 ? '0'+startDate.getDate() : startDate.getDate()) + '/' + startDate.getFullYear())
     };
 
     const [recordatorio, setRecordatorios] = useState(0); const handleRecordatoriosChange = (event) => { setRecordatorios(event.target.value); };
@@ -74,7 +75,6 @@ export function ModificarActividad() {
                 nombre: event.target[event.target.selectedIndex].innerText
             }];
         });
-        alert(fecha); alert(horaInicio);
         event.target.value = 0;
     };
 
@@ -203,7 +203,7 @@ export function ModificarActividad() {
 
                                     <div className="input-group w-100 my-3">
                                         <span className="input-group-text" >Duración</span>
-                                        <input id="txtCarnet" type="text" className="form-control" placeholder="horas" value={duracion}/>
+                                        <input id="txtCarnet" type="text" className="form-control" placeholder="horas" value={duracion} onChange={handleHoraFinChange}/>
                                     </div>
 
                                     <div className="input-group w-100 my-3">
