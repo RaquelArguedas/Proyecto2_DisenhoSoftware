@@ -30,4 +30,11 @@ class AdminProfesores:
                         correoElectronico, numeroOficina,autoridad, estado):
         return self.dao.crearProfesor(cedula,nombre,apellido1, apellido2, sede, numeroCelular,
                         correoElectronico, numeroOficina,autoridad, estado)
+    
+    #fotos
+    def registrarFotoProfesor(self,idProfe,bin):
+        self.dao.registrarFotoProfesor(idProfe, bin)
+
+    def getFotoProfesor(self,idProfe):
+        return self.dao.getFotoProfesor(idProfe)
 

@@ -42,6 +42,12 @@ class MainController:
         return self.controlProfesor.crearProfesor(cedula,nombre,apellido1, apellido2, sede, numeroCelular,
                         correoElectronico, numeroOficina,autoridad, estado)
     
+    def registrarFotoProfesor(self,idProfe,bin):
+        self.controlProfesor.registrarFotoProfesor(idProfe, bin)
+    
+    def getFotoProfesor(self,idProfe):
+        return self.controlProfesor.getFotoProfesor(idProfe)
+    
     #AdminEquipoGuia
     def agregarProfesor(self, profesor):
         return self.controlEquipoGuia.agregarProfesor(profesor)
