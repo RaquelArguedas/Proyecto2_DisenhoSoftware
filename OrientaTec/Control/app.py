@@ -387,8 +387,9 @@ def actividadToJSON(ac):
 # def exists(self, correo, contrasenha):
 @app.route('/exists/<correo>/<contrasenha>', methods=['GET'])
 def exists(correo, contrasenha):
-  print(control.exists(correo, contrasenha))
-  return json.dumps(control.exists(correo, contrasenha))
+  res = control.exists(correo, contrasenha)
+  print(res)
+  return str(res)
 
 # def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol):
 @app.route('/modificarUsuario', methods=['POST'])

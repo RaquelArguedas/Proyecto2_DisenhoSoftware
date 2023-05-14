@@ -1,21 +1,34 @@
 import React, { Fragment, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert';
+
+const API = process.env.REACT_APP_API;
 
 export function Login() {
     let navigate = useNavigate();
     let usuarioVista;
 
     const refTxtUsuario = useRef()
+    const refTxtContrasenhaa = useRef()
 
-    const gotoMenu = () => {
-        const usuario = refTxtUsuario.current.value;
+    const gotoMenu = async() => {
+        const correo = refTxtUsuario.current.value;
+        const contrasenha = refTxtContrasenhaa.current.value;
 
-        if (usuario === '1'){ usuarioVista = '/menuAsistente'; }
-        else if (usuario === '2'){ usuarioVista = '/menuProfesor'; }
-        else if (usuario === '3'){ usuarioVista = '/menuCoordinador'; }
+        const res = await fetch(`${API}/exists/${correo}/${contrasenha}`, {  
+            method: "GET"
+          });
+        const boolValue = res === "true"; //convierte el texto a un valor booleando disponible para el frontend
+        
+        console.log(typeof boolValue)
+
+
+        if (boolValue === false){ 
+            console.log("bomba")
+        }
         else{ return }
 
-        navigate(usuarioVista, {});
+        //navigate(usuarioVista, {});
     }
 
     const gotoRecuperar = () => {
@@ -38,7 +51,7 @@ export function Login() {
 
                         <div className="input-group w-50 my-3 mx-auto">
                             <span className="input-group-text w-25" >Contraseña</span>
-                            <input id="txtContrasena" type="password" className="form-control" />
+                            <input ref={refTxtContrasenhaa} id="txtContrasena" type="password" className="form-control" />
                         </div>
 
                         <div className="row w-50 mx-auto">

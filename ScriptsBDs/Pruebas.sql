@@ -63,26 +63,7 @@ insert into Rol(descripcion) values("PROFESOR_COORDINADOR");
 insert into Rol(descripcion) values("ASISTENTE");
 insert into Rol(descripcion) values("ASISTENTE_CARTAGO");
 insert into Rol(descripcion) values("ESTUDIANTE");
-
-insert into Usuario(correo, contrasenha, idRol)
-			 values ("rafa@gmail.com", "rafa", 2);
-insert into Usuario(correo, contrasenha, idRol)
-			 values ("pau@gmail.com", "pau", 1);
-insert into Usuario(correo, contrasenha, idRol)
-			 values ("hugo@gmail.com","hugo", 1);
-insert into Usuario(correo, contrasenha, idRol)
-			 values ("as@gmail.com","as", 4); 
-insert into Usuario(correo, contrasenha, idRol)
-			 values ("dani@gmail.com", "dani", 5);
-insert into Usuario(correo, contrasenha, idRol)
-			 values ("Mariana@gmail.com", "Mariana", 5);
-insert into Usuario(correo, contrasenha, idRol)
-			 values ("Roberto@gmail.com","Roberto", 5);
-insert into Usuario(correo, contrasenha, idRol)
-			 values ("blop@gmail.com","blop", 5); 
-
-
-             
+          
 insert into PlanTrabajo(anno) values(2019);
 insert into PlanTrabajo(anno) values(2020);
 insert into PlanTrabajo(anno) values(2021);
@@ -114,9 +95,26 @@ insert into Sede(descripcion) values ("SC");
 insert into Sede(descripcion) values ("AL");
 insert into Sede(descripcion) values ("LI");
 
+insert into Usuario(correo, contrasenha, idRol, idSede)
+			 values ("rafa@gmail.com", "rafa", 2, 1);
+insert into Usuario(correo, contrasenha, idRol, idSede)
+			 values ("pau@gmail.com", "pau", 1, 1);
+insert into Usuario(correo, contrasenha, idRol, idSede)
+			 values ("hugo@gmail.com","hugo", 1, 1);
+insert into Usuario(correo, contrasenha, idRol, idSede)
+			 values ("as@gmail.com","as", 4, 1); 
+insert into Usuario(correo, contrasenha, idRol, idSede)
+			 values ("dani@gmail.com", "dani", 5, 1);
+insert into Usuario(correo, contrasenha, idRol, idSede)
+			 values ("Mariana@gmail.com", "Mariana", 5, 1);
+insert into Usuario(correo, contrasenha, idRol, idSede)
+			 values ("Roberto@gmail.com","Roberto", 5, 1);
+insert into Usuario(correo, contrasenha, idRol, idSede)
+			 values ("blop@gmail.com","blop", 5, 1); 
+
 insert into Profesor(cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
 						correoElectronico, numeroOficina, idAutoridad, idEstado)
-			 values (1, "Rafael", "Bonilla", "Vargas", 1, 83082888,
+			 values (187, "Rafael", "Bonilla", "Vargas", 1, 83082888,
 						"rafa@gmail.com", 22334455, 1, 1);
 insert into Profesor(cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
 						correoElectronico, numeroOficina, idAutoridad, idEstado)
@@ -126,6 +124,10 @@ insert into Profesor(cedula, nombre, apellido1, apellido2, idSede, numeroCelular
 						correoElectronico, numeroOficina, idAutoridad, idEstado)
 			 values (3, "Hugo", "Rodriguez", "Romero", 1, 83082877,
 						"hugo@gmail.com", 23423, 2, 1);
+insert into Profesor(cedula, nombre, apellido1, apellido2, idSede, numeroCelular,
+						correoElectronico, numeroOficina, idAutoridad, idEstado)
+			 values (189, "Boniyo", "Bonilla", "Vargas", 1, 83082888,
+						"rafa@gmail.com", 22334455, 1, 1);
 
 insert into ResponsableXActividad(idResponsable, idActividad) 
 						   values(1, 1);

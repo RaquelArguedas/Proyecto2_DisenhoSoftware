@@ -118,7 +118,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         objeto = None
         
         if (tablaBD == "Usuario"):
-            objeto = Usuario(lista[0], lista[1], lista[2], lista[3])
+            objeto = Usuario(lista[0], lista[1], lista[2], lista[3], lista[4])
         elif (tablaBD == "Estudiante"):
             objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7])
         elif (tablaBD == "EquipoGuia"):
@@ -716,9 +716,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         return respuesta
 
     #modificarUsuario(data):id
-    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol):
+    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol, idSede):
         
-        args = [idUsuario, correoElectronico, contrasenha, idRol]
+        args = [idUsuario, correoElectronico, contrasenha, idRol, idSede]
         
         #se modifica en la bd
         respuesta = self.executeStoredProcedure('updateUsuario', args)
@@ -735,17 +735,19 @@ class SingletonDAO(metaclass=SingletonMeta):
                         self.usuarios[i].contrasenha = contrasenha
                     if (idRol != None):
                         self.usuarios[i].idRol = idRol
+                    if (idSede != None):
+                        self.usuarios[i].idSede = idSede
         return respuesta
 
     #+crearUsuario(data):id
-    def crearUsuario(self, correoElectronico, contrasenha, idRol):
-        args = [correoElectronico, contrasenha, idRol]
+    def crearUsuario(self, correoElectronico, contrasenha, idRol, idSede):
+        args = [correoElectronico, contrasenha, idRol, idSede]
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createUsuario', args)
         
         if(len(id)==1):
-            salida = Usuario(id[0], correoElectronico, contrasenha, idRol)
+            salida = Usuario(id[0], correoElectronico, contrasenha, idRol, idSede)
 
             #se agrega a la lista de Actividades
             self.usuarios += [salida]
@@ -765,7 +767,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     def modificarUsuarioCorreo(self, correoAnterior, correoNuevo):        
         for user in self.usuarios:
             if (user.correo == correoAnterior):
-                self.modificarUsuario(user.idUsuario, correoNuevo, None, None)
+                self.modificarUsuario(user.idUsuario, correoNuevo, None, None, None)
 
 
     #ejecuta un procedimiento almacenado y devuelve una lista con resultados

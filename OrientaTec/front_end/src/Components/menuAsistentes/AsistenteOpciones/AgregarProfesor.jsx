@@ -15,32 +15,68 @@ export function AgregarProfesor() {
     const [codigo, setCodigo] = useState('');
     const [sede, setSede] = useState('');
     const [image, setImage] = useState(null);
+    const [imageB, setImageB] = useState(null);
+    const [imageUrl, setImageUrl] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();  
 
+        // console.log("AAAAAAAAAAAA")
+        // console.log(image)
+        // convertImageToBinary(image)
+        // console.log(imageB)
+        // console.log("BBBBBBBBBBBB")
+
+        //const b = convertImageToBinary(image);
+
         // real
-        const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
-            method: "POST",
+        // const res = await fetch(`${API}/crearProfesor`, { 
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify({
+        //         cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
+        //         numeroOficina, imageB
+        //     }),
+        //   });
+
+        // const miJSON = JSON.stringify(image);
+
+        // console.log(miJSON);
+        // console.log(image)
+        // console.log(imageB)
+
+        
+        //console.log(imageBinary)
+        console.log(image)
+        const res = fetch(`${API}/getFotoProfesor/${51}`, { 
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
-                numeroOficina
-            }),
-          });
+            }
+        });
+        const data = res.text() //resultado de la consulta
+        console.log(data) // imprime en consola web
+        console.log(imageUrl)
+        setImageUrl(URL.createObjectURL(new Blob([res], { type: 'image/jpeg' })));
+        console.log(imageUrl)
 
-        // // base para front_end
-        //`${API}/nombreFuncion/${parametro1}/${parametro2}`
-        // const res = await fetch(`${API}/getProfesorCedula/${189}`, {
-        //     method: "GET",
-        // });
-        // const data = await res.json();//resultado de la consulta
-        // console.log(data) // imprime en consola web
+    };
+    const convertImageToBinary = (file) => {
+        const reader = new FileReader();
+      
+        reader.onload = (event) => {
+          const binaryString = event.target.result;
+          // Aquí puedes utilizar `binaryString` como representación binaria de la imagen
+          // Puedes enviarlo al backend o realizar cualquier otra operación necesaria
+          //console.log(binaryString);
+          setImageB(binaryString)
+        };
+      
+        reader.readAsBinaryString(file);
+      };
 
-
-    }
     const handleNameChange = (event) => {
     setName(event.target.value);
     }; 
@@ -72,6 +108,9 @@ export function AgregarProfesor() {
     const handleImageUpload = (event) => {
         const selectedImage = event.target.files[0];
         setImage(selectedImage);
+        console.log("desde handleImage:")
+        console.log(image)
+        
     };
     return (
         <Fragment>
@@ -171,6 +210,7 @@ export function AgregarProfesor() {
                             </div>
                             <div className="mb-3">
                             <button type="submit" class="btn btn-primary">Agregar </button>
+                            <img src={imageUrl} class="img-thumbnail w-100" />
                             </div>
                         </form>
 

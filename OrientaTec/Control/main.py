@@ -27,9 +27,8 @@ if __name__ == "__main__":
     # for ac in dao.getActividades():
     #     print(ac.idActividad, " ", ac.fechaActividad)
 
-    lista = control.consultarActividadesEstado(1)
-    for ac in lista:
-        print(ac.idActividad)
+    for user in dao.usuarios:
+        print(user.correo)
         
 
 
