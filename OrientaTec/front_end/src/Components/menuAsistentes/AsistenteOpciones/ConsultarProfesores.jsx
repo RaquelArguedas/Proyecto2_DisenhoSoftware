@@ -1,4 +1,4 @@
-import React, { Fragment , useRef} from 'react'
+import React, { Fragment , useRef, useState} from 'react'
 import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
