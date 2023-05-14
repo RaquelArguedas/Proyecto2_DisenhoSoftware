@@ -1,5 +1,4 @@
 from SingletonDAO import *
-from Modelo.Sede import *
 class AdminEstudiantes:
     #Constructor
     def __init__(self):
@@ -40,21 +39,8 @@ class AdminEstudiantes:
                                             numeroCelular, estado)
     
     #PENDIENTE
-    def generarExcelEstudiantes(self,sede):
-        numSede = 0
-        if sede == Sede.SJ: numSede = 1
-        if sede == Sede.CA: numSede = 2
-        if sede == Sede.SC: numSede = 3
-        if sede == Sede.AL: numSede = 4
-        if sede == Sede.LI: numSede = 5
-
-        if numSede == 0:
-            return self.dao.generarExcelTodos()
-        else:
-            return self.dao.generarExcelSede(numSede)
-        
-    def cargarExcelEstudiantes(self):
-        return self.dao.cargarExcel(self)
+    def generarExcelEstudiantes(self):
+        return False
     
     def cargarExcelEstudiantes(self):
         return False
