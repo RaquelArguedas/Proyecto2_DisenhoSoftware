@@ -101,7 +101,7 @@ def modificarProfesor():
   prof = control.getProfesorCodigo(request.json['codigo'])
   id = control.modificarProfesor(prof.id,request.json['cedula'], request.json['name'], 
                              request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
-                             request.json['numeroTelefono'], request.json['correo'], request.json['numeroOficina'],None,None)
+                             request.json['numeroTelefono'], request.json['correo'], request.json['numeroOficina'],None,request.json['estado'])
   return jsonify(str(id))
 
 # getProfesorCodigo(self, idProfesor):

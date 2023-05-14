@@ -1,4 +1,4 @@
-import React, { Fragment , useRef, useState} from 'react'
+import React, { Fragment , useRef} from 'react'
 import { useLocation } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
@@ -9,7 +9,6 @@ const API =  'http://localhost:5000';
 
 
 export function ConsultarProfesores() {
-    const { state } = useLocation();
 
     const codigoRef = useRef();
     const [profesores, setProfesores] = useState([[]]);
@@ -23,7 +22,7 @@ export function ConsultarProfesores() {
 
     //    aca se busca un profesor por un codigo
         if(codigoRef.current.value===''){
-            const res = await fetch(`${API}/getProfesorCodigo/${1}`, {  //falta cambiar el codigo por el deseado
+            const res = await fetch(`${API}/getProfesorCodigo/${codigoRef.current.value}`, {  //falta cambiar el codigo por el deseado
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",

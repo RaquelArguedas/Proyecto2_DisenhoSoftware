@@ -30,7 +30,7 @@ export function AgregarProfesor() {
             }),
           });
 
-          alert("Se ha ingreado un nuevo profesor")
+          alert("Se ha ingreado un nusevo profesor")
         // // base para front_end
         // //`${API}/nombreFuncion/${parametro1}/${parametro2}`
         // const res = await fetch(`${API}/getUsuarioRol/${"as@gmail.com"}/${"as"}`, {
@@ -139,11 +139,11 @@ export function AgregarProfesor() {
                             <div class="mb-3">
                                 <select id="mySelect" value={sede} onChange={handleSedeChange}>
                                 <option value="">Seleccionar</option>
-                                <option value="1">Cartago</option>
-                                <option value="2">Alajuela</option>
-                                <option value="3">Limón</option>
-                                <option value="4">San José</option>
-                                <option value="5">San Carlos</option>
+                                <option value="1">San José</option>
+                                <option value="2">Cartago</option>
+                                <option value="3">San Carlos</option>
+                                <option value="4">Alajuela</option>
+                                <option value="5">Limon</option>
                                 </select>
                             </div>
                             <div className="mb-3">
