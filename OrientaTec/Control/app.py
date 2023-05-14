@@ -192,7 +192,6 @@ def cancelarActividad(idActividad):
 #                    recordatorio, medio,enlace, estado, ultimaModificacion):
 @app.route('/crearActividad', methods=['POST'])
 def crearActividad():
-  #print(request.json)
 
   id = control.crearActividad(request.json['nombre'], request.json['tipo'], request.json['fecha'], 
                                request.json['horaInicio'], request.json['horaFin'], request.json['recordatorio'], 
