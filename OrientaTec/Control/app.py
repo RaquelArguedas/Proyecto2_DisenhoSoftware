@@ -127,17 +127,28 @@ def getProfesorCedula(cedula):
 # crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular, correoElectronico, numeroOficina,autoridad, estado):
 @app.route('/crearProfesor', methods=['POST'])
 def crearProfesor():
-  print(request.json)
-
-  id = control.crearProfesor(request.json['cedula'], request.json['name'], request.json['apellido1'], 
-                             request.json['apellido2'], request.json['sede'], request.json['numeroTelefono'], 
-                             request.json['correo'], request.json['numeroOficina'],2,1)
+  #print(request.json)
   
-  control.agregarProfesor(control.getProfesor(id[0]))
-  control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
-                             SingletonSesionActual().getUsuario().idUsuario, "nuevo profesor con id=" + str(id[0]))
+  print(type(bytes(request.json['imageB'], "utf-8")))
+
+  # id = control.crearProfesor(request.json['cedula'], request.json['name'], request.json['apellido1'], 
+  #                            request.json['apellido2'], request.json['sede'], request.json['numeroTelefono'], 
+  #                            request.json['correo'], request.json['numeroOficina'],2,1)
+  
+  #print(id)
+  id = 51
+  control.registrarFotoProfesor(id, request.json['imageB'])
+  
+  #control.agregarProfesor(control.getProfesor(id[0])) #se agrega al equipo guia
+  # control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+  #                            SingletonSesionActual().getUsuario().idUsuario, "nuevo profesor con id=" + str(id[0]))
+  
   return jsonify(str(id))
 
+# getFotoProfesor
+@app.route('/getFotoProfesor/<idProfesor>', methods=['GET'])
+def getFotoProfesor(idProfesor):
+  return str(control.getFotoProfesor(int(idProfesor)))
 
 #AdminEquipoGuia
 # getEquipoGuia(self):
