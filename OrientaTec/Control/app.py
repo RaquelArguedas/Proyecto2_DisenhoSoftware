@@ -144,6 +144,14 @@ def getEquipoGuia():
   # return jsonify(jsonLista)
   return listaSalida
 
+# getAllProfesores(self):
+@app.route('/getAllProfesores', methods=['GET'])
+def getAllProfesores():
+  listaProfesores = control.getAllProfesores()
+  listaSalida = []
+  for p in listaProfesores:
+    listaSalida += [json.dumps(p.__dict__)]
+  return listaSalida
 
 #AdminActividades
 # def verActividad(self, idActividad):

@@ -11,7 +11,6 @@ if __name__ == "__main__":
 
     e=control.buscarEstudiante(20198)
 
-    jsonStr = json.dumps(e.__dict__)
-    print(control.getUsuarioRol("as@gmail.com", "rafa"))
+    print(control.getAllProfesores())
     #control.consultarEstudiantes(int(Ordenamiento['SEDE']))
     

@@ -46,6 +46,9 @@ class MainController:
     def getEquipoGuia(self):
         return self.controlEquipoGuia.getEquipoGuia()
     
+    def getAllProfesores(self):
+        return self.controlEquipoGuia.getAllProfesores()
+    
     def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
         return self.controlEquipoGuia.bitacoraEquipoGuia(fecha, hora, idAutor, descripcion)
     
