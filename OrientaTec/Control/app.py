@@ -192,19 +192,29 @@ def verActividad(idActividad):
 def modificarActividad():
   #print(request.json)
 
-  #Descomentar cuando se envie el codigo y borrar el otro
-  #ac = control.verActividad(int(request.json['idActividad']))
+  ac = control.verActividad(int(request.json['idActividad']))
 
-  ac = control.verActividad(1)
-  
-  # id = control.modificarActividad(ac.idActividad,request.json['nombreActividad'], int(request.json['tipoActividad']), 
-  #                            request.json['fechaActividad'], request.json['horaInicio'], request.json['horaFin'], 
-  #                            int(request.json['recordatorio']), int(request.json['medio']),
-  #                            request.json['enlace'],int(request.json['estado']))
+  # ac = control.verActividad(1)
 
-  id = control.modificarActividad(ac.idActividad,'nonname', 1, 
-                             datetime.now().date(), datetime.now().time(), datetime.now().time(), 
-                             1, 1,'enlace',1)
+  #el comentado es el pasado
+  '''
+  id = control.modificarActividad(ac.idActividad,request.json['nombreActividad'], int(request.json['tipoActividad']), 
+                             request.json['fechaActividad'], request.json['horaInicio'], request.json['horaFin'], 
+                             int(request.json['recordatorio']), int(request.json['medio']),
+                             request.json['enlace'],int(request.json['estado']))
+  '''
+  fecha = (datetime.strptime(request.json['fechaActividad'], '%m/%d/%y')).date()
+  horaInicio = (datetime.strptime(request.json['horaInicio'], '%H:%M')).time()
+  horaFinal = (datetime.strptime(request.json['horaFin'], '%H:%M')).time()
+
+  id = control.modificarActividad(ac.idActividad,request.json['nombreActividad'], int(request.json['tipoActividad']), 
+                            fecha, horaInicio, horaFinal, 
+                            int(request.json['recordatorio']), int(request.json['medio']),
+                            request.json['enlace'],int(request.json['estado']))
+
+  # id = control.modificarActividad(ac.idActividad,'nonname', 1, 
+  #                            datetime.now().date(), datetime.now().time(), datetime.now().time(), 
+  #                            1, 1,'enlace',1)
   
   print(id)
   

@@ -1,6 +1,6 @@
 import React, { Fragment, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 const API = process.env.REACT_APP_API;
 
@@ -24,7 +24,11 @@ export function Login() {
 
 
         if (boolValue === false){ 
-            console.log("bomba")
+            Swal.fire({
+                icon: 'error',
+                title: '¡Error!',
+                text: 'Se produjo un error en la operación.',
+              });
         }
         else{ return }
 

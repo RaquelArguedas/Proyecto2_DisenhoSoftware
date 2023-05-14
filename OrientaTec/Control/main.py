@@ -15,20 +15,11 @@ if __name__ == "__main__":
 
 
     dao = SingletonDAO()
-
-    #dao.registrarFotoProfesor(1,'C:\\Users\\raque\\Downloads\\Rafael.jpeg')
     
-    #print(type(dao.getFotoProfesor(51)))
-
-    # for ac in dao.actividades:
-    #     print(ac.idActividad, " ", ac.fechaActividad)
-
-    # print("----------------------")
-    # for ac in dao.getActividades():
-    #     print(ac.idActividad, " ", ac.fechaActividad)
-
-    for user in dao.usuarios:
-        print(user.correo)
+    fecha = (datetime.strptime('08/08/2023', '%d/%m/%Y')).date()
+    horaInicio = (datetime.strptime('11:00', '%H:%M')).time()
+    horaFinal = (datetime.strptime('13:00', '%H:%M')).time()
+    print(fecha, horaInicio, horaFinal)
         
 
 
