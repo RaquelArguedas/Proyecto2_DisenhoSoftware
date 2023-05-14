@@ -928,24 +928,28 @@ class SingletonDAO(metaclass=SingletonMeta):
         wb['Sheet']['E1'] = 'NumeroCelular'
         wb['Sheet']['F1'] = 'CorreoElectronico'
         wb['Sheet']['G1'] = 'Sede'
-        est = self.estudiantes #Traemos la lista de estudiantes para no estarla llamando 
-        lenght = len(self.estudiantes)
+        wb['Sheet']['H1'] = 'Estado'
         registro = 2
         #Se recorren los estudiantes y se van guardando 
-        for i in range(lenght):            
-            if (est[i][3] == sede):
+        for estudiante in range(len(self.estudiantes)):
+            #Estado: activo-->1, inactivo--->2            
+            if (estudiante.sede == sede):
                 #La info de ese registro se guarda 
-                wb['Sheet']['A'+ str(registro)] = est[i][0]  #Carne
-                wb['Sheet']['B'+ str(registro)] = est[i][1] #Nombre
-                wb['Sheet']['C'+ str(registro)] = est[i][2] #App 1
-                wb['Sheet']['D'+ str(registro)] = est[i][3] #App 2
-                wb['Sheet']['E'+ str(registro)] = est[i][4] #celular
-                wb['Sheet']['F'+ str(registro)] = est[i][5] #correo
-                wb['Sheet']['G'+ str(registro)] = est[i][3] #Sede
+                wb['Sheet']['A'+ str(registro)] = estudiante.carnet  #Carne
+                wb['Sheet']['B'+ str(registro)] = estudiante.nombre #Nombre
+                wb['Sheet']['C'+ str(registro)] = estudiante.apellido1 #App 1
+                wb['Sheet']['D'+ str(registro)] = estudiante.apellido2 #App 2
+                wb['Sheet']['E'+ str(registro)] = estudiante.numeroCelular #celular
+                wb['Sheet']['F'+ str(registro)] = estudiante.correoElectronico #correo
+                wb['Sheet']['G'+ str(registro)] = estudiante.sede #Sede
+                wb['Sheet']['G'+ str(registro)] = estudiante.estado #Estado
+                registro += 1
         wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
-        return load_workbook('listaEstudiantes.xlsx')
+        return wb
         
     def generarExcelTodos(self):
+        #NOTA: Self.estudiantes guarda una lista de ESTUDIANTE
+
         wb = Workbook() # se crea el nuevo xlsx
         ws1 = wb['Sheet']  #primer hoja del excel
         #Hacer 5 hojas en el excel
@@ -996,87 +1000,68 @@ class SingletonDAO(metaclass=SingletonMeta):
         wb['SC']['G1'] = 'Sede'
         wb['AL']['G1'] = 'Sede'
         wb['LI']['G1'] = 'Sede'
+
+        wb['SJ']['H1'] = 'Estado'
+        wb['CA']['H1'] = 'Estado'
+        wb['SC']['H1'] = 'Estado'
+        wb['AL']['H1'] = 'Estado'
+        wb['LI']['H1'] = 'Estado'
+
         #Headers de los archivos 
-        est = self.estudiantes #Traemos la lista de estudiantes para no estarla llamando 
-        lenght = len(self.estudiantes)
-        regSJ = 2 #Esto es para saberen cual fila poner la info leida
-        regCA = 2 #Inicia en 2 porquefila 1 es de headers 
-        regSC = 2
-        regAL = 2
-        regLI = 2
+        regSJ = 1 #Esto es para saberen cual fila poner la info leida
+        regCA = 1 #Inicia en 2 porquefila 1 es de headers 
+        regSC = 1
+        regAL = 1
+        regLI = 1
         #Se recorren los estudiantes y se van guardando 
-        for i in range(lenght):            
-            if (est[i][3] == 1):
+        for estudiante in range(len(self.estudiantes)):            
+            if (estudiante.carnet == 1):
                 sede = 'SJ'
-                registro = regSJ
-                #La info de ese registro se guarda 
-                wb[sede]['A'+ str(registro)] = est[i][0]  #Carne
-                wb[sede]['B'+ str(registro)] = est[i][1] #Nombre
-                wb[sede]['C'+ str(registro)] = est[i][2] #App 1
-                wb[sede]['D'+ str(registro)] = est[i][3] #App 2
-                wb[sede]['E'+ str(registro)] = est[i][4]
-                wb[sede]['F'+ str(registro)] = est[i][5]
-                wb[sede]['G'+ str(registro)] = est[i][6]
                 regSJ += 1
-            elif (est[i][3] ==2):
+                registro = regSJ
+                
+            elif (estudiante.carnet ==2):
                 sede = 'CA'
-                registro = regCA
-                #La info de ese registro se guarda 
-                wb[sede]['A'+ str(registro)] = est[i][0]  #Carne
-                wb[sede]['B'+ str(registro)] = est[i][1] #Nombre
-                wb[sede]['C'+ str(registro)] = est[i][2] #App 1
-                wb[sede]['D'+ str(registro)] = est[i][3] #App 2
-                wb[sede]['E'+ str(registro)] = est[i][4]
-                wb[sede]['F'+ str(registro)] = est[i][5]
-                wb[sede]['G'+ str(registro)] = est[i][6]
                 regCA += 1
-            elif (est[i][3] == 3):
+                registro = regCA
+                
+            elif (estudiante.carnet == 3):
                 sede = 'SC'
-                registro = regSC
-                #La info de ese registro se guarda 
-                wb[sede]['A'+ str(registro)] = est[i][0]  #Carne
-                wb[sede]['B'+ str(registro)] = est[i][1] #Nombre
-                wb[sede]['C'+ str(registro)] = est[i][2] #App 1
-                wb[sede]['D'+ str(registro)] = est[i][3] #App 2
-                wb[sede]['E'+ str(registro)] = est[i][4]
-                wb[sede]['F'+ str(registro)] = est[i][5]
-                wb[sede]['G'+ str(registro)] = est[i][6]
                 regSC += 1
-            elif (est[i][3] ==4):
+                registro = regSC
+                
+            elif (estudiante.carnet ==4):
                 sede = 'AL'
-                registro = regAL
-                #La info de ese registro se guarda 
-                wb[sede]['A'+ str(registro)] = est[i][0]  #Carne
-                wb[sede]['B'+ str(registro)] = est[i][1] #Nombre
-                wb[sede]['C'+ str(registro)] = est[i][2] #App 1
-                wb[sede]['D'+ str(registro)] = est[i][3] #App 2
-                wb[sede]['E'+ str(registro)] = est[i][4]
-                wb[sede]['F'+ str(registro)] = est[i][5]
-                wb[sede]['G'+ str(registro)] = est[i][6]
                 regAL += 1
+                registro = regAL
+                
             else:
                 sede = 'LI'
-                registro = regLI
-                #La info de ese registro se guarda 
-                wb[sede]['A'+ str(registro)] = est[i][0]  #Carne
-                wb[sede]['B'+ str(registro)] = est[i][1] #Nombre
-                wb[sede]['C'+ str(registro)] = est[i][2] #App 1
-                wb[sede]['D'+ str(registro)] = est[i][3] #App 2
-                wb[sede]['E'+ str(registro)] = est[i][4]
-                wb[sede]['F'+ str(registro)] = est[i][5]
-                wb[sede]['G'+ str(registro)] = est[i][6]
                 regLI += 1
+                registro = regLI
+                
+            wb[sede]['A'+ str(registro)] = estudiante.carnet  #Carne
+            wb[sede]['B'+ str(registro)] = estudiante.nombre #Nombre
+            wb[sede]['C'+ str(registro)] = estudiante.apellido1 #App 1
+            wb[sede]['D'+ str(registro)] = estudiante.apellido2 #App 2
+            wb[sede]['E'+ str(registro)] = estudiante.numeroCelular #numcel
+            wb[sede]['F'+ str(registro)] = estudiante.correoElectronico #correo
+            wb[sede]['G'+ str(registro)] = estudiante.sede #sede
+            wb[sede]['H'+ str(registro)] = estudiante.estado #estado
 
         wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
-        return load_workbook('listaEstudiantes.xlsx')
-        #recibir un archivo
+        #return load_workbook('listaEstudiantes.xlsx')
+        return wb
 
-    'Guarda los registros de un excel en la base de datos'
-    def cargarExcel(nombArchivo):
+    ''''
+    cargarExcel
+    Lee los registros de un excel en la base de datos
+        params: @nombArchivo: nombreDelExcel o ruta
+    '''
+    def cargarExcel(self,nombArchivo):
         wb = load_workbook(nombArchivo) 
         sheet = wb.active
         i = 2
-        listEst = [] #Lista que guarda todos losregistros
         #Recorre cada fila del excel
         for row in sheet.iter_rows(min_row = 2,min_col=1):
             estudiante = [] #Lista que va a guardar los valores del estudiante
@@ -1087,7 +1072,36 @@ class SingletonDAO(metaclass=SingletonMeta):
                 elif cell.value != None:
                     #Se agrega al objeto estudiante
                     estudiante.append(cell.value)
-            if estudiante != []:
-                listEst.append(estudiante) 
-                #Lllamar al método agregarEstudiante de BD
-   
+            if estudiante != []: #ya recorrió todos los campos de una fila 
+                #Validar que la SEDE sea válida
+                if (estudiante[6] == 1 or estudiante[6] == 2 or estudiante[6] == 3 
+                or estudiante[6] == 4 or estudiante[6] == 5):  
+                    #Llamar al método agregarEstudiante de BD
+                    args = [estudiante[0],estudiante[1],estudiante[2],estudiante[3],estudiante[4],
+                    estudiante[5],estudiante[6],1]
+                    #se modifica en la bd
+                    respuesta = self.executeStoredProcedure('createEstudiante', args)
+                    if(len(respuesta)==1):
+                        #se genera el Estudiante y se agrega a la lista de estudiantes
+                        est = Estudiante(estudiante[0],estudiante[1],estudiante[2],estudiante[3],estudiante[4],
+                        estudiante[5],estudiante[6],1) 
+                        #se agrega a la lista de Estudiantes
+                        self.estudiantes += [est]
+                        
+        return True
+    
+    #Metodo para agregar estudiantes copnectándose a BD por si necesita en el futuro   
+    # +agregarEstudiante(estudiante: Estudiante): boolean
+    def agregarEstudiante(self, carnet, nombre,apellido1,
+        apellido2, sede, numeroCelular,correoElectronico, estado):
+
+            args = [carnet,nombre,apellido1,apellido2,sede,numeroCelular,correoElectronico,estado]
+
+            #se agrega a la bd
+            id = self.executeStoredProcedure('createEstudiante', args)
+            if(len(id)==1):
+                #se genera el Estudiante y se agrega a la lista de estudiantes
+                est = Estudiante(carnet,nombre,apellido1,apellido2,sede,numeroCelular,correoElectronico,estado) 
+                #se agrega a la lista de Estudiantes
+                self.estudiantes += [est]
+            return id

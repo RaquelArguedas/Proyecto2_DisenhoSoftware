@@ -7,6 +7,7 @@ import json
 if __name__ == "__main__":
     
     control = MainController()
+    dao = SingletonDAO()
 
 
     e=control.buscarEstudiante(20198)

@@ -177,3 +177,4 @@ idEstado int, foreign key (idEstado) references EstadoCuenta (idEstadoC)
 );
 
 
+
