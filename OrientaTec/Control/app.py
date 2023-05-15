@@ -260,8 +260,6 @@ def agregarResponsablesActividad():
   #si le pasan el codigo y no el id usan la que esta comentada y borran la otra
   #id = control.agregarResponsablesActividad(idActividad, [control.getProfesorCodigo(idResponsableNuevo)])
 
-  print(request.json['idActividad'], request.json['idResponsableNuevo'])
-  print([control.getProfesor(int(request.json['idResponsableNuevo']))])
   id = control.agregarResponsablesActividad(int(request.json['idActividad']), [control.getProfesor(int(request.json['idResponsableNuevo']))])
   
   print(id)
@@ -283,9 +281,9 @@ def quitarResponsablesActividad():
   id = control.quitarResponsablesActividad(int(request.json['idActividad']), [control.getProfesor(int(request.json['idResponsableEliminado']))])
   
   print(id)
-  ac = control.verActividad(request.json['idActividad'])
-  for p in ac.responsables:
-    print(p.id, " ", p.nombre)
+  # ac = control.verActividad(request.json['idActividad'])
+  # for p in ac.responsables:
+  #   print(p.id, " ", p.nombre)
   
   return jsonify(str(id))
         

@@ -39,8 +39,8 @@ export function ModificarActividad() {
         setHoraInicio(startDate.getHours() + ':' + (startDate.getMinutes() === 0 ? '00' : startDate.getMinutes()));
         const subHoraFin = Number(startDate.getHours()) + Number(event.target.value);
         setHoraFin(((subHoraFin < 24) ? subHoraFin : subHoraFin - 24) + ':' + (startDate.getMinutes() == 0 ? '00' : startDate.getMinutes()));
-        setFecha((startDate.getMonth()<101 ? '0'+startDate.getMonth() : startDate.getMonth()) + '/' + 
-        (startDate.getDate().length<10 ? '0'+startDate.getDate() : startDate.getDate()) + '/' + startDate.getFullYear())
+        setFecha((startDate.getMonth() < 101 ? '0' + startDate.getMonth() : startDate.getMonth()) + '/' +
+            (startDate.getDate().length < 10 ? '0' + startDate.getDate() : startDate.getDate()) + '/' + startDate.getFullYear())
     };
 
     const [recordatorio, setRecordatorios] = useState(0); const handleRecordatoriosChange = (event) => { setRecordatorios(event.target.value); };
@@ -60,16 +60,16 @@ export function ModificarActividad() {
             setEstado(data.estado);
             setFecha(data.fechaActividad);
             setHoraInicio(data.horaInicio);
-            setDuracion(Number(data.horaFin[1]===':' ? data.horaFin[0] : data.horaFin.slice(0,2)) - 
-                Number(data.horaInicio[1]===':' ? data.horaInicio[0] : data.horaInicio.slice(0,2)));
+            setDuracion(Number(data.horaFin[1] === ':' ? data.horaFin[0] : data.horaFin.slice(0, 2)) -
+                Number(data.horaInicio[1] === ':' ? data.horaInicio[0] : data.horaInicio.slice(0, 2)));
             setHoraFin(data.horaFin);
             setRecordatorios(data.recordatorio);
 
-            setStartDate(new Date(data.fechaActividad+'T'+(data.horaInicio[1]===':' ? '0'+data.horaInicio : data.horaInicio)));
+            setStartDate(new Date(data.fechaActividad + 'T' + (data.horaInicio[1] === ':' ? '0' + data.horaInicio : data.horaInicio)));
 
             console.log((JSON.parse(data.responsables.replace(/\'/g, ''))))
 
-            setResponsables(JSON.parse(data.responsables.replace(/\'/g, '')).map(responsable => ({id: responsable.id, nombre: responsable.nombre+' '+responsable.apellido1+' '+responsable.apellido2})));
+            setResponsables(JSON.parse(data.responsables.replace(/\'/g, '')).map(responsable => ({ id: responsable.id, nombre: responsable.nombre + ' ' + responsable.apellido1 + ' ' + responsable.apellido2 })));
 
             console.log(responsables)
         }
@@ -117,7 +117,7 @@ export function ModificarActividad() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        
+
         if (responsables.length <= 0) {
             alert("Debe registrar responsables.")
         } else if (nombre === '' || horaFin === horaInicio || recordatorio === '') {
@@ -162,7 +162,7 @@ export function ModificarActividad() {
                                 <div className="col ">
                                     <div className="input-group w-100 my-3">
                                         <span className="input-group-text" >Nombre</span>
-                                        <input id="txtCarnet" type="text" className="form-control" value={nombre} onChange={handleNombreChange}/>
+                                        <input id="txtCarnet" type="text" className="form-control" value={nombre} onChange={handleNombreChange} />
                                     </div>
 
                                     <div className="input-group w-100 my-3">
@@ -177,7 +177,11 @@ export function ModificarActividad() {
                                         </select>
                                     </div>
 
-                                    <ListaResponsables responsables={responsables} />
+                                    {idActRef.current !== undefined &&
+                                        <ListaResponsables idActividad={idActRef.current.value} responsables={responsables} />
+                                    }
+
+
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="input-group w-100 my-3">
@@ -193,7 +197,7 @@ export function ModificarActividad() {
 
                                     <div className="input-group w-100 my-3">
                                         <span className="input-group-text w-25">Modalidad</span>
-                                        <select class="form-select" aria-label="ModalidadActividad" onChange={handleModalidadChange} value={medio}> 
+                                        <select class="form-select" aria-label="ModalidadActividad" onChange={handleModalidadChange} value={medio}>
                                             <option value="1">Presencial</option>
                                             <option value="2">Virtual</option>
                                         </select>
@@ -213,7 +217,7 @@ export function ModificarActividad() {
                                         <button className="btn btn-info w-25 text-light">Afiche</button>
                                         <button className="btn btn-success w-25 text-light">Subir Afiche</button>
                                         {esVirtual &&
-                                            <input type="text" className="form-control" placeholder="Enlace a la actividad" onChange={handleEnlaceChange} value={enlaceR}/>
+                                            <input type="text" className="form-control" placeholder="Enlace a la actividad" onChange={handleEnlaceChange} value={enlaceR} />
                                         }
                                     </div>
 
@@ -224,7 +228,7 @@ export function ModificarActividad() {
 
                                     <div className="input-group w-100 my-3">
                                         <span className="input-group-text" >Duración</span>
-                                        <input id="txtCarnet" type="text" className="form-control" placeholder="horas" value={duracion} onChange={handleHoraFinChange}/>
+                                        <input id="txtCarnet" type="text" className="form-control" placeholder="horas" value={duracion} onChange={handleHoraFinChange} />
                                     </div>
 
                                     <div className="input-group w-100 my-3">

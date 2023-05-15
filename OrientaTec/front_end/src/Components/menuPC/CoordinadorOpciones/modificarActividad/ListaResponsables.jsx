@@ -3,28 +3,28 @@ import { Icon } from '@iconify/react';
 
 const API = process.env.REACT_APP_API;
 
-export function ListaResponsables({ responsables }) {
+export function ListaResponsables({idActividad, responsables }) {
     const [, updateState] = React.useState();
     const forceUpdate = React.useCallback(() => updateState({}), []);
-    console.log(responsables)
 
     const handleDeleteResponsable = async (event) => {
         event.preventDefault();
 
-        console.log(event)
+        const idResponsableEliminado = Number(event.target.id);
+        console.log(idActividad);
+        console.log(idResponsableEliminado);
 
-        const res = await fetch(`${API}/agregarResponsablesActividad/`, { //queda pendiente lo de agregar una foto
+        const res = await fetch(`${API}/quitarResponsablesActividad/`, { //queda pendiente lo de agregar una foto
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-
+                idActividad, idResponsableEliminado
             }),
         }); //PENDIENTE : debe de darle el codigo
-        const data = await res.json();//resultado de la consulta
+        const data = await res.json();
 
-        responsables.shift();
         forceUpdate();
     }
 
@@ -33,15 +33,11 @@ export function ListaResponsables({ responsables }) {
             <div className="input-group my-3">
                 {responsables.map((responsable) => (
                     <Fragment>
-                        <form onSubmit={handleDeleteResponsable} class="form-inline">
-                            <div className="input-group">
-                                <ul class="list-group list-group-horizontal w-100">
-                                    <li class="list-group-item w-100" value={responsable.id}> {responsable.nombre} </li>
-                                </ul>
-                                <button className="btn btn-danger btn-sm" type='sumbit'> <Icon icon="ic:baseline-delete" width="24" height="24" /></button>
-                            </div>
-
-                        </form>
+                        <ul class="list-group list-group-horizontal w-100">
+                            <li class="list-group-item w-100"> {responsable.nombre} </li>
+                            <button onClick={handleDeleteResponsable} className="btn btn-danger btn-sm" id={responsable.id} > <Icon icon="ic:baseline-delete" width="24" height="24" />
+                            </button>
+                        </ul>
                     </Fragment>
                 ))}
             </div >
