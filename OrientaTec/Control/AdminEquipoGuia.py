@@ -15,5 +15,8 @@ class AdminEquipoGuia:
     def getAllProfesores(self):
         return self.dao.getAllProfesores()
     
+    def getAllAsistentes(self):
+        return self.dao.getAllAsistentes()
+    
     def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
         return self.dao.bitacoraEquipoGuia(fecha, hora, idAutor, descripcion)

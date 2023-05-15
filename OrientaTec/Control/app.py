@@ -460,7 +460,18 @@ def getUsuarioSesionActual():
   print("---", user.__dict__)
   return jsonify(user.__dict__)
 
-
+# def getInfoUsuarioSesionActual(self):
+@app.route('/getInfoUsuarioSesionActual', methods=['GET'])
+def getInfoUsuarioSesionActual():
+  #SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
+  user = SingletonSesionActual().getUsuario()
+  listaPersonas = control.getAllProfesores() + control.getAllAsistentes() + control.consultarEstudiantes(1)
+  for p in listaPersonas:
+    if (user.correo == p.correoElectronico):
+      print("---", p.__dict__)
+      return jsonify(p.__dict__)
+    
+  
 
 
 

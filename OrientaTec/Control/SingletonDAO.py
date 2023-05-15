@@ -293,6 +293,9 @@ class SingletonDAO(metaclass=SingletonMeta):
     def getAllProfesores(self):
         return self.profesores
     
+    def getAllAsistentes(self):
+        return self.asistentes
+
     # +agregarProfesor(profesor: Profesor): boolean
     def agregarProfesor(self, profesor):
 

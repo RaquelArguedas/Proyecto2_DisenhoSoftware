@@ -21,7 +21,12 @@ if __name__ == "__main__":
     horaFinal = (datetime.strptime('13:00', '%H:%M')).time()
     print(fecha, horaInicio, horaFinal)
         
+    profesores = control.getAllProfesores()
+    asistentes = control.getAllAsistentes()
+    estudiantes = control.consultarEstudiantes(1)
 
+    listaPersonas = control.getAllProfesores() + control.getAllAsistentes() + control.consultarEstudiantes(1)
+    print(listaPersonas)
 
     #no borrad:
     # def getFotoProfesor(self,idBuscado):

@@ -61,6 +61,9 @@ class MainController:
     def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
         return self.controlEquipoGuia.bitacoraEquipoGuia(fecha, hora, idAutor, descripcion)
     
+    def getAllAsistentes(self):
+        return self.controlEquipoGuia.getAllAsistentes()
+    
     #AdminEstudiantes
     def consultarEstudiantes(self, ordenamiento):
         return self.controlEstudiante.consultarEstudiantes(ordenamiento)
