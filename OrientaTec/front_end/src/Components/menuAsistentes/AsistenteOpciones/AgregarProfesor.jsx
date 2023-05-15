@@ -17,20 +17,37 @@ export function AgregarProfesor() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();  
+        if (cedula===''||name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||numeroOficina===''){
+            alert("Ha dejado campos en blanco.");
+        }
+        const info = await fetch(`${API}/getProfesorCedula/${cedula}`); //PENDIENTE : debe de darle el carnet
+        const data = await info.json();//resultado de la consulta
+        console.log(data)
+        if(data==="No existe"){
+            const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
+                    numeroOficina
+                }),
+              });
+    
+            alert("Se ha ingreado un nuevo profesor")
+        }
 
-        // real
-        const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
-                numeroOficina
-            }),
-          });
-
-          alert("Se ha ingreado un nusevo profesor")
+        else{
+            alert("El profesor ya se encuentra ingresado");
+        }
+        
+    }
+    // const handleSearch = async () => {
+    //     const res = await fetch(`${API}/getProfesorCodigo/${codigoRef.current.value}`); //PENDIENTE : debe de darle el codigo
+    //     const data = await res.json();//resultado de la consulta
+    // real
+        
         // // base para front_end
         //`${API}/nombreFuncion/${parametro1}/${parametro2}`
         // const res = await fetch(`${API}/getProfesorCedula/${189}`, {
@@ -38,10 +55,6 @@ export function AgregarProfesor() {
         // });
         // const data = await res.json();//resultado de la consulta
         // console.log(data) // imprime en consola web
-    }
-    // const handleSearch = async () => {
-    //     const res = await fetch(`${API}/getProfesorCodigo/${codigoRef.current.value}`); //PENDIENTE : debe de darle el codigo
-    //     const data = await res.json();//resultado de la consulta
 
     // }
 

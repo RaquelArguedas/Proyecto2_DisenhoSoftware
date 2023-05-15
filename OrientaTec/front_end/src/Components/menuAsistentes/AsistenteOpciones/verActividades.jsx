@@ -25,12 +25,11 @@ export function VerActividades() {
       },
     });
     const data = await res.json(); //resultado de la consulta
-    console.log(data); // imprime en consola web
-    console.log(data.tipoActividad); //ejemplo
   };
 
   const handleVerTodasActividades = async (event) => {
     event.preventDefault();
+    console.log("Legue aqui por lo menos")
 
     //esta obtiene todas las actividades
     const res = await fetch(`${API}/consultarActividades`, {
@@ -39,15 +38,20 @@ export function VerActividades() {
         "Content-Type": "application/json",
       },
     });
+    
+    console.log("Pase el get")
+
     const data = await res.json(); //resultado de la consulta
+    console.log(data) //hasta aqui todo
     setActividades(() => {
       clearActividad();
       return [data]
     })
-    console.log(data); // imprime en consola web
-    console.log(data[0]); //ejemplo
-    const obj = JSON.parse(data[0]); //aca toma la actividad en la posicion x y lo convierte en un JSON
-    console.log(obj.tipoActividad);
+    console.log("Segundo date")
+    console.log(data)
+    console.log("Primer activiades")
+    console.log(actividades)
+    
   };
 
   const handleVerActividadesEstado = async (estad,event) => {
@@ -123,7 +127,7 @@ export function VerActividades() {
                     type="radio"
                     name="flexRadioDefault"
                     id="flexRadioDefault2"
-                    onChange={handleVerProximaActividad} // Agrega el controlador de eventos onChange
+                    onChange={(event) => handleVerActividadesEstado(2,event)}// Agrega el controlador de eventos onChange
                   />
                   <label
                     className="form-check-label"
@@ -172,10 +176,13 @@ export function VerActividades() {
 
             {/* Lista de actividades */}
             <div class="overflow-auto" id="listaActividades">
-              {actividades.length > 0 && 
+              {console.log("Aqui en el bajo mundo")}
+              {console.log(actividades[0])}
+              { actividades.length>0 && 
                 actividades[0].map((act) =>
-                  JSON.parse(act).idActividad != undefined && (
-                    <Actividad datos={act} />
+                   (
+                    console.log(JSON.parse(act)),
+                    <Actividad datos={JSON.parse(act)} />
                   )
                 )
               }

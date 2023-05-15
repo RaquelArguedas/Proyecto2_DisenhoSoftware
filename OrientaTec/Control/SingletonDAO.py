@@ -3,6 +3,8 @@
 
 import mysql.connector
 import pymongo 
+from operator import attrgetter
+
 from datetime import datetime, date, timedelta
 from openpyxl import Workbook #Para manejo de excel 
 from openpyxl import load_workbook
@@ -185,6 +187,14 @@ class SingletonDAO(metaclass=SingletonMeta):
 
     def generarCodigoProfesor(self, idSede, id):
         return Sede(idSede).name +"-"+str(id)
+    
+    def getProfesorCedula(self, cedula):
+        for prof in self.profesores:
+            if(prof.cedula == cedula):
+                return prof
+
+    def getAllProfesores(self):
+        return self.profesores
 
     def generarResposables(self, idActividad):
         self.connectServer()
@@ -301,6 +311,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     def getActividades(self):
         listaSalida = sorted(self.actividades, key=attrgetter('fechaActividad'))
         return listaSalida
+
 
     # +getPlanTrabajo():planTrabajo: PlanTrabajo 
     def getPlanTrabajo(self):
