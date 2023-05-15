@@ -110,7 +110,7 @@ def getProfesorCodigo(codigo):
   prof = control.getProfesorCodigo(codigo)
 
   if (prof == None):
-     return jsonify("No existe")
+    return jsonify("No existe")
   
   return json.dumps(prof.__dict__)
 # getProfesorCedula(self, idProfesor):
@@ -118,7 +118,8 @@ def getProfesorCodigo(codigo):
 def getProfesorCedula(cedula):
   prof = control.getProfesorCedula(int(cedula))
   if (prof == None):
-    return None
+    return jsonify("No existe")
+  return json.dumps(prof.__dict__)
 
 # getAllProfesores(self):
 @app.route('/getAllProfesores', methods=['GET'])

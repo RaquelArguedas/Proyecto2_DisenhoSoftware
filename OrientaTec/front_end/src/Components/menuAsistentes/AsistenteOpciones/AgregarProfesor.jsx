@@ -20,10 +20,10 @@ export function AgregarProfesor() {
         if (cedula===''||name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||numeroOficina===''){
             alert("Ha dejado campos en blanco.");
         }
-        const info = await fetch(`${API}/getProfesorCodigo/${cedula}`); //PENDIENTE : debe de darle el carnet
+        const info = await fetch(`${API}/getProfesorCedula/${cedula}`); //PENDIENTE : debe de darle el carnet
         const data = await info.json();//resultado de la consulta
         console.log(data)
-        if(data===null){
+        if(data==="No existe"){
             const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
                 method: "POST",
                 headers: {
@@ -35,7 +35,7 @@ export function AgregarProfesor() {
                 }),
               });
     
-            alert("Se ha ingreado un nusevo profesor")
+            alert("Se ha ingreado un nuevo profesor")
         }
 
         else{
