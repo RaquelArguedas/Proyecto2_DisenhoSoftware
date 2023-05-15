@@ -36,7 +36,7 @@ export function ConsultarEstudiantes() {
             })
 
         } else {
-            const res = await fetch(`${API}/getEstudiante/${carnetRef.current.value}`, { //busca estudiante por carnet, 20198 es el carnet
+            const res = await fetch(`${API}/getEstudiante/${carnetRef.current.value}`, { //busca estudiante por carnet
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

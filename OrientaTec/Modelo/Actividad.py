@@ -18,7 +18,8 @@ class Actividad:
         self.modificaciones = modificaciones    
 
     def agregarResponsable(self, profesor):
-        self.responsables += [profesor]
+        print(profesor)
+        #self.responsables += profesor.toString
 
     def quitarResponsable(self, profesor):
         self.responsables.remove(profesor)  
