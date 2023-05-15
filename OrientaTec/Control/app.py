@@ -260,7 +260,8 @@ def agregarResponsablesActividad():
   #si le pasan el codigo y no el id usan la que esta comentada y borran la otra
   #id = control.agregarResponsablesActividad(idActividad, [control.getProfesorCodigo(idResponsableNuevo)])
 
-  id = control.agregarResponsablesActividad(int(request.json['idActividad']), [control.getProfesor(int(request.json['idResponsableNuevo']))])
+  #print(int(request.json['idResponsableNuevo']))
+  id = control.agregarResponsablesActividad(int(request.json['idActividad']), [request.json['idResponsableNuevo']])
   
   print(id)
   #Error: ac.responsables lo devuelve como un string y no deja convertirlo a JSon
@@ -333,21 +334,15 @@ def actividadToJSON(ac):
   listaSalida = []
 
   for clave in acDic:
-    print('type:', type(acDic[clave]))
 
     if (type(acDic[clave]) == list):
-      print('enter list')
       for p in acDic[clave]:
         listaSalida += [json.dumps(p.__dict__)]
       acDic[clave] = listaSalida
 
     if (type(acDic[clave]) != int and type(acDic[clave]) != str):
-      print('enter no int/str')
       acDic[clave] = str(acDic[clave])
-      
-    
 
-  print(json.dumps(acDic))
   return json.dumps(acDic)
 
 #AdminUsuario

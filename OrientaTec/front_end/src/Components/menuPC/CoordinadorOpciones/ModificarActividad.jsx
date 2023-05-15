@@ -84,7 +84,7 @@ export function ModificarActividad() {
         });
 
         const idActividad = idActRef.current.value;
-        const idResponsableNuevo = event.target.value;
+        const idResponsableNuevo = {id: event.target.value};
 
         const res = await fetch(`${API}/agregarResponsablesActividad/`, { //queda pendiente lo de agregar una foto
             method: "POST",

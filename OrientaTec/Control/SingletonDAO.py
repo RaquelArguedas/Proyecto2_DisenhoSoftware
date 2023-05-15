@@ -416,12 +416,16 @@ class SingletonDAO(metaclass=SingletonMeta):
             if (ac.idActividad == idActividad):
                 actividad = ac
 
+        print('Resp. Nuevos:', responsablesNuevos)
         for responsable in responsablesNuevos:
             #agregar en tabla responsablexactividad
-            self.executeStoredProcedure("createResponsableXActividad", [responsable.id, idActividad])
+            self.executeStoredProcedure("createResponsableXActividad", [responsable['id'], idActividad])
 
             #agregar a la actividad el responsable
-            actividad.agregarResponsable(responsable)
+            actividad.agregarResponsable(self.getProfesor(responsable['id']))
+            print('lista:',actividad.responsables )
+            for r in actividad.responsables:
+                print('r:', r)
 
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
         actividad = None

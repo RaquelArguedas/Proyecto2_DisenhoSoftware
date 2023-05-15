@@ -76,6 +76,7 @@ export function CrearActividad() {
             alert("Faltan datos por registrar.")
         } else {
             alert("Actividad ingresada correctamente")
+            console.log(responsables)
             const enlace = (esVirtual) ? enlaceR : ''
             const res = await fetch(`${API}/crearActividad`, { //queda pendiente lo de agregar una foto
                 method: "POST",
@@ -87,6 +88,8 @@ export function CrearActividad() {
                     nombre, tipo, fecha, horaInicio, horaFin, recordatorio, responsables, medio, enlace, estado
                 }),
             });
+
+            
         }
     }
 
