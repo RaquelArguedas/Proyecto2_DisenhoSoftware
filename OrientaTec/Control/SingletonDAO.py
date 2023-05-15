@@ -418,7 +418,7 @@ class SingletonDAO(metaclass=SingletonMeta):
 
         for responsable in responsablesNuevos:
             #agregar en tabla responsablexactividad
-            self.executeStoredProcedure("createResponsableXActividad", [responsable['id'], idActividad])
+            self.executeStoredProcedure("createResponsableXActividad", [responsable.id, idActividad])
 
             #agregar a la actividad el responsable
             actividad.agregarResponsable(responsable)

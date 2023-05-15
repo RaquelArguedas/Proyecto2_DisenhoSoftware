@@ -147,7 +147,7 @@ def getEquipoGuia():
 @app.route('/verActividad/<idActividad>', methods=['GET'])
 def verActividad(idActividad):
   ac = control.verActividad(idActividad)
-  print(ac)
+  print(ac.responsables)
 
   if (ac == None):
      return jsonify("No existe")       
@@ -158,12 +158,18 @@ def verActividad(idActividad):
 #                 horaFin, recordatorio,responsables, medio, enlace,estado):
 @app.route('/modificarActividad', methods=['POST'])
 def modificarActividad():
+  
   print(request.json)
+
+  fecha = (datetime.strptime(request.json['fecha'], '%Y-%m-%d')).date()
+  horaInicio = (datetime.strptime(request.json['horaInicio'], '%H:%M:%S')).time()
+  horaFin = (datetime.strptime(request.json['horaFin'], '%H:%M:%S')).time()
+
   id = control.modificarActividad(request.json['id'],request.json['nombre'], int(request.json['tipo']), 
-                             request.json['fecha'], request.json['horaInicio'], request.json['horaFin'], 
+                             None, None, None, 
                              int(request.json['recordatorio']), int(request.json['medio']),
                              request.json['enlace'],int(request.json['estado']))
-  
+
   print(id)
   
   return jsonify(str(id))
@@ -248,32 +254,36 @@ def finalizarActividad(idActividad, linkGrabacion):
   return str(res)
 
 # def agregarResponsablesActividad(self, idActividad, responsablesNuevos):
-@app.route('/agregarResponsablesActividad/<idActividad>/<idResponsableNuevo>', methods=['POST'])
-def agregarResponsablesActividad(idActividad, idResponsableNuevo):
+@app.route('/agregarResponsablesActividad/', methods=['POST'])
+def agregarResponsablesActividad():
 
   #si le pasan el codigo y no el id usan la que esta comentada y borran la otra
   #id = control.agregarResponsablesActividad(idActividad, [control.getProfesorCodigo(idResponsableNuevo)])
 
-  id = control.agregarResponsablesActividad(int(idActividad), [control.getProfesor(int(idResponsableNuevo))])
+  print(request.json['idActividad'], request.json['idResponsableNuevo'])
+  print([control.getProfesor(int(request.json['idResponsableNuevo']))])
+  id = control.agregarResponsablesActividad(int(request.json['idActividad']), [control.getProfesor(int(request.json['idResponsableNuevo']))])
   
   print(id)
-  ac = control.verActividad(int(idActividad))
-  for p in ac.responsables:
-    print(p.id, " ", p.nombre)
+  #Error: ac.responsables lo devuelve como un string y no deja convertirlo a JSon
+  #ac = control.verActividad(int(request.json['idActividad']))
+  #for p in ac.responsables:
+  # #print(p.id, " ", p.nombre)
+  # print(p)
   
   return jsonify(str(id))
 
 # def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
-@app.route('/quitarResponsablesActividad/<idActividad>/<idResponsableEliminado>', methods=['POST'])
-def quitarResponsablesActividad(idActividad, idResponsableEliminado):
+@app.route('/quitarResponsablesActividad/', methods=['POST'])
+def quitarResponsablesActividad():
 
   #si le pasan el codigo y no el id usan la que esta comentada y borran la otra
   #id = control.agregarResponsablesActividad(idActividad, [control.getProfesorCodigo(idResponsableNuevo)])
 
-  id = control.quitarResponsablesActividad(int(idActividad), [control.getProfesor(int(idResponsableEliminado))])
+  id = control.quitarResponsablesActividad(int(request.json['idActividad']), [control.getProfesor(int(request.json['idResponsableEliminado']))])
   
   print(id)
-  ac = control.verActividad(int(idActividad))
+  ac = control.verActividad(request.json['idActividad'])
   for p in ac.responsables:
     print(p.id, " ", p.nombre)
   
@@ -322,14 +332,24 @@ def definirPlanActividades(idActividad):
 #funcion auxiliar que convierte una actividad a un JSON aceptable
 def actividadToJSON(ac):
   acDic = ac.__dict__
+  listaSalida = []
 
   for clave in acDic:
-    if (type(acDic[clave]) != int and type(acDic[clave]) != str):
-      acDic[clave] = str(acDic[clave])
+    print('type:', type(acDic[clave]))
+
     if (type(acDic[clave]) == list):
+      print('enter list')
       for p in acDic[clave]:
         listaSalida += [json.dumps(p.__dict__)]
       acDic[clave] = listaSalida
+
+    if (type(acDic[clave]) != int and type(acDic[clave]) != str):
+      print('enter no int/str')
+      acDic[clave] = str(acDic[clave])
+      
+    
+
+  print(json.dumps(acDic))
   return json.dumps(acDic)
 
 #AdminUsuario

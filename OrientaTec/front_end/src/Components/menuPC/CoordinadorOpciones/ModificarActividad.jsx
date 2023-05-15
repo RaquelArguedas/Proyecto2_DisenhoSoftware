@@ -53,28 +53,50 @@ export function ModificarActividad() {
         if (data === 'No existe') {
             alert("No existe una actividad con el ID ingresado.")
         } else {
-            setNombre(data.nombreActividad)
-            setTipo(data.tipoActividad)
-            setModalidad(data.medio)
-            setEnlace(data.enlace)
-            setEstado(data.estado)
-            setFecha(data.fechaActividad)
-            setHoraInicio(data.horaInicio)
+            setNombre(data.nombreActividad);
+            setTipo(data.tipoActividad);
+            setModalidad(data.medio);
+            setEnlace(data.enlace);
+            setEstado(data.estado);
+            setFecha(data.fechaActividad);
+            setHoraInicio(data.horaInicio);
             setDuracion(Number(data.horaFin[1]===':' ? data.horaFin[0] : data.horaFin.slice(0,2)) - 
-                Number(data.horaInicio[1]===':' ? data.horaInicio[0] : data.horaInicio.slice(0,2)))
-            setRecordatorios(data.recordatorio)
+                Number(data.horaInicio[1]===':' ? data.horaInicio[0] : data.horaInicio.slice(0,2)));
+            setHoraFin(data.horaFin);
+            setRecordatorios(data.recordatorio);
 
-            setStartDate(new Date(data.fechaActividad+'T'+(data.horaInicio[1]===':' ? '0'+data.horaInicio : data.horaInicio)))
+            setStartDate(new Date(data.fechaActividad+'T'+(data.horaInicio[1]===':' ? '0'+data.horaInicio : data.horaInicio)));
+
+            console.log((JSON.parse(data.responsables.replace(/\'/g, ''))))
+
+            setResponsables(JSON.parse(data.responsables.replace(/\'/g, '')).map(responsable => ({id: responsable.id, nombre: responsable.nombre+' '+responsable.apellido1+' '+responsable.apellido2})));
+
+            console.log(responsables)
         }
     };
 
-    const handleAddResponsable = (event) => {
+    const handleAddResponsable = async (event) => {
         setResponsables((prevResponsables) => {
             return [...prevResponsables, {
                 id: event.target.value,
                 nombre: event.target[event.target.selectedIndex].innerText
             }];
         });
+
+        const idActividad = idActRef.current.value;
+        const idResponsableNuevo = event.target.value;
+
+        const res = await fetch(`${API}/agregarResponsablesActividad/`, { //queda pendiente lo de agregar una foto
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idActividad, idResponsableNuevo
+            }),
+        }); //PENDIENTE : debe de darle el codigo
+        const data = await res.json();//resultado de la consulta
+
         event.target.value = 0;
     };
 
@@ -95,7 +117,7 @@ export function ModificarActividad() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+        
         if (responsables.length <= 0) {
             alert("Debe registrar responsables.")
         } else if (nombre === '' || horaFin === horaInicio || recordatorio === '') {
@@ -108,10 +130,9 @@ export function ModificarActividad() {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "http://localhost:3000",
                 },
                 body: JSON.stringify({
-                    id, nombre, tipo, fecha, horaInicio, horaFin, recordatorio, responsables, medio, enlace, estado
+                    id, nombre, tipo, fecha, horaInicio, horaFin, recordatorio, medio, enlace, estado
                 }),
             });
         }

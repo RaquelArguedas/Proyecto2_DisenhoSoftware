@@ -70,9 +70,6 @@ export function CrearActividad() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        setModalidad(Number(medio) + 1);
-        console.log(medio);
-
         if (responsables.length <= 0) {
             alert("Debe registrar responsables.")
         }else if (nombre===''||horaFin===horaInicio||recordatorio===''){
