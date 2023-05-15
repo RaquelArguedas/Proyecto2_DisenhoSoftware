@@ -401,19 +401,29 @@ def exists(correo, contrasenha):
   print(res)
   return jsonify(res)
 
+# def correoRegistrado(self, correo, contrasenha):
+@app.route('/correoRegistrado/<correo>', methods=['GET'])
+def correoRegistrado(correo):
+  res = control.correoRegistrado(correo)
+  print(res)
+  return jsonify(res)
+
 # def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol):
-@app.route('/modificarUsuario', methods=['POST'])
-def modificarUsuario():
-  #print(request.json)
+@app.route('/modificarUsuarioContrasenha', methods=['POST'])
+def modificarUsuarioContrasenha():
+
+  print(request.json)
+  contrasenha = request.json['nuevaContrasenha']
 
   #Descomentar cuando se envie el codigo y borrar el otro
+  print(SingletonSesionActual().getUsuario().idUsuario, " ",SingletonSesionActual().getUsuario().contrasenha)
   
-  # id = control.modificarUsuario(int(request.json['idUsuario']), request.json['correoElectronico'], 
-  #                            request.json['contrasenha'], request.json['idRol'])
+  #se modifica en la BD y en los objetos 
+  id = control.modificarUsuario(SingletonSesionActual().getUsuario().idUsuario, None, contrasenha, None, None)
+  #se modifica en la sesionActual
+  SingletonSesionActual().getUsuario().setContrasenha(contrasenha) 
 
-  id = control.modificarUsuario(1, None, None, 1)
-  
-  print(id)
+  print(SingletonSesionActual().getUsuario().idUsuario, " ",SingletonSesionActual().getUsuario().contrasenha)
   
   return jsonify(str(id))
 
@@ -445,10 +455,10 @@ def getUsuarioActualRol():
   user = SingletonSesionActual().getUsuario()
   return json.dumps(control.getUsuarioRol(user.correo, user.contrasenha))
 
-# def iniciarSesion(self, correo, contrasenha):
-@app.route('/iniciarSesion/<correo>/<contrasenha>', methods=['POST'])
-def iniciarSesion(correo, contrasenha):
-  SingletonSesionActual().setUsuario(control.getUsuarioCorreo(correo, contrasenha))
+# def iniciarSesion(self, correo):
+@app.route('/iniciarSesion/<correo>', methods=['POST'])
+def iniciarSesion(correo):
+  SingletonSesionActual().setUsuario(control.getUsuarioCorreo(correo))
   print("....",SingletonSesionActual().getUsuario().idUsuario)
   return str(SingletonSesionActual().getUsuario().idUsuario)
 

@@ -5,3 +5,6 @@ class Usuario:
         self.contrasenha = contrasenha
         self.idRol = idRol
         self.idSede = idSede
+
+    def setContrasenha(self, contrasenha):
+        self.contrasenha = contrasenha

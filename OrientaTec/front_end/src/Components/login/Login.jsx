@@ -41,7 +41,7 @@ export function Login() {
               });
         }
         else{ 
-            fetch(`${API}/iniciarSesion/${correo}/${contrasenha}`, {  
+            fetch(`${API}/iniciarSesion/${correo}`, {  
                 method: "POST"
             });
             const rol = await fetch(`${API}/getUsuarioActualRol`, {  
@@ -63,8 +63,49 @@ export function Login() {
         
     }
 
-    const gotoRecuperar = () => {
-        navigate('/recuperar', {});
+    const gotoRecuperar = async() => {
+        const correo = refTxtUsuario.current.value;
+        var registrado = false;
+        if (correo !== ''){
+            const res = await fetch(`${API}/correoRegistrado/${correo}`, {  
+                method: "GET"
+            });
+            registrado = await res.json();
+            console.log(registrado)
+        }
+        
+        if (registrado === true){    
+            fetch(`${API}/iniciarSesion/${correo}`, {  
+                method: "POST"
+            });
+            
+            const generarNumeroAleatorio = () => {
+                const numero = Math.floor(Math.random() * 10); // Generar un número aleatorio de 6 dígitos
+                return numero;
+            };
+            
+            // Llamar a la función generarNumeroAleatorio para obtener el número aleatorio
+            const d0 = generarNumeroAleatorio();
+            const d1 = generarNumeroAleatorio();
+            const d2 = generarNumeroAleatorio();
+            const d3 = generarNumeroAleatorio();
+            const d4 = generarNumeroAleatorio();
+            const d5 = generarNumeroAleatorio();
+
+        
+            Swal.fire({
+                icon: 'info',
+                title: 'Correo: restauracion de contraseña' ,
+                text: `Su código para la contraseña es: ${d0}${d1}${d2}${d3}${d4}${d5}`,
+            });
+            navigate('/recuperar', {state:{d0: {d0}, d1: {d1}, d2: {d2}, d3: {d3}, d4: {d4}, d5: {d5}}});
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Debe indicar su usuario' ,
+                text: `Debe indicar el correo que tiene registrado.`,
+            });
+        }
     }
 
     return (
