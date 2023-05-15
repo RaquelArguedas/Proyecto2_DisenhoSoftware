@@ -13,10 +13,26 @@ from operator import attrgetter
 
 import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
-#sys.path.append('./Modelo')
+sys.path.append('./Modelo')
 #Importo la Clase
+'''
+sys.path.insert(1, './Modelo')
 
-
+from Modelo import Usuario
+from Modelo import Estudiante
+from Modelo import EquipoGuia 
+from Modelo import Actividad 
+from Modelo import Profesor 
+from Modelo import AsistenteAdministrativo 
+from Modelo import Bitacora 
+from Modelo import PlanTrabajo 
+from Modelo import Recordatorio 
+from Modelo import Evidencia 
+from Modelo import Observacion 
+from Modelo import Comentario 
+from Modelo import Sede 
+from Modelo import Ordenamiento 
+'''
 from Modelo.Usuario import *
 from Modelo.Estudiante import * 
 from Modelo.EquipoGuia import *
@@ -31,8 +47,6 @@ from Modelo.Observacion import *
 from Modelo.Comentario import *
 from Modelo.Sede import *
 from Modelo.Ordenamiento import *
-
-
 
 
 class SingletonMeta(type):

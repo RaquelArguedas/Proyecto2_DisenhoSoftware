@@ -62,16 +62,17 @@ def buscarEstudiante(carnet):
   #return jsonify(jsonStr)
 
 #PENDIENTE como las dos pendientes solamente interactuan a nivel de BD no deberia modificarse nada aca
-# generarExcelEstudiantes():
-@app.route('/generarExcelEstudiantes', methods=['POST'])
-def generarExcelEstudiantes():
-  res = control.generarExcelEstudiantes()
+# generarExcelEstudiantes(self,sede):
+@app.route('/generarExcelEstudiantes/<sede>', methods=['POST'])
+def generarExcelEstudiantes(sede):
+  res = control.generarExcelEstudiantes(sede)
   return jsonify(str(res))
 
-# cargarExcelEstudiantes()
-@app.route('/cargarExcelEstudiantes', methods=['POST'])
-def cargarExcelEstudiantes():
-  res = control.cargarExcelEstudiantes()
+# cargarExcelEstudiantes(self,archivo)
+@app.route('/cargarExcelEstudiantes/<archivo>', methods=['POST'])
+def cargarExcelEstudiantes(archivo):
+  archivo = request.files['archivo']
+  res = control.cargarExcelEstudiantes(archivo)
   return jsonify(str(res))
 
 
@@ -437,6 +438,15 @@ def getUsuarioSesionActual():
   user = SingletonSesionActual().getUsuario()
 
   return user.__dict__
+
+
+#NUEVO CAMBIO
+# def getSedeUsuarioSesionActual(self):
+@app.route('/getSedeUsuarioSesionActual', methods=['GET'])
+def getSedeUsuarioSesionActual():
+  SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
+  user = SingletonSesionActual().getUsuario()
+  return str(user.sede)
 
 
 

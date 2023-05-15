@@ -1,5 +1,5 @@
 from SingletonDAO import *
-from MainController import *
+from Control.MainController import *
 from datetime import time, datetime
 from SingletonSesionActual import *
 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     for ac in lista:
         print(ac.idActividad)
         
-
+    dao.generarExcelTodos()
 
     #no borrad:
     # def getFotoProfesor(self,idBuscado):

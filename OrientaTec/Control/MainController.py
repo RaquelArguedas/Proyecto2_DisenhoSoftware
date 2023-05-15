@@ -70,12 +70,11 @@ class MainController:
         return self.controlEstudiante.modificarEstudiante(carnet, nombre,apellido1, apellido2, sede, 
                                                           correoElectronico, numeroCelular, estado)
     
-    #PENDIENTE
-    def generarExcelEstudiantes(self):
-        return self.controlEstudiante.generarExcelEstudiantes()
+    def generarExcelEstudiantes(self,sede):
+        return self.controlEstudiante.generarExcelEstudiantes(sede)
     
-    def cargarExcelEstudiantes(self):
-        return self.controlEstudiante.cargarExcelEstudiantes()
+    def cargarExcelEstudiantes(self,nombArchivo):
+        return self.controlEstudiante.cargarExcelEstudiantes(nombArchivo)
     
     def buscarEstudiante(self, carnet):
         return self.controlEstudiante.buscarEstudiante(carnet)
