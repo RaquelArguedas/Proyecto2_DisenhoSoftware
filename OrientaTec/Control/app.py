@@ -117,9 +117,8 @@ def getProfesorCodigo(codigo):
 @app.route('/getProfesorCedula/<cedula>', methods=['GET'])
 def getProfesorCedula(cedula):
   prof = control.getProfesorCedula(int(cedula))
-
   if (prof == None):
-     return jsonify("No existe")
+    return None
 
 # getAllProfesores(self):
 @app.route('/getAllProfesores', methods=['GET'])
