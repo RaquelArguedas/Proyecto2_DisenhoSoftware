@@ -15,6 +15,31 @@ export function VerActividades() {
     setActividades([]);
   };
 
+  const [todasActividades, setTodasActividades]=useState([]);
+  const clearTodas = () => {
+    setTodasActividades([]);
+  };
+
+  const handleTodasActividades = async () => {
+    const res = await fetch(`${API}/consultarActividades`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json(); //resultado de la consulta
+    console.log(data)
+    setTodasActividades(() => {
+      clearTodas();
+      return [data]
+  })
+  };
+  React.useEffect(() => {
+    handleTodasActividades()
+  }, []);
+  
+
+
   const handleVerProximaActividad = async (event) => {
     event.preventDefault();
     //  esta consulta la proxima actividad
@@ -29,7 +54,6 @@ export function VerActividades() {
 
   const handleVerTodasActividades = async (event) => {
     event.preventDefault();
-    console.log("Legue aqui por lo menos")
 
     //esta obtiene todas las actividades
     const res = await fetch(`${API}/consultarActividades`, {
@@ -38,20 +62,12 @@ export function VerActividades() {
         "Content-Type": "application/json",
       },
     });
-    
-    console.log("Pase el get")
 
     const data = await res.json(); //resultado de la consulta
-    console.log(data) //hasta aqui todo
     setActividades(() => {
       clearActividad();
       return [data]
     })
-    console.log("Segundo date")
-    console.log(data)
-    console.log("Primer activiades")
-    console.log(actividades)
-    
   };
 
   const handleVerActividadesEstado = async (estad,event) => {
@@ -95,10 +111,10 @@ export function VerActividades() {
                 <h4>Actividades del plan de trabajo</h4>
               </div>
               <div className="col-sm-3">
-                <p>Inicio: 06/02/2023</p>
+                <p>Inicio:</p>
               </div>
               <div className="col-sm-3">
-                <p>Fin: 16/06/2023</p>
+                <p>Fin: </p>
               </div>
             </div>
 
@@ -177,7 +193,6 @@ export function VerActividades() {
             {/* Lista de actividades */}
             <div class="overflow-auto" id="listaActividades">
               {console.log("Aqui en el bajo mundo")}
-              {console.log(actividades[0])}
               { actividades.length>0 && 
                 actividades[0].map((act) =>
                    (

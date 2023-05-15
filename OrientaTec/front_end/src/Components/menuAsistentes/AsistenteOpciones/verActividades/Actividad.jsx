@@ -12,7 +12,8 @@ export function Actividad({datos}) {
     console.log("Aqui en actividad")
     console.log(datos)
     //state.datosactividad.nombre
-
+    const tipoActividad = (datos.tipoActividad===1 ? "Orientadora" : (datos.tipoActividad===2 ? "Motivacional" : (datos.tipoActividad===3 ? "Apoyo estudiantil": (datos.tipoActividad===4 ? "Orden tecnico": "Recreativa"))))
+    const estado = (datos.estado===1 ? "Planeada" : (datos.estado===2 ? "Notificada" : (datos.estado===3 ? "Realizada":  "Cancelada")))
     const gotoDetalleActividad = () => { navigate('/verplan/detalle', {state:{comentarios: state.comentarios, linkMenu: state.linkMenu}}); }
 
     return (
@@ -20,7 +21,7 @@ export function Actividad({datos}) {
             <div class="card my-3">
                 <div class="card-body">
                     <h5 id='nombreActividad' class="card-title">Nombre: {datos.nombreActividad}  ID: {datos.idActividad}</h5>
-                    <h6 id="tipoActividad" class="card-subtitle mb-2 text-muted"> Tipo Actividad: {datos.tipoActividad}</h6>
+                    <h6 id="tipoActividad" class="card-subtitle mb-2 text-muted"> Tipo Actividad: {tipoActividad}</h6>
 
                     <div className="row">
                         <div className="col">
@@ -47,7 +48,7 @@ export function Actividad({datos}) {
 
                             <p id="estadoActividad" class="card-text mb-2">
                                 <Icon icon="material-symbols:brightness-empty" width="24" height="24" />
-                                Estado: {datos.estado}
+                                Estado: {estado}
                             </p>
 
                             <a id="afiche" class="card-text mb-2">
