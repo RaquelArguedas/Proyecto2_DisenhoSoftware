@@ -90,9 +90,7 @@ export function VerActividades() {
     console.log(obj.tipoActividad)
   };
 
-  const gotoMenuProfesor = () => {
-    navigate("/menuProfesor", {});
-  };
+  
   const { state } = useLocation();
 
   return (
