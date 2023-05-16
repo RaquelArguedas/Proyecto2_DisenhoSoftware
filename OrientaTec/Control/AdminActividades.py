@@ -25,6 +25,28 @@ class AdminActividades:
     def cambiarEstado(self, idActividad, idEstado):
         return self.dao.modificarActividad(idActividad, None,None, None, None, None, None, None, None, idEstado)
 
+
+    def registrarFotoAfiche(self,idActividad,image):
+        self.dao.registrarFotoAfiche(idActividad,image)
+
+    def registrarFotoEvLista(self,idEvidencia,image):
+        self.dao.registrarFotoEvLista(idEvidencia,image)
+
+    def registrarFotoEv(self,idEvidencia,image):
+        self.dao.registrarFotoEv(idEvidencia,image)
+
+    def setFotoAfiche(self,idBuscado, image):
+        self.dao.setFotoAfiche(idBuscado, image)
+    
+    def getFotoAfiche(self,idBuscado):
+        return self.dao.getFotoAfiche(idBuscado)
+
+    def getEvLista(self,idBuscado):
+        return self.dao.getEvLista(idBuscado)
+
+    def getFotoEv(self, idBuscado):
+        return self.dao.getFotoEv(idBuscado)
+    
     #devuelve una Actividad, sus comentarios e evidencias
     def getDetalleActividad(self, idActividad):
         lista = []

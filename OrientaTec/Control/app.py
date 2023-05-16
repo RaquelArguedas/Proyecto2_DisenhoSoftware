@@ -1,9 +1,12 @@
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from MainController import *
 from SingletonSesionActual import *
 from datetime import datetime, timedelta
+from io import BytesIO
+from PIL import Image
+import base64
 
 # Instantiation
 app = Flask(__name__)
@@ -96,15 +99,24 @@ def designarCoordinador(idProfesor):
 #                   correoElectronico, numeroOficina,autoridad, estado):
 @app.route('/modificarProfesor', methods=['POST'])
 def modificarProfesor():
-  print(request.json)
+  #codigo = request.form.get('codigo')
+  cedula = request.form.get('cedula')
+  name = request.form.get('name')
+  apellido1 = request.form.get('apellido1')
+  apellido2 = request.form.get('apellido2')
+  sede = request.form.get('sede')
+  numeroTelefono = request.form.get('numeroTelefono')
+  correo = request.form.get('correo')
+  numeroOficina = request.form.get('numeroOficina')
 
-  #Descomentar cuando se envie el codigo y borrar el otro
-  #prof = control.getProfesorCodigo(request.json['codigo'])
+  #prof = control.getProfesorCodigo(codigo)
+  prof = control.getProfesorCodigo("SJ-6")
+  id = control.modificarProfesor(prof.id,int(cedula), name, apellido1, apellido2, int(sede), int(numeroTelefono), 
+                                  correo, int(numeroOficina),None,None)
+  
+  print(id)
+  control.setFotoProfesor(prof.id, request.files['image'])
 
-  prof = control.getProfesorCodigo("SJ-1")
-  id = control.modificarProfesor(prof.id,request.json['cedula'], request.json['name'], 
-                             request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
-                             request.json['numeroTelefono'], request.json['correo'], request.json['numeroOficina'],None,None)
   return jsonify(str(id))
 
 # getProfesorCodigo(self, idProfesor):
@@ -130,28 +142,59 @@ def getProfesorCedula(cedula):
 # crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular, correoElectronico, numeroOficina,autoridad, estado):
 @app.route('/crearProfesor', methods=['POST'])
 def crearProfesor():
-  #print(request.json)
-  
-  print(type(bytes(request.json['imageB'], "utf-8")))
+  cedula = request.form.get('cedula')
+  name = request.form.get('name')
+  apellido1 = request.form.get('apellido1')
+  apellido2 = request.form.get('apellido2')
+  sede = request.form.get('sede')
+  numeroTelefono = request.form.get('numeroTelefono')
+  correo = request.form.get('correo')
+  numeroOficina = request.form.get('numeroOficina')
 
-  # id = control.crearProfesor(request.json['cedula'], request.json['name'], request.json['apellido1'], 
-  #                            request.json['apellido2'], request.json['sede'], request.json['numeroTelefono'], 
-  #                            request.json['correo'], request.json['numeroOficina'],2,1)
+  id = control.crearProfesor(cedula, name, apellido1, apellido2, sede, numeroTelefono, 
+                             correo, numeroOficina,2,1)
   
-  #print(id)
-  id = 51
-  control.registrarFotoProfesor(id, request.json['imageB'])
-  
-  #control.agregarProfesor(control.getProfesor(id[0])) #se agrega al equipo guia
-  # control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
-  #                            SingletonSesionActual().getUsuario().idUsuario, "nuevo profesor con id=" + str(id[0]))
+  print(id)
+  control.registrarFotoProfesor(id[0], request.files['image'])
+
+  control.agregarProfesor(control.getProfesor(id[0])) #se agrega al equipo guia
+  control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+                             SingletonSesionActual().getUsuario().idUsuario, "nuevo profesor con id=" + str(id[0]))
   
   return jsonify(str(id))
+
+def is_base64_valid(base64_string):
+    try:
+        base64.b64decode(base64_string)
+        return True
+    except (TypeError):
+        return False
 
 # getFotoProfesor
 @app.route('/getFotoProfesor/<idProfesor>', methods=['GET'])
 def getFotoProfesor(idProfesor):
-  return str(control.getFotoProfesor(int(idProfesor)))
+  imagen = control.getFotoProfesor(int(idProfesor))
+  base64_image = base64.b64encode(imagen).decode('utf-8')
+  
+  if is_base64_valid(base64_image):
+    return base64_image
+  else:
+    return "None"
+
+# getFotoProfesor
+@app.route('/getFotoProfesorCodigo/<codigo>', methods=['GET'])
+def getFotoProfesorCodigo(codigo):
+  idProfesor = control.getProfesorCodigo(codigo).id
+  imagen = control.getFotoProfesor(int(idProfesor))
+
+  base64_image = None
+  if (imagen != None):
+    base64_image = base64.b64encode(imagen).decode('utf-8')
+
+  if is_base64_valid(base64_image):
+    return base64_image
+  else:
+    return "None"
 
 #AdminEquipoGuia
 # getEquipoGuia(self):

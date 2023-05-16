@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react'
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
+import axios from 'axios';
 
 const API = process.env.REACT_APP_API;
 
@@ -16,24 +17,53 @@ export  function ModificarProfesor() {
     const [correo, setCorreo] = useState('');
     const [sede, setSede] = useState('');
     const [image, setImage] = useState(null);
+    const [imagenData, setImagenData] = useState(null);
+
+    function isBase64Valid(base64String) {
+        const regex = /^[A-Za-z0-9+/=]+$/;
+        const isLengthValid = base64String.length % 4 === 0;
+        const isValidCharacters = regex.test(base64String);
+        return isLengthValid && isValidCharacters;
+      }
+
+    const obtenerImagen = async () => {
+        try {
+            const response = await axios.get(`${API}/getFotoProfesorCodigo/${"SJ-6"}`); //aqui debe enviar el codigo que es
+            const imageBase64 = response.data;
+            console.log(isBase64Valid(imageBase64));
+            setImagenData(imageBase64);
+          } catch (error) {
+            console.error('Error al obtener la imagen:');
+          }
+      };
 
     const handleSubmit = async (event) => {
         event.preventDefault();  
-        const res = await fetch(`${API}/modificarProfesor`, { //queda pendiente lo de agregar una foto
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ //pendiente lo del codigo
-                // codigo, cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, numeroOficina 
-                cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, numeroOficina
-            }),
-          });
+
+        const formData = new FormData();
+        formData.append('image', image);
+        //formData.append('codigo', codigo);
+        formData.append('cedula', cedula);
+        formData.append('name', name);
+        formData.append('apellido1', apellido1);
+        formData.append('apellido2', apellido2);
+        formData.append('sede', sede);
+        formData.append('numeroTelefono', numeroTelefono);
+        formData.append('correo', correo);
+        formData.append('numeroOficina', numeroOficina);
+
+        
+        const res = await fetch(`${API}//modificarProfesor`, {
+            method: 'POST',
+            body: formData
+        });
+        
         const data = await res.json() //resultado de la consulta
         console.log(data) // imprime en consola web
     }
     const handleSearch = async () => { 
-        const res = await fetch(`${API}/getProfesorCodigo/${"SJ-1"}`); //PENDIENTE : debe de darle el codigo
+        obtenerImagen();
+        const res = await fetch(`${API}/getProfesorCodigo/${"SJ-6"}`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta
         console.log(data) // imprime en consola web
             
@@ -171,6 +201,7 @@ export  function ModificarProfesor() {
                                 <div className="mb-3">
                                     <label htmlFor="formGroupInputCodigo" className="form-label">
                                     Foto
+                                    {imagenData && <img src={`data:image/jpeg;base64,${imagenData}`} alt="Foto del profesor" style={{ width: '300px', height: 'auto' }}/>}
                                     </label>
                                 </div>
                                 <div className="mb-3">

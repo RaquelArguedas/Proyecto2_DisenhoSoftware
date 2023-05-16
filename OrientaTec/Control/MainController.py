@@ -44,6 +44,9 @@ class MainController:
     
     def registrarFotoProfesor(self,idProfe,bin):
         self.controlProfesor.registrarFotoProfesor(idProfe, bin)
+
+    def setFotoProfesor(self,idBuscado, image):
+        self.controlProfesor.setFotoProfesor(idBuscado, image)
     
     def getFotoProfesor(self,idProfe):
         return self.controlProfesor.getFotoProfesor(idProfe)
@@ -124,7 +127,27 @@ class MainController:
     def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
         return self.controlActividades.bitacoraActividad(idActividad, fecha, hora, idAutor, descripcion)
     
+    def registrarFotoAfiche(self,idActividad,image):
+        self.controlActividades.registrarFotoAfiche(idActividad,image)
 
+    def registrarFotoEvLista(self,idEvidencia,image):
+        self.controlActividades.registrarFotoEvLista(idEvidencia,image)
+
+    def registrarFotoEv(self,idEvidencia,image):
+        self.controlActividades.registrarFotoEv(idEvidencia,image)
+
+    def setFotoAfiche(self,idBuscado, image):
+        self.controlActividades.setFotoAfiche(idBuscado, image)
+    
+    def getFotoAfiche(self,idBuscado):
+        return self.controlActividades.getFotoAfiche(idBuscado)
+
+    def getEvLista(self,idBuscado):
+        return self.controlActividades.getEvLista(idBuscado)
+
+    def getFotoEv(self, idBuscado):
+        return self.controlActividades.getFotoEv(idBuscado)
+    
     #AdminPlanActividades
     def consultarProximaActividad(self):
         return self.controlPlanActividades.consultarProximaActividad()

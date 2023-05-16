@@ -1,6 +1,7 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
+
 
 const API = process.env.REACT_APP_API;
 
@@ -15,67 +16,31 @@ export function AgregarProfesor() {
     const [codigo, setCodigo] = useState('');
     const [sede, setSede] = useState('');
     const [image, setImage] = useState(null);
-    const [imageB, setImageB] = useState(null);
-    const [imageUrl, setImageUrl] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();  
 
-        // console.log("AAAAAAAAAAAA")
-        // console.log(image)
-        // convertImageToBinary(image)
-        // console.log(imageB)
-        // console.log("BBBBBBBBBBBB")
-
-        //const b = convertImageToBinary(image);
-
-        // real
-        // const res = await fetch(`${API}/crearProfesor`, { 
-        //     method: "POST",
-        //     headers: {
-        //       "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
-        //         numeroOficina, imageB
-        //     }),
-        //   });
-
-        // const miJSON = JSON.stringify(image);
-
-        // console.log(miJSON);
-        // console.log(image)
-        // console.log(imageB)
+        const formData = new FormData();
+        formData.append('image', image);
+        formData.append('cedula', cedula);
+        formData.append('name', name);
+        formData.append('apellido1', apellido1);
+        formData.append('apellido2', apellido2);
+        formData.append('sede', sede);
+        formData.append('numeroTelefono', numeroTelefono);
+        formData.append('correo', correo);
+        formData.append('numeroOficina', numeroOficina);
 
         
-        //console.log(imageBinary)
-        console.log(image)
-        const res = fetch(`${API}/getFotoProfesor/${51}`, { 
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            }
-        });
-        const data = res.text() //resultado de la consulta
-        console.log(data) // imprime en consola web
-        console.log(imageUrl)
-        setImageUrl(URL.createObjectURL(new Blob([res], { type: 'image/jpeg' })));
-        console.log(imageUrl)
+        const res = await fetch(`${API}//crearProfesor`, {
+            method: 'POST',
+            body: formData
+          });
 
+        const data = await res.json();
+        console.log(data);
+        
     };
-    const convertImageToBinary = (file) => {
-        const reader = new FileReader();
-      
-        reader.onload = (event) => {
-          const binaryString = event.target.result;
-          // Aquí puedes utilizar `binaryString` como representación binaria de la imagen
-          // Puedes enviarlo al backend o realizar cualquier otra operación necesaria
-          //console.log(binaryString);
-          setImageB(binaryString)
-        };
-      
-        reader.readAsBinaryString(file);
-      };
 
     const handleNameChange = (event) => {
     setName(event.target.value);
@@ -112,6 +77,7 @@ export function AgregarProfesor() {
         console.log(image)
         
     };
+
     return (
         <Fragment>
             <div className="container">
@@ -210,7 +176,7 @@ export function AgregarProfesor() {
                             </div>
                             <div className="mb-3">
                             <button type="submit" class="btn btn-primary">Agregar </button>
-                            <img src={imageUrl} class="img-thumbnail w-100" />
+                            
                             </div>
                         </form>
 

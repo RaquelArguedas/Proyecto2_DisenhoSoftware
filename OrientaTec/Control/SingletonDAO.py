@@ -810,9 +810,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             print(ex)
 
 
-    #-----------MÉTODOS PARA BUSCAR FOTOS DE MONGO--------------------------#
-    #Registrar NUEVOS archivos 
-    def registrarFotoProfesor(self,idProfe,bin):
+    def registrarFotoProfesor(self,idProfe,image):
         try:
             self.connectMongoServer()
             #revisar que no exista el registro 
@@ -821,61 +819,79 @@ class SingletonDAO(metaclass=SingletonMeta):
             if(cantRegistros > 0):
                 print("El registro ya existe, NO SE PUEDE actualizar.")
             else:
-                # with open(pathFoto, 'rb') as file: photo_data = file.read()
-                print(type(bytes(bin, "utf-8")))
-                self.collecFtProf.insert_one({'idProfe':idProfe, 'foto': bytes(bin,"utf-8")})
+                self.collecFtProf.insert_one({'idProfe':idProfe, 'foto': image.read()})
                 print("Se ha insertado la foto exitosamente.")
             self.closeMongoConnection()
         except Exception as ex:
             print(ex)
 
-    def registrarFotoAfiche(self,idActividad,pathFoto):
+    def registrarFotoAfiche(self,idActividad,image):
         try:
             self.connectMongoServer()
-            with open(pathFoto, 'rb') as file: photo_data = file.read()
-            self.collecAfiche.insert_one({'idActividad':idActividad, 'foto': photo_data})
+            #revisar que no exista el registro 
+            cantRegistros = self.collecAfiche.count_documents({'idActividad':idActividad})
+            print(cantRegistros)
+            if(cantRegistros > 0):
+                print("El registro ya existe, NO SE PUEDE actualizar.")
+            else:
+                self.collecAfiche.insert_one({'idActividad':idActividad, 'foto': image.read()})
+                print("Se ha insertado la foto exitosamente.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+
+    def registrarFotoEvLista(self,idEvidencia,image):
+        try:
+            self.connectMongoServer()
+            self.collecEvLista.insert_one({'idEvidencia':idEvidencia, 'foto': image.read()})
             print("Foto registrada con exito.")
             self.closeMongoConnection()
         except Exception as ex:
             print(ex)
 
-    # def registrarFotoEvLista(self,idEvidencia,nuevaFoto):
-    #     try:
-    #         self.connectMongoServer()
-    #         self.collecEvLista.insert_one({'idEvidencia':idEvidencia, 'foto': nuevaFoto})
-    #         print("Foto registrada con exito.")
-    #         self.closeMongoConnection()
-    #     except Exception as ex:
-    #         print(ex)
-    # def registrarFotoEv(self,idEvidencia,nuevaFoto):
-    #     try:
-    #         self.connectMongoServer()
-    #         self.collecEvFoto.insert_one({'idEvidencia':idEvidencia, 'foto': nuevaFoto})
-    #         print("Foto registrada con exito.")
-    #         self.closeMongoConnection()
-    #     except Exception as ex:
-    #         print(ex)
-    # #-------------------------------REGISTRAR-------------------------------
-    # #-------------------------------SET-------------------------------
-    # def setFotoProfesor(self,idBuscado, nuevaFoto):
-    #     try:
-    #         self.connectMongoServer()
-    #         #Revisar que exista el registro 
-    #         cantRegistros = self.collecFtProf.count_documents({'idProfe':idBuscado})
-    #         if(cantRegistros > 0):
-    #             self.collecFtProf.update_one({'idProfe':idBuscado},{'$set':{'foto':nuevaFoto}})
-    #             print("Se ha actualizado la foto exitosamente. ")
-    #         else:
-    #             print("El registro que intenta actualizar NO existe.")
-    #         self.closeMongoConnection()
-    #     except Exception as ex:
-    #         print(ex)
-    # """
-    #     El profesor es el único que necesita actualizar registros porque mantiene UNA única foto, 
-    #     pueden existir n fotos de una evidencia, n fotos de un afiche para una actividad. 
-    # """
-    # #-------------------------------SET-------------------------------
-    # #-------------------------------GETTERS-------------------------------
+    def registrarFotoEv(self,idEvidencia,image):
+        try:
+            self.connectMongoServer()
+            #revisar que no exista el registro 
+            cantRegistros = self.collecEvFoto.count_documents({'idEvidencia':idEvidencia})
+            print(cantRegistros)
+            if(cantRegistros > 0):
+                print("El registro ya existe, NO SE PUEDE actualizar.")
+            else:
+                self.collecEvFoto.insert_one({'idEvidencia':idEvidencia, 'foto': image.read()})
+                print("Se ha insertado la foto exitosamente.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+
+    def setFotoProfesor(self,idBuscado, image):
+        try:
+            self.connectMongoServer()
+            #Revisar que exista el registro 
+            cantRegistros = self.collecFtProf.count_documents({'idProfe':idBuscado})
+            if(cantRegistros > 0):
+                self.collecFtProf.update_one({'idProfe':idBuscado},{'$set':{'foto':image.read()}})
+                print("Se ha actualizado la foto exitosamente. ")
+            else:
+                print("El registro que intenta actualizar NO existe.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+
+    def setFotoAfiche(self,idBuscado, image):
+        try:
+            self.connectMongoServer()
+            #Revisar que exista el registro 
+            cantRegistros = self.collecAfiche.count_documents({'idActividad':idBuscado})
+            if(cantRegistros > 0):
+                self.collecAfiche.update_one({'idActividad':idBuscado},{'$set':{'foto':image.read()}})
+                print("Se ha actualizado la foto exitosamente. ")
+            else:
+                print("El registro que intenta actualizar NO existe.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+
     def getFotoProfesor(self,idBuscado):
         try:
             self.connectMongoServer()
@@ -897,229 +913,45 @@ class SingletonDAO(metaclass=SingletonMeta):
             cantRegistros = self.collecAfiche.count_documents({'idActividad':idBuscado})
             if cantRegistros > 0 :
                 document = self.collecAfiche.find_one({'idActividad': idBuscado})
-                photo_data = document['foto']
-                ruta_descargas = Path.home() / 'Downloads'# Obtén la ruta de la carpeta de descargas según el sistema operativo
-                nombre_archivo = str(idBuscado)+'.jpg'# Crea la ruta completa del archivo de descarga
-                ruta_archivo = ruta_descargas / nombre_archivo
-                with open(ruta_archivo, 'wb') as file:file.write(photo_data)
                 self.closeMongoConnection()
+                return document['foto']
             else:
                 print("La actividad que busca NO existe.")
         except Exception as ex:
             print(ex)
 
-    # def getFotoEvLista(self,idBuscado):
-    #     try:
-    #         self.connectMongoServer()
-    #         #revisar que el registro exista
-    #         cantRegistros = self.collecEvLista.count_documents({'idEvidencia':idBuscado})
-    #         if cantRegistros > 0 :
-    #             for documento in self.collecEvLista.find({"idEvidencia": idBuscado}):
-    #                 return documento["foto"]
-    #             self.closeMongoConnection()
-    #         else:
-    #             print("La evidencia que busca NO existe.")
-    #     except Exception as ex:
-    #         print(ex) 
+    #i. Una colección de imágenes con la lista de asistencia,
+    def getEvLista(self,idBuscado):
+        try:
+            self.connectMongoServer()
+            #revisar que el registro exista
+            cantRegistros = self.collecEvLista.count_documents({'idEvidencia':idBuscado})
+            if cantRegistros > 0 :
+                resultados = self.collecEvLista.find({'idEvidencia': idBuscado})
+                listaSalida = []
+                for r in resultados:
+                    listaSalida += [r['foto']]
+                self.closeMongoConnection()
+                return listaSalida
+            else:
+                print("La evidencia que busca NO existe.")
+        except Exception as ex:
+            print(ex) 
 
-    # def getALLEvLista(self):
-    #     try:
-    #         self.connectMongoServer()
-    #         for documento in self.collecEvLista.find():
-    #             print(documento)
-    #         self.closeMongoConnection()
-    #     except Exception as ex:
-    #         print(ex) 
-
-    # def getFotoEv(self, idBuscado):
-    #     try:
-    #         self.connectMongoServer()
-    #         cantRegistros = self.collecEvFoto.count_documents({'idEvidencia':idBuscado})
-    #         if cantRegistros > 0 :
-    #             for documento in self.collecEvFoto.find({"idEvidencia": idBuscado},{ "idEvidencia": 0, "_id":0}):
-    #                 return documento["foto"]
-    #             self.closeMongoConnection()
-    #         else:
-    #             print("La evidencia que busca NO existe.")
-    #     except Exception as ex:
-    #         print(ex)
-    # #-------------------------------GETTERS-------------------------------
-    # #--------------------EXCEL----------------------------
-    # '''params
-    #  @sede: Numero de sede de la cual quiere el excel'''
-    # def generarExcelSede(self,sede):
-    #     wb = Workbook() # se crea el nuevo xlsx
-    #     ws1 = wb['Sheet']  #primer hoja del excel
-
-    #     #Headers de la hoja s 
-    #     wb['Sheet']['A1'] = 'Carne'
-    #     wb['Sheet']['B1'] = 'Nombre'
-    #     wb['Sheet']['C1'] = 'Apellido1'
-    #     wb['Sheet']['D1'] = 'Apellido2'
-    #     wb['Sheet']['E1'] = 'NumeroCelular'
-    #     wb['Sheet']['F1'] = 'CorreoElectronico'
-    #     wb['Sheet']['G1'] = 'Sede'
-    #     est = self.estudiantes #Traemos la lista de estudiantes para no estarla llamando 
-    #     lenght = len(self.estudiantes)
-    #     registro = 2
-    #     #Se recorren los estudiantes y se van guardando 
-    #     for i in range(lenght):            
-    #         if (est[i][3] == sede):
-    #             #La info de ese registro se guarda 
-    #             wb['Sheet']['A'+ str(registro)] = est[i][0]  #Carne
-    #             wb['Sheet']['B'+ str(registro)] = est[i][1] #Nombre
-    #             wb['Sheet']['C'+ str(registro)] = est[i][2] #App 1
-    #             wb['Sheet']['D'+ str(registro)] = est[i][3] #App 2
-    #             wb['Sheet']['E'+ str(registro)] = est[i][4]
-    #             wb['Sheet']['F'+ str(registro)] = est[i][5]
-    #             wb['Sheet']['G'+ str(registro)] = est[i][6]
-    #     wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
-    #     return load_workbook('listaEstudiantes.xlsx')
-        
-    # def generarExcelTodos(self):
-    #     wb = Workbook() # se crea el nuevo xlsx
-    #     ws1 = wb['Sheet']  #primer hoja del excel
-    #     #Hacer 5 hojas en el excel
-    #     ws1.title = 'SJ' #Por defecto la primer hoja que se creacion el libro se llama asi
-    #     ws2 = wb.create_sheet('CA')
-    #     ws3 = wb.create_sheet('SC')
-    #     ws4 = wb.create_sheet('AL')
-    #     ws5 = wb.create_sheet('LI')
-    #     #Headers de los archivos 
-    #     wb['SJ']['A1'] = 'Carne'
-    #     wb['CA']['A1'] = 'Carne'
-    #     wb['SC']['A1'] = 'Carne'
-    #     wb['AL']['A1'] = 'Carne'
-    #     wb['LI']['A1'] = 'Carne'
-
-    #     wb['SJ']['B1'] = 'Nombre'
-    #     wb['CA']['B1'] = 'Nombre'
-    #     wb['SC']['B1'] = 'Nombre'
-    #     wb['AL']['B1'] = 'Nombre'
-    #     wb['LI']['B1'] = 'Nombre'
-
-    #     wb['SJ']['C1'] = 'Apellido1'
-    #     wb['CA']['C1'] = 'Apellido1'
-    #     wb['SC']['C1'] = 'Apellido1'
-    #     wb['AL']['C1'] = 'Apellido1'
-    #     wb['LI']['C1'] = 'Apellido1'
-
-    #     wb['SJ']['D1'] = 'Apellido2'
-    #     wb['CA']['D1'] = 'Apellido2'
-    #     wb['SC']['D1'] = 'Apellido2'
-    #     wb['AL']['D1'] = 'Apellido2'
-    #     wb['LI']['D1'] = 'Apellido2'    
-
-    #     wb['SJ']['E1'] = 'NumeroCelular'
-    #     wb['CA']['E1'] = 'NumeroCelular'
-    #     wb['SC']['E1'] = 'NumeroCelular'
-    #     wb['AL']['E1'] = 'NumeroCelular'
-    #     wb['LI']['E1'] = 'NumeroCelular'
-
-    #     wb['SJ']['F1'] = 'CorreoElectronico'
-    #     wb['CA']['F1'] = 'CorreoElectronico'
-    #     wb['SC']['F1'] = 'CorreoElectronico'
-    #     wb['AL']['F1'] = 'CorreoElectronico'
-    #     wb['LI']['F1'] = 'CorreoElectronico' 
-
-    #     wb['SJ']['G1'] = 'Sede'
-    #     wb['CA']['G1'] = 'Sede'
-    #     wb['SC']['G1'] = 'Sede'
-    #     wb['AL']['G1'] = 'Sede'
-    #     wb['LI']['G1'] = 'Sede'
-    #     #Headers de los archivos 
-    #     est = self.estudiantes #Traemos la lista de estudiantes para no estarla llamando 
-    #     lenght = len(self.estudiantes)
-    #     regSJ = 2 #Esto es para saberen cual fila poner la info leida
-    #     regCA = 2 #Inicia en 2 porquefila 1 es de headers 
-    #     regSC = 2
-    #     regAL = 2
-    #     regLI = 2
-    #     #Se recorren los estudiantes y se van guardando 
-    #     for i in range(lenght):            
-    #         if (est[i][3] == 1):
-    #             sede = 'SJ'
-    #             registro = regSJ
-    #             #La info de ese registro se guarda 
-    #             wb[sede]['A'+ str(registro)] = est[i][0]  #Carne
-    #             wb[sede]['B'+ str(registro)] = est[i][1] #Nombre
-    #             wb[sede]['C'+ str(registro)] = est[i][2] #App 1
-    #             wb[sede]['D'+ str(registro)] = est[i][3] #App 2
-    #             wb[sede]['E'+ str(registro)] = est[i][4]
-    #             wb[sede]['F'+ str(registro)] = est[i][5]
-    #             wb[sede]['G'+ str(registro)] = est[i][6]
-    #             regSJ += 1
-    #         elif (est[i][3] ==2):
-    #             sede = 'CA'
-    #             registro = regCA
-    #             #La info de ese registro se guarda 
-    #             wb[sede]['A'+ str(registro)] = est[i][0]  #Carne
-    #             wb[sede]['B'+ str(registro)] = est[i][1] #Nombre
-    #             wb[sede]['C'+ str(registro)] = est[i][2] #App 1
-    #             wb[sede]['D'+ str(registro)] = est[i][3] #App 2
-    #             wb[sede]['E'+ str(registro)] = est[i][4]
-    #             wb[sede]['F'+ str(registro)] = est[i][5]
-    #             wb[sede]['G'+ str(registro)] = est[i][6]
-    #             regCA += 1
-    #         elif (est[i][3] == 3):
-    #             sede = 'SC'
-    #             registro = regSC
-    #             #La info de ese registro se guarda 
-    #             wb[sede]['A'+ str(registro)] = est[i][0]  #Carne
-    #             wb[sede]['B'+ str(registro)] = est[i][1] #Nombre
-    #             wb[sede]['C'+ str(registro)] = est[i][2] #App 1
-    #             wb[sede]['D'+ str(registro)] = est[i][3] #App 2
-    #             wb[sede]['E'+ str(registro)] = est[i][4]
-    #             wb[sede]['F'+ str(registro)] = est[i][5]
-    #             wb[sede]['G'+ str(registro)] = est[i][6]
-    #             regSC += 1
-    #         elif (est[i][3] ==4):
-    #             sede = 'AL'
-    #             registro = regAL
-    #             #La info de ese registro se guarda 
-    #             wb[sede]['A'+ str(registro)] = est[i][0]  #Carne
-    #             wb[sede]['B'+ str(registro)] = est[i][1] #Nombre
-    #             wb[sede]['C'+ str(registro)] = est[i][2] #App 1
-    #             wb[sede]['D'+ str(registro)] = est[i][3] #App 2
-    #             wb[sede]['E'+ str(registro)] = est[i][4]
-    #             wb[sede]['F'+ str(registro)] = est[i][5]
-    #             wb[sede]['G'+ str(registro)] = est[i][6]
-    #             regAL += 1
-    #         else:
-    #             sede = 'LI'
-    #             registro = regLI
-    #             #La info de ese registro se guarda 
-    #             wb[sede]['A'+ str(registro)] = est[i][0]  #Carne
-    #             wb[sede]['B'+ str(registro)] = est[i][1] #Nombre
-    #             wb[sede]['C'+ str(registro)] = est[i][2] #App 1
-    #             wb[sede]['D'+ str(registro)] = est[i][3] #App 2
-    #             wb[sede]['E'+ str(registro)] = est[i][4]
-    #             wb[sede]['F'+ str(registro)] = est[i][5]
-    #             wb[sede]['G'+ str(registro)] = est[i][6]
-    #             regLI += 1
-
-    #     wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
-    #     return load_workbook('listaEstudiantes.xlsx')
-    #     #recibir un archivo
-
-    # 'Guarda los registros de un excel en la base de datos'
-    # def cargarExcel(nombArchivo):
-    #     wb = load_workbook(nombArchivo) 
-    #     sheet = wb.active
-    #     i = 2
-    #     listEst = [] #Lista que guarda todos losregistros
-    #     #Recorre cada fila del excel
-    #     for row in sheet.iter_rows(min_row = 2,min_col=1):
-    #         estudiante = [] #Lista que va a guardar los valores del estudiante
-    #         for cell in row:
-    #             if cell.value == None:
-    #                 estudiante = [] #se vuelve a poner la lista en vacío
-    #                 break #Ese estudiante NO se agrega 
-    #             elif cell.value != None:
-    #                 #Se agrega al objeto estudiante
-    #                 estudiante.append(cell.value)
-    #         if estudiante != []:
-    #             listEst.append(estudiante) 
-    #             #Lllamar al método agregarEstudiante de BD
+    # ii. Una imagen de los participantes, expositores y estudiantes o bien,
+    # screenshots de la reunión en caso de haber sido remota. 
+    def getFotoEv(self, idBuscado):
+        try:
+            self.connectMongoServer()
+            cantRegistros = self.collecEvFoto.count_documents({'idEvidencia':idBuscado})
+            if cantRegistros > 0 :
+                documento = self.collecEvFoto.find_one({"idEvidencia": idBuscado})
+                self.closeMongoConnection()
+                return documento["foto"]
+            else:
+                print("La evidencia que busca NO existe.")
+        except Exception as ex:
+            print(ex)
+    
 
 
