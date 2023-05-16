@@ -6,17 +6,6 @@ import { ListaPlan } from './definirPlan/ListaPlan'
 
 export function DefinirPlan() {
 
-     //falta el boton para agregar cada actividad al plan
-    // const handleSubmit = async (event) => {
-    //     event.preventDefault();  
-
-    //     const res = await fetch(`${API}/definirPlanActividades/${1}`, {  //el 1 es el id de la actividad
-    //         method: "POST",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //         }
-    //       });
-    // }
     return (
         <Fragment>
             <div className="container">

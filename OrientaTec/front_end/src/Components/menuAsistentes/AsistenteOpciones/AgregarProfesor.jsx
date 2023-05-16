@@ -16,26 +16,38 @@ export function AgregarProfesor() {
     const [image, setImage] = useState(null);
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        console.log(JSON.stringify({
-            cedula, name, apellido1, apellido2, sede, numeroTelefono, correo,
-            numeroOficina
-        }));
-        // real
-        alert("Se ha ingreado un nuevo profesor")
-        const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                cedula, name, apellido1, apellido2, sede, numeroTelefono, correo,
-                numeroOficina
-            }),
-        });
+        event.preventDefault();  
+        if (cedula===''||name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||numeroOficina===''){
+            alert("Ha dejado campos en blanco.");
+        }
+        const info = await fetch(`${API}/getProfesorCedula/${cedula}`); //PENDIENTE : debe de darle el carnet
+        const data = await info.json();//resultado de la consulta
+        console.log(data)
+        if(data==="No existe"){
+            const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
+                    numeroOficina
+                }),
+              });
+    
+            alert("Se ha ingreado un nuevo profesor")
+        }
 
-        const data = await res.text();
-        console.log(data);
+        else{
+            alert("El profesor ya se encuentra ingresado");
+        }
+        
+    }
+    // const handleSearch = async () => {
+    //     const res = await fetch(`${API}/getProfesorCodigo/${codigoRef.current.value}`); //PENDIENTE : debe de darle el codigo
+    //     const data = await res.json();//resultado de la consulta
+    // real
+        
         // // base para front_end
         // //`${API}/nombreFuncion/${parametro1}/${parametro2}`
         // const res = await fetch(`${API}/getUsuarioRol/${"as@gmail.com"}/${"as"}`, {
@@ -43,10 +55,6 @@ export function AgregarProfesor() {
         // });
         // const data = await res.json();//resultado de la consulta
         // console.log(data) // imprime en consola web
-    }
-    // const handleSearch = async () => {
-    //     const res = await fetch(`${API}/getProfesorCodigo/${codigoRef.current.value}`); //PENDIENTE : debe de darle el codigo
-    //     const data = await res.json();//resultado de la consulta
 
     // }
 
@@ -143,12 +151,12 @@ export function AgregarProfesor() {
                             </div>
                             <div class="mb-3">
                                 <select id="mySelect" value={sede} onChange={handleSedeChange}>
-                                    <option value="">Seleccionar</option>
-                                    <option value="1">Cartago</option>
-                                    <option value="2">Alajuela</option>
-                                    <option value="3">Limón</option>
-                                    <option value="4">San José</option>
-                                    <option value="5">San Carlos</option>
+                                <option value="">Seleccionar</option>
+                                <option value="1">San José</option>
+                                <option value="2">Cartago</option>
+                                <option value="3">San Carlos</option>
+                                <option value="4">Alajuela</option>
+                                <option value="5">Limon</option>
                                 </select>
                             </div>
                             <div className="mb-3">
