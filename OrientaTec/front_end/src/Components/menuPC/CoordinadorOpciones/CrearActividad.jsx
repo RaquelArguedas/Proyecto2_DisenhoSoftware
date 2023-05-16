@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { ListaResponsables } from './modificarActividad/ListaResponsables';
+import { Icon } from '@iconify/react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -72,7 +73,7 @@ export function CrearActividad() {
 
         if (responsables.length <= 0) {
             alert("Debe registrar responsables.")
-        }else if (nombre===''||horaFin===horaInicio||recordatorio===''){
+        } else if (nombre === '' || horaFin === horaInicio || recordatorio === '') {
             alert("Faltan datos por registrar.")
         } else {
             alert("Actividad ingresada correctamente")
@@ -89,8 +90,17 @@ export function CrearActividad() {
                 }),
             });
 
-            
+
         }
+    }
+
+    const [, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
+
+    const handleDeleteResponsable = async (event) => {
+        event.preventDefault();
+        setResponsables(()=> responsables.filter(responsable => responsable.id !== event.target.id))
+        forceUpdate();
     }
 
     React.useEffect(() => {
@@ -127,7 +137,19 @@ export function CrearActividad() {
                                         </select>
                                     </div>
 
-                                    <ListaResponsables responsables={responsables} />
+                                    <div className="input-group my-3">
+                                        {responsables.map((responsable) => (
+                                            <Fragment>
+                                                <ul class="list-group list-group-horizontal w-100">
+                                                    <li class="list-group-item w-100"> {responsable.nombre} </li>
+                                                    <button onClick={handleDeleteResponsable} className="btn btn-danger btn-sm" id={responsable.id} > <Icon icon="ic:baseline-delete" width="24" height="24" />
+                                                    </button>
+                                                </ul>
+                                            </Fragment>
+                                        ))}
+                                    </div >
+
+                                    {/* <ListaResponsables responsables={responsables} /> */}
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="input-group w-100 my-3">
