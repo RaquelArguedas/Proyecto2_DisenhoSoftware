@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState , useEffect} from "react";
 import { useLocation } from "react-router-dom";
 import { Navbar } from "../../navegacion/Navbar";
 import { BarraLateral } from "../../navegacion/BarraLateral";
@@ -9,7 +9,8 @@ const API = "http://localhost:5000"; //process.env.REACT_APP_API;
 
 export function VerActividades() {
   let navigate = useNavigate();
-
+  
+  const { state } = useLocation();
   const [actividades, setActividades] = useState([]);
   const clearActividad = () => {
     setActividades([]);
@@ -19,6 +20,9 @@ export function VerActividades() {
   const clearTodas = () => {
     setTodasActividades([]);
   };
+  useEffect(() => {
+    handleTodasActividades()
+  }, []);
 
   const handleTodasActividades = async () => {
     const res = await fetch(`${API}/consultarActividades`, {
@@ -34,9 +38,7 @@ export function VerActividades() {
       return [data]
   })
   };
-  React.useEffect(() => {
-    handleTodasActividades()
-  }, []);
+  
   
 
 
@@ -91,7 +93,6 @@ export function VerActividades() {
   };
 
   
-  const { state } = useLocation();
 
   return (
     <Fragment>

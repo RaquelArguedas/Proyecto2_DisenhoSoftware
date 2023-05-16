@@ -22,7 +22,7 @@ export function ListaActividades() {
             }
         });
         const data = await res.json() //resultado de la consulta
-        console.log("aqui dentro de la funcion")
+        
         console.log(data)
         setActividades(() => {
           clearActividad();

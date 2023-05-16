@@ -1,9 +1,21 @@
 import React, { Fragment } from 'react'
 import { Icon } from '@iconify/react';
 
+const API = process.env.REACT_APP_API;
+
 export function CardActividad({datos}) {
     const tipoActividad = (datos.tipoActividad===1 ? "Orientadora" : (datos.tipoActividad===2 ? "Motivacional" : (datos.tipoActividad===3 ? "Apoyo estudiantil": (datos.tipoActividad===4 ? "Orden tecnico": "Recreativa"))))
-    
+     //falta el boton para agregar cada actividad al plan
+    const handleSubmit = async (event) => {
+        event.preventDefault();  
+
+        const res = await fetch(`${API}/definirPlanActividades/${datos.idActividad}`, {  //el 1 es el id de la actividad
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            }
+          });
+    }
     return (
         <Fragment>
             <div class="card my-3 w-100">
@@ -14,7 +26,9 @@ export function CardActividad({datos}) {
                             <h6 id="tipoActividad" class="card-subtitle mb-2 text-muted">Tipo Actividad: {tipoActividad}</h6>
                         </div>
                         <div className="col-sm-2">
-                            <btn class="btn btn-success w-100"><Icon icon="material-symbols:add-circle-outline-rounded" width="24" height="24" /></btn>
+                            <btn 
+                            onClick={handleSubmit}
+                            class="btn btn-success w-100"><Icon icon="material-symbols:add-circle-outline-rounded" width="24" height="24" /></btn>
                         </div>
                     </div>
 

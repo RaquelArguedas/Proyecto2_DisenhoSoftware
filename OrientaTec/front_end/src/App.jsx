@@ -23,7 +23,7 @@ import { ModificarActividad } from "./Components/menuPC/CoordinadorOpciones/Modi
 import { CrearActividad } from "./Components/menuPC/CoordinadorOpciones/CrearActividad";
 import { DefinirPlan } from "./Components/menuPC/CoordinadorOpciones/DefinirPlan";
 import { EvidenciasActividad } from "./Components/menuAsistentes/AsistenteOpciones/verActividades/EvidenciasActividad";
-
+import {InsertarEvidencias} from "./Components/menuPC/InsertarEvidencias"; 
 export function App() {
     return (
     <Router>
@@ -52,6 +52,7 @@ export function App() {
                 <Route exact path = "/modificarActividad" element = {<ModificarActividad/>}/>
                 <Route exact path = "/crearActividad" element = {<CrearActividad/>}/>
                 <Route exact path = "/definirPlan" element = {<DefinirPlan/>}/>
+                <Route exact path = "/insertarEvidencias" element = {<InsertarEvidencias/>}/>
             </Routes>
         </div>
     </Router>

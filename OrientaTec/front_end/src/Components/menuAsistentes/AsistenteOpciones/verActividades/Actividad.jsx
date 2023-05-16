@@ -12,15 +12,16 @@ export function Actividad({datos}) {
     console.log("Aqui en actividad")
     console.log(datos)
     //state.datosactividad.nombre
-    const tipoActividad = (datos.tipoActividad===1 ? "Orientadora" : (datos.tipoActividad===2 ? "Motivacional" : (datos.tipoActividad===3 ? "Apoyo estudiantil": (datos.tipoActividad===4 ? "Orden tecnico": "Recreativa"))))
-    const estado = (datos.estado===1 ? "Planeada" : (datos.estado===2 ? "Notificada" : (datos.estado===3 ? "Realizada":  "Cancelada")))
-    const gotoDetalleActividad = () => { navigate('/verplan/detalle', {state:{comentarios: state.comentarios, linkMenu: state.linkMenu}}); }
-    const [responsables, setResponsables] = useState([]);
     useEffect(() => {
         setResponsables( JSON.parse(datos.responsables.replace(/\'/g, '')).
         map(responsable => ({id: responsable.id, nombre: responsable.nombre+' '+responsable.apellido1+' '+responsable.apellido2})));
     }, []);
    
+    const tipoActividad = (datos.tipoActividad===1 ? "Orientadora" : (datos.tipoActividad===2 ? "Motivacional" : (datos.tipoActividad===3 ? "Apoyo estudiantil": (datos.tipoActividad===4 ? "Orden tecnico": "Recreativa"))))
+    const estado = (datos.estado===1 ? "Planeada" : (datos.estado===2 ? "Notificada" : (datos.estado===3 ? "Realizada":  "Cancelada")))
+    const gotoDetalleActividad = () => { navigate('/verplan/detalle', {state:{comentarios: state.comentarios, linkMenu: state.linkMenu}}); }
+    const [responsables, setResponsables] = useState([]);
+    
     
     return (
         <Fragment>
