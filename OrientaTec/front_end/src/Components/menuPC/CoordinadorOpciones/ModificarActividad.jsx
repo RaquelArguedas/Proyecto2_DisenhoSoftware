@@ -69,7 +69,7 @@ export function ModificarActividad() {
 
             console.log((JSON.parse(data.responsables.replace(/\'/g, ''))))
 
-            setResponsables(JSON.parse(data.responsables.replace(/\'/g, '')).map(responsable => ({ id: responsable.id, nombre: responsable.nombre + ' ' + responsable.apellido1 + ' ' + responsable.apellido2 })));
+            setResponsables(() => JSON.parse(data.responsables.replace(/\'/g, '')).map(responsable => ({ id: responsable.id, nombre: responsable.nombre + ' ' + responsable.apellido1 + ' ' + responsable.apellido2 })));
 
             console.log(responsables)
         }
