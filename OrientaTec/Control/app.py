@@ -279,7 +279,7 @@ def quitarResponsablesActividad():
   #si le pasan el codigo y no el id usan la que esta comentada y borran la otra
   #id = control.agregarResponsablesActividad(idActividad, [control.getProfesorCodigo(idResponsableNuevo)])
 
-  id = control.quitarResponsablesActividad(int(request.json['idActividad']), [control.getProfesor(int(request.json['idResponsableEliminado']))])
+  id = control.quitarResponsablesActividad(int(request.json['idActividad']), [request.json['idResponsableEliminado']])
   
   print(id)
   # ac = control.verActividad(request.json['idActividad'])

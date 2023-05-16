@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
-import { ListaResponsables } from './modificarActividad/ListaResponsables';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -38,7 +37,7 @@ export function ModificarActividad() {
         setDuracion(event.target.value);
         setHoraInicio(startDate.getHours() + ':' + (startDate.getMinutes() === 0 ? '00' : startDate.getMinutes()));
         const subHoraFin = Number(startDate.getHours()) + Number(event.target.value);
-        setHoraFin(((subHoraFin < 24) ? subHoraFin : subHoraFin - 24) + ':' + (startDate.getMinutes() == 0 ? '00' : startDate.getMinutes()));
+        setHoraFin(((subHoraFin < 24) ? subHoraFin : subHoraFin - 24) + ':' + (startDate.getMinutes() === 0 ? '00' : startDate.getMinutes()));
         setFecha((startDate.getMonth() < 101 ? '0' + startDate.getMonth() : startDate.getMonth()) + '/' +
             (startDate.getDate().length < 10 ? '0' + startDate.getDate() : startDate.getDate()) + '/' + startDate.getFullYear())
     };
@@ -46,10 +45,10 @@ export function ModificarActividad() {
     const [recordatorio, setRecordatorios] = useState(0); const handleRecordatoriosChange = (event) => { setRecordatorios(event.target.value); };
     const [responsables, setResponsables] = useState([]);
 
+
     const handleSearch = async () => {
         const res = await fetch(`${API}/verActividad/${idActRef.current.value}`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta
-
         if (data === 'No existe') {
             alert("No existe una actividad con el ID ingresado.")
         } else {
@@ -67,15 +66,14 @@ export function ModificarActividad() {
 
             setStartDate(new Date(data.fechaActividad + 'T' + (data.horaInicio[1] === ':' ? '0' + data.horaInicio : data.horaInicio)));
 
-            console.log((JSON.parse(data.responsables.replace(/\'/g, ''))))
+            //console.log((JSON.parse(data.responsables.replace(/\'/g, ''))))
 
-            setResponsables(() => JSON.parse(data.responsables.replace(/\'/g, '')).map(responsable => ({ id: responsable.id, nombre: responsable.nombre + ' ' + responsable.apellido1 + ' ' + responsable.apellido2 })));
-
-            console.log(responsables)
+            setResponsables(JSON.parse(data.responsables.replace(/\'/g, '')).map(responsable => ({ id: responsable.id, nombre: responsable.nombre + ' ' + responsable.apellido1 + ' ' + responsable.apellido2 })));
         }
     };
 
     const handleAddResponsable = async (event) => {
+        event.preventDefault();
         setResponsables((prevResponsables) => {
             return [...prevResponsables, {
                 id: event.target.value,
@@ -84,7 +82,7 @@ export function ModificarActividad() {
         });
 
         const idActividad = idActRef.current.value;
-        const idResponsableNuevo = {id: event.target.value};
+        const idResponsableNuevo = { id: event.target.value };
 
         const res = await fetch(`${API}/agregarResponsablesActividad/`, { //queda pendiente lo de agregar una foto
             method: "POST",
@@ -138,6 +136,25 @@ export function ModificarActividad() {
         }
     }
 
+    const handleDeleteResponsable = async (event) => {
+        event.preventDefault();
+        setResponsables(()=> responsables.filter(responsable => responsable.id !== event.target.id))
+
+        const idActividad = idActRef.current.value;
+        const idResponsableEliminado = event.target.id;
+
+        const res = await fetch(`${API}/quitarResponsablesActividad/`, { //queda pendiente lo de agregar una foto
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idActividad, idResponsableEliminado
+            }),
+        }); //PENDIENTE : debe de darle el codigo
+        const data = await res.json();
+    }
+
     React.useEffect(() => {
         handleLlenarProfesores()
     }, []);
@@ -177,10 +194,17 @@ export function ModificarActividad() {
                                         </select>
                                     </div>
 
-                                    {idActRef.current !== undefined &&
-                                        <ListaResponsables idActividad={idActRef.current.value} responsables={responsables} />
-                                    }
-
+                                    <div className="input-group my-3">
+                                        {responsables.map((responsable) => (
+                                            <Fragment>
+                                                <ul class="list-group list-group-horizontal w-100">
+                                                    <li class="list-group-item w-100"> {responsable.nombre} </li>
+                                                    <button onClick={handleDeleteResponsable} className="btn btn-danger btn-sm" id={responsable.id} > <Icon icon="ic:baseline-delete" width="24" height="24" />
+                                                    </button>
+                                                </ul>
+                                            </Fragment>
+                                        ))}
+                                    </div >
 
                                 </div>
                                 <div className="col-lg-6">
@@ -233,7 +257,7 @@ export function ModificarActividad() {
 
                                     <div className="input-group w-100 my-3">
                                         <span className="input-group-text" >Cantidad de recordatorios</span>
-                                        <input id="txtCarnet" type="number" min={0} className="form-control" onChange={handleRecordatoriosChange} />
+                                        <input id="txtCarnet" type="number" min={0} className="form-control" onChange={handleRecordatoriosChange} value={recordatorio} />
                                     </div>
 
                                     <br /><br /><br /><br /><br />

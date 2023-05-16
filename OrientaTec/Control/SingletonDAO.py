@@ -424,8 +424,6 @@ class SingletonDAO(metaclass=SingletonMeta):
             #agregar a la actividad el responsable
             actividad.agregarResponsable(self.getProfesor(responsable['id']))
             print('lista:',actividad.responsables )
-            for r in actividad.responsables:
-                print('r:', r)
 
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
         actividad = None
@@ -434,12 +432,13 @@ class SingletonDAO(metaclass=SingletonMeta):
             if (ac.idActividad == idActividad):
                 actividad = ac
 
+        print('Resp. elim: ', responsablesEliminados)
         for responsable in responsablesEliminados:
             #quitar en tabla responsablexactividad
-            self.executeStoredProcedure("quitarResponsablesActividad", [responsable.id, idActividad])
+            self.executeStoredProcedure("quitarResponsablesActividad", [responsable, idActividad])
 
             #quita a la actividad el responsable
-            actividad.quitarResponsable(responsable)
+            actividad.quitarResponsable(self.getProfesor(responsable))
             
     def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
         #crear bitacora
