@@ -105,6 +105,10 @@ class MainController:
 
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
         return self.controlActividades.quitarResponsablesActividad(idActividad, responsablesEliminados)
+    
+    #Crear Observación - Parche de Alonso
+    def crearObservacion(self, idActividad, fechaCancelacion, detalle):
+        return self.controlActividades.crearObservacion(idActividad, fechaCancelacion, detalle)
             
     def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
         return self.controlActividades.bitacoraActividad(idActividad, fecha, hora, idAutor, descripcion)

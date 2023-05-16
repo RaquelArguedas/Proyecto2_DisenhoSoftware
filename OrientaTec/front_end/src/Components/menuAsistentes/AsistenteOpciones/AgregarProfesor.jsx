@@ -22,6 +22,7 @@ export function AgregarProfesor() {
             numeroOficina
         }));
         // real
+        alert("Se ha ingreado un nuevo profesor")
         const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
             method: "POST",
             headers: {
@@ -35,8 +36,6 @@ export function AgregarProfesor() {
 
         const data = await res.text();
         console.log(data);
-
-        alert("Se ha ingreado un nuevo profesor")
         // // base para front_end
         // //`${API}/nombreFuncion/${parametro1}/${parametro2}`
         // const res = await fetch(`${API}/getUsuarioRol/${"as@gmail.com"}/${"as"}`, {

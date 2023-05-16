@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { Icon } from '@iconify/react';
 import { useNavigate } from "react-router-dom";
 
-const API = 'http://localhost:5000'; //process.env.REACT_APP_API;
+const API = process.env.REACT_APP_API;
 
 export function CardProf({ btnColor, btnText, nombreCompleto, telefono, correo, oficina, sede, id }) {
 

@@ -396,6 +396,12 @@ def getUsuarioRol(correo, contrasenha):
   return json.dumps(control.getUsuarioRol(correo, contrasenha))
 
 
+#Crear Observación - Parche de Alonso
+@app.route('/crearObservacion', methods=['POST'])
+def crearObservacion():
+  id = control.crearObservacion(request.json['idActividad'], datetime.today(), request.json['detalle'])
+  print(id)
+  return jsonify(str(id))
 
 
 

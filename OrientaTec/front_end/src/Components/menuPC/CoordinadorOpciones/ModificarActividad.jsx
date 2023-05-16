@@ -11,6 +11,8 @@ const API = process.env.REACT_APP_API;
 export function ModificarActividad() {
     let navigate = useNavigate();
     const gotoMenu = () => { navigate('/menuCoordinador', {}); }
+    //const gotoRealizada = () => { navigate('/menuCoordinador', {}); }
+    const gotoCancelada = () => { navigate('/cancelarActividad', {state: {idActividad: idActRef.current.value}}); }
 
     const [startDate, setStartDate] = useState(new Date());
     const [esVirtual, setVirtual] = useState(false);
@@ -65,9 +67,6 @@ export function ModificarActividad() {
             setRecordatorios(data.recordatorio);
 
             setStartDate(new Date(data.fechaActividad + 'T' + (data.horaInicio[1] === ':' ? '0' + data.horaInicio : data.horaInicio)));
-
-            //console.log((JSON.parse(data.responsables.replace(/\'/g, ''))))
-
             setResponsables(JSON.parse(data.responsables.replace(/\'/g, '')).map(responsable => ({ id: responsable.id, nombre: responsable.nombre + ' ' + responsable.apellido1 + ' ' + responsable.apellido2 })));
         }
     };
@@ -133,6 +132,15 @@ export function ModificarActividad() {
                     id, nombre, tipo, fecha, horaInicio, horaFin, recordatorio, medio, enlace, estado
                 }),
             });
+
+            /*if (estado === 3){
+                //Redirigir a Realizada
+            }*/
+
+            if (estado === 4){
+                //Redirigir a Cancelar
+                gotoCancelada();
+            }
         }
     }
 

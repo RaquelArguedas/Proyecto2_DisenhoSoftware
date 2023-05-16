@@ -47,6 +47,10 @@ class AdminActividades:
 
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
         return self.dao.quitarResponsablesActividad(idActividad, responsablesEliminados)
+    
+    #Crear Observación - Parche de Alonso
+    def crearObservacion(self, idActividad, fechaCancelacion, detalle):
+        return self.dao.crearObservacion(idActividad, fechaCancelacion, detalle)
             
     def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
         return self.dao.bitacoraActividad(idActividad, fecha, hora, idAutor, descripcion)

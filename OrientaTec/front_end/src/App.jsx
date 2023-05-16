@@ -20,6 +20,7 @@ import { ConsultarEstudiantesP } from "./Components/menuProfesor/ProfesorOpcione
 import { ModificarEstudiante } from "./Components/menuProfesor/ProfesorOpciones/ModificarEstudiante";
 import { MenuProfesorC } from "./Components/menuPC/menuProfesorC";
 import { ModificarActividad } from "./Components/menuPC/CoordinadorOpciones/ModificarActividad";
+import { ActividadCancelada } from "./Components/menuPC/CoordinadorOpciones/modificarActividad/ActividadCancelada";
 import { CrearActividad } from "./Components/menuPC/CoordinadorOpciones/CrearActividad";
 import { DefinirPlan } from "./Components/menuPC/CoordinadorOpciones/DefinirPlan";
 import { EvidenciasActividad } from "./Components/menuAsistentes/AsistenteOpciones/verActividades/EvidenciasActividad";
@@ -50,6 +51,7 @@ export function App() {
 
                 <Route exact path = "/menuCoordinador" element = {<MenuProfesorC/>}/>
                 <Route exact path = "/modificarActividad" element = {<ModificarActividad/>}/>
+                <Route exact path = "/cancelarActividad" element = {<ActividadCancelada/>}/>
                 <Route exact path = "/crearActividad" element = {<CrearActividad/>}/>
                 <Route exact path = "/definirPlan" element = {<DefinirPlan/>}/>
             </Routes>
