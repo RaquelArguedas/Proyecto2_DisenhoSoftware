@@ -232,6 +232,13 @@ export function ModificarActividad() {
                                     </div>
 
                                     <div className="input-group w-100 my-3">
+                                        <span className="input-group-text" >Cantidad de recordatorios</span>
+                                        <input id="txtCarnet" type="number" min={0} className="form-control" onChange={handleRecordatoriosChange} />
+                                    </div>
+
+                                    <br /><br /><br /><br /><br />
+
+                                    <div className="input-group w-100 my-3">
                                         <button className="btn btn-success w-50" type='submit'>Actualizar</button>
                                         <button className="btn btn-danger w-50" onClick={gotoMenu}>Cancelar</button>
                                     </div>
