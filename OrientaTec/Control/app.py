@@ -322,10 +322,12 @@ def consultarProximaActividad():
 @app.route('/consultarActividades', methods=['GET'])
 def consultarActividades():
   actividades = control.consultarActividades()
+  print(actividades)
   listaSalida = []
 
   for ac in actividades:
     listaSalida += [actividadToJSON(ac)]
+
   return listaSalida
 
 @app.route('/consultarActividadesEstado/<estado>', methods=['GET'])
@@ -348,25 +350,24 @@ def definirPlanActividades(idActividad):
 #funcion auxiliar que convierte una actividad a un JSON aceptable
 def actividadToJSON(ac):
   acDic = ac.__dict__
-  listaSalida = []
-
   for clave in acDic:
-    print('type:', type(acDic[clave]))
+    listaSalida = []
+    #print('type:', type(acDic[clave]), acDic[clave])
 
     if (type(acDic[clave]) == list):
-      print('enter list')
+      #print('enter list')
       for p in acDic[clave]:
-        listaSalida += [json.dumps(p.__dict__)]
-      acDic[clave] = listaSalida
+        listaSalida += [actividadToJSON(p)]
+      acDic[clave] = json.dumps(listaSalida)
+      print("//", acDic[clave])
 
     if (type(acDic[clave]) != int and type(acDic[clave]) != str):
-      print('enter no int/str')
+      #print('enter no int/str')
+      #print(type(acDic[clave]))
       acDic[clave] = str(acDic[clave])
-      
-    
-
-  print(json.dumps(acDic))
   return json.dumps(acDic)
+
+
 
 #AdminUsuario
 # def exists(self, correo, contrasenha):

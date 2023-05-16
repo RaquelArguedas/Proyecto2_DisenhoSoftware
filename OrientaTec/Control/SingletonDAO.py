@@ -272,11 +272,13 @@ class SingletonDAO(metaclass=SingletonMeta):
     
     #+getActividades():Collection<Actividad>
     def getActividades(self):
-        listaSalida = sorted(self.actividades, key=attrgetter('fechaActividad'))
+        print(self.planesTrabajo[-1].actividades)
+        
+        listaSalida = sorted(self.planesTrabajo[-1].actividades, key=attrgetter('fechaActividad'))
         return listaSalida
 
 
-    # +getPlanTrabajo():planTrabajo: PlanTrabajo 
+    # +getPlanTrabajo():planTrabajo: PlanTrabajo  
     def getPlanTrabajo(self):
         return self.planesTrabajo[-1]
 
