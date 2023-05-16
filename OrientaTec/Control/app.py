@@ -228,15 +228,13 @@ def getDetalleActividad(idActividad):
 # def escribirComentario(self, idActividad,autor,fechaHora, contenido, idComentarioPadre):
 @app.route('/escribirComentario', methods=['POST'])
 def escribirComentario():
-  #print(request.json)
+  print(request.json)
 
   #borrar este y descomentar el otro con los JSON adecuados
-  # id = control.escribirComentario(request.json['idActividad'],
-  #                                 SingletonSesionActual().getUsuario().idUsuario, datetime.now(), 
-  #                                 request.json['contenido'], request.json['idComentarioPadre'])
+  id = control.escribirComentario(request.json['idActividad'],
+                                   SingletonSesionActual().getUsuario().idUsuario, datetime.now(), 
+                                   request.json['contenido'], request.json['idComentarioPadre'])
   
-  
-  id = control.escribirComentario(1, 1, datetime.now(), "contenido", 1)
   print(id)
   
   # decomentar cuando este listo
