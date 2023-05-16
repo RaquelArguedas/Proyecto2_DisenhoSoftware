@@ -93,6 +93,12 @@ insert into ActividadesxPlan(idActividad, idPlan) values(1, 1);
 insert into ActividadesxPlan(idActividad, idPlan) values(2, 2);
 insert into ActividadesxPlan(idActividad, idPlan) values(3, 3);
 
+insert into ActividadesxPlan(idActividad, idPlan) values(1, 5);
+insert into ActividadesxPlan(idActividad, idPlan) values(2, 5);
+insert into ActividadesxPlan(idActividad, idPlan) values(3, 5);
+
+select * from actividad;
+insert into ActividadesxPlan(idActividad, idPlan) values(4, 5);
 insert into Observacion(idActividad, fechaCancelada, detalle) values(1, "2023-09-09", "detalleCan1");
 
 insert into Evidencia(idActividad,linkGrabacion) values 
@@ -220,3 +226,6 @@ insert into Estudiante(carnet, nombre, apellido1, apellido2, idSede, numeroCelul
 						correoElectronico, idEstado)
 			 values (20220,"Mariana", "Mendez", "Arias", 5, 834635609,
 						"Mariana@gmail.com", 1);
+select * from profesor;
+select * from actividad;
+select * from responsablexactividad;
