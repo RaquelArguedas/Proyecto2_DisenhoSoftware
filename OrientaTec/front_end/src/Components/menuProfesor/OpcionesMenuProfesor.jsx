@@ -14,9 +14,9 @@ export function OpcionesMenuProfesor() {
     const gotoModificarProfesor = () => { navigate("/modificarProfesor", {}); };
     function handleDownloadExcelCampus() { // Define una función llamada handleDownloadExcelCampus que se ejecuta cuando se hace clic en un botón o enlace
         GenerarExel(); // Llama a una función llamada GenerarExel que probablemente genera y descarga un archivo Excel para el campus especificado
-      }
+    }
       
-      function handleDownloadExcelPorCampus() { // Define una función llamada handleDownloadExcelPorCampus que se ejecuta cuando se hace clic en un botón o enlace
+    function handleDownloadExcelPorCampus() { // Define una función llamada handleDownloadExcelPorCampus que se ejecuta cuando se hace clic en un botón o enlace
         GenerarExelPorCampus(); // Llama a una función llamada GenerarExelPorCampus que probablemente genera y descarga un archivo Excel que contiene información detallada por campus
       }
     
@@ -70,16 +70,18 @@ export function OpcionesMenuProfesor() {
                 <div class="row m-5">
                     <div class="col">
                         <button 
+                            onClick={handleDownloadExcelCampus}
                             className="btn btn-success h-100 w-100"
                         >
-                            Generar Exel de datos del campus perteneciente
+                            Generar Excel de datos del campus perteneciente
                         </button>
                     </div>
                     <div class="col">
                         <button 
+                            onClick={handleDownloadExcelPorCampus}
                             className="btn btn-success h-100 w-100"
                         >
-                            Generar Exel de datos de todos los campus
+                            Generar Excel de datos de todos los campus
                         </button>
                     </div>
 

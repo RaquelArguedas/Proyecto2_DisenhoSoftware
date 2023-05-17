@@ -1,33 +1,38 @@
 # basado en codigo de Refactoring.Guru, adjuntamos el enlace a continuacion
 # https://refactoring.guru/design-patterns/singleton/python/example#:~:text=Singleton%20is%20a%20creational%20design,the%20modularity%20of%20your%20code.
 
+import mysql.connector
+import pymongo 
 from operator import attrgetter
-import mysql.connector 
+
 from datetime import datetime, date, timedelta
-import pymongo
+from openpyxl import Workbook #Para manejo de excel 
+from openpyxl import load_workbook
+
 import os
 from pathlib import Path
 from operator import attrgetter
 
 import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
-sys.path.append('./Modelo')
-#Importo la Clase
-from Usuario import *
-from Estudiante import *
-from EquipoGuia import *
-from Actividad import *
-from Profesor import *
-from AsistenteAdministrativo import *
-from Bitacora import *
-from PlanTrabajo import *
-from Recordatorio import *
-from Evidencia import *
-from Observacion import *
-from Comentario import *
-from Sede import *
-from Ordenamiento import *
+sys.path.append('Proyecto2_DisenhoSoftware/OrientaTec/Modelo')
 
+#sys.path.append('./Modelo')
+#Importo la Clase
+from Modelo.Usuario import *
+from Modelo.Estudiante import * 
+from Modelo.EquipoGuia import *
+from Modelo.Actividad import *
+from Modelo.Profesor import *
+from Modelo.AsistenteAdministrativo import *
+from Modelo.Bitacora import *
+from Modelo.PlanTrabajo import *
+from Modelo.Recordatorio import *
+from Modelo.Evidencia import *
+from Modelo.Observacion import *
+from Modelo.Comentario import *
+from Modelo.Sede import *
+from Modelo.Ordenamiento import *
 
 
 class SingletonMeta(type):
@@ -48,6 +53,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     #Atributos de conexión
     connection = None
     cursor = None
+    #Atributos para conetarse a MONGO
 
     #Atributos para conetarse a MONGO
     MONGO_HOST="localhost"
@@ -60,7 +66,6 @@ class SingletonDAO(metaclass=SingletonMeta):
     collecAfiche = None 
     collecEvLista = None
     collecEvFoto= None
-
     #Atributos del modelo
     usuarios = []
     estudiantes = []
@@ -121,7 +126,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         if (tablaBD == "Usuario"):
             objeto = Usuario(lista[0], lista[1], lista[2], lista[3], lista[4])
         elif (tablaBD == "Estudiante"):
-            objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7])
+            objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6])
         elif (tablaBD == "EquipoGuia"):
             objeto = EquipoGuia(lista[1], self.generarBitacorasEquipoGuia(lista[0]), self.generarProfesores(str(lista[0])), lista[2])
         elif (tablaBD == "Actividad"):    
@@ -266,7 +271,8 @@ class SingletonDAO(metaclass=SingletonMeta):
     def connectServer(self):
         try:
             self.connection = mysql.connector.connect(
-                host = 'localhost',
+                #host = 'localhost',
+                host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
                 password = '123456',
@@ -325,10 +331,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         return self.asistentes
 
     # +agregarProfesor(profesor: Profesor): boolean
-    def agregarProfesor(self, profesor):
+    def agregarProfesor(self, profesor, idEquipoGuia):
 
-        idEquipoGuia = len(self.equiposGuia) #es el ultimo equipo guia
-        args = [idEquipoGuia, profesor.id ]
+        args = [profesor.id, idEquipoGuia]
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createprofesoresxequipoguia', args)
@@ -341,7 +346,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +verActividad(id): Actividad
     def verActividad(self, id):
         for i in range (len(self.actividades)):
-            if (self.actividades[i].idActividad == int(id)):
+            if (self.actividades[i].idActividad == id):
                 return self.actividades[i]
         return None 
     
@@ -564,9 +569,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         
         ultimaModificacion = date.today()
 
-        args = [nombreActividad, int(tipoActividad), fechaActividad,
-                horaInicio, horaFin, int(recordatorio), int(medio),  
-                enlace, int(estado), ultimaModificacion]
+        args = [nombreActividad, tipoActividad, fechaActividad,
+                horaInicio, horaFin, recordatorio, medio,  
+                enlace, estado, ultimaModificacion]
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createActividad', args)
@@ -601,10 +606,10 @@ class SingletonDAO(metaclass=SingletonMeta):
         print("id: ", id)
         if(len(id)==1):
             #se obtiene el id y se le agrega
-            prof = Profesor(self.generarCodigoProfesor(int(sede),id[0]), id[0], int(cedula), nombre, apellido1, 
-                apellido2, int(sede), int(numeroCelular), correoElectronico, 
-                int(numeroOficina), int(autoridad), int(estado)) 
-            #se agrega a la lista de profesores
+            prof = Profesor(self.generarCodigoProfesor(sede,id[0]), id[0], cedula, nombre, apellido1, 
+                apellido2, sede, numeroCelular, correoElectronico, 
+                numeroOficina, autoridad, estado) 
+            #se agrega a la lista de Actividades
             self.profesores += [prof]
         
         return id
@@ -624,9 +629,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         if (respuesta == None):
             #se modifica en lista
             for i in range(len(self.profesores)):
-                if (self.profesores[i].id == int(id)):
+                if (self.profesores[i].id == id):
                     if (cedula != None):
-                        self.profesores[i].cedula = int(cedula)
+                        self.profesores[i].cedula = cedula
                     if (nombre != None):
                         self.profesores[i].nombre = nombre
                     if (apellido1 != None):
@@ -634,19 +639,19 @@ class SingletonDAO(metaclass=SingletonMeta):
                     if (apellido2 != None):
                         self.profesores[i].apellido2 = apellido2
                     if (sede != None):
-                        self.profesores[i].sede = int(sede)
+                        self.profesores[i].sede = sede
                         self.profesores[i].codigo = self.generarCodigoProfesor(sede,self.profesores[i].id)
                     if (numeroCelular != None):
-                        self.profesores[i].numeroCelular = int(numeroCelular)
+                        self.profesores[i].numeroCelular = numeroCelular
                     if (correoElectronico != None):
                         self.modificarUsuarioCorreo(self.profesores[i].correoElectronico, correoElectronico)
                         self.profesores[i].correoElectronico = correoElectronico
                     if (numeroOficina != None):
-                        self.profesores[i].numeroOficina = int(numeroOficina)
+                        self.profesores[i].numeroOficina = numeroOficina
                     if (autoridad != None):
-                        self.profesores[i].autoridad = int(autoridad)
+                        self.profesores[i].autoridad = autoridad
                     if (estado != None):
-                        self.profesores[i].estado = int(estado)
+                        self.profesores[i].estado = estado
         return respuesta
     
     # +modificarAsistente(idProfesor, ): boolean
@@ -733,17 +738,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +getProfesor(id:int):profesor:Profesor
     def getProfesor(self, idProfesor):
         for prof in self.profesores:
-            if(prof.id == int(idProfesor)):
-                return prof
-            
-    def getProfesorCodigo(self, codigo):
-        for prof in self.profesores:
-            if(prof.codigo == codigo):
-                return prof
-            
-    def getProfesorCedula(self, cedula):
-        for prof in self.profesores:
-            if(prof.cedula == cedula):
+            if(prof.id == idProfesor):
                 return prof
 
     # +consultarEstudiantes(ordenamiento: enum): Collection<Estudiante>
@@ -753,7 +748,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +buscarEstudiante(id:int) : Estudiante
     def buscarEstudiante(self, carnet):
         for estudiante in self.estudiantes:
-            if (int(carnet) == estudiante.carnet):
+            if (carnet == estudiante.carnet):
                 return estudiante
         return None
 
@@ -787,8 +782,6 @@ class SingletonDAO(metaclass=SingletonMeta):
                         self.estudiantes[i].correoElectronico = correoElectronico
                     if (numeroCelular != None):
                         self.estudiantes[i].numeroCelular = numeroCelular
-                    if (estado != None):
-                        self.estudiantes[i].estado = estado
         return respuesta
 
     #modificarUsuario(data):id
@@ -1025,6 +1018,196 @@ class SingletonDAO(metaclass=SingletonMeta):
                 print("La evidencia que busca NO existe.")
         except Exception as ex:
             print(ex)
+    #-------------------------------GETTERS-------------------------------
+    #--------------------EXCEL----------------------------
+    '''params
+     @sede: Numero de sede de la cual quiere el excel'''
+    def generarExcelSede(self,sede):
+        wb = Workbook() # se crea el nuevo xlsx
+        ws1 = wb['Sheet']  #primer hoja del excel
+
+        #Headers de la hoja s 
+        wb['Sheet']['A1'] = 'Carne'
+        wb['Sheet']['B1'] = 'Nombre'
+        wb['Sheet']['C1'] = 'Apellido1'
+        wb['Sheet']['D1'] = 'Apellido2'
+        wb['Sheet']['E1'] = 'NumeroCelular'
+        wb['Sheet']['F1'] = 'CorreoElectronico'
+        wb['Sheet']['G1'] = 'Sede'
+        wb['Sheet']['H1'] = 'Estado'
+        registro = 2
+        #Se recorren los estudiantes y se van guardando 
+        for estudiante in range(len(self.estudiantes)):
+            #Estado: activo-->1, inactivo--->2            
+            if (estudiante.sede == sede):
+                #La info de ese registro se guarda 
+                wb['Sheet']['A'+ str(registro)] = estudiante.carnet  #Carne
+                wb['Sheet']['B'+ str(registro)] = estudiante.nombre #Nombre
+                wb['Sheet']['C'+ str(registro)] = estudiante.apellido1 #App 1
+                wb['Sheet']['D'+ str(registro)] = estudiante.apellido2 #App 2
+                wb['Sheet']['E'+ str(registro)] = estudiante.numeroCelular #celular
+                wb['Sheet']['F'+ str(registro)] = estudiante.correoElectronico #correo
+                wb['Sheet']['G'+ str(registro)] = estudiante.sede #Sede
+                wb['Sheet']['G'+ str(registro)] = estudiante.estado #Estado
+                registro += 1
+        wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
+        return wb
+        
+    def generarExcelTodos(self):
+        #NOTA: Self.estudiantes guarda una lista de ESTUDIANTE
+
+        wb = Workbook() # se crea el nuevo xlsx
+        ws1 = wb['Sheet']  #primer hoja del excel
+        #Hacer 5 hojas en el excel
+        ws1.title = 'SJ' #Por defecto la primer hoja que se creacion el libro se llama asi
+        ws2 = wb.create_sheet('CA')
+        ws3 = wb.create_sheet('SC')
+        ws4 = wb.create_sheet('AL')
+        ws5 = wb.create_sheet('LI')
+        #Headers de los archivos 
+        wb['SJ']['A1'] = 'Carne'
+        wb['CA']['A1'] = 'Carne'
+        wb['SC']['A1'] = 'Carne'
+        wb['AL']['A1'] = 'Carne'
+        wb['LI']['A1'] = 'Carne'
+
+        wb['SJ']['B1'] = 'Nombre'
+        wb['CA']['B1'] = 'Nombre'
+        wb['SC']['B1'] = 'Nombre'
+        wb['AL']['B1'] = 'Nombre'
+        wb['LI']['B1'] = 'Nombre'
+
+        wb['SJ']['C1'] = 'Apellido1'
+        wb['CA']['C1'] = 'Apellido1'
+        wb['SC']['C1'] = 'Apellido1'
+        wb['AL']['C1'] = 'Apellido1'
+        wb['LI']['C1'] = 'Apellido1'
+
+        wb['SJ']['D1'] = 'Apellido2'
+        wb['CA']['D1'] = 'Apellido2'
+        wb['SC']['D1'] = 'Apellido2'
+        wb['AL']['D1'] = 'Apellido2'
+        wb['LI']['D1'] = 'Apellido2'    
+
+        wb['SJ']['E1'] = 'NumeroCelular'
+        wb['CA']['E1'] = 'NumeroCelular'
+        wb['SC']['E1'] = 'NumeroCelular'
+        wb['AL']['E1'] = 'NumeroCelular'
+        wb['LI']['E1'] = 'NumeroCelular'
+
+        wb['SJ']['F1'] = 'CorreoElectronico'
+        wb['CA']['F1'] = 'CorreoElectronico'
+        wb['SC']['F1'] = 'CorreoElectronico'
+        wb['AL']['F1'] = 'CorreoElectronico'
+        wb['LI']['F1'] = 'CorreoElectronico' 
+
+        wb['SJ']['G1'] = 'Sede'
+        wb['CA']['G1'] = 'Sede'
+        wb['SC']['G1'] = 'Sede'
+        wb['AL']['G1'] = 'Sede'
+        wb['LI']['G1'] = 'Sede'
+
+        wb['SJ']['H1'] = 'Estado'
+        wb['CA']['H1'] = 'Estado'
+        wb['SC']['H1'] = 'Estado'
+        wb['AL']['H1'] = 'Estado'
+        wb['LI']['H1'] = 'Estado'
+
+        #Headers de los archivos 
+        regSJ = 1 #Esto es para saberen cual fila poner la info leida
+        regCA = 1 #Inicia en 2 porquefila 1 es de headers 
+        regSC = 1
+        regAL = 1
+        regLI = 1
+        #Se recorren los estudiantes y se van guardando 
+        for estudiante in range(len(self.estudiantes)):            
+            if (estudiante.carnet == 1):
+                sede = 'SJ'
+                regSJ += 1
+                registro = regSJ
+                
+            elif (estudiante.carnet ==2):
+                sede = 'CA'
+                regCA += 1
+                registro = regCA
+                
+            elif (estudiante.carnet == 3):
+                sede = 'SC'
+                regSC += 1
+                registro = regSC
+                
+            elif (estudiante.carnet ==4):
+                sede = 'AL'
+                regAL += 1
+                registro = regAL
+                
+            else:
+                sede = 'LI'
+                regLI += 1
+                registro = regLI
+                
+            wb[sede]['A'+ str(registro)] = estudiante.carnet  #Carne
+            wb[sede]['B'+ str(registro)] = estudiante.nombre #Nombre
+            wb[sede]['C'+ str(registro)] = estudiante.apellido1 #App 1
+            wb[sede]['D'+ str(registro)] = estudiante.apellido2 #App 2
+            wb[sede]['E'+ str(registro)] = estudiante.numeroCelular #numcel
+            wb[sede]['F'+ str(registro)] = estudiante.correoElectronico #correo
+            wb[sede]['G'+ str(registro)] = estudiante.sede #sede
+            wb[sede]['H'+ str(registro)] = estudiante.estado #estado
+
+        wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
+        #return load_workbook('listaEstudiantes.xlsx')
+        return wb
+
+    ''''
+    cargarExcel
+    Lee los registros de un excel en la base de datos
+        params: @nombArchivo: nombreDelExcel o ruta
+    '''
+    def cargarExcel(self,nombArchivo):
+        wb = load_workbook(nombArchivo) 
+        sheet = wb.active
+        i = 2
+        #Recorre cada fila del excel
+        for row in sheet.iter_rows(min_row = 2,min_col=1):
+            estudiante = [] #Lista que va a guardar los valores del estudiante
+            for cell in row:
+                if cell.value == None:
+                    estudiante = [] #se vuelve a poner la lista en vacío
+                    break #Ese estudiante NO se agrega 
+                elif cell.value != None:
+                    #Se agrega al objeto estudiante
+                    estudiante.append(cell.value)
+            if estudiante != []: #ya recorrió todos los campos de una fila 
+                #Validar que la SEDE sea válida
+                if (estudiante[6] == 1 or estudiante[6] == 2 or estudiante[6] == 3 
+                or estudiante[6] == 4 or estudiante[6] == 5):  
+                    #Llamar al método agregarEstudiante de BD
+                    args = [estudiante[0],estudiante[1],estudiante[2],estudiante[3],estudiante[4],
+                    estudiante[5],estudiante[6],1]
+                    #se modifica en la bd
+                    respuesta = self.executeStoredProcedure('createEstudiante', args)
+                    if(len(respuesta)==1):
+                        #se genera el Estudiante y se agrega a la lista de estudiantes
+                        est = Estudiante(estudiante[0],estudiante[1],estudiante[2],estudiante[3],estudiante[4],
+                        estudiante[5],estudiante[6],1) 
+                        #se agrega a la lista de Estudiantes
+                        self.estudiantes += [est]
+                        
+        return True
     
+    #Metodo para agregar estudiantes copnectándose a BD por si necesita en el futuro   
+    # +agregarEstudiante(estudiante: Estudiante): boolean
+    def agregarEstudiante(self, carnet, nombre,apellido1,
+        apellido2, sede, numeroCelular,correoElectronico, estado):
 
+            args = [carnet,nombre,apellido1,apellido2,sede,numeroCelular,correoElectronico,estado]
 
+            #se agrega a la bd
+            id = self.executeStoredProcedure('createEstudiante', args)
+            if(len(id)==1):
+                #se genera el Estudiante y se agrega a la lista de estudiantes
+                est = Estudiante(carnet,nombre,apellido1,apellido2,sede,numeroCelular,correoElectronico,estado) 
+                #se agrega a la lista de Estudiantes
+                self.estudiantes += [est]
+            return id

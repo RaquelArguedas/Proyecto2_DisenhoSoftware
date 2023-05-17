@@ -65,16 +65,17 @@ def buscarEstudiante(carnet):
   #return jsonify(jsonStr)
 
 #PENDIENTE como las dos pendientes solamente interactuan a nivel de BD no deberia modificarse nada aca
-# generarExcelEstudiantes():
-@app.route('/generarExcelEstudiantes', methods=['POST'])
-def generarExcelEstudiantes():
-  res = control.generarExcelEstudiantes()
+# generarExcelEstudiantes(self,sede):
+@app.route('/generarExcelEstudiantes/<sede>', methods=['POST'])
+def generarExcelEstudiantes(sede):
+  res = control.generarExcelEstudiantes(sede)
   return jsonify(str(res))
 
-# cargarExcelEstudiantes()
-@app.route('/cargarExcelEstudiantes', methods=['POST'])
-def cargarExcelEstudiantes():
-  res = control.cargarExcelEstudiantes()
+# cargarExcelEstudiantes(self,archivo)
+@app.route('/cargarExcelEstudiantes/<archivo>', methods=['POST'])
+def cargarExcelEstudiantes(archivo):
+  archivo = request.files['archivo']
+  res = control.cargarExcelEstudiantes(archivo)
   return jsonify(str(res))
 
 
@@ -135,16 +136,6 @@ def getProfesorCodigo(codigo):
 
   if (prof == None):
     return jsonify("No existe")
-  
-  return json.dumps(prof.__dict__)
-
-# getProfesorCedula(self, idProfesor):
-@app.route('/getProfesorCedula/<cedula>', methods=['GET'])
-def getProfesorCedula(cedula):
-  prof = control.getProfesorCedula(int(cedula))
-
-  if (prof == None):
-     return jsonify("No existe")
   
   return json.dumps(prof.__dict__)
 
@@ -545,6 +536,18 @@ def getInfoUsuarioSesionActual():
       return jsonify(p.__dict__)
     
   
+  return user.__dict__
+
+
+#NUEVO CAMBIO
+# def getSedeUsuarioSesionActual(self):
+@app.route('/getSedeUsuarioSesionActual', methods=['GET'])
+def getSedeUsuarioSesionActual():
+  SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
+  user = SingletonSesionActual().getUsuario()
+  return str(user.sede)
+
+
 
 
 

@@ -38,12 +38,14 @@ class AdminEstudiantes:
         return self.dao.modificarEstudiante(carnet, nombre,apellido1, apellido2, sede, correoElectronico, 
                                             numeroCelular, estado)
     
-    #PENDIENTE
-    def generarExcelEstudiantes(self):
-        return False
+    def generarExcelEstudiantes(self,sede):
+        if sede == 1 or sede == 2 or sede == 3 or sede == 4 or sede == 5:
+            return self.dao.generarExcelSede(sede)
+        else:
+            return self.dao.generarExcelTodos()
     
-    def cargarExcelEstudiantes(self):
-        return False
+    def cargarExcelEstudiantes(self,nombArchivo):
+        return self.dao.cargarExcel(nombArchivo)
     
     def buscarEstudiante(self, carnet):
         return self.dao.buscarEstudiante(carnet)
