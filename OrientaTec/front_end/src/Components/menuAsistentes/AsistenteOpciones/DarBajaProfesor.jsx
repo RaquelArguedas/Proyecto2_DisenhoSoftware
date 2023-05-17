@@ -4,7 +4,7 @@ import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
 import { CardProf } from './asignarQuitarCoord/CardProfesor';
 
-const API = 'http://localhost:5000'; //process.env.REACT_APP_API;
+const API = process.env.REACT_APP_API;
 
 export function DarBajaProfesor() {
     const codigoRef = useRef();
@@ -15,7 +15,7 @@ export function DarBajaProfesor() {
         event.preventDefault();
 
         //aca se busca un profesor por un codigo
-        const res = await fetch(`${API}/getProfesorCodigo/${(codigoRef.current.value === '' ? 0 : codigoRef.current.value)}`, {  //falta cambiar el codigo por el deseado
+        const res = await fetch(`${API}/getProfesorCodigo/${(codigoRef.current.value === '' ? 0 : codigoRef.current.value)}`, {  
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

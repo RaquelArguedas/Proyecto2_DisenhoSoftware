@@ -108,6 +108,7 @@ def modificarProfesor():
 @app.route('/getProfesorCodigo/<codigo>', methods=['GET'])
 def getProfesorCodigo(codigo):
   prof = control.getProfesorCodigo(codigo)
+  print(prof.nombre)
 
   if (prof == None):
      return jsonify("No existe")
