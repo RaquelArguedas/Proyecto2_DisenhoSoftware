@@ -1,5 +1,7 @@
 import React, { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import GenerarExel from "./ProfesorOpciones/GenerarExel";
+import GenerarExelPorCampus from "./ProfesorOpciones/GenerarExelPorCampus";
 
 
 export function OpcionesMenuProfesor() {

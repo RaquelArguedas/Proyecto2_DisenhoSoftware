@@ -570,14 +570,19 @@ class SingletonDAO(metaclass=SingletonMeta):
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createActividad', args)
+        print("id" , id)
         if(len(id)==1):
+            print("entro a crearla")
             #se obtiene el id y se le agrega
             salida = Actividad.Actividad(id[0], nombreActividad, tipoActividad, fechaActividad,
                     horaInicio, horaFin, recordatorio, [], medio,  
                     enlace, estado, ultimaModificacion, [])
 
             #se agrega a la lista de Actividades
+            print(len(self.actividades))
             self.actividades += [salida]
+            print(salida.nombreActividad)
+            print(len(self.actividades))
 
             self.agregarResponsablesActividad(id[0], responsables)
         
@@ -766,7 +771,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             #se modifica en lista
 
             for i in range(len(self.estudiantes)):
-                if (self.estudiantes[i].carnet == carnet):
+                if (self.estudiantes[i].carnet == int(carnet)):
                     if (carnet != None):
                         self.estudiantes[i].carnet = carnet
                     if (nombre != None):
@@ -799,7 +804,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             #se modifica en lista
 
             for i in range(len(self.usuarios)):
-                if (self.usuarios[i].idUsuario == idUsuario):
+                if (self.usuarios[i].idUsuario == int(idUsuario)):
                     if (correoElectronico != None):
                         self.usuarios[i].correo = correoElectronico
                     if (contrasenha != None):

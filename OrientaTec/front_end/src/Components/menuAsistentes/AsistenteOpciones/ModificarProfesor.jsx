@@ -55,7 +55,8 @@ export function ModificarProfesor() {
         formData.append('numeroTelefono', numeroTelefono);
         formData.append('correo', correo);
         formData.append('numeroOficina', numeroOficina);
-        formData.append('estado', estado);
+        formData.append('estado', estado);        
+        formData.append('codigo', codigo);
         
         const res = await fetch(`${API}/modificarProfesor`, {
             method: 'POST',
@@ -65,7 +66,7 @@ export function ModificarProfesor() {
         const data = await res.json() //resultado de la consulta
         console.log(data) // imprime en consola web
     }
-    }
+    
 
     const handleSearch = async () => { 
         obtenerImagen();

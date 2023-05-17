@@ -1,5 +1,6 @@
-import React, {Fragment} from 'react'
+import React, {Fragment, useState} from 'react'
 import { useNavigate } from "react-router-dom";
+import { uploadFile } from './AsistenteOpciones/CargarExel';
 
 export default function OpcionesMenu() {
   let navigate = useNavigate();

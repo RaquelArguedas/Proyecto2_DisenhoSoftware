@@ -114,8 +114,9 @@ def modificarProfesor():
     sede = int(sede)
   if (estado != None):
     estado = int(estado)
-
+  print(codigo)
   prof = control.getProfesorCodigo(codigo)
+  print(prof)
   #prof = control.getProfesorCodigo("SJ-1")
   id = control.modificarProfesor(prof.id,int(cedula), name, apellido1, apellido2, sede, int(numeroTelefono), 
                                   correo, int(numeroOficina),None,estado)
@@ -136,22 +137,6 @@ def getProfesorCodigo(codigo):
     return jsonify("No existe")
   
   return json.dumps(prof.__dict__)
-# getProfesorCedula(self, idProfesor):
-@app.route('/getProfesorCedula/<cedula>', methods=['GET'])
-def getProfesorCedula(cedula):
-  prof = control.getProfesorCedula(int(cedula))
-  if (prof == None):
-    return jsonify("No existe")
-  return json.dumps(prof.__dict__)
-
-# getAllProfesores(self):
-@app.route('/getAllProfesores', methods=['GET'])
-def getAllProfesores():
-  listaProfesores = control.getAllProfesores()
-  listaSalida = []
-  for p in listaProfesores:
-    listaSalida += [json.dumps(p.__dict__)]
-  return listaSalida
 
 # getProfesorCedula(self, idProfesor):
 @app.route('/getProfesorCedula/<cedula>', methods=['GET'])
@@ -241,15 +226,19 @@ def getAllProfesores():
     listaSalida += [json.dumps(p.__dict__)]
   return listaSalida
 
+
+
 #AdminActividades
 # def verActividad(self, idActividad):
 @app.route('/verActividad/<idActividad>', methods=['GET'])
 def verActividad(idActividad):
-  ac = control.verActividad(idActividad)
-  print(ac.responsables)
+  ac = control.verActividad(int(idActividad))
+  print(ac.nombreActividad)
 
   if (ac == None):
-     return jsonify("No existe")       
+     return jsonify("No existe")   
+
+  print(actividadToJSON(ac))    
 
   return actividadToJSON(ac)
 
@@ -456,7 +445,7 @@ def actividadToJSON(ac):
     if (type(acDic[clave]) != int and type(acDic[clave]) != str):
       #print('enter no int/str')
       #print(type(acDic[clave]))
-      acDic[clave] = str(acDic[clave])
+      acDic[clave] = str(acDic[clave]) #21:54:00 
   return json.dumps(acDic)
 
 
