@@ -30,7 +30,7 @@ export function ModificarProfesor() {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                codigo, cedula, name, apellido1, apellido2, sede, numeroTelefono, correo, numeroOficina
+                codigo, cedula, name, apellido1, apellido2, sede, numeroTelefono, correo, numeroOficina, estado
             }),
         });
         const data = await res.json() //resultado de la consulta

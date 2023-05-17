@@ -9,7 +9,6 @@ const API =  'http://localhost:5000';
 
 
 export function ConsultarProfesores() {
-    const { state } = useLocation();
 
     const codigoRef = useRef();
     const [profesores, setProfesores] = useState([[]]);
@@ -24,7 +23,7 @@ export function ConsultarProfesores() {
     //    aca se busca un profesor por un codigo
         if(codigoRef.current.value===''){
             console.log(codigoRef.current.value);
-            const res = await fetch(`${API}/getEquipoGuia`, {  //falta cambiar el codigo por el deseado
+            const res = await fetch(`${API}/getAllProfesores`, {  //falta cambiar el codigo por el deseado
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",

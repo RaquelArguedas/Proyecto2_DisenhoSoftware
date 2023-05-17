@@ -101,7 +101,7 @@ def modificarProfesor():
   prof = control.getProfesorCodigo(request.json['codigo'])
   id = control.modificarProfesor(prof.id,request.json['cedula'], request.json['name'], 
                              request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
-                             request.json['numeroTelefono'], request.json['correo'], request.json['numeroOficina'],None,None)
+                             request.json['numeroTelefono'], request.json['correo'], request.json['numeroOficina'],None,request.json['estado'])
   return jsonify(str(id))
 
 # getProfesorCodigo(self, idProfesor):
@@ -111,9 +111,25 @@ def getProfesorCodigo(codigo):
   print(prof.nombre)
 
   if (prof == None):
-     return jsonify("No existe")
+    return jsonify("No existe")
   
   return json.dumps(prof.__dict__)
+# getProfesorCedula(self, idProfesor):
+@app.route('/getProfesorCedula/<cedula>', methods=['GET'])
+def getProfesorCedula(cedula):
+  prof = control.getProfesorCedula(int(cedula))
+  if (prof == None):
+    return jsonify("No existe")
+  return json.dumps(prof.__dict__)
+
+# getAllProfesores(self):
+@app.route('/getAllProfesores', methods=['GET'])
+def getAllProfesores():
+  listaProfesores = control.getAllProfesores()
+  listaSalida = []
+  for p in listaProfesores:
+    listaSalida += [json.dumps(p.__dict__)]
+  return listaSalida
 
 # crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular, correoElectronico, numeroOficina,autoridad, estado):
 @app.route('/crearProfesor', methods=['POST'])
@@ -304,10 +320,12 @@ def consultarProximaActividad():
 @app.route('/consultarActividades', methods=['GET'])
 def consultarActividades():
   actividades = control.consultarActividades()
+  print(actividades)
   listaSalida = []
 
   for ac in actividades:
     listaSalida += [actividadToJSON(ac)]
+
   return listaSalida
 
 @app.route('/consultarActividadesEstado/<estado>', methods=['GET'])
@@ -330,19 +348,24 @@ def definirPlanActividades(idActividad):
 #funcion auxiliar que convierte una actividad a un JSON aceptable
 def actividadToJSON(ac):
   acDic = ac.__dict__
-  listaSalida = []
-
   for clave in acDic:
+    listaSalida = []
+    #print('type:', type(acDic[clave]), acDic[clave])
 
     if (type(acDic[clave]) == list):
+      #print('enter list')
       for p in acDic[clave]:
-        listaSalida += [json.dumps(p.__dict__)]
-      acDic[clave] = listaSalida
+        listaSalida += [actividadToJSON(p)]
+      acDic[clave] = json.dumps(listaSalida)
+      print("//", acDic[clave])
 
     if (type(acDic[clave]) != int and type(acDic[clave]) != str):
+      #print('enter no int/str')
+      #print(type(acDic[clave]))
       acDic[clave] = str(acDic[clave])
-
   return json.dumps(acDic)
+
+
 
 #AdminUsuario
 # def exists(self, correo, contrasenha):
