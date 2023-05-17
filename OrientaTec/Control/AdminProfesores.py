@@ -40,4 +40,12 @@ class AdminProfesores:
 
     def getFotoProfesor(self,idProfe):
         return self.dao.getFotoProfesor(idProfe)
+    
+    def getProfesorCorreo(self, correo):
+        profesores = self.dao.getAllProfesores()
+        for prof in profesores:
+            if (prof.correoElectronico == correo):
+                return prof
+    
+    
 

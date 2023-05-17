@@ -99,7 +99,7 @@ def designarCoordinador(idProfesor):
 #                   correoElectronico, numeroOficina,autoridad, estado):
 @app.route('/modificarProfesor', methods=['POST'])
 def modificarProfesor():
-  #codigo = request.form.get('codigo')
+  codigo = request.form.get('codigo')
   cedula = request.form.get('cedula')
   name = request.form.get('name')
   apellido1 = request.form.get('apellido1')
@@ -109,13 +109,18 @@ def modificarProfesor():
   correo = request.form.get('correo')
   numeroOficina = request.form.get('numeroOficina')
 
-  #prof = control.getProfesorCodigo(codigo)
-  prof = control.getProfesorCodigo("SJ-6")
-  id = control.modificarProfesor(prof.id,int(cedula), name, apellido1, apellido2, int(sede), int(numeroTelefono), 
+  if (sede != None):
+    sede = int(sede)
+
+
+  prof = control.getProfesorCodigo(codigo)
+  #prof = control.getProfesorCodigo("SJ-1")
+  id = control.modificarProfesor(prof.id,int(cedula), name, apellido1, apellido2, sede, int(numeroTelefono), 
                                   correo, int(numeroOficina),None,None)
   
   print(id)
-  control.setFotoProfesor(prof.id, request.files['image'])
+  if (request.form.get('image') != "null"):
+    control.setFotoProfesor(prof.id, request.files['image'])
 
   return jsonify(str(id))
 

@@ -609,6 +609,40 @@ class SingletonDAO(metaclass=SingletonMeta):
                     if (estado != None):
                         self.profesores[i].estado = int(estado)
         return respuesta
+    
+    # +modificarAsistente(idProfesor, ): boolean
+    def modificarAsistente(self, id, cedula,nombre,apellido1, apellido2, sede, numeroCelular,
+                        correoElectronico, numeroOficina):
+        
+        args = [id,cedula,nombre,apellido1, apellido2, sede, numeroCelular,
+                correoElectronico, numeroOficina]
+
+        #se modifica en la bd
+        respuesta = self.executeStoredProcedure('updateAsistenteAdministrativo', args)
+
+        #Si no hubo errores dentro de la BD, realiza las modificaciones correspondientes
+        if (respuesta == None):
+            #se modifica en lista
+            for i in range(len(self.asistentes)):
+                if (self.asistentes[i].id == int(id)):
+                    if (cedula != None):
+                        self.asistentes[i].cedula = int(cedula)
+                    if (nombre != None):
+                        self.asistentes[i].nombre = nombre
+                    if (apellido1 != None):
+                        self.asistentes[i].apellido1 = apellido1
+                    if (apellido2 != None):
+                        self.asistentes[i].apellido2 = apellido2
+                    if (sede != None):
+                        self.asistentes[i].sede = int(sede)
+                    if (numeroCelular != None):
+                        self.asistentes[i].numeroCelular = int(numeroCelular)
+                    if (correoElectronico != None):
+                        self.modificarUsuarioCorreo(self.asistentes[i].correoElectronico, correoElectronico)
+                        self.asistentes[i].correoElectronico = correoElectronico
+                    if (numeroOficina != None):
+                        self.asistentes[i].numeroOficina = int(numeroOficina)
+        return respuesta
 
     # +darBajaProfesor(idProfesor: int): boolean
     def darBajaProfesor(self, idProfesor):

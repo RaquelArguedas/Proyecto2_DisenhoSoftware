@@ -28,7 +28,7 @@ export  function ModificarProfesor() {
 
     const obtenerImagen = async () => {
         try {
-            const response = await axios.get(`${API}/getFotoProfesorCodigo/${"SJ-6"}`); //aqui debe enviar el codigo que es
+            const response = await axios.get(`${API}/getFotoProfesorCodigo/${"SJ-1"}`); //aqui debe enviar el codigo que es
             const imageBase64 = response.data;
             console.log(isBase64Valid(imageBase64));
             setImagenData(imageBase64);
@@ -63,7 +63,7 @@ export  function ModificarProfesor() {
     }
     const handleSearch = async () => { 
         obtenerImagen();
-        const res = await fetch(`${API}/getProfesorCodigo/${"SJ-6"}`); //PENDIENTE : debe de darle el codigo
+        const res = await fetch(`${API}/getProfesorCodigo/${"SJ-1"}`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta
         console.log(data) // imprime en consola web
             

@@ -51,6 +51,9 @@ class MainController:
     def getFotoProfesor(self,idProfe):
         return self.controlProfesor.getFotoProfesor(idProfe)
     
+    def getProfesorCorreo(self, correo):
+        return self.controlProfesor.getProfesorCorreo(correo)
+    
     #AdminEquipoGuia
     def agregarProfesor(self, profesor):
         return self.controlEquipoGuia.agregarProfesor(profesor)
@@ -66,6 +69,14 @@ class MainController:
     
     def getAllAsistentes(self):
         return self.controlEquipoGuia.getAllAsistentes()
+    
+    def modificarAsistente(self, id, cedula,nombre,apellido1, apellido2, sede, numeroCelular,
+                        correoElectronico, numeroOficina):
+        return self.controlEquipoGuia.modificarAsistente(id, cedula,nombre,apellido1, apellido2, sede, 
+                                                         numeroCelular,correoElectronico, numeroOficina)
+    
+    def getAsistenteCorreo(self, correo):
+        return self.controlEquipoGuia.getAsistenteCorreo(correo)
     
     #AdminEstudiantes
     def consultarEstudiantes(self, ordenamiento):
@@ -188,4 +199,9 @@ class MainController:
     
     def getUsuarioRol(self, correo, contrasenha):
         return self.controlUsuario.getUsuarioRol(correo, contrasenha)
+    
+    
+    
+    
+
     

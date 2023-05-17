@@ -956,14 +956,13 @@ CREATE PROCEDURE `updateAsistenteAdministrativo`(in _idAsistente int,
 								 in _correoElectronico varchar(200), in _numeroOficina int)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
-	if( (select count(*) from Asistente where _idAsistente  = idAsistente )=0 )then 
+	if( (select count(*) from asistenteadministrativo where _idAsistente  = idAsistente )=0 )then 
 		set _error = 2, _errmsg = "Ese idAsistente  no existe";
 	elseif( _idSede is not null and  (select count(*) from Sede where _idSede = idSede)=0 )then 
 		set _error = 2, _errmsg = "Ese idSede no existe";
 	else
 		update AsistenteAdministrativo 
-		set descripcion = ifnull(_descripcion, descripcion),
-			cedula = ifnull(_cedula, cedula), 
+		set cedula = ifnull(_cedula, cedula), 
             nombre = ifnull(_nombre, nombre), 
             apellido1 = ifnull(_apellido1, apellido1), 
             apellido2 = ifnull(_apellido2, apellido2), 

@@ -32,8 +32,8 @@ export function BarraLateral() {
 
         obtenerNombreUsuario();
     }, []);
-    console.log("barra")
-    console.log(nombreUsuario);
+    //console.log("barra")
+    //console.log(nombreUsuario);
     return (
         <Fragment>
             <div className="m-3 p-2 bg-light">

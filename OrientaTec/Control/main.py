@@ -28,6 +28,8 @@ if __name__ == "__main__":
     listaPersonas = control.getAllProfesores() + control.getAllAsistentes() + control.consultarEstudiantes(1)
     print(listaPersonas)
 
+    #print(dao.modificarAsistente(1, None, "Pedro", None, None, None, None, None, None))
+
     #no borrad:
     # def getFotoProfesor(self,idBuscado):
     #         try:
