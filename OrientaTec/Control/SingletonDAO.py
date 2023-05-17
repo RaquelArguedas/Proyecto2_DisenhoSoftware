@@ -15,26 +15,10 @@ from operator import attrgetter
 
 import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
-sys.path.append('./Modelo')
-#Importo la Clase
-'''
-sys.path.insert(1, './Modelo')
+sys.path.append('Proyecto2_DisenhoSoftware/OrientaTec/Modelo')
 
-from Modelo import Usuario
-from Modelo import Estudiante
-from Modelo import EquipoGuia 
-from Modelo import Actividad 
-from Modelo import Profesor 
-from Modelo import AsistenteAdministrativo 
-from Modelo import Bitacora 
-from Modelo import PlanTrabajo 
-from Modelo import Recordatorio 
-from Modelo import Evidencia 
-from Modelo import Observacion 
-from Modelo import Comentario 
-from Modelo import Sede 
-from Modelo import Ordenamiento 
-'''
+#sys.path.append('./Modelo')
+#Importo la Clase
 from Modelo.Usuario import *
 from Modelo.Estudiante import * 
 from Modelo.EquipoGuia import *
@@ -287,10 +271,11 @@ class SingletonDAO(metaclass=SingletonMeta):
     def connectServer(self):
         try:
             self.connection = mysql.connector.connect(
-                host = 'localhost',
+                #host = 'localhost',
+                host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
-                password = 'Michelle.18',
+                password = 'Moralesjfi123456',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
