@@ -9,7 +9,7 @@ const XLSX = require('xlsx');
 //Esto genera un excel con la info de TODAS las sedes
 function GenerarExel(){
     //Obtener la Sede de la persona que hizo la consulta 
-    const sede = fetch(`${API}/getSedeUsuarioSesionActual()/`, { 
+    const sede = fetch(`${API}/getSedeUsuarioSesionActual/`, { 
         method: "GET",
         headers: {
          "Content-Type": "application/json",
