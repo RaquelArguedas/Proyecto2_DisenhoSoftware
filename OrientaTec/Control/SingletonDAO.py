@@ -15,24 +15,24 @@ from operator import attrgetter
 
 import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
-sys.path.append('Proyecto2_DisenhoSoftware/OrientaTec/Modelo')
+#sys.path.append('Proyecto2_DisenhoSoftware/OrientaTec/Modelo')
 
-#sys.path.append('./Modelo')
+sys.path.append('./Modelo')
 #Importo la Clase
-from Modelo.Usuario import *
-from Modelo.Estudiante import * 
-from Modelo.EquipoGuia import *
-from Modelo.Actividad import *
-from Modelo.Profesor import *
-from Modelo.AsistenteAdministrativo import *
-from Modelo.Bitacora import *
-from Modelo.PlanTrabajo import *
-from Modelo.Recordatorio import *
-from Modelo.Evidencia import *
-from Modelo.Observacion import *
-from Modelo.Comentario import *
-from Modelo.Sede import *
-from Modelo.Ordenamiento import *
+from Usuario import *
+from Estudiante import * 
+from EquipoGuia import *
+from Actividad import *
+from Profesor import *
+from AsistenteAdministrativo import *
+from Bitacora import *
+from PlanTrabajo import *
+from Recordatorio import *
+from Evidencia import *
+from Observacion import *
+from Comentario import *
+from Sede import *
+from Ordenamiento import *
 
 
 class SingletonMeta(type):
@@ -126,7 +126,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         if (tablaBD == "Usuario"):
             objeto = Usuario(lista[0], lista[1], lista[2], lista[3], lista[4])
         elif (tablaBD == "Estudiante"):
-            objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6])
+            objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7])
         elif (tablaBD == "EquipoGuia"):
             objeto = EquipoGuia(lista[1], self.generarBitacorasEquipoGuia(lista[0]), self.generarProfesores(str(lista[0])), lista[2])
         elif (tablaBD == "Actividad"):    
@@ -748,7 +748,8 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +buscarEstudiante(id:int) : Estudiante
     def buscarEstudiante(self, carnet):
         for estudiante in self.estudiantes:
-            if (carnet == estudiante.carnet):
+            if (int(carnet) == estudiante.carnet):
+                print("llegue")
                 return estudiante
         return None
 

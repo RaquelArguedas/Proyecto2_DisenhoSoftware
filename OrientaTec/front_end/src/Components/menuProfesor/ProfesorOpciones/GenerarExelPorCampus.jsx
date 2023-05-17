@@ -9,8 +9,10 @@ const XLSX = require('xlsx');
 
 //Esto genera un excel con la info de TODAS las sedes
 function GenerarExelPorCampus(){
+    
     // Ya la función del back se encarga de crear el archivo y devolerlo
-    const wb = fetch(`${API}/generarExcelEstudiantes/${sede}`, { 
+    //No se obtiene la sede porque no se necesita
+    const wb = fetch(`${API}/generarExcelEstudiantes/${0}`, { 
         method: "GET",
         headers: {
          "Content-Type": "application/json",

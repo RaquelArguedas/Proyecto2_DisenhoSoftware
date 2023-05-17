@@ -9,14 +9,14 @@ const XLSX = require('xlsx');
 //Esto genera un excel con la info de TODAS las sedes
 function GenerarExel(){
     //Obtener la Sede de la persona que hizo la consulta 
-    const sede = fetch(`${API}/getSedeUsuarioSesionActual()/`, { 
+    const sede = fetch(`${API}/getSedeUsuarioSesionActual/`, { 
         method: "GET",
         headers: {
          "Content-Type": "application/json",
      }
     })
-    //No es necesario validar la sede porque es info directamente del usuario que se creó
-   
+    console.log("pase Sede")
+    
     // Ya la función del back se encarga de crear el archivo y devolerlo
     const wb = fetch(`${API}/generarExcelEstudiantes/${sede}`, { 
         method: "GET",
@@ -24,6 +24,7 @@ function GenerarExel(){
          "Content-Type": "application/json",
      }
     })
+    console.log("pase generar")
 
     // Genera el archivo de Excel y lo guarda en un objeto binario
     const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });

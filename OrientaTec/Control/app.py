@@ -35,27 +35,23 @@ def consultarEstudiantes(ordenamiento):
 def modificarEstudiante():
   print(request.json)
 
-  id = control.modificarEstudiante(request.json['carnet'] if request.json['carnet'] != '' else None, 
+  id = control.modificarEstudiante(int(request.json['carnet']) if request.json['carnet'] != '' else None, 
                                   request.json['name'] if request.json['name'] != '' else None, 
                                   request.json['apellido1'] if request.json['apellido1'] != '' else None, 
                                   request.json['apellido2'] if request.json['apellido2'] != '' else None, 
-                                  request.json['sede'] if request.json['sede'] != '' else None, 
+                                  int(request.json['sede']) if request.json['sede'] != '' else None, 
                                   request.json['correo'] if request.json['correo'] != '' else None, 
-                                  request.json['numeroTelefono'] if request.json['numeroTelefono'] != '' else None,  
-                                  request.json['estado'] if request.json['estado'] != '' else None)
+                                  int(request.json['numeroTelefono']) if request.json['numeroTelefono'] != '' else None,  
+                                  int(request.json['estado'] )if request.json['estado'] != '' else None)
   
   return jsonify(str(id))
 
 # buscarEstudiante(self, carnet)
 @app.route('/getEstudiante/<carnet>', methods=['GET'])
 def buscarEstudiante(carnet):
-  est = control.buscarEstudiante(carnet)
+  print("carnet", carnet)
+  est = control.buscarEstudiante(int(carnet))
   print(est) #esto se imprime en la terminar de VS
-
-  # if (est == None):
-  #    jsonStr = "No existe"
-  # else:
-  #   jsonStr = json.dumps(est.__dict__)
 
   if (est == None):
      return jsonify("No existe")
@@ -83,7 +79,7 @@ def cargarExcelEstudiantes(archivo):
 # darBajaProfesor(self, idProfesor)
 @app.route('/darBajaProfesor/<idProfesor>', methods=['POST'])
 def darBajaProfesor(idProfesor):
-  res = control.darBajaProfesor(idProfesor)
+  res = control.darBajaProfesor(int(idProfesor))
   control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
                              SingletonSesionActual().getUsuario().idUsuario, "se dio de baja al id =" + str(idProfesor))
   return jsonify(str(res))
@@ -91,7 +87,7 @@ def darBajaProfesor(idProfesor):
 # designarCoordinador(self, idProfesor):
 @app.route('/designarCoordinador/<idProfesor>', methods=['POST'])
 def designarCoordinador(idProfesor):
-  res = control.designarCoordinador(idProfesor)
+  res = control.designarCoordinador(int(idProfesor))
   control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
                              SingletonSesionActual().getUsuario().idUsuario, "se designo al coordinador con id =" + str(idProfesor))
   return jsonify(str(res))
@@ -151,7 +147,7 @@ def crearProfesor():
   correo = request.form.get('correo')
   numeroOficina = request.form.get('numeroOficina')
 
-  id = control.crearProfesor(cedula, name, apellido1, apellido2, sede, numeroTelefono, 
+  id = control.crearProfesor(int(cedula), name, apellido1, apellido2, int(sede), int(numeroTelefono), 
                              correo, numeroOficina,2,1)
   
   print(id)
@@ -267,9 +263,9 @@ def cancelarActividad(idActividad):
 #                    recordatorio, medio,enlace, estado, ultimaModificacion):
 @app.route('/crearActividad', methods=['POST'])
 def crearActividad():
-  id = control.crearActividad(request.json['nombre'], request.json['tipo'], datetime.strptime(request.json['fecha'], '%m/%d/%Y'), 
-                               datetime.strptime(request.json['horaInicio'], '%H:%M'), datetime.strptime(request.json['horaFin'], '%H:%M'), request.json['recordatorio'], 
-                               request.json['responsables'], request.json['medio'], request.json['enlace'], request.json['estado'])
+  id = control.crearActividad(request.json['nombre'], int(request.json['tipo']), datetime.strptime(request.json['fecha'], '%m/%d/%Y'), 
+                               datetime.strptime(request.json['horaInicio'], '%H:%M'), datetime.strptime(request.json['horaFin'], '%H:%M'), int(request.json['recordatorio']), 
+                               request.json['responsables'], int(request.json['medio']), request.json['enlace'], int(request.json['estado']))
   print(id)
   
   control.bitacoraActividad(id[0], datetime.now().date(), datetime.now().time().strftime('%H:%M'),
@@ -279,7 +275,7 @@ def crearActividad():
 # def cambiarEstado(self, idActividad, idEstado):
 @app.route('/cambiarEstado/<idActividad>/<idEstado>', methods=['POST'])
 def cambiarEstado(idActividad, idEstado):
-  res = control.cambiarEstado(idActividad, idEstado)
+  res = control.cambiarEstado(int(idActividad), int(idEstado))
   control.bitacoraActividad(int(idActividad),datetime.now().date(), datetime.now().time().strftime('%H:%M'),
                              SingletonSesionActual().getUsuario().idUsuario, "se cambio el estado de la actividad con id = " + str(idActividad))
   print(res)
@@ -310,9 +306,9 @@ def escribirComentario():
   print(request.json)
 
   #borrar este y descomentar el otro con los JSON adecuados
-  id = control.escribirComentario(request.json['idActividad'],
+  id = control.escribirComentario(int(request.json['idActividad']),
                                    SingletonSesionActual().getUsuario().idUsuario, datetime.now(), 
-                                   request.json['contenido'], request.json['idComentarioPadre'])
+                                   request.json['contenido'], int(request.json['idComentarioPadre']))
   
   print(id)
   
@@ -513,7 +509,7 @@ def iniciarSesion(correo):
 #Crear Observación - Parche de Alonso
 @app.route('/crearObservacion', methods=['POST'])
 def crearObservacion():
-  id = control.crearObservacion(request.json['idActividad'], datetime.today(), request.json['detalle'])
+  id = control.crearObservacion(int(request.json['idActividad']), datetime.today(), request.json['detalle'])
   print(id)
   return jsonify(str(id))
 # def getUsuarioSesionActual(self):
@@ -532,7 +528,7 @@ def getInfoUsuarioSesionActual():
   listaPersonas = control.getAllProfesores() + control.getAllAsistentes() + control.consultarEstudiantes(1)
   for p in listaPersonas:
     if (user.correo == p.correoElectronico):
-      print("---", p.__dict__)
+      #print("---", p.__dict__)
       return jsonify(p.__dict__)
     
   
@@ -543,8 +539,9 @@ def getInfoUsuarioSesionActual():
 # def getSedeUsuarioSesionActual(self):
 @app.route('/getSedeUsuarioSesionActual', methods=['GET'])
 def getSedeUsuarioSesionActual():
-  SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
+  #SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
   user = SingletonSesionActual().getUsuario()
+  print("GET", user.sede)
   return str(user.sede)
 
 
