@@ -13,6 +13,7 @@ export function ModificarActividad() {
     const gotoMenu = () => { navigate('/menuCoordinador', {}); }
     //const gotoRealizada = () => { navigate('/menuCoordinador', {}); }
     const gotoCancelada = () => { navigate('/cancelarActividad', {state: {idActividad: idActRef.current.value}}); }
+    const gotoEvidencias = () => { navigate('/insertarEvidencias', {state: {idActividad: idActRef.current.value}}); }
 
     const [startDate, setStartDate] = useState(new Date());
     const [esVirtual, setVirtual] = useState(false);
@@ -133,11 +134,12 @@ export function ModificarActividad() {
                 }),
             });
 
-            /*if (estado === 3){
+            if (estado == 3){
                 //Redirigir a Realizada
-            }*/
+                gotoEvidencias();
+            }
 
-            if (estado === 4){
+            if (estado == 4){
                 //Redirigir a Cancelar
                 gotoCancelada();
             }

@@ -15,7 +15,7 @@ export function ListaActividades() {
 
     const handleVerActividadesEstado = async (event) => {
         // Obtener las actividades dependiendo del estado
-        const res = await fetch(`${API}/consultarActividadesEstado/${1}`, {  //aca se cambia el 1 por el estado deseado, asi se sacan las canceladas y las realizadas
+        const res = await fetch(`${API}/consultarTodasActividades`, {  //aca se cambia el 1 por el estado deseado, asi se sacan las canceladas y las realizadas
             method: "GET",
             headers: {
               "Content-Type": "application/json",

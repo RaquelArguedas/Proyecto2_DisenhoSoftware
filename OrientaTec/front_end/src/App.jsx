@@ -24,7 +24,7 @@ import { ActividadCancelada } from "./Components/menuPC/CoordinadorOpciones/modi
 import { CrearActividad } from "./Components/menuPC/CoordinadorOpciones/CrearActividad";
 import { DefinirPlan } from "./Components/menuPC/CoordinadorOpciones/DefinirPlan";
 import { EvidenciasActividad } from "./Components/menuAsistentes/AsistenteOpciones/verActividades/EvidenciasActividad";
-import {InsertarEvidencias} from "./Components/menuPC/InsertarEvidencias"; 
+import {InsertarEvidencias} from "./Components/menuPC/CoordinadorOpciones/modificarActividad/InsertarEvidencias"; 
 export function App() {
     return (
     <Router>

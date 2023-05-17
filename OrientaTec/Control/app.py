@@ -182,7 +182,7 @@ def modificarActividad():
   horaInicio = (datetime.strptime(request.json['horaInicio'], '%H:%M:%S')).time()
   horaFin = (datetime.strptime(request.json['horaFin'], '%H:%M:%S')).time()
 
-  id = control.modificarActividad(request.json['id'],request.json['nombre'], int(request.json['tipo']), 
+  id = control.modificarActividad(int(request.json['id']),request.json['nombre'], int(request.json['tipo']), 
                              None, None, None, 
                              int(request.json['recordatorio']), int(request.json['medio']),
                              request.json['enlace'],int(request.json['estado']))
@@ -328,6 +328,18 @@ def consultarActividades():
 
   return listaSalida
 
+# def consultarTodasActividades(self):
+@app.route('/consultarTodasActividades', methods=['GET'])
+def consultarTodasActividades():
+  actividades = control.consultarTodasActividades()
+  print(actividades)
+  listaSalida = []
+
+  for ac in actividades:
+    listaSalida += [actividadToJSON(ac)]
+
+  return listaSalida
+
 @app.route('/consultarActividadesEstado/<estado>', methods=['GET'])
 def consultarActividadesEstado(estado):
   actividades = control.consultarActividadesEstado(estado)
@@ -342,7 +354,7 @@ def consultarActividadesEstado(estado):
 @app.route('/definirPlanActividades/<idActividad>', methods=['POST'])
 def definirPlanActividades(idActividad):
 
-  control.definirPlanActividades(1, [control.verActividad(int(idActividad))])
+  control.definirPlanActividades(5, [control.verActividad(int(idActividad))])
   return "Definido"
 
 #funcion auxiliar que convierte una actividad a un JSON aceptable

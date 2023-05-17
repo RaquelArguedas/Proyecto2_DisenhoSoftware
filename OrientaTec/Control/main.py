@@ -14,4 +14,4 @@ if __name__ == "__main__":
     jsonStr = json.dumps(e.__dict__)
     print(control.getUsuarioRol("as@gmail.com", "rafa"))
     #control.consultarEstudiantes(int(Ordenamiento['SEDE']))
-    
+

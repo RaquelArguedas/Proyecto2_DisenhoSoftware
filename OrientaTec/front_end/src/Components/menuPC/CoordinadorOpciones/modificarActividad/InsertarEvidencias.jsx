@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
-import { Navbar } from '../navegacion/Navbar';
-import { BarraLateral } from '../navegacion/BarraLateral';
+import { Navbar } from '../../../navegacion/Navbar';
+import { BarraLateral } from '../../../navegacion/BarraLateral';
 import { Icon } from '@iconify/react';
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -9,6 +9,8 @@ export  function InsertarEvidencias() {
     let navigate = useNavigate();
 
     const { state } = useLocation();
+    console.log(state.idActividad)
+
     const [imagenes, setImagenes] = useState([]);
     const [image, setImage] = useState(null);
     const [enlace, setEnlace] = useState('');
@@ -29,8 +31,6 @@ export  function InsertarEvidencias() {
 
     const handleSubmit = async (event) => {
         event.preventDefault(); 
-    
-    
     }
 
     //const gotoDetalleActividad = () => { navigate('/verplan/detalle', { state: {  linkMenu: state.linkMenu } }); };
@@ -38,7 +38,7 @@ export  function InsertarEvidencias() {
     return (
         <Fragment>
             <div className='container'>
-                {/* <Navbar linkInicio={state.linkMenu}/> */}
+                <Navbar linkInicio='/menuCoordinador'/>
 
                 <div class="row">
                     <div class="col-sm-3">

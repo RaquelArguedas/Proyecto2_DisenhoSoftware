@@ -11,6 +11,9 @@ class AdminPlanActividades:
     def consultarActividades(self):
         return self.dao.getActividades()
     
+    def consultarTodasActividades(self):
+        return self.dao.getTodasActividades()
+    
     def consultarActividadesEstado(self, estado):
         actividades = self.consultarActividades()
         listaSalida = []
