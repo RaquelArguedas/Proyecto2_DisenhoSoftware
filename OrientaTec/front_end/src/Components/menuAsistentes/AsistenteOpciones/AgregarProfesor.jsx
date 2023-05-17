@@ -1,6 +1,7 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { Navbar } from '../../navegacion/Navbar'
 import { BarraLateral } from '../../navegacion/BarraLateral'
+
 
 const API = process.env.REACT_APP_API;
 
@@ -24,18 +25,27 @@ export function AgregarProfesor() {
         const data = await info.json();//resultado de la consulta
         console.log(data)
         if(data==="No existe"){
-            const res = await fetch(`${API}/crearProfesor`, { //queda pendiente lo de agregar una foto
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    cedula,name,apellido1, apellido2, sede, numeroTelefono, correo, 
-                    numeroOficina
-                }),
-              });
-    
             alert("Se ha ingreado un nuevo profesor")
+            const formData = new FormData();
+            formData.append('image', image);
+            formData.append('cedula', cedula);
+            formData.append('name', name);
+            formData.append('apellido1', apellido1);
+            formData.append('apellido2', apellido2);
+            formData.append('sede', sede);
+            formData.append('numeroTelefono', numeroTelefono);
+            formData.append('correo', correo);
+            formData.append('numeroOficina', numeroOficina);
+
+            
+            const res = await fetch(`${API}/crearProfesor`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await res.json();
+            console.log(data);
+    
         }
 
         else{
@@ -43,20 +53,6 @@ export function AgregarProfesor() {
         }
         
     }
-    // const handleSearch = async () => {
-    //     const res = await fetch(`${API}/getProfesorCodigo/${codigoRef.current.value}`); //PENDIENTE : debe de darle el codigo
-    //     const data = await res.json();//resultado de la consulta
-    // real
-        
-        // // base para front_end
-        // //`${API}/nombreFuncion/${parametro1}/${parametro2}`
-        // const res = await fetch(`${API}/getUsuarioRol/${"as@gmail.com"}/${"as"}`, {
-        //     method: "GET",
-        // });
-        // const data = await res.json();//resultado de la consulta
-        // console.log(data) // imprime en consola web
-
-    // }
 
 
     const handleNameChange = (event) => {
@@ -87,7 +83,11 @@ export function AgregarProfesor() {
     const handleImageUpload = (event) => {
         const selectedImage = event.target.files[0];
         setImage(selectedImage);
+        console.log("desde handleImage:")
+        console.log(image)
+        
     };
+
     return (
         <Fragment>
             <div className="container">

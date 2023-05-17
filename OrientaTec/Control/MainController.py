@@ -45,6 +45,18 @@ class MainController:
         return self.controlProfesor.crearProfesor(cedula,nombre,apellido1, apellido2, sede, numeroCelular,
                         correoElectronico, numeroOficina,autoridad, estado)
     
+    def registrarFotoProfesor(self,idProfe,bin):
+        self.controlProfesor.registrarFotoProfesor(idProfe, bin)
+
+    def setFotoProfesor(self,idBuscado, image):
+        self.controlProfesor.setFotoProfesor(idBuscado, image)
+    
+    def getFotoProfesor(self,idProfe):
+        return self.controlProfesor.getFotoProfesor(idProfe)
+    
+    def getProfesorCorreo(self, correo):
+        return self.controlProfesor.getProfesorCorreo(correo)
+    
     #AdminEquipoGuia
     def agregarProfesor(self, profesor):
         return self.controlEquipoGuia.agregarProfesor(profesor)
@@ -52,8 +64,22 @@ class MainController:
     def getEquipoGuia(self):
         return self.controlEquipoGuia.getEquipoGuia()
     
+    def getAllProfesores(self):
+        return self.controlEquipoGuia.getAllProfesores()
+    
     def bitacoraEquipoGuia(self, fecha, hora, idAutor, descripcion):
         return self.controlEquipoGuia.bitacoraEquipoGuia(fecha, hora, idAutor, descripcion)
+    
+    def getAllAsistentes(self):
+        return self.controlEquipoGuia.getAllAsistentes()
+    
+    def modificarAsistente(self, id, cedula,nombre,apellido1, apellido2, sede, numeroCelular,
+                        correoElectronico, numeroOficina):
+        return self.controlEquipoGuia.modificarAsistente(id, cedula,nombre,apellido1, apellido2, sede, 
+                                                         numeroCelular,correoElectronico, numeroOficina)
+    
+    def getAsistenteCorreo(self, correo):
+        return self.controlEquipoGuia.getAsistenteCorreo(correo)
     
     #AdminEstudiantes
     def consultarEstudiantes(self, ordenamiento):
@@ -119,7 +145,27 @@ class MainController:
     def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
         return self.controlActividades.bitacoraActividad(idActividad, fecha, hora, idAutor, descripcion)
     
+    def registrarFotoAfiche(self,idActividad,image):
+        self.controlActividades.registrarFotoAfiche(idActividad,image)
 
+    def registrarFotoEvLista(self,idEvidencia,image):
+        self.controlActividades.registrarFotoEvLista(idEvidencia,image)
+
+    def registrarFotoEv(self,idEvidencia,image):
+        self.controlActividades.registrarFotoEv(idEvidencia,image)
+
+    def setFotoAfiche(self,idBuscado, image):
+        self.controlActividades.setFotoAfiche(idBuscado, image)
+    
+    def getFotoAfiche(self,idBuscado):
+        return self.controlActividades.getFotoAfiche(idBuscado)
+
+    def getEvLista(self,idBuscado):
+        return self.controlActividades.getEvLista(idBuscado)
+
+    def getFotoEv(self, idBuscado):
+        return self.controlActividades.getFotoEv(idBuscado)
+    
     #AdminPlanActividades
     def consultarProximaActividad(self):
         return self.controlPlanActividades.consultarProximaActividad()
@@ -144,9 +190,12 @@ class MainController:
     #AdminUsuario
     def exists(self, correo, contrasenha):
         return self.controlUsuario.exists(correo, contrasenha)
+    
+    def correoRegistrado(self, correo):
+        return self.controlUsuario.correoRegistrado(correo)
 
-    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol):
-        return self.controlUsuario.modificarUsuario(idUsuario, correoElectronico, contrasenha, idRol)
+    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol, idSede):
+        return self.controlUsuario.modificarUsuario(idUsuario, correoElectronico, contrasenha, idRol, idSede)
     
     
     def crearUsuario(self, correoElectronico, contrasenha, idRol):
@@ -155,7 +204,14 @@ class MainController:
     def getUsuario(self, idUsuario):
         return self.controlUsuario.getUsuario(idUsuario)
     
+    def getUsuarioCorreo(self, correo):
+        return self.controlUsuario.getUsuarioCorreo(correo)
+    
     def getUsuarioRol(self, correo, contrasenha):
         return self.controlUsuario.getUsuarioRol(correo, contrasenha)
     
-        
+    
+    
+    
+
+    

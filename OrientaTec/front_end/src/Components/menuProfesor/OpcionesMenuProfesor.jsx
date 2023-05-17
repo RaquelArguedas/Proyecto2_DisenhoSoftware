@@ -1,9 +1,5 @@
 import React, { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import GenerarExel from "./ProfesorOpciones/GenerarExel";
-import GenerarExelPorCampus from "./ProfesorOpciones/GenerarExelPorCampus";
-
-//import  from 
 
 
 export function OpcionesMenuProfesor() {
@@ -72,18 +68,16 @@ export function OpcionesMenuProfesor() {
                 <div class="row m-5">
                     <div class="col">
                         <button 
-                            onClick={handleDownloadExcelCampus}
                             className="btn btn-success h-100 w-100"
                         >
-                            Generar Excel de datos del campus perteneciente
+                            Generar Exel de datos del campus perteneciente
                         </button>
                     </div>
                     <div class="col">
                         <button 
-                            onClick={handleDownloadExcelPorCampus}
                             className="btn btn-success h-100 w-100"
                         >
-                            Generar Excel de datos de todos los campus
+                            Generar Exel de datos de todos los campus
                         </button>
                     </div>
 

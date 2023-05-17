@@ -39,13 +39,6 @@ create table Rol
 descripcion varchar(50)
 );
 
-create table Usuario
-(idUsuario int primary key not null auto_increment,
-correo varchar(100),
-contrasenha varchar(50),
-idRol int, foreign key (idRol) references Rol (idRol)
-);
-
 create table PlanTrabajo
 (idPlan int primary key not null auto_increment,
 anno int
@@ -53,7 +46,7 @@ anno int
 
 create table ActividadesxPlan
 (idActividadesxPlan int primary key not null auto_increment,
-idActividad int,foreign key (idActividad) references EstadoActividad (idEstadoA),
+idActividad int,foreign key (idActividad) references Actividad (idActividad),
 idPlan int, foreign key (idPlan) references PlanTrabajo (idPlan)
 );
 
@@ -83,6 +76,14 @@ descripcion varchar(50)
 create table Sede
 (idSede int primary key not null auto_increment,
 descripcion varchar(50)
+);
+
+create table Usuario
+(idUsuario int primary key not null auto_increment,
+correo varchar(100),
+contrasenha varchar(50),
+idRol int, foreign key (idRol) references Rol (idRol),
+idSede int, foreign key (idSede) references Sede (idSede)
 );
 
 create table Profesor

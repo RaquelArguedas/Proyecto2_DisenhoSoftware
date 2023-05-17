@@ -1,9 +1,12 @@
 import json
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from MainController import *
 from SingletonSesionActual import *
 from datetime import datetime, timedelta
+from io import BytesIO
+from PIL import Image
+import base64
 
 # Instantiation
 app = Flask(__name__)
@@ -96,12 +99,31 @@ def designarCoordinador(idProfesor):
 #                   correoElectronico, numeroOficina,autoridad, estado):
 @app.route('/modificarProfesor', methods=['POST'])
 def modificarProfesor():
-  print(request.json)
+  codigo = request.form.get('codigo')
+  cedula = request.form.get('cedula')
+  name = request.form.get('name')
+  apellido1 = request.form.get('apellido1')
+  apellido2 = request.form.get('apellido2')
+  sede = request.form.get('sede')
+  numeroTelefono = request.form.get('numeroTelefono')
+  correo = request.form.get('correo')
+  numeroOficina = request.form.get('numeroOficina')
+  estado = request.form.get('estado')
 
-  prof = control.getProfesorCodigo(request.json['codigo'])
-  id = control.modificarProfesor(prof.id,request.json['cedula'], request.json['name'], 
-                             request.json['apellido1'], request.json['apellido2'], request.json['sede'], 
-                             request.json['numeroTelefono'], request.json['correo'], request.json['numeroOficina'],None,request.json['estado'])
+  if (sede != None):
+    sede = int(sede)
+  if (estado != None):
+    estado = int(estado)
+
+  prof = control.getProfesorCodigo(codigo)
+  #prof = control.getProfesorCodigo("SJ-1")
+  id = control.modificarProfesor(prof.id,int(cedula), name, apellido1, apellido2, sede, int(numeroTelefono), 
+                                  correo, int(numeroOficina),None,estado)
+  
+  print(id)
+  if (request.form.get('image') != "null"):
+    control.setFotoProfesor(prof.id, request.files['image'])
+
   return jsonify(str(id))
 
 # getProfesorCodigo(self, idProfesor):
@@ -131,20 +153,72 @@ def getAllProfesores():
     listaSalida += [json.dumps(p.__dict__)]
   return listaSalida
 
+# getProfesorCedula(self, idProfesor):
+@app.route('/getProfesorCedula/<cedula>', methods=['GET'])
+def getProfesorCedula(cedula):
+  prof = control.getProfesorCedula(int(cedula))
+
+  if (prof == None):
+     return jsonify("No existe")
+  
+  return json.dumps(prof.__dict__)
+
 # crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular, correoElectronico, numeroOficina,autoridad, estado):
 @app.route('/crearProfesor', methods=['POST'])
 def crearProfesor():
-  print(request.json)
+  cedula = request.form.get('cedula')
+  name = request.form.get('name')
+  apellido1 = request.form.get('apellido1')
+  apellido2 = request.form.get('apellido2')
+  sede = request.form.get('sede')
+  numeroTelefono = request.form.get('numeroTelefono')
+  correo = request.form.get('correo')
+  numeroOficina = request.form.get('numeroOficina')
 
-  id = control.crearProfesor(request.json['cedula'], request.json['name'], request.json['apellido1'], 
-                             request.json['apellido2'], request.json['sede'], request.json['numeroTelefono'], 
-                             request.json['correo'], request.json['numeroOficina'],2,1)
+  id = control.crearProfesor(cedula, name, apellido1, apellido2, sede, numeroTelefono, 
+                             correo, numeroOficina,2,1)
   
-  control.agregarProfesor(control.getProfesor(id[0]))
+  print(id)
+  control.registrarFotoProfesor(id[0], request.files['image'])
+
+  control.agregarProfesor(control.getProfesor(id[0])) #se agrega al equipo guia
   control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
                              SingletonSesionActual().getUsuario().idUsuario, "nuevo profesor con id=" + str(id[0]))
+  
   return jsonify(str(id))
 
+def is_base64_valid(base64_string):
+    try:
+        base64.b64decode(base64_string)
+        return True
+    except (TypeError):
+        return False
+
+# getFotoProfesor
+@app.route('/getFotoProfesor/<idProfesor>', methods=['GET'])
+def getFotoProfesor(idProfesor):
+  imagen = control.getFotoProfesor(int(idProfesor))
+  base64_image = base64.b64encode(imagen).decode('utf-8')
+  
+  if is_base64_valid(base64_image):
+    return base64_image
+  else:
+    return "None"
+
+# getFotoProfesor
+@app.route('/getFotoProfesorCodigo/<codigo>', methods=['GET'])
+def getFotoProfesorCodigo(codigo):
+  idProfesor = control.getProfesorCodigo(codigo).id
+  imagen = control.getFotoProfesor(int(idProfesor))
+
+  base64_image = None
+  if (imagen != None):
+    base64_image = base64.b64encode(imagen).decode('utf-8')
+
+  if is_base64_valid(base64_image):
+    return base64_image
+  else:
+    return "None"
 
 #AdminEquipoGuia
 # getEquipoGuia(self):
@@ -158,6 +232,14 @@ def getEquipoGuia():
   # return jsonify(jsonLista)
   return listaSalida
 
+# getAllProfesores(self):
+@app.route('/getAllProfesores', methods=['GET'])
+def getAllProfesores():
+  listaProfesores = control.getAllProfesores()
+  listaSalida = []
+  for p in listaProfesores:
+    listaSalida += [json.dumps(p.__dict__)]
+  return listaSalida
 
 #AdminActividades
 # def verActividad(self, idActividad):
@@ -183,7 +265,7 @@ def modificarActividad():
   horaFin = (datetime.strptime(request.json['horaFin'], '%H:%M:%S')).time()
 
   id = control.modificarActividad(int(request.json['id']),request.json['nombre'], int(request.json['tipo']), 
-                             None, None, None, 
+                             fecha, horaInicio, horaFin, 
                              int(request.json['recordatorio']), int(request.json['medio']),
                              request.json['enlace'],int(request.json['estado']))
 
@@ -383,22 +465,33 @@ def actividadToJSON(ac):
 # def exists(self, correo, contrasenha):
 @app.route('/exists/<correo>/<contrasenha>', methods=['GET'])
 def exists(correo, contrasenha):
-  print(control.exists(correo, contrasenha))
-  return json.dumps(control.exists(correo, contrasenha))
+  res = control.exists(correo, contrasenha)
+  print(res)
+  return jsonify(res)
+
+# def correoRegistrado(self, correo, contrasenha):
+@app.route('/correoRegistrado/<correo>', methods=['GET'])
+def correoRegistrado(correo):
+  res = control.correoRegistrado(correo)
+  print(res)
+  return jsonify(res)
 
 # def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol):
-@app.route('/modificarUsuario', methods=['POST'])
-def modificarUsuario():
-  #print(request.json)
+@app.route('/modificarUsuarioContrasenha', methods=['POST'])
+def modificarUsuarioContrasenha():
+
+  print(request.json)
+  contrasenha = request.json['nuevaContrasenha']
 
   #Descomentar cuando se envie el codigo y borrar el otro
+  print(SingletonSesionActual().getUsuario().idUsuario, " ",SingletonSesionActual().getUsuario().contrasenha)
   
-  # id = control.modificarUsuario(int(request.json['idUsuario']), request.json['correoElectronico'], 
-  #                            request.json['contrasenha'], request.json['idRol'])
+  #se modifica en la BD y en los objetos 
+  id = control.modificarUsuario(SingletonSesionActual().getUsuario().idUsuario, None, contrasenha, None, None)
+  #se modifica en la sesionActual
+  SingletonSesionActual().getUsuario().setContrasenha(contrasenha) 
 
-  id = control.modificarUsuario(1, None, None, 1)
-  
-  print(id)
+  print(SingletonSesionActual().getUsuario().idUsuario, " ",SingletonSesionActual().getUsuario().contrasenha)
   
   return jsonify(str(id))
 
@@ -425,10 +518,17 @@ def getUsuario(idUsuario):
   return user.__dict__
 
 # def getUsuarioRol(self, correo, contrasenha):
-@app.route('/getUsuarioRol/<correo>/<contrasenha>', methods=['GET'])
-def getUsuarioRol(correo, contrasenha):
-  return json.dumps(control.getUsuarioRol(correo, contrasenha))
+@app.route('/getUsuarioActualRol', methods=['GET'])
+def getUsuarioActualRol():
+  user = SingletonSesionActual().getUsuario()
+  return json.dumps(control.getUsuarioRol(user.correo, user.contrasenha))
 
+# def iniciarSesion(self, correo):
+@app.route('/iniciarSesion/<correo>', methods=['POST'])
+def iniciarSesion(correo):
+  SingletonSesionActual().setUsuario(control.getUsuarioCorreo(correo))
+  print("....",SingletonSesionActual().getUsuario().idUsuario)
+  return str(SingletonSesionActual().getUsuario().idUsuario)
 
 #Crear Observación - Parche de Alonso
 @app.route('/crearObservacion', methods=['POST'])
@@ -436,6 +536,26 @@ def crearObservacion():
   id = control.crearObservacion(request.json['idActividad'], datetime.today(), request.json['detalle'])
   print(id)
   return jsonify(str(id))
+# def getUsuarioSesionActual(self):
+@app.route('/getUsuarioSesionActual', methods=['GET'])
+def getUsuarioSesionActual():
+  #SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
+  user = SingletonSesionActual().getUsuario()
+  print("---", user.__dict__)
+  return jsonify(user.__dict__)
+
+# def getInfoUsuarioSesionActual(self):
+@app.route('/getInfoUsuarioSesionActual', methods=['GET'])
+def getInfoUsuarioSesionActual():
+  #SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
+  user = SingletonSesionActual().getUsuario()
+  listaPersonas = control.getAllProfesores() + control.getAllAsistentes() + control.consultarEstudiantes(1)
+  for p in listaPersonas:
+    if (user.correo == p.correoElectronico):
+      print("---", p.__dict__)
+      return jsonify(p.__dict__)
+    
+  
 
 
 

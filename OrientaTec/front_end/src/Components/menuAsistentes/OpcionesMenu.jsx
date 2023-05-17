@@ -1,7 +1,5 @@
-import React, {Fragment, useState} from 'react'
+import React, {Fragment} from 'react'
 import { useNavigate } from "react-router-dom";
-import { uploadFile } from './AsistenteOpciones/CargarExel';
-
 
 export default function OpcionesMenu() {
   let navigate = useNavigate();
@@ -72,16 +70,9 @@ export default function OpcionesMenu() {
               </button>
             </div>
             <div class="col">
-              <label htmlFor="fileInput" className="btn btn-success h-100 w-100">
+              <button className="btn btn-success h-100 w-100">
                 Cargar datos de estudiantes
-              </label>
-              <input 
-                id="fileInput"
-                type="file" 
-                onChange={handleFileSelect}
-                accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
-                style={{ display: "none" }} 
-              />
+              </button>
             </div>
         </div>
        </div>

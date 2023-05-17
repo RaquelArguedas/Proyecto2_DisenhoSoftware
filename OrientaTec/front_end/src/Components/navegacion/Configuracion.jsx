@@ -2,6 +2,9 @@ import React, { Fragment, useState, useEffect  } from 'react'
 import { useLocation } from "react-router-dom";
 import { Navbar } from './Navbar'
 import { BarraLateral } from './BarraLateral'
+import axios from 'axios';
+
+const API = process.env.REACT_APP_API;
 
 export  function Configuracion() {
     const state = useLocation().state
@@ -15,26 +18,94 @@ export  function Configuracion() {
     const [numeroOficina, setNumeroOficina] = useState('');
     const [correo, setCorreo] = useState('');
     const [image, setImage] = useState(null);
+    const [imagenData, setImagenData] = useState(null);
+
+    function isBase64Valid(base64String) {
+        const regex = /^[A-Za-z0-9+/=]+$/;
+        const isLengthValid = base64String.length % 4 === 0;
+        const isValidCharacters = regex.test(base64String);
+        return isLengthValid && isValidCharacters;
+      }
+
+    const obtenerImagen = async (codigo) => {
+        try {
+            const response = await axios.get(`${API}/getFotoProfesorCodigo/${codigo}`); //aqui debe enviar el codigo que es
+            const imageBase64 = response.data;
+            console.log(isBase64Valid(imageBase64));
+            setImagenData(imageBase64);
+          } catch (error) {
+            console.error('Error al obtener la imagen:');
+          }
+      };
+
+    const obtenerImagenAsistente = async () => {
+        try {
+            const response = await axios.get(`${API}/getFotoAsistente`);
+            const imageBase64 = response.data;
+            console.log(isBase64Valid(imageBase64));
+            setImagenData(imageBase64);
+          } catch (error) {
+            console.error('Error al obtener la imagen:');
+          }
+      };
 
     useEffect(() => {
         handleSearch();
     }, []);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();  
-        // Aquí puedes enviar los datos a tu backend o hacer lo que necesites con ellos
+
+        const formData = new FormData();
+        formData.append('image', image);
+        formData.append('codigo', codigo);
+        formData.append('cedula', cedula);
+        formData.append('name', name);
+        formData.append('apellido1', apellido1);
+        formData.append('apellido2', apellido2);
+        formData.append('numeroTelefono', numeroTelefono);
+        formData.append('correo', correo);
+        formData.append('numeroOficina', numeroOficina);
+
+        
+        const res = await fetch(`${API}//modificarProfesor`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await res.json() //resultado de la consulta
+        console.log(data) // imprime en consola web
       }
-    const handleSearch = () => {
-        // Aquí podrías agregar la lógica para buscar la información
-        // y asignarla 
-        setName("Adolfo")
-        setApellido1("Corrales")
-        setCodigo("bg123")
-        setApellido2('Perez')
-        setCedula(11230034)
-        setNumeroTelefono(87655432)
-        setNumeroOficina(22341265)
-        setCorreo('Adolfo23@estudiantec.cr')
+    const handleSearch = async () => {
+        const res = await fetch(`${API}/getInfoUsuarioSesionActual`); //PENDIENTE : debe de darle el codigo
+        const data = await res.json();//resultado de la consulta
+        console.log(data) // imprime en consola web 
+
+
+        setCodigo(data['codigo'])
+        setName(data['nombre'])
+        setApellido1(data['apellido1'])
+        setApellido2(data['apellido2'])
+        setCedula(data['cedula'])
+        setNumeroTelefono(data['numeroCelular'])
+        setNumeroOficina(data['numeroOficina'])
+        setCorreo(data['correoElectronico'])
+
+
+        const rol = await fetch(`${API}/getUsuarioActualRol`, {  
+            method: "GET",
+            headers: {
+            "Content-Type": "application/json",
+        }
+        });
+        const usuario = await rol.json();
+        console.log(usuario)
+        if (usuario === 1 || usuario === 2){ 
+            obtenerImagen(data['codigo']);
+        }
+        else { 
+            console.log("asistente") 
+        } 
     };
     
     const handleNameChange = (event) => {
@@ -132,6 +203,7 @@ export  function Configuracion() {
                                     <div className="mb-3">
                                         <label htmlFor="formGroupInputCodigo" className="form-label">
                                         Foto
+                                        {imagenData && <img src={`data:image/jpeg;base64,${imagenData}`} style={{ width: '300px', height: 'auto' }}/>}
                                         </label>
                                     </div>
                                     <div className="mb-3">

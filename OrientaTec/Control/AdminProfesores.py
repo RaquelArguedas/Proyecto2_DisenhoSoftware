@@ -30,4 +30,22 @@ class AdminProfesores:
                         correoElectronico, numeroOficina,autoridad, estado):
         return self.dao.crearProfesor(cedula,nombre,apellido1, apellido2, sede, numeroCelular,
                         correoElectronico, numeroOficina,autoridad, estado)
+    
+    #fotos
+    def registrarFotoProfesor(self,idProfe,bin):
+        self.dao.registrarFotoProfesor(idProfe, bin)
+
+    def setFotoProfesor(self,idBuscado, image):
+        self.dao.setFotoProfesor(idBuscado, image)
+
+    def getFotoProfesor(self,idProfe):
+        return self.dao.getFotoProfesor(idProfe)
+    
+    def getProfesorCorreo(self, correo):
+        profesores = self.dao.getAllProfesores()
+        for prof in profesores:
+            if (prof.correoElectronico == correo):
+                return prof
+    
+    
 
