@@ -18,6 +18,7 @@ export  function Configuracion() {
     const [numeroTelefono, setNumeroTelefono] = useState('');
     const [numeroOficina, setNumeroOficina] = useState('');
     const [correo, setCorreo] = useState('');
+    const [correoV, setCorreoV] = useState('');
     const [image, setImage] = useState(null);
     const [imagenData, setImagenData] = useState(null);
 
@@ -56,7 +57,9 @@ export  function Configuracion() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();  
-
+        if (numeroTelefono===''||correo===''||numeroOficina===''){
+            alert("Ha dejado campos en blanco.");
+        }
         const formData = new FormData();
         formData.append('image', image);
         formData.append('codigo', codigo);
@@ -77,18 +80,44 @@ export  function Configuracion() {
         });
         const usuario = await rol.json();
         console.log(usuario)
-        if (usuario === 1 || usuario === 2){ 
-            await fetch(`${API}//modificarProfesor`, {
-                method: 'POST',
-                body: formData
-            });
+        
+        if(correo!=correoV){
+            const info = await fetch(`${API}/correoRegistrado/${correo}`)//Busca si el correo del profesor ya existe
+            const datos = await info.json();
+            if(datos==false){
+                alert("Se ha modificado la información correctamente")
+                if (usuario === 1 || usuario === 2){ 
+                    await fetch(`${API}//modificarProfesor`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                }
+                else { 
+                    await fetch(`${API}//modificarAsistente`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                } 
+            } else{
+                alert("El correo ingresado no esta disponible, ingrese otro correo");
+            }
+        }else{
+            
+            alert("Se ha modificado la información correctamente")
+            if (usuario === 1 || usuario === 2){ 
+                await fetch(`${API}//modificarProfesor`, {
+                    method: 'POST',
+                    body: formData
+                });
+            }
+            else { 
+                await fetch(`${API}//modificarAsistente`, {
+                    method: 'POST',
+                    body: formData
+                });
+            } 
         }
-        else { 
-            await fetch(`${API}//modificarAsistente`, {
-                method: 'POST',
-                body: formData
-            });
-        } 
+
 
       }
     const handleSearch = async () => {
@@ -105,6 +134,7 @@ export  function Configuracion() {
         setNumeroTelefono(data['numeroCelular'])
         setNumeroOficina(data['numeroOficina'])
         setCorreo(data['correoElectronico'])
+        setCorreoV(data['correoElectronico'])
 
 
         const rol = await fetch(`${API}/getUsuarioActualRol`, {  
