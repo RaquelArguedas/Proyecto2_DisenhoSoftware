@@ -146,7 +146,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         elif (tablaBD == "Observacion"):
             objeto = Observacion(lista[0], lista[1], lista[2])
         elif (tablaBD == "Comentario"):
-            objeto = Comentario(lista[1], lista[2], lista[3], lista[4], lista[5])
+            objeto = Comentario(lista[1], lista[2], lista[3], lista[4], lista[5], lista[0])
 
         return objeto
 
@@ -275,7 +275,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
-                password = '123456',
+                password = 'abd00123',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
@@ -296,8 +296,9 @@ class SingletonDAO(metaclass=SingletonMeta):
     def getActividades(self):
         print(self.planesTrabajo[-1].actividades)
         
-        listaSalida = sorted(self.planesTrabajo[-1].actividades, key=attrgetter('fechaActividad'))
-        return listaSalida
+        #listaSalida = sorted(self.planesTrabajo[-1].actividades, key=attrgetter('fechaActividad'))
+        #return listaSalida
+        return self.planesTrabajo[-1].actividades
     
     #+getTodasActividades():Collection<Actividad>
     def getTodasActividades(self):
@@ -353,6 +354,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     #devuelve los comentario de una actividad
     def verComentariosActividad(self, idActividad):
         lista = []
+
         for i in range (len(self.comentarios)):
             if (self.comentarios[i].idActividad == idActividad):
                 lista += [self.comentarios[i]]
@@ -713,7 +715,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         id = self.executeStoredProcedure('createComentario', args)
         if(len(id)==1):
             #se obtiene el id y se le agrega
-            salida = Comentario(idActividad,autor,fechaHora,contenido, idComentarioPadre)
+            salida = Comentario(idActividad,autor,fechaHora,contenido, idComentarioPadre, None)
 
             #se agrega a la lista de Actividades
             self.comentarios += [salida]
@@ -832,6 +834,7 @@ class SingletonDAO(metaclass=SingletonMeta):
 
     #getUsuarios():Collection<Usuario>
     def getUsuarios(self):
+        print('DAO, Usuarios: ', self.usuarios)
         return self.usuarios
     
     def modificarUsuarioCorreo(self, correoAnterior, correoNuevo):        

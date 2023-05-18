@@ -19,7 +19,7 @@ export function Actividad({datos}) {
    
     const tipoActividad = (datos.tipoActividad===1 ? "Orientadora" : (datos.tipoActividad===2 ? "Motivacional" : (datos.tipoActividad===3 ? "Apoyo estudiantil": (datos.tipoActividad===4 ? "Orden tecnico": "Recreativa"))))
     const estado = (datos.estado===1 ? "Planeada" : (datos.estado===2 ? "Notificada" : (datos.estado===3 ? "Realizada":  "Cancelada")))
-    const gotoDetalleActividad = () => { navigate('/verplan/detalle', {state:{comentarios: state.comentarios, linkMenu: state.linkMenu}}); }
+    const gotoDetalleActividad = () => { navigate('/verplan/detalle', {state:{comentarios: state.comentarios, linkMenu: state.linkMenu, idActividad: datos.idActividad}}); }
     const [responsables, setResponsables] = useState([]);
     
     

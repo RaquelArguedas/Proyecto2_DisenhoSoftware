@@ -1,4 +1,4 @@
-import React, { Fragment, useState , useEffect} from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Navbar } from "../../navegacion/Navbar";
 import { BarraLateral } from "../../navegacion/BarraLateral";
@@ -9,14 +9,14 @@ const API = "http://localhost:5000"; //process.env.REACT_APP_API;
 
 export function VerActividades() {
   let navigate = useNavigate();
-  
+
   const { state } = useLocation();
   const [actividades, setActividades] = useState([]);
   const clearActividad = () => {
     setActividades([]);
   };
 
-  const [todasActividades, setTodasActividades]=useState([]);
+  const [todasActividades, setTodasActividades] = useState([]);
   const clearTodas = () => {
     setTodasActividades([]);
   };
@@ -36,10 +36,10 @@ export function VerActividades() {
     setTodasActividades(() => {
       clearTodas();
       return [data]
-  })
+    })
   };
-  
-  
+
+
 
 
   const handleVerProximaActividad = async (event) => {
@@ -72,14 +72,14 @@ export function VerActividades() {
     })
   };
 
-  const handleVerActividadesEstado = async (estad,event) => {
+  const handleVerActividadesEstado = async (estad, event) => {
     event.preventDefault();
     // Obtener las actividades dependiendo del estado
     const res = await fetch(`${API}/consultarActividadesEstado/${estad}`, {  //aca se cambia el 1 por el estado deseado, asi se sacan las canceladas y las realizadas
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        }
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      }
     });
     const data = await res.json() //resultado de la consulta
     setActividades(() => {
@@ -92,7 +92,7 @@ export function VerActividades() {
     console.log(obj.tipoActividad)
   };
 
-  
+
 
   return (
     <Fragment>
@@ -142,7 +142,7 @@ export function VerActividades() {
                     type="radio"
                     name="flexRadioDefault"
                     id="flexRadioDefault2"
-                    onChange={(event) => handleVerActividadesEstado(2,event)}// Agrega el controlador de eventos onChange
+                    onChange={(event) => handleVerActividadesEstado(2, event)}// Agrega el controlador de eventos onChange
                   />
                   <label
                     className="form-check-label"
@@ -159,8 +159,8 @@ export function VerActividades() {
                     type="radio"
                     name="flexRadioDefault"
                     id="flexRadioDefault3"
-                    onChange={(event) => handleVerActividadesEstado(3,event)}
-                    
+                    onChange={(event) => handleVerActividadesEstado(3, event)}
+
                   />
                   <label
                     className="form-check-label"
@@ -177,7 +177,7 @@ export function VerActividades() {
                     type="radio"
                     name="flexRadioDefault"
                     id="flexRadioDefault4"
-                    onChange={(event) => handleVerActividadesEstado(4,event)}
+                    onChange={(event) => handleVerActividadesEstado(4, event)}
                   />
                   <label
                     className="form-check-label"
@@ -192,17 +192,17 @@ export function VerActividades() {
             {/* Lista de actividades */}
             <div class="overflow-auto" id="listaActividades">
               {console.log("Aqui en el bajo mundo")}
-              { actividades.length>0 && 
+              {actividades.length > 0 &&
                 actividades[0].map((act) =>
-                   (
-                    console.log(JSON.parse(act)),
-                    <Actividad datos={JSON.parse(act)} />
-                  )
+                (
+                  console.log(JSON.parse(act)),
+                  <Actividad datos={JSON.parse(act)} />
+                )
                 )
               }
             </div>
 
-            
+
           </div>
         </div>
       </div>

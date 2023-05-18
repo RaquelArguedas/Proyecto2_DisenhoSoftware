@@ -293,22 +293,22 @@ def getDetalleActividad(idActividad):
   
   for comment in lista[1]:
     listaComentarios += [actividadToJSON(comment)] 
+
   for evidencia in lista[2]:
     listaEvidencias += [evidencia.__dict__]
     
   listaSalida = [actividadToJSON(lista[0])] + [listaComentarios] + [listaEvidencias]
-  #print(listaSalida)
   return listaSalida
 
 # def escribirComentario(self, idActividad,autor,fechaHora, contenido, idComentarioPadre):
 @app.route('/escribirComentario', methods=['POST'])
 def escribirComentario():
-  print(request.json)
+  print(request.form)
 
   #borrar este y descomentar el otro con los JSON adecuados
-  id = control.escribirComentario(int(request.json['idActividad']),
+  id = control.escribirComentario(int(request.form.get('idActividad')),
                                    SingletonSesionActual().getUsuario().idUsuario, datetime.now(), 
-                                   request.json['contenido'], int(request.json['idComentarioPadre']))
+                                   request.form.get('contenido'), int(request.form.get('idComentarioPadre')))
   
   print(id)
   
