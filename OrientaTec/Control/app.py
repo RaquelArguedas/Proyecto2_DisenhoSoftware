@@ -71,6 +71,7 @@ def buscarEstudiante(carnet):
 @app.route('/generarExcelEstudiantes/<sede>', methods=['GET'])
 def generarExcelEstudiantes(sede):
     path = control.generarExcelEstudiantes(sede)
+    print('Path'+path)
     # Ruta al archivo de Excel generado
     excel_path = str(path)
     return send_file(excel_path, as_attachment=True)

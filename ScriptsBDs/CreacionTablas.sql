@@ -10,6 +10,10 @@ I Semestre 2023*/
 CREATE SCHEMA `orientatec` ;
 use orientatec;
 
+create table Sede
+(idSede int primary key not null auto_increment,
+descripcion varchar(50)
+);
 create table TipoActividad
 (idTActividad int primary key not null auto_increment,
 descripcion varchar(150)
@@ -39,6 +43,14 @@ create table Rol
 descripcion varchar(50)
 );
 
+create table Usuario
+(idUsuario int primary key not null auto_increment,
+correo varchar(100),
+contrasenha varchar(50),
+idRol int, foreign key (idRol) references Rol (idRol),
+idSede int, foreign key (idSede) references Sede (idSede)
+);
+
 create table PlanTrabajo
 (idPlan int primary key not null auto_increment,
 anno int
@@ -46,7 +58,7 @@ anno int
 
 create table ActividadesxPlan
 (idActividadesxPlan int primary key not null auto_increment,
-idActividad int,foreign key (idActividad) references Actividad (idActividad),
+idActividad int,foreign key (idActividad) references EstadoActividad (idEstadoA),
 idPlan int, foreign key (idPlan) references PlanTrabajo (idPlan)
 );
 
@@ -73,18 +85,6 @@ create table Autoridad
 descripcion varchar(50)
 );
 
-create table Sede
-(idSede int primary key not null auto_increment,
-descripcion varchar(50)
-);
-
-create table Usuario
-(idUsuario int primary key not null auto_increment,
-correo varchar(100),
-contrasenha varchar(50),
-idRol int, foreign key (idRol) references Rol (idRol),
-idSede int, foreign key (idSede) references Sede (idSede)
-);
 
 create table Profesor
 (idProfesor int primary key not null auto_increment,
@@ -176,6 +176,4 @@ numeroCelular int,
 correoElectronico varchar(200),
 idEstado int, foreign key (idEstado) references EstadoCuenta (idEstadoC)
 );
-
-
 

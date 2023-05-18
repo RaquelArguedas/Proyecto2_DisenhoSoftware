@@ -1,9 +1,11 @@
 //___________GENERAR excel para TODAS sola SEDES____________________
 import axios from 'axios';
+const API = process.env.REACT_APP_API;
 
 const GenerarExelPorCampus = async () => {
     try {
-        const response = await axios.get('/generarExcelEstudiantes', {
+        //const response = await axios.get('/generarExcelEstudiantes', {
+            const response = fetch(`${API}/generarExcelEstudiantes/${0}`, {
             responseType: 'blob', // Indicar que se espera una respuesta de tipo blob (archivo binario)
         });
 

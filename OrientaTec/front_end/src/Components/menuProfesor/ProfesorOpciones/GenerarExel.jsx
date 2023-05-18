@@ -1,17 +1,22 @@
 //___________GENERAR excel para UNA sola SEDE____________________
 import axios from 'axios';
+const API = process.env.REACT_APP_API;
 
 const GenerarExel = async () => {
+  //function GenerarExel(){
     try {
         //Obtener la Sede de la persona que hizo la consulta 
-        const sede = await fetch(`${API}/getSedeUsuarioSesionActual/`, { 
+        console.log("holap")
+        const sede = fetch(`${API}/getSedeUsuarioSesionActual/`, { 
             method: "GET",
             headers: {
             "Content-Type": "application/json",
         }
         });
+        console.log("pase Sede")
 
-        const response = await axios.get('/generarExcelEstudiantes', {
+        //const response = axios.get('/generarExcelEstudiantes', {
+        const response = fetch(`${API}/generarExcelEstudiantes/${sede}`, {
             responseType: 'blob', // Indicar que se espera una respuesta de tipo blob (archivo binario)
         });
 
