@@ -715,7 +715,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         id = self.executeStoredProcedure('createComentario', args)
         if(len(id)==1):
             #se obtiene el id y se le agrega
-            salida = Comentario(idActividad,autor,fechaHora,contenido, idComentarioPadre, None)
+            salida = Comentario(idActividad,autor,fechaHora,contenido, idComentarioPadre, id)
 
             #se agrega a la lista de Actividades
             self.comentarios += [salida]

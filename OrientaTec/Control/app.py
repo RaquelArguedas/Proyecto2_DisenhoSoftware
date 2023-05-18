@@ -291,13 +291,24 @@ def getDetalleActividad(idActividad):
   if (lista[0] == None):
      return jsonify("No existe")       
   
+  commentReparsed = {} #Importate: para el comentario hay que armar una estructura que incluye el nombre del autor
+  #Lo hago porque no quiero cambiar el modelo - Atte: Alonso
   for comment in lista[1]:
-    listaComentarios += [actividadToJSON(comment)] 
+    commentReparsed = {'idActividad': comment.idActividad,
+                       'autor': control.getProfesor(comment.autor).nombre+' '
+                       +control.getProfesor(comment.autor).apellido1+' '
+                       +control.getProfesor(comment.autor).apellido2,
+                       'fechaHora': comment.fechaHora.__str__(),
+                       'contenido': comment.contenido,
+                       'idComentarioPadre': comment.idComentarioPadre,
+                       'idComentario': comment.idComentario}
+    listaComentarios += [commentReparsed] 
 
   for evidencia in lista[2]:
     listaEvidencias += [evidencia.__dict__]
     
   listaSalida = [actividadToJSON(lista[0])] + [listaComentarios] + [listaEvidencias]
+  print(listaSalida)
   return listaSalida
 
 # def escribirComentario(self, idActividad,autor,fechaHora, contenido, idComentarioPadre):

@@ -47,6 +47,7 @@ export function DetalleActividad() {
         });
 
         const data = await res.json(); //resultado de la consulta
+        console.log(data)
         console.log(data[1])
         setListaComentarios(data[1]);
     };
@@ -151,23 +152,23 @@ export function DetalleActividad() {
                                         <Fragment>
                                             <div className="card m-3">
                                                 <div className="card-body">
-                                                    <h6 id="comentarioNombre" className="card-title"> {JSON.parse(comentario).autor} </h6>
+                                                    <h6 id="comentarioNombre" className="card-title"> {comentario.autor} </h6>
 
                                                     <div className="row">
                                                         <div className="col-lg">
                                                             <p id="comentarioDatetime" className="text-secondary mb-2">
-                                                                {JSON.parse(comentario).fechaHora}
+                                                                {comentario.fechaHora}
                                                             </p>
                                                         </div>
                                                         <div className="col-sm-2 d-flex justify-content-end">
                                                             <button href="" className="card-text btn btn-link" 
-                                                                onClick={handleResponder(JSON.parse(comentario).idComentario, JSON.parse(comentario).autor)}>
+                                                                onClick={handleResponder(comentario.idComentario, comentario.autor)}>
                                                                     Responder
                                                             </button>
                                                         </div>
                                                     </div>
 
-                                                    <p id="comentarioContent" className="card-text"> {JSON.parse(comentario).contenido} </p>
+                                                    <p id="comentarioContent" className="card-text"> {comentario.contenido} </p>
                                                 </div>
                                             </div>
                                         </Fragment>
