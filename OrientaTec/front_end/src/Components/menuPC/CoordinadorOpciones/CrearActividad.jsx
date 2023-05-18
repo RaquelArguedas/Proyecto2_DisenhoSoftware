@@ -171,13 +171,12 @@ export function CrearActividad() {
                                             </Fragment>
                                         ))}
                                     </div >
-
-                                    {/* <ListaResponsables responsables={responsables} /> */}
                                 </div>
                                 <div className="col-lg-6">
                                     <div className="input-group w-100 my-3">
                                         <span className="input-group-text w-25">Tipo</span>
                                         <select class="form-select" aria-label="TipoActividad" onChange={handleTipoChange}>
+                                            <option value="0"></option>
                                             <option value="1">Orientadora</option>
                                             <option value="2">Motivacional</option>
                                             <option value="3">Apoyo estudiantil</option>
@@ -189,6 +188,7 @@ export function CrearActividad() {
                                     <div className="input-group w-100 my-3">
                                         <span className="input-group-text w-25">Modalidad</span>
                                         <select class="form-select" aria-label="ModalidadActividad" onChange={handleModalidadChange}>
+                                            <option value="0"></option>
                                             <option value="1">Presencial</option>
                                             <option value="2">Virtual</option>
                                         </select>
@@ -197,6 +197,7 @@ export function CrearActividad() {
                                     <div className="input-group w-100 my-3">
                                         <span className="input-group-text w-25">Estado</span>
                                         <select class="form-select" aria-label="EstadoActividad" onChange={handleEstadoChange}>
+                                            <option value="0"></option>
                                             <option value="1">Planeada</option>
                                             <option value="2">Notificada</option>
                                             <option value="3">Realizada</option>

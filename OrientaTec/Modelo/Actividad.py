@@ -20,11 +20,7 @@ class Actividad:
         self.modificaciones = modificaciones    
 
     def agregarResponsable(self, profesor):
-        if(type(self.responsables) == str):
-            self.responsables = ast.literal_eval(self.responsables).append(profesor)
-        else:
-            self.responsables.append(profesor)
-        print('lista responsables:', self.responsables )
+        self.responsables.append(profesor)
 
     def quitarResponsable(self, profesor):
         self.responsables.remove(profesor)  

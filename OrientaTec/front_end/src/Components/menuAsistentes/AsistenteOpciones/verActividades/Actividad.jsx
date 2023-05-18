@@ -5,24 +5,27 @@ import { useNavigate } from "react-router-dom";
 //A ver
 
 
-export function Actividad({datos}) {
+export function Actividad({ datos }) {
     let navigate = useNavigate();
 
     const { state } = useLocation();
-    console.log("Aqui en actividad")
-    console.log(datos)
-    //state.datosactividad.nombre
-    useEffect(() => {
-        setResponsables( JSON.parse(datos.responsables.replace(/\'/g, '')).
-        map(responsable => ({id: responsable.id, nombre: responsable.nombre+' '+responsable.apellido1+' '+responsable.apellido2})));
-    }, []);
-   
-    const tipoActividad = (datos.tipoActividad===1 ? "Orientadora" : (datos.tipoActividad===2 ? "Motivacional" : (datos.tipoActividad===3 ? "Apoyo estudiantil": (datos.tipoActividad===4 ? "Orden tecnico": "Recreativa"))))
-    const estado = (datos.estado===1 ? "Planeada" : (datos.estado===2 ? "Notificada" : (datos.estado===3 ? "Realizada":  "Cancelada")))
-    const gotoDetalleActividad = () => { navigate('/verplan/detalle', {state:{comentarios: state.comentarios, linkMenu: state.linkMenu, idActividad: datos.idActividad}}); }
+
     const [responsables, setResponsables] = useState([]);
-    
-    
+
+    useEffect(() => {
+        const responsablesJSON = JSON.parse(datos.responsables);
+        setResponsables(responsablesJSON.map(responsable => ({
+            id: JSON.parse(responsable).id,
+            nombre: JSON.parse(responsable).nombre + ' ' +
+                JSON.parse(responsable).apellido1 + ' ' +
+                JSON.parse(responsable).apellido2
+        })));
+    }, []);
+
+    const tipoActividad = (datos.tipoActividad === 1 ? "Orientadora" : (datos.tipoActividad === 2 ? "Motivacional" : (datos.tipoActividad === 3 ? "Apoyo estudiantil" : (datos.tipoActividad === 4 ? "Orden tecnico" : "Recreativa"))))
+    const estado = (datos.estado === 1 ? "Planeada" : (datos.estado === 2 ? "Notificada" : (datos.estado === 3 ? "Realizada" : "Cancelada")))
+    const gotoDetalleActividad = () => { navigate('/verplan/detalle', { state: { comentarios: state.comentarios, linkMenu: state.linkMenu, datosActividad: datos } }); }
+
     return (
         <Fragment>
             <div class="card my-3">
@@ -39,12 +42,12 @@ export function Actividad({datos}) {
 
                             <p id="horaDuracionAct" class="card-text mb-2">
                                 <Icon icon="mdi:alarm-clock" width="24" height="24" />
-                                
-                                Hora Inicio: {datos.horaInicio}      
+
+                                Hora Inicio: {datos.horaInicio}
                             </p>
                             <p id="horaDuracionAct" class="card-text mb-2">
                                 <Icon icon="mdi:alarm-clock" width="24" height="24" />
-                                
+
                                 Hora fin: {datos.horaFin}
                             </p>
 
@@ -68,10 +71,16 @@ export function Actividad({datos}) {
                                 <Icon icon="mdi:people-group" width="24" height="24" />
                                 Responsables
                             </p>
-                          
-                            <p>
-                                {responsables.nombre}
-                            </p>
+
+                            {responsables.length > 0 &&
+                                responsables.map((responsable) =>
+                                (
+                                    <p>
+                                        {responsable.nombre}
+                                    </p>
+                                )
+                                )
+                            }
 
                             <btn onClick={gotoDetalleActividad} class="btn btn-primary">Ver actividad</btn>
                         </div>

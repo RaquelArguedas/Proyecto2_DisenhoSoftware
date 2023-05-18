@@ -12,9 +12,43 @@ export function DetalleActividad() {
     let navigate = useNavigate();
 
     const { state } = useLocation();
+
+    let tipoActividadStr = '';
+    switch (state.datosActividad.tipoActividad) {
+        case 1: tipoActividadStr = 'Orientadora'; break;
+        case 2: tipoActividadStr = 'Motivacional'; break;
+        case 3: tipoActividadStr = 'Apoyo estudiantil'; break;
+        case 4: tipoActividadStr = 'Orden técnico'; break;
+        case 5: tipoActividadStr = 'Recreativa'; break;
+    }
+
+    let medioActividadStr = (state.datosActividad.medio === 1 ? 'Presencial' : 'Virtual');
+
+    let estadoActividadStr = '';
+    switch (state.datosActividad.estado) {
+        case 1: estadoActividadStr = 'Planeada'; break;
+        case 2: estadoActividadStr = 'Notificada'; break;
+        case 3: estadoActividadStr = 'Realizada'; break;
+        case 4: estadoActividadStr = 'Cancelada'; break;
+    }
+
+    const [responsables, setResponsables] = useState([]);
+
+    useEffect(() => {
+        const responsablesJSON = JSON.parse(state.datosActividad.responsables);
+        setResponsables(responsablesJSON.map(responsable => ({
+            id: JSON.parse(responsable).id,
+            nombre: JSON.parse(responsable).nombre + ' ' +
+                JSON.parse(responsable).apellido1 + ' ' +
+                JSON.parse(responsable).apellido2
+        })));
+    });
+
     const [comentarioPadre, setComentarioPadre] = useState(0);
     const [listaComentarios, setListaComentarios] = useState([]);
     const comentarioRef = useRef();
+
+    console.log(state.datosActividad)
 
     const gotoEvidenciasActividad = () => { navigate('/verplan/detalle/evidencias', { state: { comentarios: state.comentarios, linkMenu: state.linkMenu } }); }
 
@@ -23,7 +57,7 @@ export function DetalleActividad() {
     const handleAddComentario = async () => {
         if (comentarioRef.current.value !== '') {
             const formData = new FormData();
-            formData.append('idActividad', state.idActividad);
+            formData.append('idActividad', state.datosActividad.idActividad);
             formData.append('contenido', comentarioRef.current.value);
             formData.append('idComentarioPadre', comentarioPadre);
 
@@ -41,7 +75,7 @@ export function DetalleActividad() {
     const handleGetDetalle = async () => {
 
         //esta obtiene todas las actividades
-        const res = await fetch(`${API}/getDetalleActividad/${state.idActividad}`, {
+        const res = await fetch(`${API}/getDetalleActividad/${state.datosActividad.idActividad}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -49,13 +83,11 @@ export function DetalleActividad() {
         });
 
         const data = await res.json(); //resultado de la consulta
-        console.log(data)
-        console.log(data[1])
         setListaComentarios(data[1]);
     };
 
     const handleResponder = (idPadre, autor) => (event) => {
-        comentarioRef.current.value = "Respondiendo a "+autor+": \n"
+        comentarioRef.current.value = "Respondiendo a " + autor + ": \n"
         setComentarioPadre(idPadre)
     };
 
@@ -75,29 +107,33 @@ export function DetalleActividad() {
                     <div className="col-lg m-3 p-3 bg-light">
                         <div className="card my-3">
                             <div className="card-body">
-                                <h5 className="card-title">Nombre de la actividad</h5>
-                                <h6 className="card-subtitle mb-2 text-muted">Tipo de actividad</h6>
+                                <h5 className="card-title"> {state.datosActividad.nombreActividad} </h5>
+                                <h6 className="card-subtitle mb-2 text-muted">{tipoActividadStr}</h6>
 
                                 <div className="row">
                                     <div className="col">
                                         <p id="" className="card-text mb-2">
                                             <Icon icon="material-symbols:calendar-month" width="24" height="24" />
-                                            Fecha: 27/06/2023
+                                            {state.datosActividad.fechaActividad}
                                         </p>
 
                                         <p id="" className="card-text mb-2">
                                             <Icon icon="mdi:alarm-clock" width="24" height="24" />
-                                            Hora: 07:00 p.m. Duración: 2 horas
+                                            Hora de inicio: {state.datosActividad.horaInicio}
+                                        </p>
+
+                                        <p id="" className="card-text mb-2 mx-4">
+                                            Hora de fin: {state.datosActividad.horaFin}
                                         </p>
 
                                         <p id="" className="card-text mb-2">
                                             <Icon icon="material-symbols:bookmark" width="24" height="24" />
-                                            Tipo de actividad <a href="https://youtu.be/COpJ52Fl4aU?t=240">enlace</a>
+                                            {medioActividadStr} <a href={state.datosActividad.enlace} > {state.datosActividad.enlace} </a>
                                         </p>
 
                                         <p id="" className="card-text mb-2">
                                             <Icon icon="material-symbols:brightness-empty" width="24" height="24" />
-                                            Estado de la actividad
+                                            {estadoActividadStr}
                                         </p>
 
                                         <a id="" className="card-text mb-2">
@@ -111,10 +147,15 @@ export function DetalleActividad() {
                                             Responsables
                                         </p>
 
-                                        <p id="nombresResponsables" className="card-text mb-2">
-                                            &emsp; Nombre Apellido Apellido <br />
-                                            &emsp; Nombre Apellido Apellido
-                                        </p>
+                                        {responsables.length > 0 &&
+                                            responsables.map((responsable) =>
+                                            (
+                                                <p className="card-text mb-2">
+                                                    &emsp; {responsable.nombre}
+                                                </p>
+                                            )
+                                            )
+                                        }
                                     </div>
                                 </div>
 
@@ -163,9 +204,9 @@ export function DetalleActividad() {
                                                             </p>
                                                         </div>
                                                         <div className="col-sm-2 d-flex justify-content-end">
-                                                            <button href="" className="card-text btn btn-link" 
+                                                            <button href="" className="card-text btn btn-link"
                                                                 onClick={handleResponder(comentario.idComentario, comentario.autor)}>
-                                                                    Responder
+                                                                Responder
                                                             </button>
                                                         </div>
                                                     </div>
