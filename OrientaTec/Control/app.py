@@ -267,12 +267,12 @@ def getAllProfesores():
 @app.route('/verActividad/<idActividad>', methods=['GET'])
 def verActividad(idActividad):
   ac = control.verActividad(int(idActividad))
-  print(ac.nombreActividad)
+  print(ac.__dict__)
 
   if (ac == None):
      return jsonify("No existe")   
 
-  print(actividadToJSON(ac))    
+  #print(actividadToJSON(ac))    
 
   return actividadToJSON(ac)
 
@@ -512,7 +512,7 @@ def actividadToJSON(ac):
       for p in acDic[clave]:
         listaSalida += [actividadToJSON(p)]
       acDic[clave] = json.dumps(listaSalida)
-      print("//", acDic[clave])
+      #print("//", acDic[clave])
 
     if (type(acDic[clave]) != int and type(acDic[clave]) != str):
       #print('enter no int/str')

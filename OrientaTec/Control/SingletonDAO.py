@@ -485,7 +485,6 @@ class SingletonDAO(metaclass=SingletonMeta):
 
             #agregar a la actividad el responsable
             actividad.agregarResponsable(self.getProfesor(int(responsable['id'])))
-            print('lista:',actividad.responsables )
 
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
         actividad = None

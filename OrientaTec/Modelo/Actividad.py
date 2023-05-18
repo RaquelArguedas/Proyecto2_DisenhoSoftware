@@ -1,3 +1,5 @@
+import ast
+
 class Actividad:
     def __init__(self,idActividad, nombreActividad,
     tipoActividad, fechaActividad, horaInicio,
@@ -18,7 +20,11 @@ class Actividad:
         self.modificaciones = modificaciones    
 
     def agregarResponsable(self, profesor):
-        self.responsables.append(profesor)
+        if(type(self.responsables) == str):
+            self.responsables = ast.literal_eval(self.responsables).append(profesor)
+        else:
+            self.responsables.append(profesor)
+        print('lista responsables:', self.responsables )
 
     def quitarResponsable(self, profesor):
         self.responsables.remove(profesor)  

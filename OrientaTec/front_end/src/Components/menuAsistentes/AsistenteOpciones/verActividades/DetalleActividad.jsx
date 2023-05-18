@@ -31,8 +31,10 @@ export function DetalleActividad() {
                 method: 'POST',
                 body: formData
             });
-            const data = await res.json() //resultado de la consulta
-            console.log('COMENTARIO AGREGADO')
+            const data = await res.json(); //resultado de la consulta
+            console.log('COMENTARIO AGREGADO');
+            comentarioRef.current.value = '';
+            handleGetDetalle();
         }
     };
 
