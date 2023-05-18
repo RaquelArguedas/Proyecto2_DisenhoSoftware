@@ -15,6 +15,7 @@ from operator import attrgetter
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
 
 import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
@@ -1041,7 +1042,7 @@ class SingletonDAO(metaclass=SingletonMeta):
 
         media = MediaFileUpload(archivo, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-        archivo_subido = servicio_drive.files().create(
+        archivo_subido = self.servicio_drive.files().create(
             body=metadata,
             media_body=media,
             fields='id'
@@ -1096,6 +1097,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         #return wb
         
     def generarExcelTodos(self):
+        print('Entre al excel')
         #NOTA: Self.estudiantes guarda una lista de ESTUDIANTE
 
         wb = Workbook() # se crea el nuevo xlsx
@@ -1162,7 +1164,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         regAL = 1
         regLI = 1
         #Se recorren los estudiantes y se van guardando 
-        for estudiante in range(len(self.estudiantes)):            
+        for estudiante in self.estudiantes:            
             if (estudiante.carnet == 1):
                 sede = 'SJ'
                 regSJ += 1
@@ -1197,15 +1199,26 @@ class SingletonDAO(metaclass=SingletonMeta):
             wb[sede]['G'+ str(registro)] = estudiante.sede #sede
             wb[sede]['H'+ str(registro)] = estudiante.estado #estado
 
-        wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
+        #wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
         #return load_workbook('listaEstudiantes.xlsx')
         #NUEVO
-        archivo_excel = wb.load_workbook('listaEstudiantes.xlsx')
+        wb.save('listaEstudiantes.xlsx')
+        #archivo_excel = wb.save('listaEstudiantes.xlsx')
         nombre_archivo = 'listaEstudiantes.xlsx'
 
-        id_archivo = self.subir_a_google_drive(archivo_excel, nombre_archivo)
+        id_archivo = self.subir_a_google_drive(nombre_archivo, nombre_archivo)
         url_archivo = self.obtener_url_google_drive(id_archivo)
+        print('URL ARCHIVO: ' + url_archivo)
 
+        # Obtiene la lista de permisos del archivo
+        resultado = self.servicio_drive.permissions().list(fileId=id_archivo).execute()
+
+        # Itera sobre los permisos y muestra la información relevante
+        permisos = resultado.get('permissions', [])
+        for permiso in permisos:
+            print('ID del permiso:', permiso['id'])
+            print('Tipo de permiso:', permiso['role'])
+            print('---')
         return url_archivo
         #NUEVO
         #return wb

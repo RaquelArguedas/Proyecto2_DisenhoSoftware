@@ -1,97 +1,44 @@
-//___________GENERAR excel para UNA sola SEDE____________________
-import axios from 'axios';
-const API = process.env.REACT_APP_API;
+//__________________Genera excel de UNA sola SEDE________________________
+const XLSX = require('xlsx');
 
-const GenerarExel = async () => {
-  //function GenerarExel(){
-    try {
-        //Obtener la Sede de la persona que hizo la consulta 
-        console.log("holap")
-        const sede = fetch(`${API}/getSedeUsuarioSesionActual/`, { 
-            method: "GET",
-            headers: {
-            "Content-Type": "application/json",
-        }
-        });
-        console.log("pase Sede")
+function GenerarExel(){
+  // Crea un nuevo libro de trabajo
+  const wb = XLSX.utils.book_new();
 
-        //const response = axios.get('/generarExcelEstudiantes', {
-        const response = fetch(`${API}/generarExcelEstudiantes/${sede}`, {
-            responseType: 'blob', // Indicar que se espera una respuesta de tipo blob (archivo binario)
-        });
+  // Crea una hoja de trabajo con datos de ejemplo
+  const wsData = [['Nombre', 'Apellido'], ['Juan', 'Pérez'], ['María', 'Gómez']];
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
 
-        // Crear un objeto URL para el archivo descargado
-        const url = window.URL.createObjectURL(new Blob([response.data]));
+  // Agrega la hoja de trabajo al libro de trabajo
+  XLSX.utils.book_append_sheet(wb, ws, 'Hoja 1');
 
-        // Crear un enlace temporal y hacer clic en él para descargar el archivo
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'DatosDelCampus.xlsx');
-        document.body.appendChild(link);
-        link.click();
+  // Genera el archivo de Excel y lo guarda en un objeto binario
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
 
-        // Eliminar el objeto URL y el enlace temporal
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(link);
-    } catch (error) {
-        console.error('Error al descargar el archivo', error);
-    }
-};
+  // Define el nombre del archivo
+  const fileName = 'DatosDelCampus.xlsx';
 
-// Pruebas SOPHY
-//import React, { Fragment, useRef, useState } from 'react'
+  // Crea un objeto Blob a partir del archivo binario
+  const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
 
-//const API = 'http://localhost:5000'; //process.env.REACT_APP_API;
-//const XLSX = require('xlsx');
+  // Descarga el archivo usando la función window.location.href
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = fileName;
+  link.click();
 
-//Esto genera un excel con la info de TODAS las sedes
-//function GenerarExel(){
-    //Obtener la Sede de la persona que hizo la consulta 
-   // const sede = fetch(`${API}/getSedeUsuarioSesionActual/`, { 
-     //   method: "GET",
-       // headers: {
-        // "Content-Type": "application/json",
-     //}
-    //})
-    //console.log("pase Sede")
-    
-    // Ya la función del back se encarga de crear el archivo y devolerlo
-   // const wb = fetch(`${API}/generarExcelEstudiantes/${sede}`, { 
-    //    method: "GET",
-     //   headers: {
-       //  "Content-Type": "application/json",
-     //}
-    //})
-    //console.log("pase generar")
-
-    // Genera el archivo de Excel y lo guarda en un objeto binario
-    //const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
-
-    // Define el nombre del archivo
-    //const fileName = 'DatosDelCampus.xlsx';
-
-    // Crea un objeto Blob a partir del archivo binario
-    //const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
-
-    // Descarga el archivo usando la función window.location.href
-    //const url = URL.createObjectURL(blob);
-    //const link = document.createElement('a');
-    //link.href = url;
-    //link.download = fileName;
-    //link.click();
-
-    // Elimina el objeto URL
-    //URL.revokeObjectURL(url);
-//}
-
+  // Elimina el objeto URL
+  URL.revokeObjectURL(url);
+}
 // Convierte una cadena en un arreglo de bytes
-//function s2ab(s) {
- // const buf = new ArrayBuffer(s.length);
-  //const view = new Uint8Array(buf);
-  //for (let i = 0; i < s.length; i++) {
-   // view[i] = s.charCodeAt(i) & 0xFF;
- // }
-  //return buf;
-//}
+function s2ab(s) {
+  const buf = new ArrayBuffer(s.length);
+  const view = new Uint8Array(buf);
+  for (let i = 0; i < s.length; i++) {
+    view[i] = s.charCodeAt(i) & 0xFF;
+  }
+  return buf;
+}
 
 export default GenerarExel;
