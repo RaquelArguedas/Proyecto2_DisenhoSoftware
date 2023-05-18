@@ -13,6 +13,7 @@ export  function Configuracion() {
     const [apellido1, setApellido1] = useState('');
     const [apellido2, setApellido2] = useState('');
     const [codigo, setCodigo] = useState('');
+    const [id, setId] = useState('');
     const [cedula, setCedula] = useState('');
     const [numeroTelefono, setNumeroTelefono] = useState('');
     const [numeroOficina, setNumeroOficina] = useState('');
@@ -38,9 +39,9 @@ export  function Configuracion() {
           }
       };
 
-    const obtenerImagenAsistente = async () => {
+    const obtenerImagenAsistente = async (id) => {
         try {
-            const response = await axios.get(`${API}/getFotoAsistente`);
+            const response = await axios.get(`${API}/getFotoAsistente/${id}`);
             const imageBase64 = response.data;
             console.log(isBase64Valid(imageBase64));
             setImagenData(imageBase64);
@@ -66,15 +67,29 @@ export  function Configuracion() {
         formData.append('numeroTelefono', numeroTelefono);
         formData.append('correo', correo);
         formData.append('numeroOficina', numeroOficina);
-
-        
-        const res = await fetch(`${API}//modificarProfesor`, {
-            method: 'POST',
-            body: formData
+        formData.append('id', id);
+             
+        const rol = await fetch(`${API}/getUsuarioActualRol`, {  
+            method: "GET",
+            headers: {
+            "Content-Type": "application/json",
+        }
         });
-        
-        const data = await res.json() //resultado de la consulta
-        console.log(data) // imprime en consola web
+        const usuario = await rol.json();
+        console.log(usuario)
+        if (usuario === 1 || usuario === 2){ 
+            await fetch(`${API}//modificarProfesor`, {
+                method: 'POST',
+                body: formData
+            });
+        }
+        else { 
+            await fetch(`${API}//modificarAsistente`, {
+                method: 'POST',
+                body: formData
+            });
+        } 
+
       }
     const handleSearch = async () => {
         const res = await fetch(`${API}/getInfoUsuarioSesionActual`); //PENDIENTE : debe de darle el codigo
@@ -82,7 +97,7 @@ export  function Configuracion() {
         console.log(data) // imprime en consola web 
 
 
-        setCodigo(data['codigo'])
+        
         setName(data['nombre'])
         setApellido1(data['apellido1'])
         setApellido2(data['apellido2'])
@@ -102,9 +117,12 @@ export  function Configuracion() {
         console.log(usuario)
         if (usuario === 1 || usuario === 2){ 
             obtenerImagen(data['codigo']);
+            setCodigo(data['codigo'])
         }
         else { 
-            console.log("asistente") 
+            obtenerImagenAsistente(data['id']);
+            setCodigo("Id: "+data['id']) // para que se muestre en pantalla
+            setId(data['id'])
         } 
     };
     

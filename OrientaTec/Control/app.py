@@ -120,7 +120,35 @@ def modificarProfesor():
   
   print(id)
   if (request.form.get('image') != "null"):
-    control.setFotoProfesor(prof.id, request.files['image'])
+    control.registrarFotoProfesor(prof.id, request.files['image'])
+
+  return jsonify(str(id))
+
+# modificarAsistente(self, id, cedula,nombre,apellido1, apellido2, sede, numeroCelular,
+#                        correoElectronico, numeroOficina):
+@app.route('/modificarAsistente', methods=['POST'])
+def modificarAsistente():
+  id = request.form.get('id')
+  cedula = request.form.get('cedula')
+  name = request.form.get('name')
+  apellido1 = request.form.get('apellido1')
+  apellido2 = request.form.get('apellido2')
+  sede = request.form.get('sede')
+  numeroTelefono = request.form.get('numeroTelefono')
+  correo = request.form.get('correo')
+  numeroOficina = request.form.get('numeroOficina')
+
+  print(id)
+
+  if (sede != None):
+    sede = int(sede)
+  
+  res = control.modificarAsistente(int(id),int(cedula), name, apellido1, apellido2, sede, int(numeroTelefono), 
+                                  correo, int(numeroOficina))
+  
+  print(res)
+  if (request.form.get('image') != "null"):
+    control.registrarFotoAsistente(int(id), request.files['image'])
 
   return jsonify(str(id))
 
@@ -170,13 +198,32 @@ def is_base64_valid(base64_string):
 @app.route('/getFotoProfesor/<idProfesor>', methods=['GET'])
 def getFotoProfesor(idProfesor):
   imagen = control.getFotoProfesor(int(idProfesor))
-  base64_image = base64.b64encode(imagen).decode('utf-8')
   
-  if is_base64_valid(base64_image):
-    return base64_image
+  if (imagen!=None and is_base64_valid(base64.b64encode(imagen).decode('utf-8'))):
+    return base64.b64encode(imagen).decode('utf-8')
   else:
     return "None"
-
+  
+# getFotoAsistente
+@app.route('/getFotoAsistente/<id>', methods=['GET'])
+def getFotoAsistente(id):
+  imagen = control.getFotoAsistente(int(id))
+  
+  if (imagen!=None and is_base64_valid(base64.b64encode(imagen).decode('utf-8'))):
+    return base64.b64encode(imagen).decode('utf-8')
+  else:
+    return "None"
+  
+# getFotoAsistente
+@app.route('/getFotoAfiche/<id>', methods=['GET'])
+def getFotoAfiche(id):
+  imagen = control.getFotoAfiche(int(id))
+  
+  if (imagen!=None and is_base64_valid(base64.b64encode(imagen).decode('utf-8'))):
+    return base64.b64encode(imagen).decode('utf-8')
+  else:
+    return "None"
+  
 # getFotoProfesor
 @app.route('/getFotoProfesorCodigo/<codigo>', methods=['GET'])
 def getFotoProfesorCodigo(codigo):
@@ -233,20 +280,33 @@ def verActividad(idActividad):
 #                 horaFin, recordatorio,responsables, medio, enlace,estado):
 @app.route('/modificarActividad', methods=['POST'])
 def modificarActividad():
-  
-  print(request.json)
+  id = request.form.get('id')
+  nombre = request.form.get('nombre')
+  tipo = request.form.get('tipo')
+  fecha = (datetime.strptime(request.form.get('fecha'), '%Y-%m-%d')).date()
+  horaInicio = (datetime.strptime(request.form.get('horaInicio'), '%H:%M:%S')).time()
+  horaFin = (datetime.strptime(request.form.get('horaFin'), '%H:%M:%S')).time()
+  recordatorio = request.form.get('recordatorio')
+  medio = request.form.get('medio')
+  enlace = request.form.get('enlace')
+  estado = request.form.get('estado')
+   
+  if (recordatorio != None):
+    recordatorio = int(recordatorio)
+  if (tipo != None):
+    tipo = int(tipo)
+  if (estado != None):
+    estado = int(estado)
+  if (medio != None):
+    medio = int(medio)
 
-  fecha = (datetime.strptime(request.json['fecha'], '%Y-%m-%d')).date()
-  horaInicio = (datetime.strptime(request.json['horaInicio'], '%H:%M:%S')).time()
-  horaFin = (datetime.strptime(request.json['horaFin'], '%H:%M:%S')).time()
+  res = control.modificarActividad(int(id),nombre, tipo, fecha, horaInicio, horaFin, 
+                                   recordatorio, medio, enlace, estado )
 
-  id = control.modificarActividad(int(request.json['id']),request.json['nombre'], int(request.json['tipo']), 
-                             fecha, horaInicio, horaFin, 
-                             int(request.json['recordatorio']), int(request.json['medio']),
-                             request.json['enlace'],int(request.json['estado']))
+  print("ID: ", id)
+  if (request.form.get('image') != "null"):
+    control.registrarFotoAfiche(int(id), request.files['image'])
 
-  print(id)
-  
   return jsonify(str(id))
 
 # def cancelarActividad(self, idActividad):
@@ -263,10 +323,24 @@ def cancelarActividad(idActividad):
 #                    recordatorio, medio,enlace, estado, ultimaModificacion):
 @app.route('/crearActividad', methods=['POST'])
 def crearActividad():
-  id = control.crearActividad(request.json['nombre'], int(request.json['tipo']), datetime.strptime(request.json['fecha'], '%m/%d/%Y'), 
-                               datetime.strptime(request.json['horaInicio'], '%H:%M'), datetime.strptime(request.json['horaFin'], '%H:%M'), int(request.json['recordatorio']), 
-                               request.json['responsables'], int(request.json['medio']), request.json['enlace'], int(request.json['estado']))
+  nombre = request.form.get('nombre')
+  tipo = request.form.get('tipo')
+  fecha = request.form.get('fecha')
+  horaInicio = request.form.get('horaInicio')
+  horaFin = request.form.get('horaFin')
+  recordatorio = request.form.get('recordatorio')
+  responsables = request.form.get('responsables')
+  medio = request.form.get('medio')
+  enlace = request.form.get('enlace')
+  estado = request.form.get('estado')
+  
+  print("res: ", responsables)
+  id = control.crearActividad(nombre, int(tipo), datetime.strptime(fecha, '%m/%d/%Y'), 
+                               datetime.strptime(horaInicio, '%H:%M'), datetime.strptime(horaFin, '%H:%M'), 
+                               int(recordatorio), json.loads(responsables), int(medio), enlace, int(estado))
   print(id)
+
+  control.registrarFotoAfiche(id[0], request.files['image'])
   
   control.bitacoraActividad(id[0], datetime.now().date(), datetime.now().time().strftime('%H:%M'),
                              SingletonSesionActual().getUsuario().idUsuario, "nueva actividad")

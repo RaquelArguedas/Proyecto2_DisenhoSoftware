@@ -5,6 +5,7 @@ import { BarraLateral } from '../../navegacion/BarraLateral'
 import { Icon } from '@iconify/react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import axios from 'axios';
 
 const API = process.env.REACT_APP_API;
 
@@ -31,6 +32,8 @@ export function ModificarActividad() {
     const [estado, setEstado] = useState(0); const handleEstadoChange = (event) => { setEstado(event.target.value); };
     const [fecha, setFecha] = useState('');
     const [horaInicio, setHoraInicio] = useState('');
+    const [image, setImage] = useState(null);
+    const [imagenData, setImagenData] = useState(null);
 
     const [horaFin, setHoraFin] = useState('');
 
@@ -48,8 +51,27 @@ export function ModificarActividad() {
     const [recordatorio, setRecordatorios] = useState(0); const handleRecordatoriosChange = (event) => { setRecordatorios(event.target.value); };
     const [responsables, setResponsables] = useState([]);
 
+    function isBase64Valid(base64String) {
+        const regex = /^[A-Za-z0-9+/=]+$/;
+        const isLengthValid = base64String.length % 4 === 0;
+        const isValidCharacters = regex.test(base64String);
+        return isLengthValid && isValidCharacters;
+      }
+
+    const obtenerImagen = async () => {
+        try {
+            const response = await axios.get(`${API}/getFotoAfiche/${idActRef.current.value}`); 
+            const imageBase64 = response.data;
+            console.log(isBase64Valid(imageBase64));
+            setImagenData(imageBase64);
+          } catch (error) {
+            console.error('Error al obtener la imagen:');
+          }
+      };
+
 
     const handleSearch = async () => {
+        obtenerImagen();
         const res = await fetch(`${API}/verActividad/${idActRef.current.value}`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta
         if (data === 'No existe') {
@@ -124,14 +146,25 @@ export function ModificarActividad() {
             alert("Actividad modificada correctamente")
             const id = idActRef.current.value;
             const enlace = (esVirtual) ? enlaceR : ''
-            const res = await fetch(`${API}/modificarActividad`, { //queda pendiente lo de agregar una foto
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id, nombre, tipo, fecha, horaInicio, horaFin, recordatorio, medio, enlace, estado
-                }),
+
+            const formData = new FormData();
+            formData.append('id', id);
+            formData.append('image', image);
+            formData.append('nombre', nombre);
+            formData.append('tipo', tipo);
+            formData.append('fecha', fecha);
+            formData.append('horaInicio', horaInicio);
+            formData.append('horaFin', horaFin);
+            formData.append('recordatorio', recordatorio);
+            formData.append('medio', medio);
+            formData.append('estado', estado);
+            formData.append('enlace', enlace);
+
+            console.log("id", id)
+            
+            const res = await fetch(`${API}/modificarActividad`, {
+                method: 'POST',
+                body: formData
             });
 
             if (estado == 3){
@@ -164,6 +197,13 @@ export function ModificarActividad() {
         }); //PENDIENTE : debe de darle el codigo
         const data = await res.json();
     }
+    const handleImageUpload = (event) => {
+        const selectedImage = event.target.files[0];
+        setImage(selectedImage);
+        console.log("desde handleImage:")
+        console.log(image)
+        
+    };
 
     React.useEffect(() => {
         handleLlenarProfesores()
@@ -248,8 +288,26 @@ export function ModificarActividad() {
                                     </div>
 
                                     <div className="input-group w-100 my-3">
-                                        <button className="btn btn-info w-25 text-light">Afiche</button>
-                                        <button className="btn btn-success w-25 text-light">Subir Afiche</button>
+                                    <label htmlFor="formGroupInputCodigo" className="form-label">
+                                            Afiche
+                                            {imagenData && <img src={`data:image/jpeg;base64,${imagenData}`} alt="Foto del profesor" style={{ width: '300px', height: 'auto' }}/>}
+                                        </label>
+                                    <div className="mb-3">
+                                        {image && (
+                                            <img
+                                                src={URL.createObjectURL(image)}
+                                                alt="Selected Image"
+                                                style={{ width: '30%', height: 'auto' }}
+                                            />
+                                        )}
+                                    </div>
+                                    <div className="mb-3">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageUpload}
+                                        />
+                                    </div>
                                         {esVirtual &&
                                             <input type="text" className="form-control" placeholder="Enlace a la actividad" onChange={handleEnlaceChange} value={enlaceR} />
                                         }
