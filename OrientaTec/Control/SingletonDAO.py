@@ -13,11 +13,14 @@ import os
 from pathlib import Path
 from operator import attrgetter
 
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
+
 import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
-#sys.path.append('Proyecto2_DisenhoSoftware/OrientaTec/Modelo')
+sys.path.append('Proyecto2_DisenhoSoftware/OrientaTec/Modelo')
 
-sys.path.append('./Modelo')
+#sys.path.append('./Modelo')
 #Importo la Clase
 from Usuario import *
 from Estudiante import * 
@@ -53,7 +56,14 @@ class SingletonDAO(metaclass=SingletonMeta):
     #Atributos de conexión
     connection = None
     cursor = None
-    #Atributos para conetarse a MONGO
+    #Atributos para conetarse a GOOGLE DRIVE
+    # Ruta al archivo JSON de las credenciales de Google Drive
+    CREDENCIALES_JSON = 'C:/Users/Harrick Mc Lean M/Downloads/disehnosoftware-50f7c4a809ca.json'
+
+    # Crea una instancia del cliente de Google Drive
+    credenciales = service_account.Credentials.from_service_account_file(CREDENCIALES_JSON)
+    servicio_drive = build('drive', 'v3', credentials=credenciales)
+
 
     #Atributos para conetarse a MONGO
     MONGO_HOST="localhost"
@@ -275,7 +285,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
-                password = '123456',
+                password = 'Moralesjfi123456',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
@@ -1021,6 +1031,28 @@ class SingletonDAO(metaclass=SingletonMeta):
             print(ex)
     #-------------------------------GETTERS-------------------------------
     #--------------------EXCEL----------------------------
+
+    #CONEXION GOOGLE DRIVE 
+    def subir_a_google_drive(self,archivo, nombre_archivo):
+        metadata = {
+            'name': nombre_archivo,
+            'mimeType': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        }
+
+        media = MediaFileUpload(archivo, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+        archivo_subido = servicio_drive.files().create(
+            body=metadata,
+            media_body=media,
+            fields='id'
+        ).execute()
+
+        return archivo_subido['id']
+
+    def obtener_url_google_drive(self,id_archivo):
+        url = f'https://drive.google.com/uc?id={id_archivo}'
+        return url
+
     '''params
      @sede: Numero de sede de la cual quiere el excel'''
     def generarExcelSede(self,sede):
@@ -1052,7 +1084,16 @@ class SingletonDAO(metaclass=SingletonMeta):
                 wb['Sheet']['G'+ str(registro)] = estudiante.estado #Estado
                 registro += 1
         wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
-        return wb
+        #NUEVO
+        archivo_excel = wb.load_workbook('listaEstudiantes.xlsx')
+        nombre_archivo = 'listaEstudiantes.xlsx'
+
+        id_archivo = self.subir_a_google_drive(archivo_excel, nombre_archivo)
+        url_archivo = self.obtener_url_google_drive(id_archivo)
+
+        return url_archivo
+        #NUEVO
+        #return wb
         
     def generarExcelTodos(self):
         #NOTA: Self.estudiantes guarda una lista de ESTUDIANTE
@@ -1158,7 +1199,16 @@ class SingletonDAO(metaclass=SingletonMeta):
 
         wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
         #return load_workbook('listaEstudiantes.xlsx')
-        return wb
+        #NUEVO
+        archivo_excel = wb.load_workbook('listaEstudiantes.xlsx')
+        nombre_archivo = 'listaEstudiantes.xlsx'
+
+        id_archivo = self.subir_a_google_drive(archivo_excel, nombre_archivo)
+        url_archivo = self.obtener_url_google_drive(id_archivo)
+
+        return url_archivo
+        #NUEVO
+        #return wb
 
     ''''
     cargarExcel
@@ -1212,3 +1262,14 @@ class SingletonDAO(metaclass=SingletonMeta):
                 #se agrega a la lista de Estudiantes
                 self.estudiantes += [est]
             return id
+    
+    #Funciones que no se copiaron en merge
+    def getProfesorCodigo(self, codigo):
+        for prof in self.profesores:
+            if(prof.codigo == codigo):
+                return prof
+            
+    def getProfesorCedula(self, cedula):
+        for prof in self.profesores:
+            if(prof.cedula == cedula):
+                return prof

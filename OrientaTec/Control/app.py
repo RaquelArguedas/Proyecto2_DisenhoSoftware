@@ -6,6 +6,7 @@ from SingletonSesionActual import *
 from datetime import datetime, timedelta
 from io import BytesIO
 from PIL import Image
+from flask import send_file #nuevo import
 import base64
 
 # Instantiation
@@ -62,10 +63,18 @@ def buscarEstudiante(carnet):
 
 #PENDIENTE como las dos pendientes solamente interactuan a nivel de BD no deberia modificarse nada aca
 # generarExcelEstudiantes(self,sede):
-@app.route('/generarExcelEstudiantes/<sede>', methods=['POST'])
+#@app.route('/generarExcelEstudiantes/<sede>', methods=['POST'])
+#def generarExcelEstudiantes(sede):
+ # res = control.generarExcelEstudiantes(sede)
+ # return jsonify(str(res))
+
+@app.route('/generarExcelEstudiantes/<sede>', methods=['GET'])
 def generarExcelEstudiantes(sede):
-  res = control.generarExcelEstudiantes(sede)
-  return jsonify(str(res))
+    path = control.generarExcelEstudiantes(sede)
+    # Ruta al archivo de Excel generado
+    excel_path = str(path)
+    return send_file(excel_path, as_attachment=True)
+
 
 # cargarExcelEstudiantes(self,archivo)
 @app.route('/cargarExcelEstudiantes/<archivo>', methods=['POST'])
