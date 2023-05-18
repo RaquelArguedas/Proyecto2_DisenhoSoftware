@@ -47,9 +47,6 @@ class MainController:
     
     def registrarFotoProfesor(self,idProfe,bin):
         self.controlProfesor.registrarFotoProfesor(idProfe, bin)
-
-    def setFotoProfesor(self,idBuscado, image):
-        self.controlProfesor.setFotoProfesor(idBuscado, image)
     
     def getFotoProfesor(self,idProfe):
         return self.controlProfesor.getFotoProfesor(idProfe)
@@ -80,6 +77,12 @@ class MainController:
     
     def getAsistenteCorreo(self, correo):
         return self.controlEquipoGuia.getAsistenteCorreo(correo)
+    
+    def getFotoAsistente(self,id):
+        return self.controlEquipoGuia.getFotoAsistente(id)
+    
+    def registrarFotoAsistente(self,id, image):
+        return self.controlEquipoGuia.registrarFotoAsistente(id, image)
     
     #AdminEstudiantes
     def consultarEstudiantes(self, ordenamiento):

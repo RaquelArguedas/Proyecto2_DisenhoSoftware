@@ -1,6 +1,6 @@
 from SingletonDAO import *
 from MainController import *
-from datetime import time, datetime
+from datetime import time, datetime, date
 from SingletonSesionActual import *
 
 if __name__ == "__main__":
@@ -15,7 +15,13 @@ if __name__ == "__main__":
 
 
     dao = SingletonDAO()
+
+    ac = dao.verActividad(13)
     
-    for e in control.consultarEstudiantes(3):
-        print(e.sede)
+    acDic = ac.__dict__
+    fecha_str = '2023-04-17 00:00:00'
+    fecha_dt = datetime.strptime(fecha_str, '%Y-%m-%d %H:%M:%S')
+
+    print(fecha_dt.date())
+
     

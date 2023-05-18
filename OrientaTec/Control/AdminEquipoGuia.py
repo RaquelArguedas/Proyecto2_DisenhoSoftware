@@ -33,3 +33,10 @@ class AdminEquipoGuia:
                         correoElectronico, numeroOficina):
         return self.dao.modificarAsistente(id, cedula,nombre,apellido1, apellido2, sede, 
                                            numeroCelular,correoElectronico, numeroOficina)
+    
+
+    def getFotoAsistente(self,id):
+        return self.dao.getFotoAsistente(id)
+    
+    def registrarFotoAsistente(self,id, image):
+        return self.dao.registrarFotoAsistente(id, image)

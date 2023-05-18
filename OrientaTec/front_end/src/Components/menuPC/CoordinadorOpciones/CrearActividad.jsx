@@ -30,6 +30,7 @@ export function CrearActividad() {
     const [horaInicio, setHoraInicio] = useState('');
 
     const [horaFin, setHoraFin] = useState('');
+    const [image, setImage] = useState(null);
 
     const handleHoraFinChange = (event) => {
         setHoraInicio(startDate.getHours() + ':' + (startDate.getMinutes() === 0 ? '00' : startDate.getMinutes()));
@@ -78,17 +79,32 @@ export function CrearActividad() {
         } else {
             alert("Actividad ingresada correctamente")
             console.log(responsables)
+
+            const formData = new FormData();
+            formData.append('image', image);
+            formData.append('nombre', nombre);
+            formData.append('tipo', tipo);
+            formData.append('fecha', fecha);
+            formData.append('horaInicio', horaInicio);
+            formData.append('horaFin', horaFin);
+            formData.append('recordatorio', recordatorio);
+            formData.append('responsables', JSON.stringify(responsables));
+            formData.append('medio', medio);
+            formData.append('estado', estado);
+
+            console.log("TIPOOOOOOOOOOOO")
+            console.log(responsables)
+
             const enlace = (esVirtual) ? enlaceR : ''
+            formData.append('enlace', enlace);
+
             const res = await fetch(`${API}/crearActividad`, { //queda pendiente lo de agregar una foto
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "http://localhost:3000",
-                },
-                body: JSON.stringify({
-                    nombre, tipo, fecha, horaInicio, horaFin, recordatorio, responsables, medio, enlace, estado
-                }),
+                body: formData
             });
+
+            const data = await res.json();
+            console.log(data);
 
 
         }
@@ -102,6 +118,13 @@ export function CrearActividad() {
         setResponsables(()=> responsables.filter(responsable => responsable.id !== event.target.id))
         forceUpdate();
     }
+    const handleImageUpload = (event) => {
+        const selectedImage = event.target.files[0];
+        setImage(selectedImage);
+        console.log("desde handleImage:")
+        console.log(image)
+        
+    };
 
     React.useEffect(() => {
         handleLlenarProfesores()
@@ -182,7 +205,22 @@ export function CrearActividad() {
                                     </div>
 
                                     <div className="input-group w-100 my-3">
-                                        <button className="btn btn-success w-25 text-light">Subir Afiche</button>
+                                    <div className="mb-3">
+                                            {image && (
+                                                <img
+                                                    src={URL.createObjectURL(image)}
+                                                    alt="Selected Image"
+                                                    style={{ width: '30%', height: 'auto' }}
+                                                />
+                                            )}
+                                        </div>
+                                        <div className="mb-3">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleImageUpload}
+                                            />
+                                        </div>
 
                                         {esVirtual &&
                                             <input type="text" className="form-control" placeholder="Enlace a la actividad" onChange={handleEnlaceChange} />

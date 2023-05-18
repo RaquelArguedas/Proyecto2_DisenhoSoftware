@@ -63,6 +63,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     MONGO_CLIENTE = None
     MONGO_BASEDATOS = None
     collecFtProf = None
+    collecFtAs = None
     collecAfiche = None 
     collecEvLista = None
     collecEvFoto= None
@@ -476,13 +477,14 @@ class SingletonDAO(metaclass=SingletonMeta):
             if (ac.idActividad == idActividad):
                 actividad = ac
 
-        print('Resp. Nuevos:', responsablesNuevos)
+        print('Resp. Nuevos:', type(responsablesNuevos))
         for responsable in responsablesNuevos:
             #agregar en tabla responsablexactividad
-            self.executeStoredProcedure("createResponsableXActividad", [responsable['id'], idActividad])
+            print("responsable['id']", responsable)
+            self.executeStoredProcedure("createResponsableXActividad", [int(responsable['id']), int(idActividad)])
 
             #agregar a la actividad el responsable
-            actividad.agregarResponsable(self.getProfesor(responsable['id']))
+            actividad.agregarResponsable(self.getProfesor(int(responsable['id'])))
             print('lista:',actividad.responsables )
 
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
@@ -581,8 +583,8 @@ class SingletonDAO(metaclass=SingletonMeta):
         if(len(id)==1):
             print("entro a crearla")
             #se obtiene el id y se le agrega
-            salida = Actividad.Actividad(id[0], nombreActividad, tipoActividad, fechaActividad,
-                    horaInicio, horaFin, recordatorio, [], medio,  
+            salida = Actividad.Actividad(id[0], nombreActividad, tipoActividad, fechaActividad.date(),
+                    horaInicio.time(), horaFin.time(), recordatorio, [], medio,  
                     enlace, estado, ultimaModificacion, [])
 
             #se agrega a la lista de Actividades
@@ -591,6 +593,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             print(salida.nombreActividad)
             print(len(self.actividades))
 
+            print("responsables: ", responsables)
             self.agregarResponsablesActividad(id[0], responsables)
         
         return id
@@ -740,7 +743,17 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +getProfesor(id:int):profesor:Profesor
     def getProfesor(self, idProfesor):
         for prof in self.profesores:
-            if(prof.id == idProfesor):
+            if(int(prof.id )== int(idProfesor)):
+                return prof
+            
+    def getProfesorCodigo(self, codigo):
+        for prof in self.profesores:
+            if(prof.codigo == codigo):
+                return prof
+            
+    def getProfesorCedula(self, cedula):
+        for prof in self.profesores:
+            if(prof.cedula == cedula):
                 return prof
 
     # +consultarEstudiantes(ordenamiento: enum): Collection<Estudiante>
@@ -869,6 +882,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.collecAfiche = self.MONGO_BASEDATOS["AficheActividad"]
             self.collecEvLista = self.MONGO_BASEDATOS["EvListaAsistencia"]
             self.collecEvFoto= self.MONGO_BASEDATOS["EvFotosParticipantes"]
+            self.collecFtAs= self.MONGO_BASEDATOS["FotosAsistentes"]
             print("Conexion a Mongo exitosa.")
         except Exception as ex:
             print(ex)
@@ -886,10 +900,26 @@ class SingletonDAO(metaclass=SingletonMeta):
             #revisar que no exista el registro 
             cantRegistros = self.collecFtProf.count_documents({'idProfe':idProfe})
             print(cantRegistros)
-            if(cantRegistros > 0):
-                print("El registro ya existe, NO SE PUEDE actualizar.")
+            if(cantRegistros > 0): #si ya existe lo actualiza
+                self.collecFtProf.update_one({'idProfe':idProfe},{'$set':{'foto':image.read()}})
+                print("Se ha actualizado la foto exitosamente. ")
             else:
                 self.collecFtProf.insert_one({'idProfe':idProfe, 'foto': image.read()})
+                print("Se ha insertado la foto exitosamente.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+
+    def registrarFotoAsistente(self,idAsistente,image):
+        try:
+            self.connectMongoServer()            
+            cantRegistros = self.collecFtAs.count_documents({'idAsistente':idAsistente})
+            print(cantRegistros)
+            if(cantRegistros > 0): #si existe lo actualiza, si no lo crea
+                self.collecFtAs.update_one({'idAsistente':idAsistente},{'$set':{'foto':image.read()}})
+                print("Se ha actualizado la foto exitosamente. ")
+            else:
+                self.collecFtAs.insert_one({'idAsistente':idAsistente, 'foto': image.read()})
                 print("Se ha insertado la foto exitosamente.")
             self.closeMongoConnection()
         except Exception as ex:
@@ -901,8 +931,9 @@ class SingletonDAO(metaclass=SingletonMeta):
             #revisar que no exista el registro 
             cantRegistros = self.collecAfiche.count_documents({'idActividad':idActividad})
             print(cantRegistros)
-            if(cantRegistros > 0):
-                print("El registro ya existe, NO SE PUEDE actualizar.")
+            if(cantRegistros > 0): #si existe lo actualiza
+                self.collecAfiche.update_one({'idActividad':idActividad},{'$set':{'foto':image.read()}})
+                print("Se ha actualizado la foto exitosamente. ")
             else:
                 self.collecAfiche.insert_one({'idActividad':idActividad, 'foto': image.read()})
                 print("Se ha insertado la foto exitosamente.")
@@ -922,42 +953,14 @@ class SingletonDAO(metaclass=SingletonMeta):
     def registrarFotoEv(self,idEvidencia,image):
         try:
             self.connectMongoServer()
-            #revisar que no exista el registro 
             cantRegistros = self.collecEvFoto.count_documents({'idEvidencia':idEvidencia})
             print(cantRegistros)
-            if(cantRegistros > 0):
-                print("El registro ya existe, NO SE PUEDE actualizar.")
+            if(cantRegistros > 0): #si existe lo actualiza
+                self.collecEvFoto.update_one({'idEvidencia':idEvidencia},{'$set':{'foto':image.read()}})
+                print("Se ha actualizado la foto exitosamente. ")
             else:
                 self.collecEvFoto.insert_one({'idEvidencia':idEvidencia, 'foto': image.read()})
                 print("Se ha insertado la foto exitosamente.")
-            self.closeMongoConnection()
-        except Exception as ex:
-            print(ex)
-
-    def setFotoProfesor(self,idBuscado, image):
-        try:
-            self.connectMongoServer()
-            #Revisar que exista el registro 
-            cantRegistros = self.collecFtProf.count_documents({'idProfe':idBuscado})
-            if(cantRegistros > 0):
-                self.collecFtProf.update_one({'idProfe':idBuscado},{'$set':{'foto':image.read()}})
-                print("Se ha actualizado la foto exitosamente. ")
-            else:
-                print("El registro que intenta actualizar NO existe.")
-            self.closeMongoConnection()
-        except Exception as ex:
-            print(ex)
-
-    def setFotoAfiche(self,idBuscado, image):
-        try:
-            self.connectMongoServer()
-            #Revisar que exista el registro 
-            cantRegistros = self.collecAfiche.count_documents({'idActividad':idBuscado})
-            if(cantRegistros > 0):
-                self.collecAfiche.update_one({'idActividad':idBuscado},{'$set':{'foto':image.read()}})
-                print("Se ha actualizado la foto exitosamente. ")
-            else:
-                print("El registro que intenta actualizar NO existe.")
             self.closeMongoConnection()
         except Exception as ex:
             print(ex)
@@ -973,6 +976,22 @@ class SingletonDAO(metaclass=SingletonMeta):
                 return document['foto']
             else:
                 print("El registro que intenta obtener NO existe.")
+                return None
+        except Exception as ex:
+            print(ex)
+
+    def getFotoAsistente(self,idBuscado):
+        try:
+            self.connectMongoServer()
+            #revisar que el profesor exista
+            cantRegistros = self.collecFtAs.count_documents({'idAsistente':idBuscado})
+            if cantRegistros > 0 :                
+                document = self.collecFtAs.find_one({'idAsistente': idBuscado})
+                self.closeMongoConnection()
+                return document['foto']
+            else:
+                print("El registro que intenta obtener NO existe.")
+                return None
         except Exception as ex:
             print(ex)
     
@@ -986,7 +1005,8 @@ class SingletonDAO(metaclass=SingletonMeta):
                 self.closeMongoConnection()
                 return document['foto']
             else:
-                print("La actividad que busca NO existe.")
+                print("El registro que intenta obtener NO existe.")
+                return None
         except Exception as ex:
             print(ex)
 
@@ -1004,7 +1024,8 @@ class SingletonDAO(metaclass=SingletonMeta):
                 self.closeMongoConnection()
                 return listaSalida
             else:
-                print("La evidencia que busca NO existe.")
+                print("El registro que intenta obtener NO existe.")
+                return None
         except Exception as ex:
             print(ex) 
 
@@ -1019,7 +1040,8 @@ class SingletonDAO(metaclass=SingletonMeta):
                 self.closeMongoConnection()
                 return documento["foto"]
             else:
-                print("La evidencia que busca NO existe.")
+                print("El registro que intenta obtener NO existe.")
+                return None
         except Exception as ex:
             print(ex)
     #-------------------------------GETTERS-------------------------------
