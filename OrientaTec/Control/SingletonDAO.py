@@ -1052,8 +1052,6 @@ class SingletonDAO(metaclass=SingletonMeta):
                 listaEstudiantes.append(est)
         return listaEstudiantes
     
-
-
     #cargarExcel
     #Lee los registros de un excel en la base de datos
      #   params: @nombArchivo: nombreDelExcel o ruta
@@ -1076,14 +1074,16 @@ class SingletonDAO(metaclass=SingletonMeta):
                 if (int(estudiante[6]) == 1 or int(estudiante[6]) == 2 or int(estudiante[6]) == 3 
                 or int(estudiante[6]) == 4 or int(estudiante[6]) == 5):  
                     #Llamar al método agregarEstudiante de BD
-                    args = [estudiante[0],estudiante[1],estudiante[2],estudiante[3],estudiante[4],
-                    estudiante[5],estudiante[6],1]
+                    args = [estudiante[0],estudiante[1],estudiante[2],estudiante[3],estudiante[6],
+                    estudiante[4],estudiante[5],1]
                     #se modifica en la bd
                     respuesta = self.executeStoredProcedure('createEstudiante', args)
+                    print('respuesta storeProcedure:')
+                    print(respuesta)
                     if(len(respuesta)==1):
                         #se genera el Estudiante y se agrega a la lista de estudiantes
-                        est = Estudiante(estudiante[0],estudiante[1],estudiante[2],estudiante[3],estudiante[4],
-                        estudiante[5],estudiante[6],1) 
+                        est = Estudiante(estudiante[0],estudiante[1],estudiante[2],estudiante[3],estudiante[6],
+                        estudiante[4],estudiante[5],1) 
                         #se agrega a la lista de Estudiantes
                         self.estudiantes += [est]
                         

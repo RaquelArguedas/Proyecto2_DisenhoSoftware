@@ -8,7 +8,8 @@ export function uploadFile(file) { // Define una función llamada uploadFile que
   // Enviar el archivo al backend usando una función de envío o una librería como axios
   
   //axios.post('/upload', formData)
-  axios.post('/cargarExcelEstudiantes', formData)
+  
+  axios.post(`${API}/cargarExcelEstudiantes`, formData)
      .then(() => console.log('El archivo se ha subido con éxito'))
      .catch(() => console.error('Ocurrió un error al subir el archivo'));
   // La función axios.post() se utiliza comúnmente para enviar archivos al backend. 
