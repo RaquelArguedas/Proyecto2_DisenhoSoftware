@@ -39,10 +39,7 @@ class AdminEstudiantes:
                                             numeroCelular, estado)
     
     def generarExcelEstudiantes(self,sede):
-        if sede == 1 or sede == 2 or sede == 3 or sede == 4 or sede == 5:
             return self.dao.generarExcelSede(sede)
-        else:
-            return self.dao.generarExcelTodos()
     
     def cargarExcelEstudiantes(self,nombArchivo):
         return self.dao.cargarExcel(nombArchivo)

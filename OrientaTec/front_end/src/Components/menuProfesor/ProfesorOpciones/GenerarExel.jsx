@@ -1,13 +1,21 @@
-//__________________Genera excel de UNA sola SEDE________________________
-const XLSX = require('xlsx');
 
-function GenerarExel(){
+const XLSX = require('xlsx');
+const API = process.env.REACT_APP_API;
+
+
+async function GenerarExel() {
+  console.log('GENERAR EXCEL');
+
+  // Obtener la LISTA de estudiantes de la SEDE
+  const listaEstResponse = await fetch(`${API}/generarExcelEstudiantes/${0}`);
+  const listaEstData = await listaEstResponse.json();
+  console.log(listaEstData)
+
   // Crea un nuevo libro de trabajo
   const wb = XLSX.utils.book_new();
 
-  // Crea una hoja de trabajo con datos de ejemplo
-  const wsData = [['Nombre', 'Apellido'], ['Juan', 'Pérez'], ['María', 'Gómez']];
-  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  // Crea una hoja de trabajo con los datos de la lista de estudiantes
+  const ws = XLSX.utils.aoa_to_sheet(listaEstData);
 
   // Agrega la hoja de trabajo al libro de trabajo
   XLSX.utils.book_append_sheet(wb, ws, 'Hoja 1');
@@ -42,3 +50,5 @@ function s2ab(s) {
 }
 
 export default GenerarExel;
+
+//__________________Genera excel de UNA sola SEDE________________________

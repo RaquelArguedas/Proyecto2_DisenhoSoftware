@@ -19,6 +19,7 @@ if __name__ == "__main__":
     #for e in control.consultarEstudiantes(3):
      #   print(e.sede)
 
-    print('Pruebas de excel_______')
-    print('Respuesta de la funcion:' +  dao.generarExcelTodos())
+    print('Pruebas de excel')
+    print('Respuesta de la funcion:')
+    print(dao.generarExcelSede(1))
     

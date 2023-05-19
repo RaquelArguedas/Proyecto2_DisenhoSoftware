@@ -62,20 +62,17 @@ def buscarEstudiante(carnet):
   #return jsonify(jsonStr)
 
 #PENDIENTE como las dos pendientes solamente interactuan a nivel de BD no deberia modificarse nada aca
-# generarExcelEstudiantes(self,sede):
-#@app.route('/generarExcelEstudiantes/<sede>', methods=['POST'])
-#def generarExcelEstudiantes(sede):
- # res = control.generarExcelEstudiantes(sede)
- # return jsonify(str(res))
 
 @app.route('/generarExcelEstudiantes/<sede>', methods=['GET'])
 def generarExcelEstudiantes(sede):
-    path = control.generarExcelEstudiantes(sede)
-    print('Path'+path)
-    # Ruta al archivo de Excel generado
-    excel_path = str(path)
-    return send_file(excel_path, as_attachment=True)
-
+    if int(sede) == 0: #Genere para LA sede del user
+      user = SingletonSesionActual().getUsuario()
+      res =  control.generarExcelEstudiantes(user.idSede)
+    else: #Genera para todas las sedes
+      res =  control.generarExcelEstudiantes(int(sede))
+    print('respuesta generarExcel:')
+    print(res)
+    return json.dumps(res)
 
 # cargarExcelEstudiantes(self,archivo)
 @app.route('/cargarExcelEstudiantes/<archivo>', methods=['POST'])
@@ -549,14 +546,12 @@ def getInfoUsuarioSesionActual():
 # def getSedeUsuarioSesionActual(self):
 @app.route('/getSedeUsuarioSesionActual', methods=['GET'])
 def getSedeUsuarioSesionActual():
-  #SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
+  print('pruebaaaaaa')
   user = SingletonSesionActual().getUsuario()
-  print("GET", user.sede)
-  return str(user.sede)
-
-
-
-
+  #print("---", user.__dict__)
+  print('INFO DICCIONARIO:')
+  print(user.__dict__['idSede'])
+  return jsonify(user.__dict__['idSede'])
 
 # inicia el servidor
 if __name__ == "__main__":

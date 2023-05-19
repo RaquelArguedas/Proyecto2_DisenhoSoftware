@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import GenerarExel from "./ProfesorOpciones/GenerarExel";
 import GenerarExelPorCampus from "./ProfesorOpciones/GenerarExelPorCampus";
 
+//import  from 
+
 
 export function OpcionesMenuProfesor() {
     let navigate = useNavigate();
@@ -12,14 +14,13 @@ export function OpcionesMenuProfesor() {
     const gotoInformacionEquipo = () => { navigate("/infoequipo", {state: {linkMenu: "/menuProfesor"}}); };
     const gotoModificarEstudiante = () => { navigate("/modificarEstudiante", {state: {linkMenu: "/menuProfesor"}}); };
     const gotoModificarProfesor = () => { navigate("/modificarProfesor", {}); };
-    
-    const handleDownloadExcelCampus = () => { // Define una función llamada handleDownloadExcelCampus que se ejecuta cuando se hace clic en un botón o enlace
+    function handleDownloadExcelCampus() { // Define una función llamada handleDownloadExcelCampus que se ejecuta cuando se hace clic en un botón o enlace
         GenerarExel(); // Llama a una función llamada GenerarExel que probablemente genera y descarga un archivo Excel para el campus especificado
-    }
+      }
       
-    const handleDownloadExcelPorCampus = () => { // Define una función llamada handleDownloadExcelPorCampus que se ejecuta cuando se hace clic en un botón o enlace
+      function handleDownloadExcelPorCampus() { // Define una función llamada handleDownloadExcelPorCampus que se ejecuta cuando se hace clic en un botón o enlace
         GenerarExelPorCampus(); // Llama a una función llamada GenerarExelPorCampus que probablemente genera y descarga un archivo Excel que contiene información detallada por campus
-    }
+      }
     
     return (
         <Fragment>

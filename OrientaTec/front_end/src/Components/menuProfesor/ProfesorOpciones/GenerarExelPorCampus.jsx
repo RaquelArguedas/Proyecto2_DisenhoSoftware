@@ -3,21 +3,42 @@ const API = process.env.REACT_APP_API;
 const XLSX = require('xlsx'); //dk
 
 
-function GenerarExelPorCampus(){
+async function GenerarExelPorCampus(){
+  console.log('GENERAR EXCEL POR CAMPUS');
+
+  // Obtener la LISTA de estudiantes de la SEDE
+  const listaEstResponseSJ = await fetch(`${API}/generarExcelEstudiantes/${1}`)
+  const listaEstDataSJ = await listaEstResponseSJ.json();
+
+  const listaEstResponseCA = await fetch(`${API}/generarExcelEstudiantes/${2}`)
+  const listaEstDataCA = await listaEstResponseCA.json();
+
+  const listaEstResponseSC = await fetch(`${API}/generarExcelEstudiantes/${3}`)
+  const listaEstDataSC = await listaEstResponseSC.json();
+
+  const listaEstResponseAL = await fetch(`${API}/generarExcelEstudiantes/${4}`)
+  const listaEstDataAL = await listaEstResponseAL.json();
+
+  const listaEstResponseLI = await fetch(`${API}/generarExcelEstudiantes/${5}`)
+  const listaEstDataLI = await listaEstResponseLI.json();
+  //console.log(listaEstData);
 
   // Crea un nuevo libro de trabajo
   const wb = XLSX.utils.book_new();
 
-  // Crea una hoja de trabajo con datos de ejemplo
-  const wsData = [['Nombre', 'Apellido'], ['Juan', 'Pérez'], ['María', 'Gómez']];
-  const ws = XLSX.utils.aoa_to_sheet(wsData);
-
-  const wsDat = [['Nombre', 'Apellido'], ['Juan', 'Pérez'], ['María', 'Gómez']];
-  const w = XLSX.utils.aoa_to_sheet(wsData);
+  // Crea una hoja de trabajo con los datos de la lista de estudiantes
+  const wsSJ = XLSX.utils.aoa_to_sheet(listaEstDataSJ);
+  const wsCA = XLSX.utils.aoa_to_sheet(listaEstDataCA);
+  const wsSC = XLSX.utils.aoa_to_sheet(listaEstDataSC);
+  const wsAL = XLSX.utils.aoa_to_sheet(listaEstDataAL);
+  const wsLI = XLSX.utils.aoa_to_sheet(listaEstDataLI);
 
   // Agrega la hoja de trabajo al libro de trabajo
-  XLSX.utils.book_append_sheet(wb, ws, 'Hoja 1');
-  XLSX.utils.book_append_sheet(wb, w, 'Hoja 2');
+  XLSX.utils.book_append_sheet(wb, wsSJ, 'SJ');
+  XLSX.utils.book_append_sheet(wb, wsCA, 'CA');
+  XLSX.utils.book_append_sheet(wb, wsSC, 'SC');
+  XLSX.utils.book_append_sheet(wb, wsAL, 'AL');
+  XLSX.utils.book_append_sheet(wb, wsLI, 'LI');
 
   // Genera el archivo de Excel y lo guarda en un objeto binario
   const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
@@ -37,6 +58,7 @@ function GenerarExelPorCampus(){
 
   // Elimina el objeto URL
   URL.revokeObjectURL(url);
+
 }
 
 // Convierte una cadena en un arreglo de bytes
