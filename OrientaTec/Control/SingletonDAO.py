@@ -176,7 +176,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     
     def getProfesorCedula(self, cedula):
         for prof in self.profesores:
-            if(prof.cedula == cedula):
+            if(int(prof.cedula) == int(cedula)):
                 return prof
 
     def getAllProfesores(self):
@@ -276,7 +276,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
-                password = 'Michelle.18',
+                password = '123456',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
@@ -764,11 +764,6 @@ class SingletonDAO(metaclass=SingletonMeta):
             if(prof.codigo == codigo):
                 return prof
             
-    def getProfesorCedula(self, cedula):
-        for prof in self.profesores:
-            if(prof.cedula == cedula):
-                return prof
-
     # +consultarEstudiantes(ordenamiento: enum): Collection<Estudiante>
     def consultarEstudiantes(self):
         return self.estudiantes
