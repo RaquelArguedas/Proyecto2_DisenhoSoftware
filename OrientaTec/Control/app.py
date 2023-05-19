@@ -61,8 +61,6 @@ def buscarEstudiante(carnet):
 
   #return jsonify(jsonStr)
 
-#PENDIENTE como las dos pendientes solamente interactuan a nivel de BD no deberia modificarse nada aca
-
 @app.route('/generarExcelEstudiantes/<sede>', methods=['GET'])
 def generarExcelEstudiantes(sede):
     if int(sede) == 0: #Genere para LA sede del user
@@ -74,10 +72,13 @@ def generarExcelEstudiantes(sede):
     print(res)
     return json.dumps(res)
 
+
 # cargarExcelEstudiantes(self,archivo)
-@app.route('/cargarExcelEstudiantes/<archivo>', methods=['POST'])
-def cargarExcelEstudiantes(archivo):
-  archivo = request.files['archivo']
+#@app.route('/cargarExcelEstudiantes/<archivo>', methods=['POST'])
+#def cargarExcelEstudiantes(archivo):
+@app.route('/cargarExcelEstudiantes', methods=['POST'])
+def cargarExcelEstudiantes():
+  archivo = request.files['file']
   res = control.cargarExcelEstudiantes(archivo)
   return jsonify(str(res))
 
