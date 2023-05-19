@@ -19,7 +19,7 @@ export function ModificarEstudiante() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        if (carnet===''||name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||estado===''){
+        if (name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||estado===''){
             alert("Ha dejado campos en blanco.");
         }else{
             const carnet = carnetRef.current.value;
