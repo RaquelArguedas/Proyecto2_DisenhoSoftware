@@ -20,44 +20,44 @@ export function AgregarProfesor() {
         event.preventDefault();  
         if (cedula===''||name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||numeroOficina===''){
             alert("Ha dejado campos en blanco.");
-        }
-        const info = await fetch(`${API}/getProfesorCedula/${cedula}`); //Busca si la cedula del profesor ya existe
-        const data = await info.json();//resultado de la consulta
-        const res = await fetch(`${API}/correoRegistrado/${correo}`)//Busca si el correo del profesor ya existe
-        const datos = await res.json();
+        }else{
+            const info = await fetch(`${API}/getProfesorCedula/${cedula}`); //Busca si la cedula del profesor ya existe
+            const data = await info.json();//resultado de la consulta
+            const res = await fetch(`${API}/correoRegistrado/${correo}`)//Busca si el correo del profesor ya existe
+            const datos = await res.json();
 
+            if(data==="No existe"){
+                if(datos==false){
+                    const formData = new FormData();
+                    formData.append('image', image);
+                    formData.append('cedula', cedula);
+                    formData.append('name', name);
+                    formData.append('apellido1', apellido1);
+                    formData.append('apellido2', apellido2);
+                    formData.append('sede', sede);
+                    formData.append('numeroTelefono', numeroTelefono);
+                    formData.append('correo', correo);
+                    formData.append('numeroOficina', numeroOficina);
 
-        if(data==="No existe"){
-            if(datos==false){
-                alert("Se ha ingreado un nuevo profesor")
-                const formData = new FormData();
-                formData.append('image', image);
-                formData.append('cedula', cedula);
-                formData.append('name', name);
-                formData.append('apellido1', apellido1);
-                formData.append('apellido2', apellido2);
-                formData.append('sede', sede);
-                formData.append('numeroTelefono', numeroTelefono);
-                formData.append('correo', correo);
-                formData.append('numeroOficina', numeroOficina);
-
-                
-                const res = await fetch(`${API}/crearProfesor`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await res.json();
-                console.log(data);
+                    
+                    const res = await fetch(`${API}/crearProfesor`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    alert("Se ha ingreado un nuevo profesor")
+                    const data = await res.json();
+                    console.log(data);
+                }
+                else {
+                    alert("El correo ingresado no esta disponible, ingrese otro correo");
+                }
+        
             }
-            else {
-                alert("El correo ingresado no esta disponible, ingrese otro correo");
-            }
-    
-        }
 
-        else{
-            alert("El profesor ya se encuentra ingresado");
+            else{
+                alert("El profesor ya se encuentra ingresado");
+            }
         }
         
     }

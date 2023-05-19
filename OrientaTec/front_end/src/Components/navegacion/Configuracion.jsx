@@ -59,33 +59,52 @@ export  function Configuracion() {
         event.preventDefault();  
         if (numeroTelefono===''||correo===''||numeroOficina===''){
             alert("Ha dejado campos en blanco.");
-        }
-        const formData = new FormData();
-        formData.append('image', image);
-        formData.append('codigo', codigo);
-        formData.append('cedula', cedula);
-        formData.append('name', name);
-        formData.append('apellido1', apellido1);
-        formData.append('apellido2', apellido2);
-        formData.append('numeroTelefono', numeroTelefono);
-        formData.append('correo', correo);
-        formData.append('numeroOficina', numeroOficina);
-        formData.append('id', id);
-             
-        const rol = await fetch(`${API}/getUsuarioActualRol`, {  
-            method: "GET",
-            headers: {
-            "Content-Type": "application/json",
-        }
-        });
-        const usuario = await rol.json();
-        console.log(usuario)
-        
-        if(correo!=correoV){
-            const info = await fetch(`${API}/correoRegistrado/${correo}`)//Busca si el correo del profesor ya existe
-            const datos = await info.json();
-            if(datos==false){
-                alert("Se ha modificado la información correctamente")
+        }else{
+            const formData = new FormData();
+            formData.append('image', image);
+            formData.append('codigo', codigo);
+            formData.append('cedula', cedula);
+            formData.append('name', name);
+            formData.append('apellido1', apellido1);
+            formData.append('apellido2', apellido2);
+            formData.append('numeroTelefono', numeroTelefono);
+            formData.append('correo', correo);
+            formData.append('numeroOficina', numeroOficina);
+            formData.append('id', id);
+                
+            const rol = await fetch(`${API}/getUsuarioActualRol`, {  
+                method: "GET",
+                headers: {
+                "Content-Type": "application/json",
+            }
+            });
+            const usuario = await rol.json();
+            console.log(usuario)
+            
+            if(correo!=correoV){
+                const info = await fetch(`${API}/correoRegistrado/${correo}`)//Busca si el correo del profesor ya existe
+                const datos = await info.json();
+                if(datos==false){
+                    if (usuario === 1 || usuario === 2){ 
+                        await fetch(`${API}//modificarProfesor`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                    }
+                    else { 
+                        await fetch(`${API}//modificarAsistente`, {
+                            method: 'POST',
+                            body: formData
+                        });
+                    } 
+                    
+                    alert("Se ha modificado la información correctamente")
+                    
+                } else{
+                    alert("El correo ingresado no esta disponible, ingrese otro correo");
+                }
+            }else{
+                
                 if (usuario === 1 || usuario === 2){ 
                     await fetch(`${API}//modificarProfesor`, {
                         method: 'POST',
@@ -98,28 +117,18 @@ export  function Configuracion() {
                         body: formData
                     });
                 } 
-            } else{
-                alert("El correo ingresado no esta disponible, ingrese otro correo");
+                alert("Se ha modificado la información correctamente")
             }
-        }else{
-            
-            alert("Se ha modificado la información correctamente")
-            if (usuario === 1 || usuario === 2){ 
-                await fetch(`${API}//modificarProfesor`, {
-                    method: 'POST',
-                    body: formData
-                });
-            }
-            else { 
-                await fetch(`${API}//modificarAsistente`, {
-                    method: 'POST',
-                    body: formData
-                });
-            } 
+
         }
+        
 
 
       }
+
+
+
+
     const handleSearch = async () => {
         const res = await fetch(`${API}/getInfoUsuarioSesionActual`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta
