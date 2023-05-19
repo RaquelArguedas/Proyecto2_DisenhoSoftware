@@ -12,6 +12,8 @@ export function VerActividades() {
 
   const { state } = useLocation();
   const [actividades, setActividades] = useState([]);
+  const [primerActividad, setPrimerActividad] = useState([]);
+  const [ultimaActividad, setUltimaActividad] = useState([]);
   const clearActividad = () => {
     setActividades([]);
   };
@@ -33,10 +35,11 @@ export function VerActividades() {
     });
     const data = await res.json(); //resultado de la consulta
     console.log(data)
-    setTodasActividades(() => {
-      clearTodas();
-      return [data]
-    })
+    console.log("Estoy en la funcion de todas las actividades")
+    setPrimerActividad(JSON.parse(data[0]).fechaActividad)
+    setUltimaActividad(JSON.parse(data[data.length - 1]).fechaActividad)
+    //const primeraActividad=todasActividades.fechaActividad[0]
+    //console.log(primeraActividad)
   };
 
 
@@ -110,10 +113,10 @@ export function VerActividades() {
                 <h4>Actividades del plan de trabajo</h4>
               </div>
               <div className="col-sm-3">
-                <p>Inicio:</p>
+                <p>Inicio: {primerActividad}</p>
               </div>
               <div className="col-sm-3">
-                <p>Fin: </p>
+                <p>Fin: {ultimaActividad}</p>
               </div>
             </div>
 

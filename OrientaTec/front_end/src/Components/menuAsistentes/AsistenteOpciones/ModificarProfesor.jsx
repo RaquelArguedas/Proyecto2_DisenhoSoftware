@@ -19,6 +19,7 @@ export function ModificarProfesor() {
     const [numeroTelefono, setNumeroTelefono] = useState('');
     const [numeroOficina, setNumeroOficina] = useState('');
     const [correo, setCorreo] = useState('');
+    const [correoV, setCorreoV] = useState('');
     const [sede, setSede] = useState('');
     const [image, setImage] = useState(null);
     const [imagenData, setImagenData] = useState(null);
@@ -43,28 +44,50 @@ export function ModificarProfesor() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if (cedula===''||name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||numeroOficina===''){
+            alert("Ha dejado campos en blanco.");
+        }else{
+            const formData = new FormData();
+            formData.append('image', image);
+            const codigo = codigoRef.current.value;
+            formData.append('cedula', cedula);
+            formData.append('name', name);
+            formData.append('apellido1', apellido1);
+            formData.append('apellido2', apellido2);
+            formData.append('sede', sede);
+            formData.append('numeroTelefono', numeroTelefono);
+            formData.append('correo', correo);
+            formData.append('numeroOficina', numeroOficina);
+            formData.append('estado', estado);        
+            formData.append('codigo', codigo);
+            
+            const info = await fetch(`${API}/correoRegistrado/${correo}`)//Busca si el correo del profesor ya existe
+            const datos = await info.json();
+            if(correo!=correoV){
+                if(datos==false){
+                    const res = await fetch(`${API}/modificarProfesor`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    alert("Se ha modificado la información del profesor correctamente")
+                    const data = await res.json() //resultado de la consulta
+                    console.log(data) // imprime en consola web
+                    
+                
+                }else{
+                    alert("El correo ingresado no esta disponible, ingrese otro correo");
+                }
+            }else{
+                const res = await fetch(`${API}/modificarProfesor`, {
+                    method: 'POST',
+                    body: formData
+                });
+                alert("Se ha modificado la información del profesor correctamente")
+                const data = await res.json() //resultado de la consulta
+                console.log(data) // imprime en consola web
 
-        const formData = new FormData();
-        formData.append('image', image);
-        const codigo = codigoRef.current.value;
-        formData.append('cedula', cedula);
-        formData.append('name', name);
-        formData.append('apellido1', apellido1);
-        formData.append('apellido2', apellido2);
-        formData.append('sede', sede);
-        formData.append('numeroTelefono', numeroTelefono);
-        formData.append('correo', correo);
-        formData.append('numeroOficina', numeroOficina);
-        formData.append('estado', estado);        
-        formData.append('codigo', codigo);
-        
-        const res = await fetch(`${API}/modificarProfesor`, {
-            method: 'POST',
-            body: formData
-        });
-        
-        const data = await res.json() //resultado de la consulta
-        console.log(data) // imprime en consola web
+            }
+        }
     }
     
 
@@ -81,6 +104,7 @@ export function ModificarProfesor() {
         setNumeroTelefono(data.numeroCelular)
         setNumeroOficina(data.numeroOficina)
         setCorreo(data.correoElectronico)
+        setCorreoV(data.correoElectronico)
         setSede(data.sede)
         setEstado(data.estado);
     };

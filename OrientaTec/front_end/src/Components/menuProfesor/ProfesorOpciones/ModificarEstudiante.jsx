@@ -8,9 +8,7 @@ const API = process.env.REACT_APP_API;
 
 export function ModificarEstudiante() {
     const carnetRef = useRef()
-
     const { state } = useLocation();
-
     const [estado, setEstado] = useState("");
     const [name, setName] = useState('');
     const [apellido1, setApellido1] = useState('');
@@ -21,24 +19,26 @@ export function ModificarEstudiante() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const carnet = carnetRef.current.value;
-        const res = await fetch(`${API}/modificarEstudiante`, { //queda pendiente lo de agregar una foto
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                carnet, name, apellido1, apellido2, sede, numeroTelefono, correo, estado
-            }),
-        });
-        const data = await res.json() //resultado de la consulta
-        console.log(data) // imprime en consola web
-        if (carnet===''||name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||estado===''){
+        if (name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||estado===''){
             alert("Ha dejado campos en blanco.");
         }else{
+            const carnet = carnetRef.current.value;
+            const res = await fetch(`${API}/modificarEstudiante`, { //queda pendiente lo de agregar una foto
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    carnet, name, apellido1, apellido2, sede, numeroTelefono, correo, estado
+                }),
+            });
             alert("La información del estudiante se ha modificado.");
+            const data = await res.json() //resultado de la consulta
+            console.log(data) // imprime en consola web
+    
         }
     }
+
     const handleSearch = async () => {
         const res = await fetch(`${API}/getEstudiante/${carnetRef.current.value}`); //PENDIENTE : debe de darle el carnet
         const data = await res.json();//resultado de la consulta
@@ -53,29 +53,14 @@ export function ModificarEstudiante() {
         setEstado(data.estado)
     };
 
-    const handleNameChange = (event) => {
-        setName(event.target.value);
-    };
+    const handleNameChange = (event) => {setName(event.target.value);};
+    const handleApellido1Change = (event) => {setApellido1(event.target.value); };
+    const handleApellido2Change = (event) => { setApellido2(event.target.value); };
+    const handleCelularChange = (event) => {setNumeroTelefono(event.target.value);};
+    const handleCorreoChange = (event) => {setCorreo(event.target.value);};
+    const handleSedeChange = (event) => {setSede(event.target.value);};
+    const handleEstadoChange = (event) => { setEstado(event.target.value);};
 
-    const handleApellido1Change = (event) => {
-        setApellido1(event.target.value);
-    };
-    const handleApellido2Change = (event) => {
-        setApellido2(event.target.value);
-    };
-    const handleCelularChange = (event) => {
-        setNumeroTelefono(event.target.value);
-    };
-    const handleCorreoChange = (event) => {
-        setCorreo(event.target.value);
-    };
-
-    const handleSedeChange = (event) => {
-        setSede(event.target.value);
-    };
-    const handleEstadoChange = (event) => {
-        setEstado(event.target.value);
-    };
     return (
         <Fragment>
             <div className="container">

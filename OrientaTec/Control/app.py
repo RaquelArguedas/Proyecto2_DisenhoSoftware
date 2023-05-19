@@ -166,7 +166,7 @@ def getProfesorCodigo(codigo):
 # getProfesorCedula(self, idProfesor):
 @app.route('/getProfesorCedula/<cedula>', methods=['GET'])
 def getProfesorCedula(cedula):
-  prof = control.getProfesorCedula(cedula)
+  prof = control.getProfesorCedula(int(cedula))
 
   if (prof == None):
     return jsonify("No existe")
@@ -189,7 +189,8 @@ def crearProfesor():
                              correo, numeroOficina,2,1)
   
   print(id)
-  control.registrarFotoProfesor(id[0], request.files['image'])
+  if (request.form.get('image') != "null"):
+    control.registrarFotoProfesor(id[0], request.files['image'])
 
   control.agregarProfesor(control.getProfesor(id[0])) #se agrega al equipo guia
   control.bitacoraEquipoGuia(datetime.now().date(), datetime.now().time().strftime('%H:%M'),
@@ -332,7 +333,8 @@ def crearEvidencias():
   respuesta = control.crearEvidencia(idActividad, enlace)
   print(respuesta, type(respuesta[0]), respuesta[0])
 
-  control.registrarFotoEv(int(idActividad), request.files['image'])
+  if (request.form.get('image') != "null"):
+    control.registrarFotoEv(int(idActividad), request.files['image'])
   
   control.bitacoraActividad(idActividad, datetime.now().date(), datetime.now().time().strftime('%H:%M'),
                              SingletonSesionActual().getUsuario().idUsuario, "se agregaron evidencias al realizarla")
@@ -341,7 +343,8 @@ def crearEvidencias():
 @app.route('/agregarListaEv/<idActividad>', methods=['POST'])
 def agregarListaEv(idActividad):
   print("////////////////",idActividad)
-  control.registrarFotoEvLista(int(idActividad), request.files['image'])
+  if (request.form.get('image') != "null"):
+    control.registrarFotoEvLista(int(idActividad), request.files['image'])
   return jsonify(str(1))
 
 # getFotoEvLista
@@ -610,6 +613,7 @@ def exists(correo, contrasenha):
 @app.route('/correoRegistrado/<correo>', methods=['GET'])
 def correoRegistrado(correo):
   res = control.correoRegistrado(correo)
+  print("Estoy en app")
   print(res)
   return jsonify(res)
 
