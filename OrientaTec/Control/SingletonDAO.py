@@ -477,10 +477,8 @@ class SingletonDAO(metaclass=SingletonMeta):
             if (ac.idActividad == idActividad):
                 actividad = ac
 
-        print('Resp. Nuevos:', type(responsablesNuevos))
         for responsable in responsablesNuevos:
             #agregar en tabla responsablexactividad
-            print("responsable['id']", responsable)
             self.executeStoredProcedure("createResponsableXActividad", [int(responsable['id']), int(idActividad)])
 
             #agregar a la actividad el responsable

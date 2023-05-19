@@ -136,8 +136,7 @@ export function ModificarProfesor() {
                             <input ref={codigoRef} type="text" className="form-control" id="inputCarnet" placeholder="Ingrese el código de prfofesor buscar" />
                             <button onClick={handleSearch} className="btn btn-primary"> <Icon icon="ic:baseline-search" width="24" height="24" /> Buscar </button>
                         </div>
-                        {/*La seguiente seccion tendra los formGroupInput, al tocar el boton de buscar 
-                        se rellera con la informacion del profesor que buscar */}
+
                         <form onSubmit={handleSubmit}>
                             <div>
                                 <div class="mb-3">
@@ -184,7 +183,6 @@ export function ModificarProfesor() {
                                     </div>
                                     <div class="mb-3">
                                         <label htmlFor="autoSizingSelect" class="form-label">Sede: </label>
-
                                     </div>
                                     <div class="mb-3">
                                         <select id="mySelect" value={sede} onChange={handleSedeChange}>

@@ -418,7 +418,7 @@ def agregarResponsablesActividad():
   #si le pasan el codigo y no el id usan la que esta comentada y borran la otra
   #id = control.agregarResponsablesActividad(idActividad, [control.getProfesorCodigo(idResponsableNuevo)])
 
-  #print(int(request.json['idResponsableNuevo']))
+  print('request.json: ', request.json)
   id = control.agregarResponsablesActividad(int(request.json['idActividad']), [request.json['idResponsableNuevo']])
   
   print(id)
@@ -502,7 +502,8 @@ def definirPlanActividades(idActividad):
 
 #funcion auxiliar que convierte una actividad a un JSON aceptable
 def actividadToJSON(ac):
-  acDic = ac.__dict__
+  dicOriginal = ac.__dict__
+  acDic = dict(dicOriginal)
   for clave in acDic:
     listaSalida = []
     #print('type:', type(acDic[clave]), acDic[clave])

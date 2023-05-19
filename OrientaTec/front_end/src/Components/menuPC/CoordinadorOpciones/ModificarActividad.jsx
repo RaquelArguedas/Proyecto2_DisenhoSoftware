@@ -71,7 +71,8 @@ export function ModificarActividad() {
 
 
     const handleSearch = async () => {
-        obtenerImagen();
+        //obtenerImagen();
+        console.log('En handleSearch')
         const res = await fetch(`${API}/verActividad/${idActRef.current.value}`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta
         if (data === 'No existe') {
@@ -89,8 +90,6 @@ export function ModificarActividad() {
             setHoraFin(data.horaFin);
             setRecordatorios(data.recordatorio);
 
-            console.log(JSON.parse(data.responsables))
-
             const subResponsables = JSON.parse(data.responsables).map(responsable => JSON.parse(responsable))
 
             console.log(subResponsables)
@@ -101,14 +100,7 @@ export function ModificarActividad() {
     };
 
     const handleAddResponsable = async (event) => {
-        event.preventDefault();
-        setResponsables((prevResponsables) => {
-            return [...prevResponsables, {
-                id: event.target.value,
-                nombre: event.target[event.target.selectedIndex].innerText
-            }];
-        });
-
+        console.log('En handleAddResponsable')
         const idActividad = idActRef.current.value;
         const idResponsableNuevo = { id: event.target.value };
 
@@ -120,8 +112,10 @@ export function ModificarActividad() {
             body: JSON.stringify({
                 idActividad, idResponsableNuevo
             }),
-        }); //PENDIENTE : debe de darle el codigo
-        const data = await res.json();//resultado de la consulta
+        });
+        const data = await res.json();
+
+        handleSearch();
 
         event.target.value = 0;
     };
@@ -187,10 +181,12 @@ export function ModificarActividad() {
 
     const handleDeleteResponsable = async (event) => {
         event.preventDefault();
-        setResponsables(()=> responsables.filter(responsable => responsable.id !== event.target.id))
+        setResponsables(() => responsables.filter(responsable => responsable.id !== event.target.id))
 
         const idActividad = idActRef.current.value;
         const idResponsableEliminado = event.target.id;
+
+        console.log('{'+idActividad+', '+idResponsableEliminado+'}')
 
         const res = await fetch(`${API}/quitarResponsablesActividad/`, { //queda pendiente lo de agregar una foto
             method: "POST",
@@ -202,6 +198,8 @@ export function ModificarActividad() {
             }),
         }); //PENDIENTE : debe de darle el codigo
         const data = await res.json();
+
+        handleSearch();
     }
     
     const handleImageUpload = (event) => {
