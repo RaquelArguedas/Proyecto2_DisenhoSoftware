@@ -71,7 +71,8 @@ export function ModificarActividad() {
 
 
     const handleSearch = async () => {
-        obtenerImagen();
+        //obtenerImagen();
+        console.log('En handleSearch')
         const res = await fetch(`${API}/verActividad/${idActRef.current.value}`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta
         if (data === 'No existe') {
@@ -89,20 +90,17 @@ export function ModificarActividad() {
             setHoraFin(data.horaFin);
             setRecordatorios(data.recordatorio);
 
+            const subResponsables = JSON.parse(data.responsables).map(responsable => JSON.parse(responsable))
+
+            console.log(subResponsables)
+
             setStartDate(new Date(data.fechaActividad + 'T' + (data.horaInicio[1] === ':' ? '0' + data.horaInicio : data.horaInicio)));
-            setResponsables(JSON.parse(data.responsables.replace(/\'/g, '')).map(responsable => ({ id: responsable.id, nombre: responsable.nombre + ' ' + responsable.apellido1 + ' ' + responsable.apellido2 })));
+            setResponsables(JSON.parse(data.responsables).map(responsable => JSON.parse(responsable)));
         }
     };
 
     const handleAddResponsable = async (event) => {
-        event.preventDefault();
-        setResponsables((prevResponsables) => {
-            return [...prevResponsables, {
-                id: event.target.value,
-                nombre: event.target[event.target.selectedIndex].innerText
-            }];
-        });
-
+        console.log('En handleAddResponsable')
         const idActividad = idActRef.current.value;
         const idResponsableNuevo = { id: event.target.value };
 
@@ -114,8 +112,10 @@ export function ModificarActividad() {
             body: JSON.stringify({
                 idActividad, idResponsableNuevo
             }),
-        }); //PENDIENTE : debe de darle el codigo
-        const data = await res.json();//resultado de la consulta
+        });
+        const data = await res.json();
+
+        handleSearch();
 
         event.target.value = 0;
     };
@@ -181,10 +181,12 @@ export function ModificarActividad() {
 
     const handleDeleteResponsable = async (event) => {
         event.preventDefault();
-        setResponsables(()=> responsables.filter(responsable => responsable.id !== event.target.id))
+        setResponsables(() => responsables.filter(responsable => responsable.id !== event.target.id))
 
         const idActividad = idActRef.current.value;
         const idResponsableEliminado = event.target.id;
+
+        console.log('{'+idActividad+', '+idResponsableEliminado+'}')
 
         const res = await fetch(`${API}/quitarResponsablesActividad/`, { //queda pendiente lo de agregar una foto
             method: "POST",
@@ -196,7 +198,10 @@ export function ModificarActividad() {
             }),
         }); //PENDIENTE : debe de darle el codigo
         const data = await res.json();
+
+        handleSearch();
     }
+    
     const handleImageUpload = (event) => {
         const selectedImage = event.target.files[0];
         setImage(selectedImage);
@@ -248,7 +253,7 @@ export function ModificarActividad() {
                                         {responsables.map((responsable) => (
                                             <Fragment>
                                                 <ul class="list-group list-group-horizontal w-100">
-                                                    <li class="list-group-item w-100"> {responsable.nombre} </li>
+                                                    <li class="list-group-item w-100"> {responsable.nombre+' '+responsable.apellido1+' '+responsable.apellido2} </li>
                                                     <button onClick={handleDeleteResponsable} className="btn btn-danger btn-sm" id={responsable.id} > <Icon icon="ic:baseline-delete" width="24" height="24" />
                                                     </button>
                                                 </ul>

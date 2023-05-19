@@ -18,6 +18,10 @@ class Actividad:
         self.modificaciones = modificaciones    
 
     def agregarResponsable(self, profesor):
+        print('type of responsables: ', type(self.responsables))
+        print('responsables: ', self.responsables)
+        print('type of profesor: ', type(profesor))
+        print('profesor: ', profesor)
         self.responsables.append(profesor)
 
     def quitarResponsable(self, profesor):

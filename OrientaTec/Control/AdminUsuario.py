@@ -9,6 +9,7 @@ class AdminUsuario:
     #Métodos
     def exists(self, correo, contrasenha):
         usuarios = self.dao.getUsuarios()
+        print('AdmUsuario, Usuarios: ', usuarios)
         for user in usuarios:
             if (user.correo == correo and user.contrasenha == contrasenha):
                 return True

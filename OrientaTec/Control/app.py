@@ -277,12 +277,12 @@ def getAllProfesores():
 @app.route('/verActividad/<idActividad>', methods=['GET'])
 def verActividad(idActividad):
   ac = control.verActividad(int(idActividad))
-  print(ac.nombreActividad)
+  print(ac.__dict__)
 
   if (ac == None):
      return jsonify("No existe")   
 
-  print(actividadToJSON(ac))    
+  #print(actividadToJSON(ac))    
 
   return actividadToJSON(ac)
 
@@ -439,24 +439,35 @@ def getDetalleActividad(idActividad):
   if (lista[0] == None):
      return jsonify("No existe")       
   
+  commentReparsed = {} #Importate: para el comentario hay que armar una estructura que incluye el nombre del autor
+  #Lo hago porque no quiero cambiar el modelo - Atte: Alonso
   for comment in lista[1]:
-    listaComentarios += [actividadToJSON(comment)] 
+    commentReparsed = {'idActividad': comment.idActividad,
+                       'autor': control.getProfesor(comment.autor).nombre+' '
+                       +control.getProfesor(comment.autor).apellido1+' '
+                       +control.getProfesor(comment.autor).apellido2,
+                       'fechaHora': comment.fechaHora.__str__(),
+                       'contenido': comment.contenido,
+                       'idComentarioPadre': comment.idComentarioPadre,
+                       'idComentario': comment.idComentario}
+    listaComentarios += [commentReparsed] 
+
   for evidencia in lista[2]:
     listaEvidencias += [evidencia.__dict__]
     
   listaSalida = [actividadToJSON(lista[0])] + [listaComentarios] + [listaEvidencias]
-  #print(listaSalida)
+  print(listaSalida)
   return listaSalida
 
 # def escribirComentario(self, idActividad,autor,fechaHora, contenido, idComentarioPadre):
 @app.route('/escribirComentario', methods=['POST'])
 def escribirComentario():
-  print(request.json)
+  print(request.form)
 
   #borrar este y descomentar el otro con los JSON adecuados
-  id = control.escribirComentario(int(request.json['idActividad']),
+  id = control.escribirComentario(int(request.form.get('idActividad')),
                                    SingletonSesionActual().getUsuario().idUsuario, datetime.now(), 
-                                   request.json['contenido'], int(request.json['idComentarioPadre']))
+                                   request.form.get('contenido'), int(request.form.get('idComentarioPadre')))
   
   print(id)
   
@@ -480,7 +491,7 @@ def agregarResponsablesActividad():
   #si le pasan el codigo y no el id usan la que esta comentada y borran la otra
   #id = control.agregarResponsablesActividad(idActividad, [control.getProfesorCodigo(idResponsableNuevo)])
 
-  #print(int(request.json['idResponsableNuevo']))
+  print('request.json: ', request.json)
   id = control.agregarResponsablesActividad(int(request.json['idActividad']), [request.json['idResponsableNuevo']])
   
   print(id)
@@ -576,7 +587,7 @@ def actividadToJSON(ac):
       for p in acDic[clave]:
         listaSalida += [actividadToJSON(p)]
       acDic[clave] = json.dumps(listaSalida)
-      print("//", acDic[clave])
+      #print("//", acDic[clave])
 
     if (type(acDic[clave]) != int and type(acDic[clave]) != str):
       #print('enter no int/str')
