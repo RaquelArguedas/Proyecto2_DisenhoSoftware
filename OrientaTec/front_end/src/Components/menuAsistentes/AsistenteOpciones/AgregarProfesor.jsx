@@ -25,7 +25,7 @@ export function AgregarProfesor() {
         const data = await info.json();//resultado de la consulta
         console.log(data)
         if(data==="No existe"){
-            alert("Se ha ingreado un nuevo profesor")
+            
             const formData = new FormData();
             formData.append('image', image);
             formData.append('cedula', cedula);
@@ -45,7 +45,7 @@ export function AgregarProfesor() {
 
             const data = await res.json();
             console.log(data);
-    
+            alert("Se ha ingreado un nuevo profesor y ya se le envió a su correo la contraseña temporal")
         }
 
         else{

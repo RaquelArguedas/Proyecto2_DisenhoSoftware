@@ -58,52 +58,61 @@ export function Recuperar() {
         //console.log(typeof state.d0['d0'], state.d0['d0'])
         //console.log(digits[0].value == state.d0['d0'])
 
-        if (digits[0].value == state.d0['d0'] &&
-            digits[1].value == state.d1['d1'] &&
-            digits[2].value == state.d2['d2'] &&
-            digits[3].value == state.d3['d3'] &&
-            digits[4].value == state.d4['d4'] &&
-            digits[5].value == state.d5['d5']) {
+        if (/^\d{8}$/.test(nuevaContrasenha)) {
+            if (digits[0].value == state.d0['d0'] &&
+                digits[1].value == state.d1['d1'] &&
+                digits[2].value == state.d2['d2'] &&
+                digits[3].value == state.d3['d3'] &&
+                digits[4].value == state.d4['d4'] &&
+                digits[5].value == state.d5['d5']) {
 
-            // confirma que la nuevaContrasenha y su confirmacion sean iguales
-            console.log(nuevaContrasenha)
-            console.log(confirmarContrasenha)
-            console.log(confirmarContrasenha == nuevaContrasenha)
+                // confirma que la nuevaContrasenha y su confirmacion sean iguales
+                console.log(nuevaContrasenha)
+                console.log(confirmarContrasenha)
+                console.log(confirmarContrasenha == nuevaContrasenha)
 
-            if (confirmarContrasenha != '' && confirmarContrasenha == nuevaContrasenha){
-                //envía la peticion al bakcend
-                fetch(`${API}/modificarUsuarioContrasenha`, {  
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ nuevaContrasenha })
-                })
+                if (confirmarContrasenha != '' && confirmarContrasenha == nuevaContrasenha){
+                    //envía la peticion al bakcend
+                    fetch(`${API}/modificarUsuarioContrasenha`, {  
+                        method: "POST",
+                        headers: {
+                        "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ nuevaContrasenha })
+                    })
 
-                //indica que se cambió la contraseña
-                Swal.fire({
-                    icon: 'info',
-                    title: 'Codigo correcto!' ,
-                    text: `Cambio de contraseña exitoso. Vuelva a iniciar sesión`,
-                });
+                    //indica que se cambió la contraseña
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Codigo correcto!' ,
+                        text: `Cambio de contraseña exitoso. Vuelva a iniciar sesión`,
+                    });
+                    
+                    //devuelve al menu principal
+                    navigate('/', {});
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Contraseña incorrecta!' ,
+                        text: `Las contraseñas deben coincidir y no pueden ser vacias.`,
+                    });
+                }           
                 
-                //devuelve al menu principal
-                navigate('/', {});
-            }else{
+            }else{ // si no es el codigo da error
                 Swal.fire({
                     icon: 'error',
-                    title: 'Contraseña incorrecta!' ,
-                    text: `Las contraseñas deben coincidir y no pueden ser vacias.`,
+                    title: 'Codigo incorrecto!' ,
+                    text: `No se puede reestablecer la contraseña, el código no conincide con el enviado.`,
                 });
-            }           
-            
-        }else{ // si no es el codigo da error
+            }
+        }else{
             Swal.fire({
                 icon: 'error',
-                title: 'Codigo incorrecto!' ,
-                text: `No se puede reestablecer la contraseña, el código no conincide con el enviado.`,
+                title: 'Contraseña inaceptada!' ,
+                text: `La contraseña debe ser un número de ocho digitos.`,
             });
         }
+
     }
 
     //console.log(state.d0['d0'])

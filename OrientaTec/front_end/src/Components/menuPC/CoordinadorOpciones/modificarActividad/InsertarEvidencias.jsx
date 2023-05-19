@@ -4,9 +4,13 @@ import { BarraLateral } from '../../../navegacion/BarraLateral';
 import { Icon } from '@iconify/react';
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import Swal from 'sweetalert2';
+
+const API = process.env.REACT_APP_API;
 
 export  function InsertarEvidencias() {
     let navigate = useNavigate();
+    let usuarioVista;
 
     const { state } = useLocation();
     console.log(state.idActividad)
@@ -31,6 +35,52 @@ export  function InsertarEvidencias() {
 
     const handleSubmit = async (event) => {
         event.preventDefault(); 
+        //alert("Evidencias agregadas.") //envia alerta de que fueron agregadas
+
+        console.log(image)
+        imagenes.forEach((imagen) => {
+            console.log(imagen);
+        });  
+        console.log(enlace)
+        console.log(state.idActividad)
+
+        const formData = new FormData();
+        formData.append('idActividad', state.idActividad);
+        formData.append('enlace', enlace);
+        formData.append('image', image);
+        
+        const res = await fetch(`${API}/crearEvidencias`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const formData2 = new FormData();
+        const data = await res.json();
+        const idEvidencia = parseInt(data); // Convertir a entero
+        imagenes.forEach( async(imagen) => {
+            formData2.append('image', imagen);
+            await fetch(`${API}/agregarListaEv/${state.idActividad}`, {
+                method: 'POST',
+                body: formData2
+            });
+            formData2.delete('image');
+        }); 
+
+        // despues de agregar las evidencias devuelve al menú correspondiente
+        const rol = await fetch(`${API}/getUsuarioActualRol`, {  
+            method: "GET",
+            headers: {
+            "Content-Type": "application/json",
+        }
+        });
+        const usuario = await rol.json();
+        console.log(usuario)
+        if (usuario === 1){ usuarioVista = '/menuProfesor'; }
+        else if (usuario === 2){ usuarioVista = '/menuCoordinador'; }
+        else if (usuario === 5){ Swal.fire({icon: 'info',title: 'Menu no disponible',
+                                            text: 'El menu del estudiante no se encuentra habilitado.'}); }
+        else { usuarioVista = '/menuAsistente'; }
+        navigate(usuarioVista, {});
     }
 
     //const gotoDetalleActividad = () => { navigate('/verplan/detalle', { state: {  linkMenu: state.linkMenu } }); };

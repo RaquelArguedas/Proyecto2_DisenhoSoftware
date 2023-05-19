@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment,  useState, useEffect } from 'react'
 import { useLocation } from "react-router-dom";
 import { Icon } from '@iconify/react';
 import { Navbar } from '../../../navegacion/Navbar';
@@ -6,6 +6,10 @@ import { BarraLateral } from '../../../navegacion/BarraLateral';
 import { Comentario } from '../../../comentarios/Comentario';
 import { FormComentario } from '../../../comentarios/FormComentario';
 import { useNavigate } from "react-router-dom";
+
+import axios from 'axios';
+
+const API = process.env.REACT_APP_API;
 
 export function DetalleActividad() {
     let navigate = useNavigate();
@@ -15,6 +19,29 @@ export function DetalleActividad() {
     const gotoEvidenciasActividad = () => { navigate('/verplan/detalle/evidencias',  {state: {comentarios: state.comentarios, linkMenu: state.linkMenu}}); }
 
     const gotoVerPlan = () => { navigate('/verplan', {state: {comentarios: state.comentarios, linkMenu: state.linkMenu}}); };
+
+    
+    const [imagenData, setImagenData] = useState(null);
+    function isBase64Valid(base64String) {
+        const regex = /^[A-Za-z0-9+/=]+$/;
+        const isLengthValid = base64String.length % 4 === 0;
+        const isValidCharacters = regex.test(base64String);
+        return isLengthValid && isValidCharacters;
+      }
+    const obtenerImagen = async () => {
+        try {
+            const response = await axios.get(`${API}/getFotoAfiche/${52}`); //cuando me envie la actividad
+            const imageBase64 = response.data;
+            console.log(isBase64Valid(imageBase64));
+            setImagenData(imageBase64);
+          } catch (error) {
+            console.error('Error al obtener la imagen:');
+          }
+      };
+
+      useEffect(() => {
+        obtenerImagen();
+    }, []);
 
     return (
         <Fragment>
@@ -55,7 +82,7 @@ export function DetalleActividad() {
 
                                         <a id="" className="card-text mb-2">
                                             <Icon icon="material-symbols:image-rounded" width="24" height="24" />
-                                            Afiche
+                                            {imagenData && <img src={`data:image/jpeg;base64,${imagenData}`} alt="Foto del profesor" style={{ width: '300px', height: 'auto' }}/>}
                                         </a>
                                     </div>
                                     <div className="col">

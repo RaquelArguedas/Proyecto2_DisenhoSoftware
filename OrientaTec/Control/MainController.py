@@ -111,6 +111,12 @@ class MainController:
         return self.controlActividades.modificarActividad(idActividad, nombreActividad,tipoActividad, 
                                                           fechaActividad, horaInicio,horaFin, recordatorio,
                                                           medio, enlace,estado)
+    
+    def crearEvidencia(self, idActividad, enlace):
+        return self.controlActividades.crearEvidencia(idActividad, enlace)
+    
+    def getEvidencia(self, idActividad):
+        return self.controlActividades.getEvidencia(idActividad)
 
     def cancelarActividad(self, idActividad):
         return self.controlActividades.cancelarActividad(idActividad)

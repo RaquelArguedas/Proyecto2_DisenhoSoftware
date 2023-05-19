@@ -4,6 +4,7 @@
 import mysql.connector
 import pymongo 
 from operator import attrgetter
+import random
 
 from datetime import datetime, date, timedelta
 from openpyxl import Workbook #Para manejo de excel 
@@ -143,7 +144,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         elif (tablaBD == "Recordatorio"):
             objeto = Recordatorio(lista[0], lista[1])
         elif (tablaBD == "Evidencia"):
-            objeto = Evidencia(lista[0], lista[1])
+            objeto = Evidencia(lista[1], lista[2])
         elif (tablaBD == "Observacion"):
             objeto = Observacion(lista[0], lista[1], lista[2])
         elif (tablaBD == "Comentario"):
@@ -252,7 +253,6 @@ class SingletonDAO(metaclass=SingletonMeta):
             lista = []
             for row in salida:
                 lista += [self.getBitacora(row[0])]
-
             return lista
             
             
@@ -332,8 +332,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         return self.asistentes
 
     # +agregarProfesor(profesor: Profesor): boolean
-    def agregarProfesor(self, profesor, idEquipoGuia):
-
+    def agregarProfesor(self, profesor):
+        idEquipoGuia = len(self.equiposGuia)
+        
         args = [profesor.id, idEquipoGuia]
 
         #se agrega a la bd
@@ -517,12 +518,15 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.equiposGuia[-1].agregarModificacion(bitacora)
 
     def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
+        print("Tipo de la actividad:" , type(self.verActividad(idActividad)))
         #crear bitacora
         idBitacora = self.executeStoredProcedure("createBitacora", [fecha, hora, idAutor, descripcion])
 
         if (len(idBitacora) == 1):
             #insertar en la lista del singleton
             bitacora = Bitacora(idBitacora[0], fecha, hora, idAutor, descripcion)
+
+            print(type(bitacora), bitacora)
 
             self.bitacoras += [bitacora]
 
@@ -614,10 +618,15 @@ class SingletonDAO(metaclass=SingletonMeta):
                 numeroOficina, autoridad, estado) 
             #se agrega a la lista de Actividades
             self.profesores += [prof]
+
+        con = random.randrange(10**7, 10**8)
+        rol = 1
+        if (autoridad == 1) :
+            rol = 2
+        self.crearUsuario(correoElectronico, str(con), rol, sede)
         
         return id
 
-    
     # +modificarProfesor(idProfesor, ): boolean
     def modificarProfesor(self, id, cedula,nombre,apellido1, apellido2, sede, numeroCelular,
                         correoElectronico, numeroOficina,autoridad, estado):
@@ -738,6 +747,13 @@ class SingletonDAO(metaclass=SingletonMeta):
         
         return id
 
+    # +getEvidencia
+    def getEvidencia(self, idActividad):
+        for ev in self.evidencias:
+            print(ev.idActividad)
+            if(int(ev.idActividad) == int(idActividad)):
+                return ev
+
     # +getProfesor(id:int):profesor:Profesor
     def getProfesor(self, idProfesor):
         for prof in self.profesores:
@@ -834,7 +850,7 @@ class SingletonDAO(metaclass=SingletonMeta):
 
             #se agrega a la lista de Actividades
             self.usuarios += [salida]
-        
+        print("Se creo el usuario")
         return id
 
     #+getUsuario(id):usuario
@@ -938,25 +954,25 @@ class SingletonDAO(metaclass=SingletonMeta):
         except Exception as ex:
             print(ex)
 
-    def registrarFotoEvLista(self,idEvidencia,image):
+    def registrarFotoEvLista(self,idActividad,image):
         try:
             self.connectMongoServer()
-            self.collecEvLista.insert_one({'idEvidencia':idEvidencia, 'foto': image.read()})
+            self.collecEvLista.insert_one({'idActividad':idActividad, 'foto': image.read()})
             print("Foto registrada con exito.")
             self.closeMongoConnection()
         except Exception as ex:
             print(ex)
 
-    def registrarFotoEv(self,idEvidencia,image):
+    def registrarFotoEv(self,idActividad,image):
         try:
             self.connectMongoServer()
-            cantRegistros = self.collecEvFoto.count_documents({'idEvidencia':idEvidencia})
+            cantRegistros = self.collecEvFoto.count_documents({'idActividad':idActividad})
             print(cantRegistros)
             if(cantRegistros > 0): #si existe lo actualiza
-                self.collecEvFoto.update_one({'idEvidencia':idEvidencia},{'$set':{'foto':image.read()}})
+                self.collecEvFoto.update_one({'idActividad':idActividad},{'$set':{'foto':image.read()}})
                 print("Se ha actualizado la foto exitosamente. ")
             else:
-                self.collecEvFoto.insert_one({'idEvidencia':idEvidencia, 'foto': image.read()})
+                self.collecEvFoto.insert_one({'idActividad':idActividad, 'foto': image.read()})
                 print("Se ha insertado la foto exitosamente.")
             self.closeMongoConnection()
         except Exception as ex:
@@ -1012,9 +1028,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         try:
             self.connectMongoServer()
             #revisar que el registro exista
-            cantRegistros = self.collecEvLista.count_documents({'idEvidencia':idBuscado})
+            cantRegistros = self.collecEvLista.count_documents({'idActividad':idBuscado})
             if cantRegistros > 0 :
-                resultados = self.collecEvLista.find({'idEvidencia': idBuscado})
+                resultados = self.collecEvLista.find({'idActividad': idBuscado})
                 listaSalida = []
                 for r in resultados:
                     listaSalida += [r['foto']]
@@ -1031,9 +1047,9 @@ class SingletonDAO(metaclass=SingletonMeta):
     def getFotoEv(self, idBuscado):
         try:
             self.connectMongoServer()
-            cantRegistros = self.collecEvFoto.count_documents({'idEvidencia':idBuscado})
+            cantRegistros = self.collecEvFoto.count_documents({'idActividad':idBuscado})
             if cantRegistros > 0 :
-                documento = self.collecEvFoto.find_one({"idEvidencia": idBuscado})
+                documento = self.collecEvFoto.find_one({"idActividad": idBuscado})
                 self.closeMongoConnection()
                 return documento["foto"]
             else:

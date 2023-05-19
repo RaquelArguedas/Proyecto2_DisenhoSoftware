@@ -24,4 +24,8 @@ class Actividad:
         self.responsables.remove(profesor)  
 
     def agregarModificacion(self, modificacion):
-        self.modificaciones += [modificacion]  
+        print("------------------")
+        print(type(self.modificaciones), self.modificaciones)
+        self.modificaciones.append(modificacion) 
+        print(type(self.modificaciones), self.modificaciones)
+        print("------------------")

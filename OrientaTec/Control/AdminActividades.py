@@ -14,6 +14,12 @@ class AdminActividades:
         return self.dao.modificarActividad(idActividad, nombreActividad,tipoActividad, fechaActividad, horaInicio,
                     horaFin, recordatorio, medio, enlace,estado)
     
+    def crearEvidencia(self, idActividad, enlace):
+        return self.dao.crearEvidencia(idActividad, enlace)
+    
+    def getEvidencia(self, idActividad):
+        return self.dao.getEvidencia(idActividad)
+    
     def cancelarActividad(self, idActividad):
         return self.dao.modificarActividad(idActividad, None,None, None, None, None, None, None, None, 4)
     

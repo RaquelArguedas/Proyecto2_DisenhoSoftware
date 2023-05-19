@@ -17,11 +17,12 @@ if __name__ == "__main__":
     dao = SingletonDAO()
 
     ac = dao.verActividad(13)
-    
-    acDic = ac.__dict__
-    fecha_str = '2023-04-17 00:00:00'
-    fecha_dt = datetime.strptime(fecha_str, '%Y-%m-%d %H:%M:%S')
+    dic = {}
+    for i in range(3):
+        dic[str(i)] = "hola"
 
-    print(fecha_dt.date())
+    print(dic)
+
+
 
     

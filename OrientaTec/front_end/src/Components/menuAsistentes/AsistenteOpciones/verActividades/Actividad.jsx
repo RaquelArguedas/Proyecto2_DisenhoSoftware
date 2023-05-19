@@ -58,10 +58,10 @@ export function Actividad({datos}) {
                                 Estado: {estado}
                             </p>
 
-                            <a id="afiche" class="card-text mb-2">
+                            {/* <a id="afiche" class="card-text mb-2">
                                 <Icon icon="material-symbols:image-rounded" width="24" height="24" />
-                                Afiche
-                            </a>
+                                Afichon
+                            </a> */}
                         </div>
                         <div className="col">
                             <p id="" class="card-text mb-2">

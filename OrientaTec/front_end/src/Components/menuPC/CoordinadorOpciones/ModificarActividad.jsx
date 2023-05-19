@@ -290,7 +290,7 @@ export function ModificarActividad() {
                                     <div className="input-group w-100 my-3">
                                     <label htmlFor="formGroupInputCodigo" className="form-label">
                                             Afiche
-                                            {imagenData && <img src={`data:image/jpeg;base64,${imagenData}`} alt="Foto del profesor" style={{ width: '300px', height: 'auto' }}/>}
+                                            {imagenData && <img src={`data:image/jpeg;base64,${imagenData}`} alt="Foto de la actividad " style={{ width: '300px', height: 'auto' }}/>}
                                         </label>
                                     <div className="mb-3">
                                         {image && (

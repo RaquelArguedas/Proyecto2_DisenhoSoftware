@@ -163,6 +163,16 @@ def getProfesorCodigo(codigo):
   
   return json.dumps(prof.__dict__)
 
+# getProfesorCedula(self, idProfesor):
+@app.route('/getProfesorCedula/<cedula>', methods=['GET'])
+def getProfesorCedula(cedula):
+  prof = control.getProfesorCedula(cedula)
+
+  if (prof == None):
+    return jsonify("No existe")
+  
+  return json.dumps(prof.__dict__)
+
 # crearProfesor(self,cedula,nombre,apellido1, apellido2, sede, numeroCelular, correoElectronico, numeroOficina,autoridad, estado):
 @app.route('/crearProfesor', methods=['POST'])
 def crearProfesor():
@@ -214,7 +224,7 @@ def getFotoAsistente(id):
   else:
     return "None"
   
-# getFotoAsistente
+# getFotoAfiche
 @app.route('/getFotoAfiche/<id>', methods=['GET'])
 def getFotoAfiche(id):
   imagen = control.getFotoAfiche(int(id))
@@ -276,6 +286,7 @@ def verActividad(idActividad):
 
   return actividadToJSON(ac)
 
+
 # def modificarActividad(self, idActividad, nombreActividad,tipoActividad, fechaActividad, horaInicio,
 #                 horaFin, recordatorio,responsables, medio, enlace,estado):
 @app.route('/modificarActividad', methods=['POST'])
@@ -307,7 +318,67 @@ def modificarActividad():
   if (request.form.get('image') != "null"):
     control.registrarFotoAfiche(int(id), request.files['image'])
 
+  control.bitacoraActividad(int(id), datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+                             SingletonSesionActual().getUsuario().idUsuario, "se modificó la actividad.")
+
   return jsonify(str(id))
+
+# def crearEvidencias
+@app.route('/crearEvidencias', methods=['POST'])
+def crearEvidencias():
+  idActividad = request.form.get('idActividad')
+  enlace = request.form.get('enlace')
+
+  respuesta = control.crearEvidencia(idActividad, enlace)
+  print(respuesta, type(respuesta[0]), respuesta[0])
+
+  control.registrarFotoEv(int(idActividad), request.files['image'])
+  
+  control.bitacoraActividad(idActividad, datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+                             SingletonSesionActual().getUsuario().idUsuario, "se agregaron evidencias al realizarla")
+  return jsonify(respuesta[0])
+
+@app.route('/agregarListaEv/<idActividad>', methods=['POST'])
+def agregarListaEv(idActividad):
+  print("////////////////",idActividad)
+  control.registrarFotoEvLista(int(idActividad), request.files['image'])
+  return jsonify(str(1))
+
+# getFotoEvLista
+@app.route('/getFotoEvLista/<idActividad>', methods=['GET'])
+def getFotoEvLista(idActividad):
+  imagenes = control.getEvLista(int(idActividad))
+  dicImagenes = {}
+  base64_image = None
+  print("imagenes", len(imagenes))
+  for i in range(len(imagenes)):
+    imagen = imagenes[i]
+    if (imagen != None):
+      base64_image = base64.b64encode(imagen).decode('utf-8')
+      if is_base64_valid(base64_image):
+        dicImagenes[str(i)] = base64_image
+      
+  return dicImagenes
+  
+# getFotoEv
+@app.route('/getFotoEv/<idActividad>', methods=['GET'])
+def getFotoEv(idActividad):
+  imagen = control.getFotoEv(int(idActividad))
+
+  base64_image = None
+  if (imagen != None):
+    base64_image = base64.b64encode(imagen).decode('utf-8')
+
+  if is_base64_valid(base64_image):
+    return base64_image
+  else:
+    return "None"
+  
+# getEnlaceEv
+@app.route('/getEnlaceEv/<idActividad>', methods=['GET'])
+def getEnlaceEv(idActividad):
+  ev = control.getEvidencia(int(idActividad))
+  return jsonify(ev.linkGrabacion)
 
 # def cancelarActividad(self, idActividad):
 @app.route('/cancelarActividad/<idActividad>', methods=['POST'])
@@ -340,8 +411,11 @@ def crearActividad():
                                int(recordatorio), json.loads(responsables), int(medio), enlace, int(estado))
   print(id)
 
-  control.registrarFotoAfiche(id[0], request.files['image'])
-  
+  try:
+    control.registrarFotoAfiche(id[0], request.files['image'])
+  except:
+    print("Error: Ocurrió una excepción")
+    
   control.bitacoraActividad(id[0], datetime.now().date(), datetime.now().time().strftime('%H:%M'),
                              SingletonSesionActual().getUsuario().idUsuario, "nueva actividad")
   return jsonify(str(id))
@@ -386,9 +460,8 @@ def escribirComentario():
   
   print(id)
   
-  # decomentar cuando este listo
-  # control.bitacoraActividad(int(request.json['idActividad']), datetime.now().date(), datetime.now().time().strftime('%H:%M'),
-  #                            SingletonSesionActual().getUsuario().idUsuario, "comentario agregado")
+  control.bitacoraActividad(int(request.json['idActividad']), datetime.now().date(), datetime.now().time().strftime('%H:%M'),
+                             SingletonSesionActual().getUsuario().idUsuario, "comentario agregado")
   return jsonify(str(id))
 
 # def finalizarActividad(self, idActividad,linkGrabacion):
@@ -491,7 +564,9 @@ def definirPlanActividades(idActividad):
 
 #funcion auxiliar que convierte una actividad a un JSON aceptable
 def actividadToJSON(ac):
-  acDic = ac.__dict__
+  dicOriginal = ac.__dict__
+  acDic = dict(dicOriginal)
+  
   for clave in acDic:
     listaSalida = []
     #print('type:', type(acDic[clave]), acDic[clave])
@@ -507,6 +582,7 @@ def actividadToJSON(ac):
       #print('enter no int/str')
       #print(type(acDic[clave]))
       acDic[clave] = str(acDic[clave]) #21:54:00 
+  
   return json.dumps(acDic)
 
 
