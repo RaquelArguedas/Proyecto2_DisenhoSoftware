@@ -71,7 +71,7 @@ export function ModificarActividad() {
 
 
     const handleSearch = async () => {
-        //obtenerImagen();
+        obtenerImagen();
         console.log('En handleSearch')
         const res = await fetch(`${API}/verActividad/${idActRef.current.value}`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta

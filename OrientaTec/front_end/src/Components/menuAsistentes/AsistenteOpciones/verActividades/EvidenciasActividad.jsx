@@ -17,7 +17,7 @@ export function EvidenciasActividad() {
 
     const { state } = useLocation();
 
-    const gotoDetalleActividad = () => { navigate('/verplan/detalle', { state: { comentarios: state.comentarios, linkMenu: state.linkMenu } }); };
+    const gotoDetalleActividad = () => { navigate('/verplan/detalle', { state: { comentarios: state.comentarios, linkMenu: state.linkMenu, datosActividad: state.datos  } }); };
 
 
     function isBase64Valid(base64String) {
@@ -29,7 +29,7 @@ export function EvidenciasActividad() {
 
     const obtenerImagenEv = async () => {
         try {
-            const response = await axios.get(`${API}/getFotoEv/${3}`); // idActividad
+            const response = await axios.get(`${API}/getFotoEv/${state.datos.idActividad}`); // idActividad
             //console.log("Response imagen ev", response.data);
             const imageBase64 = response.data;
             //console.log(isBase64Valid(imageBase64));
@@ -42,7 +42,7 @@ export function EvidenciasActividad() {
 
     const obtenerImagenEvLista = async () => {
         try {
-            const response = await axios.get(`${API}/getFotoEvLista/${3}`); 
+            const response = await axios.get(`${API}/getFotoEvLista/${state.datos.idActividad}`); 
             //console.log("Response imagen lista ev",response.data)
             const listaSalida = []
             for (const clave in response.data) {
@@ -100,7 +100,7 @@ export function EvidenciasActividad() {
                         </p>
 
                         <div className="row">
-                            {imagenDataEv && <img src={`data:image/jpeg;base64,${imagenDataEv}`} alt="Foto del profesor" style={{ width: '300px', height: 'auto' }}/>}
+                            {imagenDataEv && <img src={`data:image/jpeg;base64,${imagenDataEv}`} alt="Foto de la evidencia" style={{ width: '300px', height: 'auto' }}/>}
                         </div>
 
                         <p class="card-text mb-2">

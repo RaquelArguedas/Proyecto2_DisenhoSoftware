@@ -50,9 +50,9 @@ export function DetalleActividad() {
     const [listaComentarios, setListaComentarios] = useState([]);
     const comentarioRef = useRef();
 
-    console.log(state.datosActividad)
+    // console.log(state.datosActividad)
 
-    const gotoEvidenciasActividad = () => { navigate('/verplan/detalle/evidencias', { state: { comentarios: state.comentarios, linkMenu: state.linkMenu } }); }
+    const gotoEvidenciasActividad = () => { navigate('/verplan/detalle/evidencias', { state: { comentarios: state.comentarios, linkMenu: state.linkMenu, datos: state.datosActividad } }); }
 
     const gotoVerPlan = () => { navigate('/verplan', { state: { comentarios: state.comentarios, linkMenu: state.linkMenu } }); };
 
@@ -67,7 +67,7 @@ export function DetalleActividad() {
                 method: 'POST',
                 body: formData
             });
-            const data = await res.json(); //resultado de la consulta
+            // const data = await res.json(); //resultado de la consulta
             console.log('COMENTARIO AGREGADO');
             comentarioRef.current.value = '';
             handleGetDetalle();
@@ -107,7 +107,7 @@ export function DetalleActividad() {
       }
     const obtenerImagen = async () => {
         try {
-            const response = await axios.get(`${API}/getFotoAfiche/${52}`); //cuando me envie la actividad
+            const response = await axios.get(`${API}/getFotoAfiche/${state.datosActividad.idActividad}`); //cuando me envie la actividad
             const imageBase64 = response.data;
             console.log(isBase64Valid(imageBase64));
             setImagenData(imageBase64);
