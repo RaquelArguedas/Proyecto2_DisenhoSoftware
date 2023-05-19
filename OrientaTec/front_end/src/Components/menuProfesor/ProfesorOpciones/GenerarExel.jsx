@@ -1,51 +1,44 @@
-//___________GENERAR excel para UNA sola SEDE____________________
 
-// Pruebas SOPHY , ignorar 
-import React, { Fragment, useRef, useState } from 'react'
-
-const API = 'http://localhost:5000'; //process.env.REACT_APP_API;
 const XLSX = require('xlsx');
+const API = process.env.REACT_APP_API;
 
-//Esto genera un excel con la info de TODAS las sedes
-function GenerarExel(){
-    //Obtener la Sede de la persona que hizo la consulta 
-    const sede = fetch(`${API}/getSedeUsuarioSesionActual/`, { 
-        method: "GET",
-        headers: {
-         "Content-Type": "application/json",
-     }
-    })
-    console.log("pase Sede")
-    
-    // Ya la función del back se encarga de crear el archivo y devolerlo
-    const wb = fetch(`${API}/generarExcelEstudiantes/${sede}`, { 
-        method: "GET",
-        headers: {
-         "Content-Type": "application/json",
-     }
-    })
-    console.log("pase generar")
 
-    // Genera el archivo de Excel y lo guarda en un objeto binario
-    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+async function GenerarExel() {
+  console.log('GENERAR EXCEL');
 
-    // Define el nombre del archivo
-    const fileName = 'DatosDelCampus.xlsx';
+  // Obtener la LISTA de estudiantes de la SEDE
+  const listaEstResponse = await fetch(`${API}/generarExcelEstudiantes/${0}`);
+  const listaEstData = await listaEstResponse.json();
+  console.log(listaEstData)
 
-    // Crea un objeto Blob a partir del archivo binario
-    const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+  // Crea un nuevo libro de trabajo
+  const wb = XLSX.utils.book_new();
 
-    // Descarga el archivo usando la función window.location.href
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    link.click();
+  // Crea una hoja de trabajo con los datos de la lista de estudiantes
+  const ws = XLSX.utils.aoa_to_sheet(listaEstData);
 
-    // Elimina el objeto URL
-    URL.revokeObjectURL(url);
+  // Agrega la hoja de trabajo al libro de trabajo
+  XLSX.utils.book_append_sheet(wb, ws, 'Hoja 1');
+
+  // Genera el archivo de Excel y lo guarda en un objeto binario
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+  // Define el nombre del archivo
+  const fileName = 'DatosDelCampus.xlsx';
+
+  // Crea un objeto Blob a partir del archivo binario
+  const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+
+  // Descarga el archivo usando la función window.location.href
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = fileName;
+  link.click();
+
+  // Elimina el objeto URL
+  URL.revokeObjectURL(url);
 }
-
 // Convierte una cadena en un arreglo de bytes
 function s2ab(s) {
   const buf = new ArrayBuffer(s.length);
@@ -57,3 +50,5 @@ function s2ab(s) {
 }
 
 export default GenerarExel;
+
+//__________________Genera excel de UNA sola SEDE________________________

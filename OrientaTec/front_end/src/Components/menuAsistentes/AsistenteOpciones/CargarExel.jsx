@@ -1,4 +1,5 @@
 import axios from 'axios';
+const API = process.env.REACT_APP_API;
 
 export function uploadFile(file) { // Define una función llamada uploadFile que recibe un archivo como argumento
   const formData = new FormData(); // Crear un objeto FormData que puede ser utilizado para enviar datos al servidor
@@ -6,7 +7,8 @@ export function uploadFile(file) { // Define una función llamada uploadFile que
   console.log('El archivo se agregó al objeto formData:', formData.get('file')); // Mostrar en la consola el archivo agregado al objeto FormData
   // Enviar el archivo al backend usando una función de envío o una librería como axios
   
-  axios.post('/upload', formData)
+  //axios.post('/upload', formData)
+  axios.post('/cargarExcelEstudiantes', formData)
      .then(() => console.log('El archivo se ha subido con éxito'))
      .catch(() => console.error('Ocurrió un error al subir el archivo'));
   // La función axios.post() se utiliza comúnmente para enviar archivos al backend. 

@@ -8,9 +8,9 @@ if __name__ == "__main__":
     control = MainController()
 
 
-    e=control.buscarEstudiante(20198)
+    #e=control.buscarEstudiante(20198)
 
-    print(control.getProfesorCedula(189).nombre)
+    #print(control.getProfesorCedula(189).nombre)
     #control.consultarEstudiantes(int(Ordenamiento['SEDE']))
 
 
@@ -25,4 +25,11 @@ if __name__ == "__main__":
 
 
 
+    
+    #for e in control.consultarEstudiantes(3):
+     #   print(e.sede)
+
+    print('Pruebas de excel')
+    print('Respuesta de la funcion:')
+    print(dao.generarExcelSede(1))
     

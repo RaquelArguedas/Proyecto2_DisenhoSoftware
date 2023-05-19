@@ -14,11 +14,15 @@ import os
 from pathlib import Path
 from operator import attrgetter
 
+#from google.oauth2 import service_account
+#from googleapiclient.discovery import build
+#from googleapiclient.http import MediaFileUpload
+
 import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
-#sys.path.append('Proyecto2_DisenhoSoftware/OrientaTec/Modelo')
+sys.path.append('Proyecto2_DisenhoSoftware/OrientaTec/Modelo')
 
-sys.path.append('./Modelo')
+#sys.path.append('./Modelo')
 #Importo la Clase
 from Usuario import *
 from Estudiante import * 
@@ -54,7 +58,14 @@ class SingletonDAO(metaclass=SingletonMeta):
     #Atributos de conexión
     connection = None
     cursor = None
-    #Atributos para conetarse a MONGO
+    #Atributos para conetarse a GOOGLE DRIVE
+    # Ruta al archivo JSON de las credenciales de Google Drive
+    CREDENCIALES_JSON = 'C:/Users/Harrick Mc Lean M/Downloads/disehnosoftware-50f7c4a809ca.json'
+
+    # Crea una instancia del cliente de Google Drive
+    #credenciales = service_account.Credentials.from_service_account_file(CREDENCIALES_JSON)
+    #servicio_drive = build('drive', 'v3', credentials=credenciales)
+
 
     #Atributos para conetarse a MONGO
     MONGO_HOST="localhost"
@@ -276,7 +287,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
-                password = '123456',
+                password = 'Moralesjfi123456',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
@@ -1054,150 +1065,31 @@ class SingletonDAO(metaclass=SingletonMeta):
             print(ex)
     #-------------------------------GETTERS-------------------------------
     #--------------------EXCEL----------------------------
-    '''params
-     @sede: Numero de sede de la cual quiere el excel'''
+    #Jalar datos para UNA SEDE especifica
+    #La sede que recibe es un idSede
     def generarExcelSede(self,sede):
-        wb = Workbook() # se crea el nuevo xlsx
-        ws1 = wb['Sheet']  #primer hoja del excel
-
-        #Headers de la hoja s 
-        wb['Sheet']['A1'] = 'Carne'
-        wb['Sheet']['B1'] = 'Nombre'
-        wb['Sheet']['C1'] = 'Apellido1'
-        wb['Sheet']['D1'] = 'Apellido2'
-        wb['Sheet']['E1'] = 'NumeroCelular'
-        wb['Sheet']['F1'] = 'CorreoElectronico'
-        wb['Sheet']['G1'] = 'Sede'
-        wb['Sheet']['H1'] = 'Estado'
-        registro = 2
-        #Se recorren los estudiantes y se van guardando 
-        for estudiante in range(len(self.estudiantes)):
-            #Estado: activo-->1, inactivo--->2            
-            if (estudiante.sede == sede):
+        listaEstudiantes=[['Carne','Nombre', 'Apellido1','Apellido2','Celular','Correo','Sede','Estado']] 
+        for estudiante in self.estudiantes:
+            est = []
+            #Sede: 1Sj   
+            if (int(estudiante.sede) == int(sede)):
                 #La info de ese registro se guarda 
-                wb['Sheet']['A'+ str(registro)] = estudiante.carnet  #Carne
-                wb['Sheet']['B'+ str(registro)] = estudiante.nombre #Nombre
-                wb['Sheet']['C'+ str(registro)] = estudiante.apellido1 #App 1
-                wb['Sheet']['D'+ str(registro)] = estudiante.apellido2 #App 2
-                wb['Sheet']['E'+ str(registro)] = estudiante.numeroCelular #celular
-                wb['Sheet']['F'+ str(registro)] = estudiante.correoElectronico #correo
-                wb['Sheet']['G'+ str(registro)] = estudiante.sede #Sede
-                wb['Sheet']['G'+ str(registro)] = estudiante.estado #Estado
-                registro += 1
-        wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
-        return wb
-        
-    def generarExcelTodos(self):
-        #NOTA: Self.estudiantes guarda una lista de ESTUDIANTE
+                est.append(estudiante.carnet)  #Carne
+                est.append(estudiante.nombre) #Nombre
+                est.append(estudiante.apellido1) #App 1
+                est.append(estudiante.apellido2) #App 2
+                est.append(estudiante.numeroCelular) #celular
+                est.append(estudiante.correoElectronico) #correo
+                est.append(estudiante.sede) #Sede
+                est.append(estudiante.estado) #Estado 
+                listaEstudiantes.append(est)
+        return listaEstudiantes
+    
 
-        wb = Workbook() # se crea el nuevo xlsx
-        ws1 = wb['Sheet']  #primer hoja del excel
-        #Hacer 5 hojas en el excel
-        ws1.title = 'SJ' #Por defecto la primer hoja que se creacion el libro se llama asi
-        ws2 = wb.create_sheet('CA')
-        ws3 = wb.create_sheet('SC')
-        ws4 = wb.create_sheet('AL')
-        ws5 = wb.create_sheet('LI')
-        #Headers de los archivos 
-        wb['SJ']['A1'] = 'Carne'
-        wb['CA']['A1'] = 'Carne'
-        wb['SC']['A1'] = 'Carne'
-        wb['AL']['A1'] = 'Carne'
-        wb['LI']['A1'] = 'Carne'
 
-        wb['SJ']['B1'] = 'Nombre'
-        wb['CA']['B1'] = 'Nombre'
-        wb['SC']['B1'] = 'Nombre'
-        wb['AL']['B1'] = 'Nombre'
-        wb['LI']['B1'] = 'Nombre'
-
-        wb['SJ']['C1'] = 'Apellido1'
-        wb['CA']['C1'] = 'Apellido1'
-        wb['SC']['C1'] = 'Apellido1'
-        wb['AL']['C1'] = 'Apellido1'
-        wb['LI']['C1'] = 'Apellido1'
-
-        wb['SJ']['D1'] = 'Apellido2'
-        wb['CA']['D1'] = 'Apellido2'
-        wb['SC']['D1'] = 'Apellido2'
-        wb['AL']['D1'] = 'Apellido2'
-        wb['LI']['D1'] = 'Apellido2'    
-
-        wb['SJ']['E1'] = 'NumeroCelular'
-        wb['CA']['E1'] = 'NumeroCelular'
-        wb['SC']['E1'] = 'NumeroCelular'
-        wb['AL']['E1'] = 'NumeroCelular'
-        wb['LI']['E1'] = 'NumeroCelular'
-
-        wb['SJ']['F1'] = 'CorreoElectronico'
-        wb['CA']['F1'] = 'CorreoElectronico'
-        wb['SC']['F1'] = 'CorreoElectronico'
-        wb['AL']['F1'] = 'CorreoElectronico'
-        wb['LI']['F1'] = 'CorreoElectronico' 
-
-        wb['SJ']['G1'] = 'Sede'
-        wb['CA']['G1'] = 'Sede'
-        wb['SC']['G1'] = 'Sede'
-        wb['AL']['G1'] = 'Sede'
-        wb['LI']['G1'] = 'Sede'
-
-        wb['SJ']['H1'] = 'Estado'
-        wb['CA']['H1'] = 'Estado'
-        wb['SC']['H1'] = 'Estado'
-        wb['AL']['H1'] = 'Estado'
-        wb['LI']['H1'] = 'Estado'
-
-        #Headers de los archivos 
-        regSJ = 1 #Esto es para saberen cual fila poner la info leida
-        regCA = 1 #Inicia en 2 porquefila 1 es de headers 
-        regSC = 1
-        regAL = 1
-        regLI = 1
-        #Se recorren los estudiantes y se van guardando 
-        for estudiante in range(len(self.estudiantes)):            
-            if (estudiante.carnet == 1):
-                sede = 'SJ'
-                regSJ += 1
-                registro = regSJ
-                
-            elif (estudiante.carnet ==2):
-                sede = 'CA'
-                regCA += 1
-                registro = regCA
-                
-            elif (estudiante.carnet == 3):
-                sede = 'SC'
-                regSC += 1
-                registro = regSC
-                
-            elif (estudiante.carnet ==4):
-                sede = 'AL'
-                regAL += 1
-                registro = regAL
-                
-            else:
-                sede = 'LI'
-                regLI += 1
-                registro = regLI
-                
-            wb[sede]['A'+ str(registro)] = estudiante.carnet  #Carne
-            wb[sede]['B'+ str(registro)] = estudiante.nombre #Nombre
-            wb[sede]['C'+ str(registro)] = estudiante.apellido1 #App 1
-            wb[sede]['D'+ str(registro)] = estudiante.apellido2 #App 2
-            wb[sede]['E'+ str(registro)] = estudiante.numeroCelular #numcel
-            wb[sede]['F'+ str(registro)] = estudiante.correoElectronico #correo
-            wb[sede]['G'+ str(registro)] = estudiante.sede #sede
-            wb[sede]['H'+ str(registro)] = estudiante.estado #estado
-
-        wb.save('listaEstudiantes.xlsx') #Esta sentencia crea y guarda todo.
-        #return load_workbook('listaEstudiantes.xlsx')
-        return wb
-
-    ''''
-    cargarExcel
-    Lee los registros de un excel en la base de datos
-        params: @nombArchivo: nombreDelExcel o ruta
-    '''
+    #cargarExcel
+    #Lee los registros de un excel en la base de datos
+     #   params: @nombArchivo: nombreDelExcel o ruta
     def cargarExcel(self,nombArchivo):
         wb = load_workbook(nombArchivo) 
         sheet = wb.active
@@ -1214,8 +1106,8 @@ class SingletonDAO(metaclass=SingletonMeta):
                     estudiante.append(cell.value)
             if estudiante != []: #ya recorrió todos los campos de una fila 
                 #Validar que la SEDE sea válida
-                if (estudiante[6] == 1 or estudiante[6] == 2 or estudiante[6] == 3 
-                or estudiante[6] == 4 or estudiante[6] == 5):  
+                if (int(estudiante[6]) == 1 or int(estudiante[6]) == 2 or int(estudiante[6]) == 3 
+                or int(estudiante[6]) == 4 or int(estudiante[6]) == 5):  
                     #Llamar al método agregarEstudiante de BD
                     args = [estudiante[0],estudiante[1],estudiante[2],estudiante[3],estudiante[4],
                     estudiante[5],estudiante[6],1]
@@ -1245,3 +1137,14 @@ class SingletonDAO(metaclass=SingletonMeta):
                 #se agrega a la lista de Estudiantes
                 self.estudiantes += [est]
             return id
+    
+    #Funciones que no se copiaron en merge
+    def getProfesorCodigo(self, codigo):
+        for prof in self.profesores:
+            if(prof.codigo == codigo):
+                return prof
+            
+    def getProfesorCedula(self, cedula):
+        for prof in self.profesores:
+            if(prof.cedula == cedula):
+                return prof

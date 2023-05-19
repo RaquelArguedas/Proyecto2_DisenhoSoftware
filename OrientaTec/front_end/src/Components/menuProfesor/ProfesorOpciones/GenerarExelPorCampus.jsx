@@ -1,42 +1,64 @@
-//___________GENERAR excel para TODAS sola SEDES____________________
+//__________________Genera excel de TODAS sola SEDES________________________
+const API = process.env.REACT_APP_API;
+const XLSX = require('xlsx'); //dk
 
 
-// Pruebas SOPHY , ignorar 
-import React, { Fragment, useRef, useState } from 'react'
+async function GenerarExelPorCampus(){
+  console.log('GENERAR EXCEL POR CAMPUS');
 
-const API = 'http://localhost:5000'; //process.env.REACT_APP_API;
-const XLSX = require('xlsx');
+  // Obtener la LISTA de estudiantes de la SEDE
+  const listaEstResponseSJ = await fetch(`${API}/generarExcelEstudiantes/${1}`)
+  const listaEstDataSJ = await listaEstResponseSJ.json();
 
-//Esto genera un excel con la info de TODAS las sedes
-function GenerarExelPorCampus(){
-    
-    // Ya la función del back se encarga de crear el archivo y devolerlo
-    //No se obtiene la sede porque no se necesita
-    const wb = fetch(`${API}/generarExcelEstudiantes/${0}`, { 
-        method: "GET",
-        headers: {
-         "Content-Type": "application/json",
-     }
-    })
+  const listaEstResponseCA = await fetch(`${API}/generarExcelEstudiantes/${2}`)
+  const listaEstDataCA = await listaEstResponseCA.json();
 
-    // Genera el archivo de Excel y lo guarda en un objeto binario
-    const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+  const listaEstResponseSC = await fetch(`${API}/generarExcelEstudiantes/${3}`)
+  const listaEstDataSC = await listaEstResponseSC.json();
 
-    // Define el nombre del archivo
-    const fileName = 'DatosPorCampus.xlsx';
+  const listaEstResponseAL = await fetch(`${API}/generarExcelEstudiantes/${4}`)
+  const listaEstDataAL = await listaEstResponseAL.json();
 
-    // Crea un objeto Blob a partir del archivo binario
-    const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+  const listaEstResponseLI = await fetch(`${API}/generarExcelEstudiantes/${5}`)
+  const listaEstDataLI = await listaEstResponseLI.json();
+  //console.log(listaEstData);
 
-    // Descarga el archivo usando la función window.location.href
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    link.click();
+  // Crea un nuevo libro de trabajo
+  const wb = XLSX.utils.book_new();
 
-    // Elimina el objeto URL
-    URL.revokeObjectURL(url);
+  // Crea una hoja de trabajo con los datos de la lista de estudiantes
+  const wsSJ = XLSX.utils.aoa_to_sheet(listaEstDataSJ);
+  const wsCA = XLSX.utils.aoa_to_sheet(listaEstDataCA);
+  const wsSC = XLSX.utils.aoa_to_sheet(listaEstDataSC);
+  const wsAL = XLSX.utils.aoa_to_sheet(listaEstDataAL);
+  const wsLI = XLSX.utils.aoa_to_sheet(listaEstDataLI);
+
+  // Agrega la hoja de trabajo al libro de trabajo
+  XLSX.utils.book_append_sheet(wb, wsSJ, 'SJ');
+  XLSX.utils.book_append_sheet(wb, wsCA, 'CA');
+  XLSX.utils.book_append_sheet(wb, wsSC, 'SC');
+  XLSX.utils.book_append_sheet(wb, wsAL, 'AL');
+  XLSX.utils.book_append_sheet(wb, wsLI, 'LI');
+
+  // Genera el archivo de Excel y lo guarda en un objeto binario
+  const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+  // Define el nombre del archivo
+  const fileName = 'DatosPorCampus.xlsx';
+
+  // Crea un objeto Blob a partir del archivo binario
+  const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+
+  // Descarga el archivo usando la función window.location.href
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = fileName;
+  link.click();
+
+  // Elimina el objeto URL
+  URL.revokeObjectURL(url);
+
 }
 
 // Convierte una cadena en un arreglo de bytes
