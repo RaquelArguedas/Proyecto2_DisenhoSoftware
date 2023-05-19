@@ -1,5 +1,7 @@
 import React, { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import GenerarExel from "../menuProfesor/ProfesorOpciones/GenerarExel";
+import GenerarExelPorCampus from "../menuProfesor/ProfesorOpciones/GenerarExelPorCampus";
 
 export function OpcionesMenuPC() {
   let navigate = useNavigate();
@@ -11,6 +13,13 @@ export function OpcionesMenuPC() {
   const gotoModificarActividad = () => {navigate("/modificarActividad", {});};
   const gotoCrearActividad = () => {navigate("/crearActividad", {});};
   const gotoDefinirPlan = () => {navigate("/definirPlan", {});};
+  function handleDownloadExcelCampus() { // Define una función llamada handleDownloadExcelCampus que se ejecuta cuando se hace clic en un botón o enlace
+    GenerarExel(); // Llama a una función llamada GenerarExel que probablemente genera y descarga un archivo Excel para el campus especificado
+  }
+  
+  function handleDownloadExcelPorCampus() { // Define una función llamada handleDownloadExcelPorCampus que se ejecuta cuando se hace clic en un botón o enlace
+    GenerarExelPorCampus(); // Llama a una función llamada GenerarExelPorCampus que probablemente genera y descarga un archivo Excel que contiene información detallada por campus
+  }
 
   return (
     <Fragment>
@@ -88,22 +97,24 @@ export function OpcionesMenuPC() {
                 
             </div>
             <div class="row m-5">
-                <div class="col">
-                    <button
-                    className="btn btn-success h-100 w-100"
-                    >
-                    Generar Exel de datos del campus perteneciente
-                    </button>
+                    <div class="col">
+                        <button 
+                            onClick={handleDownloadExcelCampus}
+                            className="btn btn-success h-100 w-100"
+                        >
+                            Generar Excel de datos del campus perteneciente
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button 
+                            onClick={handleDownloadExcelPorCampus}
+                            className="btn btn-success h-100 w-100"
+                        >
+                            Generar Excel de datos de todos los campus
+                        </button>
+                    </div>
+
                 </div>
-                <div class="col">
-                    <button
-                    className="btn btn-success h-100 w-100"
-                    >
-                    Generar Exel de datos de todos los campus
-                    </button>
-                </div>
-                
-            </div>
         </div>
     </Fragment>
   );

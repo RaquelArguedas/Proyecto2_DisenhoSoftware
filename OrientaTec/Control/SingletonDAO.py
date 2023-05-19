@@ -20,7 +20,7 @@ from operator import attrgetter
 
 import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
-sys.path.append('Proyecto2_DisenhoSoftware/OrientaTec/Modelo')
+sys.path.append('./Modelo')
 
 #sys.path.append('./Modelo')
 #Importo la Clase
@@ -287,7 +287,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
-                password = 'Moralesjfi123456',
+                password = '123456',
                 db = 'orientatec'
             )
             if self.connection.is_connected():

@@ -16,6 +16,7 @@ export function ModificarProfesor() {
     const [apellido1, setApellido1] = useState('');
     const [apellido2, setApellido2] = useState('');
     const [cedula, setCedula] = useState('');
+    const [cedulaV, setCedulaV] = useState('');
     const [numeroTelefono, setNumeroTelefono] = useState('');
     const [numeroOficina, setNumeroOficina] = useState('');
     const [correo, setCorreo] = useState('');
@@ -46,6 +47,8 @@ export function ModificarProfesor() {
         event.preventDefault();
         if (cedula===''||name===''||apellido1===''||apellido2===''||sede===''||numeroTelefono===''||correo===''||numeroOficina===''){
             alert("Ha dejado campos en blanco.");
+        }else if(numeroOficina!=/^[6-8][0-9]{3}-[0-9]{4} \([0-9]{4}\)$/){
+            alert("El formato del numero de oficina debe ser el siguiente NNNN-NNNN(NNNN) ");
         }else{
             const formData = new FormData();
             formData.append('image', image);
