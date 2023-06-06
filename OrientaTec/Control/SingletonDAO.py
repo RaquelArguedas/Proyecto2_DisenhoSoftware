@@ -307,6 +307,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     #+getActividades():Collection<Actividad>
     def getActividades(self):
         print(self.planesTrabajo[-1].actividades)
+        print(self.planesTrabajo[-1].anno)
         
         #listaSalida = sorted(self.planesTrabajo[-1].actividades, key=attrgetter('fechaActividad'))
         #return listaSalida
@@ -360,7 +361,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     # +verActividad(id): Actividad
     def verActividad(self, id):
         for i in range (len(self.actividades)):
-            if (self.actividades[i].idActividad == id):
+            if (int(self.actividades[i].idActividad) == int(id)):
                 return self.actividades[i]
         return None 
     
@@ -528,7 +529,11 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.equiposGuia[-1].agregarModificacion(bitacora)
 
     def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
-        print("Tipo de la actividad:" , type(self.verActividad(idActividad)))
+        for ac in self.actividades:
+            print(ac.idActividad, ac.nombreActividad)
+
+        print(idActividad, type(idActividad))
+        print("Tipo de la actividad:" , type(self.verActividad(int(idActividad))))
         #crear bitacora
         idBitacora = self.executeStoredProcedure("createBitacora", [fecha, hora, idAutor, descripcion])
 
