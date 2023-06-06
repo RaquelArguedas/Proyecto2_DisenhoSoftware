@@ -31,7 +31,6 @@ tipoActividad int, foreign key (tipoActividad) references TipoActividad (idTActi
 fechaActividad date,
 horaInicio time,
 horaFin time, 
-recordatorio int, 
 medio int, 
 enlace varchar(100),
 estado int, foreign key (estado) references EstadoActividad (idEstadoA),
@@ -58,7 +57,7 @@ anno int
 
 create table ActividadesxPlan
 (idActividadesxPlan int primary key not null auto_increment,
-idActividad int,foreign key (idActividad) references EstadoActividad (idEstadoA),
+idActividad int,foreign key (idActividad) references Actividad (idActividad),
 idPlan int, foreign key (idPlan) references PlanTrabajo (idPlan)
 );
 
@@ -150,7 +149,7 @@ idComentarioPadre int -- si es 0, es un comentario nuevo, no una respuesta
 create table Recordatorio
 (idRecordatorio int primary key not null auto_increment,
 idActividad int,foreign key (idActividad) references Actividad (idActividad),
-fechas varchar(500)
+fecha date
 );
 
 

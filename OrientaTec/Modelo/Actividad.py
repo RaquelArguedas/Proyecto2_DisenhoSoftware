@@ -1,7 +1,7 @@
 class Actividad:
     def __init__(self,idActividad, nombreActividad,
     tipoActividad, fechaActividad, horaInicio,
-    horaFin, recordatorio,responsables, medio, enlace,
+    horaFin, responsables, medio, enlace,
     estado, ultimaModificacion, modificaciones):
         self.idActividad = idActividad 
         self.nombreActividad = nombreActividad
@@ -9,7 +9,6 @@ class Actividad:
         self.fechaActividad = fechaActividad
         self.horaInicio = horaInicio
         self.horaFin = horaFin
-        self.recordatorio = recordatorio
         self.responsables = responsables
         self.medio = medio
         self.enlace = enlace

@@ -141,13 +141,12 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE `createActividad`(in _nombreActividad varchar(50), in _tipoActividad int,
 									in _fechaActividad date, in _horaInicio time,
-									in _horaFin time,  in _recordatorio int, 
-									in _medio int,  in _enlace varchar(100),
+									in _horaFin time, in _medio int,  in _enlace varchar(100),
 									in _estado int, in _ultimaModificacion date)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
     if( _nombreActividad is null or _tipoActividad is null or _fechaActividad  is null or
-		_horaInicio  is null or _horaFin is null or _recordatorio  is null or _medio  is null or 
+		_horaInicio  is null or _horaFin is null or _medio  is null or 
 		_enlace  is null or _estado  is null or _ultimaModificacion is null)then 
         -- si se quiere crear ningún atributo puede ser nulo, solo el id
 		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
@@ -157,9 +156,9 @@ BEGIN
 		set _error = 2, _errmsg = "Ese estado no existe";
     else
 		insert into Actividad (nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-							  recordatorio, medio, enlace, estado, ultimaModificacion) 
+							   medio, enlace, estado, ultimaModificacion) 
 					values (_nombreActividad, _tipoActividad, _fechaActividad, _horaInicio, _horaFin, 
-							  _recordatorio, _medio, _enlace, _estado, _ultimaModificacion);
+							 _medio, _enlace, _estado, _ultimaModificacion);
 		select @@identity;
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -175,7 +174,7 @@ BEGIN
 		set _error = 2, _errmsg = "Ese idActividad no existe";
 	else
 		select idActividad, nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-				recordatorio, medio, enlace, estado, ultimaModificacion 
+			   medio, enlace, estado, ultimaModificacion 
 		from Actividad where _idActividad = idActividad;
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -186,7 +185,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE `updateActividad`(in _idActividad int, in _nombreActividad varchar(50), 
 									in _tipoActividad int, in _fechaActividad date, 
-                                    in _horaInicio time, in _horaFin time,  in _recordatorio int, 
+                                    in _horaInicio time, in _horaFin time,  
 									in _medio int,  in _enlace varchar(100),
 									in _estado int, in _ultimaModificacion date)
 BEGIN
@@ -204,7 +203,6 @@ BEGIN
             fechaActividad = ifnull(_fechaActividad, fechaActividad),
             horaInicio = ifnull(_horaInicio, horaInicio),
             horaFin = ifnull(_horaFin, horaFin), 
-            recordatorio = ifnull(_recordatorio, recordatorio), 
             medio = ifnull(_medio, medio),  
             enlace = ifnull(_enlace, enlace),
             estado = ifnull(_estado, estado),
@@ -1615,17 +1613,17 @@ DELIMITER ;
 #____________________________________________________Recordatorio
 #Create
 DELIMITER $$
-CREATE PROCEDURE `createRecordatorio`(in _idActividad int, in _fechas varchar(500))
+CREATE PROCEDURE `createRecordatorio`(in _idActividad int, in _fecha date)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
-    if(_idActividad is null or _fechas is null ) then 
+    if(_idActividad is null or _fecha is null ) then 
 		-- si se quiere crear ningún atributo puede ser nulo, solo el id
 		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
 	elseif( (select count(*) from Actividad where _idActividad = idActividad)=0 )then 
 		set _error = 2, _errmsg = "Ese idActividad no existe";
 	else
-		insert into Bitacora(idActividad, fechas) 
-						values (_idActividad, _fechas);
+		insert into recordatorio(idActividad, fecha) 
+						values (_idActividad, _fecha);
 		select @@identity;
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
@@ -1640,7 +1638,7 @@ BEGIN
 	if( (select count(*) from Recordatorio where _idRecordatorio = idRecordatorio)=0 )then 
 		set _error = 2, _errmsg = "Ese idRecordatorio no existe";
 	else
-		select idRecordatorio, idActividad, fechas
+		select idRecordatorio, idActividad, fecha
 		from Recordatorio
         where _idRecordatorio = idRecordatorio;
 	end if;
@@ -1650,7 +1648,7 @@ DELIMITER ;
 
 #Update
 DELIMITER $$
-CREATE PROCEDURE `updateRecordatorio`(in _idRecordatorio int, in _idActividad int, in _fechas varchar(500))
+CREATE PROCEDURE `updateRecordatorio`(in _idRecordatorio int, in _idActividad int, in _fecha date)
 BEGIN
 	declare _error int; declare _errmsg varchar(100);
 	if( (select count(*) from Recordatorio where  _idRecordatorio= idRecordatorio)=0 )then 
@@ -1660,7 +1658,7 @@ BEGIN
 	else
 		update Recordatorio 
 		set idActividad = ifnull(_idActividad,idActividad), 
-			fechas = ifnull(_fechas, fechas)
+			fecha = ifnull(_fecha, fecha)
         where _idRecordatorio = idRecordatorio;
 	end if;
     if (_error is not null) then select _error, _errmsg; end if;
