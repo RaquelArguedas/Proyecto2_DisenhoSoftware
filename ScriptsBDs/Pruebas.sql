@@ -170,7 +170,6 @@ insert into BitacoraXActividades(idActividad, idBitacora) values (9, 9);
 insert into BitacoraXActividades(idActividad, idBitacora) values (10, 10);
 insert into BitacoraXActividades(idActividad, idBitacora) values (11, 11);
 insert into BitacoraXActividades(idActividad, idBitacora) values (12, 12);
-insert into BitacoraXActividades(idActividad, idBitacora) values (13, 13);
 
 insert into Recordatorio (idActividad, fechas) values (1, "2023-08-09");
 insert into Recordatorio (idActividad, fechas) values (2, "2023-08-08");
@@ -195,24 +194,24 @@ VALUES
   (567890123, 'Rodolfo', 'Lopez', 'Hernandez', 5, 56789012, 'rodolfolopezzz@gmail.com', 56789012);
 
 
-INSERT INTO estudiante (nombre, apellido1, apellido2, idSede, numeroCelular, correoElectronico, idEstado) VALUES
-('Ana', 'García', 'López', 3, 67894567, 'ana.garcia@estudiantec.cr', 1),
-('Carlos', 'Pérez', 'Sánchez', 1, 68876543, 'carlos.perez@estudiantec.cr', 2),
-('María', 'Rodríguez', 'Gómez', 4, 67812345, 'maria.rodriguez@estudiantec.cr', 1),
-('José', 'Martínez', 'Fernández', 2, 68765432, 'jose.martinez@estudiantec.cr', 2),
-('Laura', 'González', 'Ruiz', 5, 67898765, 'laura.gonzalez@estudiantec.cr', 1),
-('David', 'López', 'Sánchez', 3, 68887654, 'david.lopez@estudiantec.cr', 2),
-('Sofía', 'Hernández', 'García', 1, 67845678, 'sofia.hernandez@estudiantec.cr', 1),
-('Daniel', 'Gómez', 'Martínez', 4, 68756789, 'daniel.gomez@estudiantec.cr', 2),
-('Lucía', 'Sánchez', 'Pérez', 2, 67890876, 'lucia.sanchez@estudiantec.cr', 1),
-('Juan', 'Díaz', 'Rodríguez', 5, 68878908, 'juan.diaz@estudiantec.cr', 2),
-('Marta', 'Pérez', 'González', 3, 67865432, 'marta.perez@estudiantec.cr', 1),
-('Alejandro', 'García', 'López', 1, 68767654, 'alejandro.garcia@estudiantec.cr', 2),
-('Elena', 'Fernández', 'Díaz', 4, 67876543, 'elena.fernandez@estudiantec.cr', 1),
-('Luis', 'Gómez', 'Sánchez', 2, 68865432, 'luis.gomez@estudiantec.cr', 2),
-('Sara', 'Martínez', 'Rodríguez', 5, 67854321, 'sara.martinez@estudiantec.cr', 1),
-('Jorge', 'López', 'Hernández', 3, 68765431, 'jorge.lopez@estudiantec.cr' ,2),
-('Isabel','Rodríguez','González' ,4 ,67843210 ,'isabel.rodriguez@estudiantec.cr' ,1),
-('Pedro','Sánchez','Fernández' ,1 ,68854321 ,'pedro.sanchez@estudiantec.cr' ,2),
-('Carmen','García','Pérez' ,2 ,67832109 ,'carmen.garcia@estudiantec.cr' ,1),
-('Alberto','Díaz','Martínez' ,5 ,68754321 ,'alberto.diaz@estudiantec.cr' ,2);
+INSERT INTO estudiante (carnet, nombre, apellido1, apellido2, idSede, numeroCelular, correoElectronico, idEstado) VALUES
+(2021000001, 'Ana', 'García', 'López', 3, 67894567, 'ana.garcia@estudiantec.cr', 1),
+(2021000002, 'Carlos', 'Pérez', 'Sánchez', 1, 68876543, 'carlos.perez@estudiantec.cr', 2),
+(2021000003, 'María', 'Rodríguez', 'Gómez', 4, 67812345, 'maria.rodriguez@estudiantec.cr', 1),
+(2021000004, 'José', 'Martínez', 'Fernández', 2, 68765432, 'jose.martinez@estudiantec.cr', 2),
+(2021000005, 'Laura', 'González', 'Ruiz', 5, 67898765, 'laura.gonzalez@estudiantec.cr', 1),
+(2022000001, 'David', 'López', 'Sánchez', 3, 68887654, 'david.lopez@estudiantec.cr', 2),
+(2022000002, 'Sofía', 'Hernández', 'García', 1, 67845678, 'sofia.hernandez@estudiantec.cr', 1),
+(2022000003, 'Daniel', 'Gómez', 'Martínez', 4, 68756789, 'daniel.gomez@estudiantec.cr', 2),
+(2022000004, 'Lucía', 'Sánchez', 'Pérez', 2, 67890876, 'lucia.sanchez@estudiantec.cr', 1),
+(2022000005, 'Juan', 'Díaz', 'Rodríguez', 5, 68878908, 'juan.diaz@estudiantec.cr', 2),
+(2023000001, 'Marta', 'Pérez', 'González', 3, 67865432, 'marta.perez@estudiantec.cr', 1),
+(2023000002, 'Alejandro', 'García', 'López', 1, 68767654, 'alejandro.garcia@estudiantec.cr', 2),
+(2023000003, 'Elena', 'Fernández', 'Díaz', 4, 67876543, 'elena.fernandez@estudiantec.cr', 1),
+(2023000004, 'Luis', 'Gómez', 'Sánchez', 2, 68865432, 'luis.gomez@estudiantec.cr', 2),
+(2023000005, 'Sara', 'Martínez', 'Rodríguez', 5, 67854321, 'sara.martinez@estudiantec.cr', 1),
+(2023000006, 'Jorge', 'López', 'Hernández', 3, 68765431, 'jorge.lopez@estudiantec.cr' ,2),
+(2023000007, 'Isabel','Rodríguez','González' ,4 ,67843210 ,'isabel.rodriguez@estudiantec.cr' ,1),
+(2023000008, 'Pedro','Sánchez','Fernández' ,1 ,68854321 ,'pedro.sanchez@estudiantec.cr' ,2),
+(2023000009, 'Carmen','García','Pérez' ,2 ,67832109 ,'carmen.garcia@estudiantec.cr' ,1),
+(2023000010, 'Alberto','Díaz','Martínez' ,5 ,68754321 ,'alberto.diaz@estudiantec.cr' ,2);

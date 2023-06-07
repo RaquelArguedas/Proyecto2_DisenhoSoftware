@@ -58,7 +58,7 @@ anno int
 
 create table ActividadesxPlan
 (idActividadesxPlan int primary key not null auto_increment,
-idActividad int,foreign key (idActividad) references EstadoActividad (idEstadoA),
+idActividad int,foreign key (idActividad) references Actividad (idActividad),
 idPlan int, foreign key (idPlan) references PlanTrabajo (idPlan)
 );
 
