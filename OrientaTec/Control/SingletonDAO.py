@@ -100,10 +100,10 @@ class SingletonDAO(metaclass=SingletonMeta):
         self.bitacoras = self.setFromBD("SELECT * from ", "Bitacora")
         self.profesores = self.setFromBD("SELECT * from ", "Profesor")
         self.equiposGuia = self.setFromBD("SELECT * from ", "EquipoGuia")
+        self.recordatorios = self.setFromBD("SELECT * from ", "Recordatorio")
         self.actividades = self.setFromBD("SELECT * from ", "Actividad")
         self.asistentes = self.setFromBD("SELECT * from ", "AsistenteAdministrativo")
         self.planesTrabajo = self.setFromBD("SELECT * from ", "PlanTrabajo")
-        self.recordatorios = self.setFromBD("SELECT * from ", "Recordatorio")
         self.evidencias = self.setFromBD("SELECT * from ", "Evidencia")
         self.observaciones = self.setFromBD("SELECT * from ", "Observacion")
         self.comentarios = self.setFromBD("SELECT * from ", "Comentario")
@@ -142,8 +142,8 @@ class SingletonDAO(metaclass=SingletonMeta):
             objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7])
         elif (tablaBD == "EquipoGuia"):
             objeto = EquipoGuia(lista[1], self.generarBitacorasEquipoGuia(lista[0]), self.generarProfesores(str(lista[0])), lista[2])
-        elif (tablaBD == "Actividad"):    
-            objeto = Actividad.Actividad(lista[0], lista[1],lista[2], lista[3], lista[4],lista[5], lista[6],self.generarResposables(lista[0]), lista[7], lista[8],lista[9], lista[10],self.generarBitacorasActividades(lista[0]))
+        elif (tablaBD == "Actividad"):
+            objeto = Actividad.Actividad(lista[0], lista[1],lista[2], lista[3], lista[4],lista[5], self.generarResposables(lista[0]), self.generarRecordatorios(lista[0]), lista[6], lista[7], lista[8],lista[9], self.generarBitacorasActividades(lista[0]))
         elif (tablaBD == "Profesor"):
             objeto = Profesor(self.generarCodigoProfesor(lista[5],lista[0]), lista[0],lista[1],lista[2],lista[3], lista[4], lista[5], lista[6],lista[7], lista[8], lista[9], lista[10])
         elif (tablaBD == "AsistenteAdministrativo"):
@@ -153,7 +153,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         elif (tablaBD == "PlanTrabajo"):
             objeto = PlanTrabajo(lista[0], lista[1], self.obtenerActividadesPlan(lista[0]))
         elif (tablaBD == "Recordatorio"):
-            objeto = Recordatorio(lista[0], lista[1])
+            objeto = Recordatorio(lista[1], lista[2])
         elif (tablaBD == "Evidencia"):
             objeto = Evidencia(lista[1], lista[2])
         elif (tablaBD == "Observacion"):
@@ -212,6 +212,13 @@ class SingletonDAO(metaclass=SingletonMeta):
             print(ex)
 
         self.closeConnection()
+
+    def generarRecordatorios(self, idActividad):
+        lista = []
+        for recordatorio in self.recordatorios:
+            if (recordatorio.idActividad == idActividad):
+                lista += [recordatorio]
+        return lista
 
     def obtenerActividadesPlan(self, idPlan):
         self.connectServer()
@@ -446,7 +453,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         ultimaModificacion = date.today()
         
         args = [idActividad, nombreActividad, tipoActividad, fechaActividad, horaInicio,
-                horaFin, recordatorio, medio, enlace, estado, ultimaModificacion]
+                horaFin, medio, enlace, estado, ultimaModificacion]
         print(args)
 
         #se modifica en la bd
@@ -469,7 +476,8 @@ class SingletonDAO(metaclass=SingletonMeta):
                     if (horaFin != None):
                         self.actividades[i].horaFin = horaFin
                     if (recordatorio != None):
-                        self.actividades[i].recordatorio = recordatorio
+                        self.updateRecordatorios(idActividad, recordatorio) #actualiza la lista de recordatorios y la bd
+                        self.actividades[i].recordatorios = recordatorio #actualiza el objeto
                     if (medio != None):
                         self.actividades[i].medio = medio
                     if (enlace != None):
@@ -482,6 +490,17 @@ class SingletonDAO(metaclass=SingletonMeta):
                 
         return respuesta
     
+    def updateRecordatorios(self, idActividad, recordatorios):
+        #eliminar todos los recordatorios con ese idActividad
+        self.executeStoredProcedure('deleteRecordatorioActividad', [int(idActividad)])
+        #Crear los recordatorios
+        for rec in recordatorios:
+            self.executeStoredProcedure('createRecordatorio', [int(idActividad), rec.fecha])
+        #actualizar la lista
+        self.recordatorios += recordatorios
+
+        
+
     def agregarResponsablesActividad(self, idActividad, responsablesNuevos):
         actividad = None
         #se obtiene la actividad
@@ -586,7 +605,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         ultimaModificacion = date.today()
 
         args = [nombreActividad, tipoActividad, fechaActividad,
-                horaInicio, horaFin, recordatorio, medio,  
+                horaInicio, horaFin, medio,  
                 enlace, estado, ultimaModificacion]
 
         #se agrega a la bd

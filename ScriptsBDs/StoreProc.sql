@@ -45,3 +45,17 @@ BEGIN
     call createBitacoraXEquipoGuia (_idEquipoGuia, _idBitacora);
 END$$
 DELIMITER ;
+
+#eliminar los recordatorios con un idActividad
+DELIMITER $$
+CREATE PROCEDURE `deleteRecordatorioActividad`(in _idActividad int)
+BEGIN
+	declare _error int; declare _errmsg varchar(100);
+	if( (select count(*) from Actividad where _idActividad= idActividad)=0 )then 
+		set _error = 2, _errmsg = "Ese idRecordatorio no existe";
+	else
+		delete from Recordatorio where _idActividad = idActividad; 
+	end if;
+    if (_error is not null) then select _error, _errmsg; end if;
+END$$
+DELIMITER ;

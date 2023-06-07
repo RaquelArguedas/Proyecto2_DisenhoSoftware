@@ -1,5 +1,4 @@
 class Recordatorio:
-    fechas = []
-    def __init__(self,idActividad,fechas):
+    def __init__(self,idActividad,fecha):
         self.idActividad =idActividad
-        self.fechas= fechas #lista de fechas
+        self.fecha = fecha
