@@ -1,4 +1,5 @@
 class Actividad:
+    responsables = []
     def __init__(self,idActividad, nombreActividad,
     tipoActividad, fechaActividad, horaInicio,
     horaFin, responsables, recordatorios, medio, enlace,

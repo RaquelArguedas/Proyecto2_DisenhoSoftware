@@ -495,8 +495,13 @@ class SingletonDAO(metaclass=SingletonMeta):
         self.executeStoredProcedure('deleteRecordatorioActividad', [int(idActividad)])
         #Crear los recordatorios
         for rec in recordatorios:
+            print("cree")
             self.executeStoredProcedure('createRecordatorio', [int(idActividad), rec.fecha])
         #actualizar la lista
+        for rec in self.recordatorios:
+            if rec.idActividad == idActividad:
+                print("quite")
+                self.recordatorios.remove(rec)
         self.recordatorios += recordatorios
 
         
@@ -513,6 +518,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.executeStoredProcedure("createResponsableXActividad", [int(responsable['id']), int(idActividad)])
 
             #agregar a la actividad el responsable
+            print("DESDE AGREGAR RESPONSABLE", actividad.nombreActividad, actividad.responsables, type(actividad.responsables))
             actividad.agregarResponsable(self.getProfesor(int(responsable['id'])))
 
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
@@ -614,8 +620,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         if(len(id)==1):
             print("entro a crearla")
             #se obtiene el id y se le agrega
+
             salida = Actividad.Actividad(id[0], nombreActividad, tipoActividad, fechaActividad.date(),
-                    horaInicio.time(), horaFin.time(), recordatorio, [], medio,  
+                    horaInicio.time(), horaFin.time(),  [], recordatorio, medio,  
                     enlace, estado, ultimaModificacion, [])
 
             #se agrega a la lista de Actividades
@@ -626,6 +633,8 @@ class SingletonDAO(metaclass=SingletonMeta):
 
             print("responsables: ", responsables)
             self.agregarResponsablesActividad(id[0], responsables)
+            print("recordatorios: ", recordatorio)
+            self.updateRecordatorios(id[0], recordatorio)
         
         return id
 
