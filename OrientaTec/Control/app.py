@@ -416,6 +416,7 @@ def crearActividad():
   enlace = request.form.get('enlace')
   estado = request.form.get('estado')
   
+  print("fecha", datetime.strptime(fecha, '%m/%d/%Y'))
   print("res: ", responsables)
   id = control.crearActividad(nombre, int(tipo), datetime.strptime(fecha, '%m/%d/%Y'), 
                                datetime.strptime(horaInicio, '%H:%M'), datetime.strptime(horaFin, '%H:%M'), 
