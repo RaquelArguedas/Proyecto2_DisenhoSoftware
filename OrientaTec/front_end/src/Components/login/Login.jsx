@@ -54,8 +54,9 @@ export function Login() {
             console.log(usuario)
             if (usuario === 1){ usuarioVista = '/menuProfesor'; }
             else if (usuario === 2){ usuarioVista = '/menuCoordinador'; }
-            else if (usuario === 5){ Swal.fire({icon: 'info',title: 'Menu no disponible',
-                                                text: 'El menu del estudiante no se encuentra habilitado.'}); }
+           // else if (usuario === 5){ Swal.fire({icon: 'info',title: 'Menu no disponible',
+            //                                    text: 'El menu del estudiante no se encuentra habilitado.'}); }
+            else if (usuario === 5){usuarioVista = '/menuEstudiante';} //smm
             else { usuarioVista = '/menuAsistente'; } 
         }
 

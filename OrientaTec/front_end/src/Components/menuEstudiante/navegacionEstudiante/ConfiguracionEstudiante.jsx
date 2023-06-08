@@ -28,7 +28,7 @@ export  function ConfiguracionEstudiante() {
         return isLengthValid && isValidCharacters;
       }
 
-    const obtenerImagen = async (codigo) => {
+    const obtenerImagen = async (id) => {
         //Obtener imagen de estudiante
         try {
             const response = await axios.get(`${API}/getFotoEstudiante/${id}`); //aqui debe enviar el id del Estudiante
@@ -38,10 +38,6 @@ export  function ConfiguracionEstudiante() {
           } catch (error) {
             console.error('Error al obtener la imagen:');
         }
-      };
-
-    const obtenerImagenAsistente = async (id) => {
-        //Obtener Imagen estudiante
       };
 
     useEffect(() => {
@@ -77,20 +73,27 @@ export  function ConfiguracionEstudiante() {
         
     const handleSearch = async () => {
         //Buscar los datos del estudiante actual y mostar la informacion
+        const res = await fetch(`${API}/getInfoUsuarioSesionActual`); 
+        const data = await res.json();//resultado de la consulta
+        console.log(data) // imprime en consola web 
 
+        setName(data['nombre'])
+        setApellido1(data['apellido1'])
+        setApellido2(data['apellido2'])
+        setCarnet(data['carnet'])
+        setSede(data['sede'])
+        setNumeroTelefono(data['numeroCelular'])
+        setCorreo(data['correoElectronico'])
+        setEstado(data['estado'])
         
-        setName('Camilo')
-        setCarnet(202102234)
-        setApellido1('Perez')
-        setApellido2('Camacho')
-        setSede(1)
-        setNumeroTelefono(87236123)
-        setCorreo('camilo@estudiante.cr')
-        setEstado(1)
-        
-
-
-       
+       // setName('Camilo')
+        //setCarnet(202102234)
+        //setApellido1('Perez')
+        //setApellido2('Camacho')
+        //setSede(1)
+        //setNumeroTelefono(87236123)
+        //setCorreo('camilo@estudiante.cr')
+        //setEstado(1)
     };
     
     const handleNameChange = (event) => {

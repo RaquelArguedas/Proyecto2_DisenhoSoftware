@@ -1,4 +1,5 @@
 import json
+from EstudianteAdapter import EstudianteAdapter
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from MainController import *
@@ -651,13 +652,14 @@ def modificarUsuarioContrasenha():
 @app.route('/crearUsuario', methods=['POST'])
 def crearUsuario():  
   id = control.crearUsuario('correoElectronico', 'contrasenha', 2)
+
   print(id)
   return jsonify(str(id))
 
 # En App.py
-#def crearNuevoUsuarioEstudiante():
- #   adapter = EstudianteAdapter(estudiante)
-  #  SingletonDao.getInstance().crearUsuario(adapter)
+#def crearNuevoUsuarioEstudiante(carnet,correoElectronico, idRol, idSede):
+    #adapter = EstudianteAdapter(carnet,correoElectronico, idRol, idSede)
+    #control.crearUsuario(adapter)#Debería ser así pero crear usuario recibe los campos directamente
 
 # def getUsuario(self, idUsuario):
 @app.route('/getUsuario/<idUsuario>', methods=['GET'])
