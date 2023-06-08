@@ -218,7 +218,9 @@ class MainController:
     def getUsuarioRol(self, correo, contrasenha):
         return self.controlUsuario.getUsuarioRol(correo, contrasenha)
     
-    
+    #Admin Estudiantes NUEVOS CAMBIOS
+    def getFotoEstudiante(self,idEstudiante):
+        return self.controlEstudiante.getFotoEstudiante(idEstudiante)
     
     
 

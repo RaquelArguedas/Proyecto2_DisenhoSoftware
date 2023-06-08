@@ -707,8 +707,6 @@ def getInfoUsuarioSesionActual():
   
   return user.__dict__
 
-
-#NUEVO CAMBIO
 # def getSedeUsuarioSesionActual(self):
 @app.route('/getSedeUsuarioSesionActual', methods=['GET'])
 def getSedeUsuarioSesionActual():
@@ -718,6 +716,20 @@ def getSedeUsuarioSesionActual():
   print(user.__dict__['idSede'])
   return jsonify(user.__dict__['idSede'])
 
+#Cambios NUEVOS
+# getFotoEstudiante
+@app.route('/getFotoEstudiante/<id>', methods=['GET'])
+def getFotoEstudiante(id):
+  imagen = control.getFotoEstudiante(int(id))
+
+  base64_image = None
+  if (imagen != None):
+    base64_image = base64.b64encode(imagen).decode('utf-8')
+
+  if is_base64_valid(base64_image):
+    return base64_image
+  else:
+    return "None"
 
 # inicia el servidor
 if __name__ == "__main__":

@@ -46,3 +46,6 @@ class AdminEstudiantes:
     
     def buscarEstudiante(self, carnet):
         return self.dao.buscarEstudiante(carnet)
+    
+    def getFotoEstudiante(self,idEstudiante):
+        return self.dao.getFotoEstudiante(idEstudiante)

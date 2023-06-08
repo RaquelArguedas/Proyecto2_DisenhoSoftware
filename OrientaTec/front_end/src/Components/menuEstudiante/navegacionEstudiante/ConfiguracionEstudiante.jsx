@@ -29,7 +29,15 @@ export  function ConfiguracionEstudiante() {
       }
 
     const obtenerImagen = async (codigo) => {
-        //Obetener imagen de estudiante
+        //Obtener imagen de estudiante
+        try {
+            const response = await axios.get(`${API}/getFotoEstudiante/${id}`); //aqui debe enviar el id del Estudiante
+            const imageBase64 = response.data;
+            console.log(isBase64Valid(imageBase64));
+            setImagenData(imageBase64);
+          } catch (error) {
+            console.error('Error al obtener la imagen:');
+        }
       };
 
     const obtenerImagenAsistente = async (id) => {

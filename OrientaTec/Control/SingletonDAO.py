@@ -79,6 +79,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     collecAfiche = None 
     collecEvLista = None
     collecEvFoto= None
+    collectFtEst=None #Nuevo cambio 07.06
     #Atributos del modelo
     usuarios = []
     estudiantes = []
@@ -287,7 +288,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
-                password = 'Michelle.18',
+                password = 'Moralesjfi123456',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
@@ -907,6 +908,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.collecEvLista = self.MONGO_BASEDATOS["EvListaAsistencia"]
             self.collecEvFoto= self.MONGO_BASEDATOS["EvFotosParticipantes"]
             self.collecFtAs= self.MONGO_BASEDATOS["FotosAsistentes"]
+            self.collecFtEst= self.MONGO_BASEDATOS["FotosEstudiantes"] #Nuevo cambio 07.06
             print("Conexion a Mongo exitosa.")
         except Exception as ex:
             print(ex)
@@ -1153,3 +1155,35 @@ class SingletonDAO(metaclass=SingletonMeta):
         for prof in self.profesores:
             if(prof.cedula == cedula):
                 return prof
+            
+    #Nuevas funcionalidades
+    def getFotoEstudiante(self,idBuscado):
+        try:
+            self.connectMongoServer()
+            #revisar que el est exista
+            cantRegistros = self.collecFtEst.count_documents({'idEstudiante':idBuscado})
+            if cantRegistros > 0 :                
+                document = self.collecFtEst.find_one({'idEstudiante': idBuscado})
+                self.closeMongoConnection()
+                return document['foto']
+            else:
+                print("El registro que intenta obtener NO existe.")
+                return None
+        except Exception as ex:
+            print(ex)
+
+    def registrarFotoEstudiante(self,idEstudiante,image):
+        try:
+            self.connectMongoServer()
+            #revisar que no exista el registro 
+            cantRegistros = self.collecFtEst.count_documents({'idEstudiante':idEstudiante})
+            print(cantRegistros)
+            if(cantRegistros > 0): #si ya existe lo actualiza
+                self.collecFtEst.update_one({'idEstudiante':idEstudiante},{'$set':{'foto':image.read()}})
+                print("Se ha actualizado la foto exitosamente. ")
+            else:
+                self.collecFtEst.insert_one({'idEstudiante':idEstudiante, 'foto': image.read()})
+                print("Se ha insertado la foto exitosamente.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
