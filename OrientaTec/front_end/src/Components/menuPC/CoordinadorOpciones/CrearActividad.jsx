@@ -88,6 +88,7 @@ export function CrearActividad() {
             formData.append('horaInicio', horaInicio);
             formData.append('horaFin', horaFin);
             formData.append('recordatorio', recordatorio);
+            console.log("recordatorio", recordatorio);
             formData.append('responsables', JSON.stringify(responsables));
             formData.append('medio', medio);
             formData.append('estado', estado);

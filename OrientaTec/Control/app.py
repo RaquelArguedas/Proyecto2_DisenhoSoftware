@@ -344,6 +344,8 @@ def crearEvidencias():
   if (request.form.get('image') != "null"):
     control.registrarFotoEv(int(idActividad), request.files['image'])
   
+  print("idActividad: ",idActividad)
+
   control.bitacoraActividad(idActividad, datetime.now().date(), datetime.now().time().strftime('%H:%M'),
                              SingletonSesionActual().getUsuario().idUsuario, "se agregaron evidencias al realizarla")
   return jsonify(respuesta[0])
@@ -581,7 +583,7 @@ def consultarActividadesEstado(estado):
 @app.route('/definirPlanActividades/<idActividad>', methods=['POST'])
 def definirPlanActividades(idActividad):
 
-  control.definirPlanActividades(5, [control.verActividad(int(idActividad))])
+  control.definirPlanActividades(3, [control.verActividad(int(idActividad))])
   return "Definido"
 
 #funcion auxiliar que convierte una actividad a un JSON aceptable
