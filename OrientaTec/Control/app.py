@@ -649,17 +649,15 @@ def modificarUsuarioContrasenha():
 
 # def crearUsuario(self, correoElectronico, contrasenha, idRol):
 @app.route('/crearUsuario', methods=['POST'])
-def crearUsuario():
-  #print(request.json)
-
-  #borrar este y descomentar el otro con los JSON adecuados
-  # id = control.crearUsuario(request.json['correoElectronico'], request.json['contrasenha'], 
-  #                             request.json['idRol'])
-  
-  
+def crearUsuario():  
   id = control.crearUsuario('correoElectronico', 'contrasenha', 2)
   print(id)
   return jsonify(str(id))
+
+# En App.py
+#def crearNuevoUsuarioEstudiante():
+ #   adapter = EstudianteAdapter(estudiante)
+  #  SingletonDao.getInstance().crearUsuario(adapter)
 
 # def getUsuario(self, idUsuario):
 @app.route('/getUsuario/<idUsuario>', methods=['GET'])
@@ -714,12 +712,12 @@ def getInfoUsuarioSesionActual():
 # def getSedeUsuarioSesionActual(self):
 @app.route('/getSedeUsuarioSesionActual', methods=['GET'])
 def getSedeUsuarioSesionActual():
-  print('pruebaaaaaa')
   user = SingletonSesionActual().getUsuario()
   #print("---", user.__dict__)
   print('INFO DICCIONARIO:')
   print(user.__dict__['idSede'])
   return jsonify(user.__dict__['idSede'])
+
 
 # inicia el servidor
 if __name__ == "__main__":
