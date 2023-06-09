@@ -16,10 +16,10 @@ export  function ConfiguracionEstudiante() {
     const [id, setId] = useState('');
     const [numeroTelefono, setNumeroTelefono] = useState('');
     const [correo, setCorreo] = useState('');
+    const [sede, setSede]=useState('');
+    const [estado, setEstado]=useState('');
     const [image, setImage] = useState(null);
     const [imagenData, setImagenData] = useState(null);
-    const [sede, setSede]=useState('')
-    const [estado, setEstado]=useState('')
 
     function isBase64Valid(base64String) {
         const regex = /^[A-Za-z0-9+/=]+$/;
@@ -28,10 +28,10 @@ export  function ConfiguracionEstudiante() {
         return isLengthValid && isValidCharacters;
       }
 
-    const obtenerImagen = async (id) => {
+    const obtenerImagen = async (carnet) => {
         //Obtener imagen de estudiante
         try {
-            const response = await axios.get(`${API}/getFotoEstudiante/${id}`); //aqui debe enviar el id del Estudiante
+            const response = await axios.get(`${API}/getFotoEstudiante/${carnet}`); 
             const imageBase64 = response.data;
             console.log(isBase64Valid(imageBase64));
             setImagenData(imageBase64);
@@ -60,16 +60,20 @@ export  function ConfiguracionEstudiante() {
             formData.append('correo', correo);
             formData.append('estado', estado);   
                 
-            
-            await fetch(`${API}//modificarEstudiante`, {
+            console.log(carnet)
+            await fetch(`${API}/modificarEstudianteFront`, {
                 method: 'POST',
-                body: formData
+                body:formData
+                //headers: {
+                //  'Content-Type': 'application/json',
+                //},
+                //body: JSON.stringify(formData),
             });
              
             alert("Se ha modificado la información correctamente")
-            }
-
         }
+
+    }
         
     const handleSearch = async () => {
         //Buscar los datos del estudiante actual y mostar la informacion
@@ -80,20 +84,13 @@ export  function ConfiguracionEstudiante() {
         setName(data['nombre'])
         setApellido1(data['apellido1'])
         setApellido2(data['apellido2'])
-        setCarnet(data['carnet'])
         setSede(data['sede'])
         setNumeroTelefono(data['numeroCelular'])
         setCorreo(data['correoElectronico'])
         setEstado(data['estado'])
-        
-       // setName('Camilo')
-        //setCarnet(202102234)
-        //setApellido1('Perez')
-        //setApellido2('Camacho')
-        //setSede(1)
-        //setNumeroTelefono(87236123)
-        //setCorreo('camilo@estudiante.cr')
-        //setEstado(1)
+        setCarnet(data['carnet']);
+        obtenerImagen(data['carnet']);
+   
     };
     
     const handleNameChange = (event) => {

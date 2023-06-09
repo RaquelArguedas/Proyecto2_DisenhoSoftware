@@ -798,7 +798,10 @@ class SingletonDAO(metaclass=SingletonMeta):
         
         args = [carnet, nombre, apellido1, apellido2, sede,  numeroCelular,
                 correoElectronico, estado]
-        
+        print('DAO carnet:')
+        print(carnet)
+        print('DAO tipo:')
+        print(type(carnet))
         #se modifica en la bd
         respuesta = self.executeStoredProcedure('updateEstudiante', args)
 

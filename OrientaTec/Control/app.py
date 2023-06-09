@@ -720,9 +720,11 @@ def getSedeUsuarioSesionActual():
 
 #Cambios NUEVOS
 # getFotoEstudiante
-@app.route('/getFotoEstudiante/<id>', methods=['GET'])
-def getFotoEstudiante(id):
-  imagen = control.getFotoEstudiante(int(id))
+@app.route('/getFotoEstudiante/<carnet>', methods=['GET'])
+def getFotoEstudiante(carnet):
+  print("carnet:")
+  print(carnet)
+  imagen = control.getFotoEstudiante(int(carnet))
 
   base64_image = None
   if (imagen != None):
@@ -732,6 +734,46 @@ def getFotoEstudiante(id):
     return base64_image
   else:
     return "None"
+
+# modificarEstudiante(self, carnet, nombre,apellido1, apellido2, sede, correoElectronico, numeroCelular, 
+# estado)
+@app.route('/modificarEstudianteFront', methods=['POST'])
+def modificarEstudianteFront():
+  print(request.json)
+  carnet = request.form.get('carnet')
+  name = request.form.get('name')
+  apellido1 = request.form.get('apellido1')
+  apellido2 = request.form.get('apellido2')
+  sede = request.form.get('sede')
+  numeroTelefono = request.form.get('numeroTelefono')
+  correo = request.form.get('correo')
+  estado = request.form.get('estado')
+
+  if (sede != None):
+    sede = int(sede)
+  if (estado != None):
+    estado = int(estado)
+  if (carnet != None):
+    carnet = int(carnet) 
+  if (numeroTelefono != None):
+    numeroTelefono = int(numeroTelefono)
+  print('APP.PY carnet:')
+  print(carnet)
+  print('APP.PY tipo:')
+  print(type(carnet))
+  id = control.modificarEstudiante(carnet, 
+                                  name if name != '' else None, 
+                                  apellido1 if apellido1 != '' else None, 
+                                  apellido2 if apellido2 != '' else None, 
+                                  sede, 
+                                  correo if correo != '' else None, 
+                                  numeroTelefono,  
+                                  estado)  
+  print(id)
+  if (request.form.get('image') != "null"):
+    print('WE DID IT REGISTRANDO')
+    control.registrarFotoEstudiante(carnet, request.files['image'])
+  return jsonify(str(id))
 
 # inicia el servidor
 if __name__ == "__main__":

@@ -35,6 +35,10 @@ class AdminEstudiantes:
     
     def modificarEstudiante(self, carnet, nombre,apellido1, apellido2, sede, correoElectronico, 
                             numeroCelular, estado):
+        print('ADMIN EST carnet:')
+        print(carnet)
+        print('ADMIN EST tipo:')
+        print(type(carnet))
         return self.dao.modificarEstudiante(carnet, nombre,apellido1, apellido2, sede, correoElectronico, 
                                             numeroCelular, estado)
     
@@ -49,3 +53,7 @@ class AdminEstudiantes:
     
     def getFotoEstudiante(self,idEstudiante):
         return self.dao.getFotoEstudiante(idEstudiante)
+    
+    def registrarFotoEstudiante(self,carnet,bin):
+        self.dao.registrarFotoEstudiante(carnet, bin)
+
