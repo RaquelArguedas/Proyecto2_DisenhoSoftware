@@ -1,8 +1,11 @@
 from SingletonDAO import *
+from PublisherActividades import * #servicio del publicador
+
 class AdminActividades:
     #Constructor
     def __init__(self):
         self.dao = SingletonDAO()
+        self.publicador = PublisherActividades()
 
     #Metodos
     #Devuelve una Actividad
@@ -61,6 +64,9 @@ class AdminActividades:
         lista += [self.dao.verEvidenciasActividad(idActividad)]
         return lista
             
+    def getPublicador(self):
+        return self.publicador #getPublicador para suscribir o desuscribir, si es que aplica aquí
+
     def escribirComentario(self, idActividad,autor,fechaHora, contenido, idComentarioPadre):
         return self.dao.crearComentario(idActividad,autor,fechaHora, contenido, idComentarioPadre)
 
@@ -76,7 +82,7 @@ class AdminActividades:
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
         return self.dao.quitarResponsablesActividad(idActividad, responsablesEliminados)
     
-    #Crear Observación - Parche de Alonso
+    #Crear Observación
     def crearObservacion(self, idActividad, fechaCancelacion, detalle):
         return self.dao.crearObservacion(idActividad, fechaCancelacion, detalle)
             

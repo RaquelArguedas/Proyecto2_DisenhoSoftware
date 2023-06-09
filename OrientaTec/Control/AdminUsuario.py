@@ -45,7 +45,4 @@ class AdminUsuario:
             if (user.correo == correo and user.contrasenha == contrasenha):
                 return user.idRol
         return -1
-    
-    
-    
-    
+        
