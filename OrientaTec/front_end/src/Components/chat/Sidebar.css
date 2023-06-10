@@ -1,0 +1,58 @@
+.white-text {
+    color: white;
+  }
+.chat-item {
+  margin-bottom: 10px;
+}
+.first-chat {
+    margin-top: 30px;
+  }
+ul {
+    margin: 0;
+    padding: 0;
+}
+ul li a:hover{
+    cursor: pointer;
+}
+.active {
+    background-color: rgba(255, 255, 255, 0.8);
+    font-weight: bold;
+  }
+
+  .toast-container {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    padding: 10px;
+    background: #fff;
+    color: #000;
+    border-radius: 5px;
+    max-width: 300px;
+    z-index: 1000;
+    transition: all 0.5s;
+  }
+  
+  .toast {
+    margin-bottom: 10px;
+  }
+  
+  .toast-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .toast-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .toast-header strong {
+    margin-left: 10px;
+  }
+  
+  .toast-body {
+    margin-top: 10px;
+  }
