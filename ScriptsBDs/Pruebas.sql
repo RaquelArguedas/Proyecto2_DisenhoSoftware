@@ -98,18 +98,29 @@ insert into Sede(descripcion) values ("SC");
 insert into Sede(descripcion) values ("AL");
 insert into Sede(descripcion) values ("LI");
 
-INSERT INTO usuario (correo, contrasenha, idRol, idSede) VALUES
-('jorge.gonzalez@hotmail.com', 12345678, 2, 3),
-('lucia.lopez@yahoo.com', 23456789, 1, 4),
-('daniel.perez@outlook.com', 34567890, 2, 5),
-('isabel.rodriguez@gmail.com', 45678901, 1, 1),
-('luis.garcia@hotmail.com', 56789012, 2, 2),
-('marta.sanchez@yahoo.com', 67890123, 1, 3),
-('alejandro.fernandez@outlook.com', 78901234, 2, 4),
-('sara.gomez@gmail.com', 89012345, 1, 5),
-('juan.martinez@hotmail.com', 90123456, 2, 1),
-('carmen.lopez@yahoo.com', 01234567, 1, 2);
+INSERT INTO usuario (correo, contrasenha, idRol, idSede, permiteNotis, permiteChats) VALUES
+('jorge.gonzalez@hotmail.com', 12345678, 2, 3, true, true),
+('lucia.lopez@yahoo.com', 23456789, 1, 4, true, true),
+('daniel.perez@outlook.com', 34567890, 2, 5, true, true),
+('isabel.rodriguez@gmail.com', 45678901, 1, 1, true, true),
+('luis.garcia@hotmail.com', 56789012, 2, 2, true, true),
+('marta.sanchez@yahoo.com', 67890123, 1, 3, true, true),
+('alejandro.fernandez@outlook.com', 78901234, 2, 4, true, true),
+('sara.gomez@gmail.com', 89012345, 1, 5, true, true),
+('juan.martinez@hotmail.com', 90123456, 2, 1, true, true),
+('carmen.lopez@yahoo.com', 01234567, 1, 2, true, true),
+('ana.garcia@estudiantec.cr', 01234567, 5, 2, true, true);
 
+INSERT INTO Notificacion (emisor, fechaHora, contenido) VALUES 
+(1, '2023-06-09 10:00:00', 'Nuevo mensaje recibido');
+INSERT INTO Notificacion (emisor, fechaHora, contenido) VALUES 
+(1, '2023-06-09 10:00:00', 'Nuevo mensaje recibido2');
+
+INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 2, true);
+INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 3, true);
+INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 11, false);
+INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 5, true);
+INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (2, 5, true);
 
 INSERT INTO profesor (cedula, nombre, apellido1, apellido2, idSede, numeroCelular, correoElectronico, numeroOficina, idAutoridad, idEstado) VALUES
 (467890235, 'Jorge', 'González', 'Soto', 3, 68890123, 'jorge.gonzalez@hotmail.com', 20234567, 2, 2),

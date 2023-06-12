@@ -47,7 +47,23 @@ create table Usuario
 correo varchar(100),
 contrasenha varchar(50),
 idRol int, foreign key (idRol) references Rol (idRol),
-idSede int, foreign key (idSede) references Sede (idSede)
+idSede int, foreign key (idSede) references Sede (idSede),
+permiteNotis bool, 
+permiteChats bool
+);
+
+create table Notificacion
+(idNotificacion int primary key not null auto_increment,
+emisor int, foreign key (emisor) references Usuario (idUsuario),
+fechaHora datetime,
+contenido varchar(50)
+);
+
+create table NotificacionXUsuario
+(idNotificacionXUsuario int primary key not null auto_increment,
+idNotificacion int, foreign key (idNotificacion) references Notificacion (idNotificacion),
+idUsuario int, foreign key (idUsuario) references Usuario (idUsuario),
+leida bool
 );
 
 create table PlanTrabajo

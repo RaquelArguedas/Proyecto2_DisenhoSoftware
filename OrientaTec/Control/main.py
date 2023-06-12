@@ -26,12 +26,26 @@ if __name__ == "__main__":
     ac = dao.verActividad(12)
     #print(ac)
     # Crear una nueva instancia de la clase Recordatorio
-    fecha = datetime.date(2023, 6, 6)
-    recordatorio = Recordatorio(13,fecha)
+    #control.crearUsuario("correo", "contra", 1, 1, True, True)
+    # for user in dao.usuarios:
+    #     print(user)
 
-    # # Agregar el nuevo recordatorio a la lista de recordatorios existente
-    listaRec = ac.recordatorios + [recordatorio]
+    print("__________________________")
+    print(control.notificacionUsuarios(5, 78))
+    # for noti in dao.usuarios[0].notificaciones:
+    #     print(noti)
+
+    # id = dao.createNotificacion(1, datetime.now(), "contenido")
+    # dao.notificacionUsuarios(id, 1)
+
+    # print("__________________________")
+    # for noti in dao.usuarios[0].notificaciones:
+    #     print(noti)
+
+
+
     
-    control.crearActividad("nombre", 1, datetime.datetime(2023, 6, 6, 10, 30, 0), datetime.datetime(2023, 6, 6, 10, 30, 0),datetime.datetime(2023, 6, 6, 10, 30, 0), listaRec, ac.responsables
-                           , 1, "rfirb", 1)
+
+
+
     

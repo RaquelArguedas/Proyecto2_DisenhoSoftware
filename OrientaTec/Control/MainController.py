@@ -202,12 +202,12 @@ class MainController:
     def correoRegistrado(self, correo):
         return self.controlUsuario.correoRegistrado(correo)
 
-    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol, idSede):
-        return self.controlUsuario.modificarUsuario(idUsuario, correoElectronico, contrasenha, idRol, idSede)
+    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats):
+        return self.controlUsuario.modificarUsuario(idUsuario, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats)
     
     
-    def crearUsuario(self, correoElectronico, contrasenha, idRol):
-        return self.controlUsuario.crearUsuario(correoElectronico, contrasenha, idRol)
+    def crearUsuario(self, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats):
+        return self.controlUsuario.crearUsuario(correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats)
     
     def getUsuario(self, idUsuario):
         return self.controlUsuario.getUsuario(idUsuario)
@@ -217,6 +217,28 @@ class MainController:
     
     def getUsuarioRol(self, correo, contrasenha):
         return self.controlUsuario.getUsuarioRol(correo, contrasenha)
+    
+    #funciones de las notificaciones
+    def deleteNotificacionUsuario(self, idNotificacion, idUsuario):
+        return self.controlUsuario.deleteNotificacionUsuario(idNotificacion, idUsuario)
+
+    def deleteNotificacionesUsuario(self, idUsuario):
+        return self.controlUsuario.deleteNotificacionesUsuario(idUsuario)
+
+    def cambiarLeida(self, idNotificacion, idUsuario):
+        return self.controlUsuario.cambiarLeida(idNotificacion, idUsuario)
+
+    def todasLeidas(self, idUsuario, leidas):
+        return self.controlUsuario.todasLeidas(idUsuario, leidas)
+
+    def createNotificacion(self, idUsuarioEmisor, fechaHora, contenido):
+        return self.controlUsuario.createNotificacion(idUsuarioEmisor, fechaHora, contenido)
+    
+    def notificacionUsuarios(self, idNotificacion, idUsuario):
+        return self.controlUsuario.notificacionUsuarios(idNotificacion, idUsuario)
+    
+    def notificarActividades(self, fechaActual):
+        return self.controlActividades.notificarActividades(fechaActual)
     
     
     

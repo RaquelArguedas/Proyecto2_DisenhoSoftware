@@ -82,3 +82,14 @@ class AdminActividades:
             
     def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
         return self.dao.bitacoraActividad(idActividad, fecha, hora, idAutor, descripcion)
+    
+    #                               fechaActual debe de ser de tipo datetime
+    def notificarActividades(self, fechaActual):
+        for actividad in self.dao.actividades:
+            # Verificar si la lista de recordatorios no está vacía
+            if actividad.recordatorios:
+                # Verifica si debe actualizar
+                
+                if actividad.recordatorios[0].fecha <= fechaActual.date():
+                        # Cambiar el estado de la actividad a "notificada"
+                        self.cambiarEstado(actividad.idActividad,2)

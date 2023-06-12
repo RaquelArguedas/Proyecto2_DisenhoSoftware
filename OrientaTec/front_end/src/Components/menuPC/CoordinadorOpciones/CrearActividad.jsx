@@ -93,22 +93,6 @@ export function CrearActividad() {
 
         setFechaRecordatorioB(formattedDate);
     };
-
-    // const handleFechaRecordatorioChange = (date) => {
-    //     console.log("CONSOLE: ", date instanceof Date && !isNaN(date))
-    //     console.log(date, typeof(date))
-
-    //     const month = date.getMonth() + 1; // Obtener el mes (se suma 1 ya que los meses se indexan desde 0)
-    //     const day = date.getDate(); // Obtener el día
-    //     const year = date.getFullYear(); // Obtener el año
-
-    //     // Construir la cadena en el formato deseado (mm/dd/aaaa)
-    //     const formattedDate = `${month}/${day}/${year}`;
-
-    //     console.log("Fecha formateada:", formattedDate, typeof(formattedDate));
-
-    //     setFechaRecordatorio(formattedDate);
-    // };
       
 
     const handleSubmit = async (event) => {
@@ -129,6 +113,8 @@ export function CrearActividad() {
             formData.append('fecha', fecha);
             formData.append('horaInicio', horaInicio);
             formData.append('horaFin', horaFin);
+            formData.append('periodicidad', periodicidad);
+            formData.append('fechaRecordatorioB', fechaRecordatorioB);
             formData.append('recordatorio', recordatorio);
             formData.append('responsables', JSON.stringify(responsables));
             formData.append('medio', medio);
