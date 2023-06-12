@@ -1,31 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as Icons from 'react-bootstrap-icons';
+import { Alert, Card } from 'react-bootstrap'; // Importar el componente Alert
 import './Sidebar.css'; // Archivo CSS para estilos personalizados
 import { NavbarEstudiante } from '../menuEstudiante/navegacionEstudiante/NavbarEstudiante';
 import { useNavigate } from "react-router-dom";
-import Card from 'react-bootstrap/Card';
+import { CrearChat } from './Crearchat';
 
 export function Sidebar() {
   let navigate = useNavigate();
   const [mensaje, setMensaje] = useState('');
+  const [mostrarCrearChat, setMostrarCrearChat] = useState(false);
 
-  const [chats, setChats] = useState([
-    {id: 1,nombreChat: 'Chat 1',mensajes: [{contenido: 'Contenido del Chat 1',fechaHora: '12/03/2021 12:00 pm',nombreUsuario: 'Carlos Rodriguez'},
-        {contenido: 'Contenido del Chat 1',fechaHora: '12/03/2021 12:10 pm', nombreUsuario: 'Samantha Rodriguez'}]},
-    {id: 2,nombreChat: 'Chat 2',mensajes: [{contenido: 'Contenido del Chat 2',fechaHora: '12/03/2021 11:00 pm',nombreUsuario: 'Samantha Rodriguez'}]},
-    {id: 3, nombreChat: 'Chat 3',mensajes: [{contenido: 'Contenido del Chat 3',fechaHora: '12/03/2021 13:00 pm',nombreUsuario: 'Pedro Rodriguez'}]}]);
-  
-  const [chatSeleccionado, setChatSeleccionado] = useState(chats[0]);
-
+  const [chats, setChats] = useState([   {id: 1,nombreChat: 'Chat 1',mensajes: [{contenido: 'Contenido del Chat 1',fechaHora: '12/03/2021 12:00 pm',nombreUsuario: 'Carlos Rodriguez'},
+  {contenido: 'Contenido del Chat 1',fechaHora: '12/03/2021 12:10 pm', nombreUsuario: 'Samantha Rodriguez'}]},
+  {id: 2,nombreChat: 'Chat 2',mensajes: [{contenido: 'Contenido del Chat 2',fechaHora: '12/03/2021 11:00 pm',nombreUsuario: 'Samantha Rodriguez'}]},
+  {id: 3, nombreChat: 'Chat 3',mensajes: [{contenido: 'Contenido del Chat 3',fechaHora: '12/03/2021 13:00 pm',nombreUsuario: 'Pedro Rodriguez'}]}
+    ]);
+ 
+  const [chatSeleccionado, setChatSeleccionado] = useState(null);
   const seleccionarChat = (chat) => {
     setChatSeleccionado(chat);
   };
+  const agregarGrupo = (nuevoGrupo) => {
+    setChats((prevChats) => [...prevChats, nuevoGrupo]);
+  };
 
-  useEffect(() => {
+  useEffect(() => { 
     handleGetDetalle();
+    if (chats.length > 0) {
+      setChatSeleccionado(chats[0]);
+    }
   }, []);
-
   const handleGetDetalle = async () => {
     // Traer los datos y usar el setChats 
   };
@@ -83,61 +89,91 @@ export function Sidebar() {
       <NavbarEstudiante />
       <div className='row'>
         <div className='col-auto min-vh-100 bg-dark'>
+        <button
+            className="btn custom-button"
+            onClick={() => setMostrarCrearChat(true)}
+          >
+            Crear nuevo chat &nbsp;&nbsp;<Icons.PlusCircle />
+          </button>
+
           <ul>
-            {chats.map((chat, index) => (
-              <li
-                key={chat.id}
-                className={`chat-item ${index === 0 ? 'first-chat' : ''} ${chat === chatSeleccionado ? 'active' : ''}`}
-              >
-                <a
-                  className='nav-link px-2 white-text'
-                  onClick={() => seleccionarChat(chat)}
+            {chats.length > 0 ? (
+              chats.map((chat, index) => (
+                <li
+                  key={chat.id}
+                  className={`chat-item ${index === 0 ? 'first-chat' : ''} ${chat === chatSeleccionado ? 'active' : ''}`}
                 >
-                  <Icons.ChatDots />{' '}
-                  <span className='ms-1 d-none d-sm-inline'>
-                    {chat.nombreChat.length > 10 ? chat.nombreChat.slice(0, 10) + '...' : chat.nombreChat}
-                  </span>
-                </a>
-              </li>
-            ))}
+                  <a
+                    className='nav-link px-2 white-text'
+                    onClick={() => seleccionarChat(chat)}
+                  >
+                    <Icons.ChatDots />{' '}
+                    <span className='ms-1 d-none d-sm-inline'>
+                      {chat.nombreChat.length > 10 ? chat.nombreChat.slice(0, 10) + '...' : chat.nombreChat}
+                    </span>
+                  </a>
+                </li>
+              ))
+            ) : (
+              <Alert variant="warning">No hay chats en la bandeja de entrada</Alert>
+            )}
           </ul>
         </div>
         <div className='col'>
-          <h2>{chatSeleccionado.nombreChat}</h2>
-          {chatSeleccionado.mensajes.map((mensaje, index) => (
-            <Card key={index} className="mb-2">
-              <Card.Header>
-                <strong>{mensaje.nombreUsuario}</strong> - {mensaje.fechaHora}
-              </Card.Header>
-              <Card.Body>
-                <Card.Text>
-                  {mensaje.contenido}
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          ))}
-          <div className="row">
-            <div className="col">
-            <textarea
-              className="w-100"
-              style={{ resize: "none", height: "5rem" }}
-              aria-label="With textarea"
-              maxLength="250"
-              value={mensaje}
-              onChange={(e) => setMensaje(e.target.value)}
-            ></textarea>
-            </div>
-            <div className="col-sm-2">
-              <button
-                className="btn btn-outline-success"
-                onClick={handleEnviarMensaje}
-              >
-                <Icons.Send />
-              </button>
-            </div>
-          </div>
+          {chatSeleccionado ? (
+            <>
+              <h2>{chatSeleccionado.nombreChat}</h2>
+              {chatSeleccionado.mensajes.map((mensaje, index) => (
+                <Card key={index} className="mb-2">
+                  <Card.Header>
+                    <strong>{mensaje.nombreUsuario}</strong> - {mensaje.fechaHora}
+                  </Card.Header>
+                  <Card.Body>
+                    <Card.Text>
+                      {mensaje.contenido}
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              ))}
+              <div className="row">
+                <div className="col">
+                  <textarea
+                    className="w-100"
+                    style={{ resize: "none", height: "5rem" }}
+                    aria-label="With textarea"
+                    maxLength="250"
+                    value={mensaje}
+                    onChange={(e) => setMensaje(e.target.value)}
+                  ></textarea>
+                </div>
+                <div className="col-sm-2">
+                  <button
+                    className="btn btn-outline-success"
+                    onClick={handleEnviarMensaje}
+                  >
+                    <Icons.Send />
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <Alert variant="info">Selecciona un chat</Alert>
+          )}
         </div>
       </div>
+            {mostrarCrearChat && (
+        <div className="crear-chat-overlay">
+          <div className="crear-chat-container">
+            <button
+              className="close-button"
+              onClick={() => setMostrarCrearChat(false)}
+            > Cerrar &nbsp;&nbsp;
+              <Icons.X />
+            </button>
+            <CrearChat agregarGrupo={agregarGrupo} chats={chats}/>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -66,7 +66,7 @@ export function App() {
                 <Route exact path = "/actividadesPlaneadas" element = {<VerActividadesPlaneadas/>}/>
                 <Route exact path = "/actividadProxima" element = {<VerActividadesProxima/>}/>
                 
-                <Route exact path = "/sidebar" element = {<Sidebar/>}/>
+                <Route exact path = "/chat" element = {<Sidebar/>}/>
             </Routes>
         </div>
     </Router>
