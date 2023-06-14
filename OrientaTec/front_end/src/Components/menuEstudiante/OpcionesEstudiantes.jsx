@@ -7,6 +7,7 @@ export default function OpcionesEstudiantes() {
     const gotoConfiguracion = () => {navigate("/configuracionEstudiante");};
     const gotoActividadesPlaneadas = () => {navigate("/actividadesPlaneadas");};
     const gotoActividadProxima = () => {navigate("/actividadProxima");};
+    const gotoChat=()=>{navigate('/chat');};
   return (
     <Fragment>
         <div className="m-3 p-3 bg-light">
@@ -17,7 +18,7 @@ export default function OpcionesEstudiantes() {
               </button>
             </div>
             <div class="col">
-              <button className="btn btn-success h-100 w-100">
+              <button  onClick={gotoChat} className="btn btn-success h-100 w-100">
                 Chat
               </button>
             </div>
