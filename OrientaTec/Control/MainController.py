@@ -90,10 +90,6 @@ class MainController:
     
     def modificarEstudiante(self, carnet, nombre,apellido1, apellido2, sede, correoElectronico, 
                             numeroCelular, estado):
-        print('MAIN CONTROLLER carnet:')
-        print(carnet)
-        print('MAIN CONTROLLER tipo:')
-        print(type(carnet))
         return self.controlEstudiante.modificarEstudiante(carnet, nombre,apellido1, apellido2, sede, 
                                                           correoElectronico, numeroCelular, estado)
     

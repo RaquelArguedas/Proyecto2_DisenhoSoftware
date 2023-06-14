@@ -59,7 +59,7 @@ export  function ConfiguracionEstudiante() {
             formData.append('numeroTelefono', numeroTelefono);
             formData.append('correo', correo);
             formData.append('estado', estado);   
-                
+            console.log(image)    
             console.log(carnet)
             await fetch(`${API}/modificarEstudianteFront`, {
                 method: 'POST',
@@ -88,8 +88,8 @@ export  function ConfiguracionEstudiante() {
         setNumeroTelefono(data['numeroCelular'])
         setCorreo(data['correoElectronico'])
         setEstado(data['estado'])
-        setCarnet(data['carnet']);
         obtenerImagen(data['carnet']);
+        setCarnet(data['carnet']);
    
     };
     
@@ -128,7 +128,7 @@ export  function ConfiguracionEstudiante() {
                     <div class="col-lg m-3 p-3 bg-light">
                         <h4>Datos Personales</h4>
                         <div>
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit} encType="multipart/form-data"> 
                                 <div class="mb-3">
                                     <div class="mb-3">
                                         <label htmlFor="labelDisableControl" class="form-label"></label>
@@ -168,7 +168,7 @@ export  function ConfiguracionEstudiante() {
                                                 placeholder="Ingrese su correo" value={correo} onChange={handleCorreoChange}
                                                 disabled/>
                                     <div className="mb-3">
-                                        <label htmlFor="formGroupInputCodigo" className="form-label">
+                                        <label htmlFor="formGroupInputCarnet" className="form-label">
                                         Foto
                                         {imagenData && <img src={`data:image/jpeg;base64,${imagenData}`} style={{ width: '300px', height: 'auto' }}/>}
                                         </label>

@@ -739,7 +739,7 @@ def getFotoEstudiante(carnet):
 # estado)
 @app.route('/modificarEstudianteFront', methods=['POST'])
 def modificarEstudianteFront():
-  print(request.json)
+  #print('respuesta:',request.files)
   carnet = request.form.get('carnet')
   name = request.form.get('name')
   apellido1 = request.form.get('apellido1')
@@ -757,10 +757,6 @@ def modificarEstudianteFront():
     carnet = int(carnet) 
   if (numeroTelefono != None):
     numeroTelefono = int(numeroTelefono)
-  print('APP.PY carnet:')
-  print(carnet)
-  print('APP.PY tipo:')
-  print(type(carnet))
   id = control.modificarEstudiante(carnet, 
                                   name if name != '' else None, 
                                   apellido1 if apellido1 != '' else None, 
@@ -770,8 +766,11 @@ def modificarEstudianteFront():
                                   numeroTelefono,  
                                   estado)  
   print(id)
-  if (request.form.get('image') != "null"):
-    print('WE DID IT REGISTRANDO')
+  #print('Resultado imagen:')
+  #print(request.form.get('image'))
+  #print(type(request.files['image']))
+  #if (request.form.get('image') != None):
+  if (request.files['image'] != None):
     control.registrarFotoEstudiante(carnet, request.files['image'])
   return jsonify(str(id))
 
