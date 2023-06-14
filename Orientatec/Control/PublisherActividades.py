@@ -8,7 +8,8 @@ class PublisherActividades:
     #Constructor
     def __init__(self):
         self.admUsuario = AdminUsuario()
-        self.suscriptores = self.admUsuario.getSuscriptores(ACTIVIDAD)
+        self.suscriptores = []
+        #self.suscriptores = self.admUsuario.getSuscriptores(ACTIVIDAD)
 
     #Métodos
     def suscribir(self, usuarioSub):
