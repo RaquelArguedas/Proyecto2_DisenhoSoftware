@@ -1,5 +1,7 @@
 class Recordatorio:
-    fechas = []
-    def __init__(self,idActividad,fechas):
+    def __init__(self,idActividad,fecha):
         self.idActividad =idActividad
-        self.fechas= fechas
+        self.fecha = fecha
+
+    def __str__(self):
+        return f"Recordatorio: ID Actividad = {self.idActividad}, Fecha = {self.fecha}"

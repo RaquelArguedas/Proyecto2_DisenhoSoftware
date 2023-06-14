@@ -296,6 +296,8 @@ def verActividad(idActividad):
   return actividadToJSON(ac)
 
 
+
+
 # def modificarActividad(self, idActividad, nombreActividad,tipoActividad, fechaActividad, horaInicio,
 #                 horaFin, recordatorio,responsables, medio, enlace,estado):
 @app.route('/modificarActividad', methods=['POST'])
@@ -303,16 +305,37 @@ def modificarActividad():
   id = request.form.get('id')
   nombre = request.form.get('nombre')
   tipo = request.form.get('tipo')
-  fecha = (datetime.strptime(request.form.get('fecha'), '%Y-%m-%d')).date()
+  fecha = datetime.strptime(request.form.get('fecha'), '%Y-%m-%d')
   horaInicio = (datetime.strptime(request.form.get('horaInicio'), '%H:%M:%S')).time()
   horaFin = (datetime.strptime(request.form.get('horaFin'), '%H:%M:%S')).time()
+  periodicidad = request.form.get('periodicidad')
+  fechaRecordatorioB = request.form.get('fechaRecordatorioB')
   recordatorio = request.form.get('recordatorio')
   medio = request.form.get('medio')
   enlace = request.form.get('enlace')
   estado = request.form.get('estado')
+
+  print("periodicidad", periodicidad)
+  print("fechaRec", datetime.strptime(fechaRecordatorioB, '%m/%d/%Y'))
+  print("recordatorio", recordatorio)
+
+  #creacion de recordatorios
+  fechaRecordatorioB = datetime.strptime(fechaRecordatorioB, '%m/%d/%Y')
+  periodicidad = int(periodicidad)
+  recordatorios = int(recordatorio)
+  print("fechaRec", fecha, fechaRecordatorioB)
+
+  # Crear una lista vacía para almacenar las fechas de recordatorio
+  lista = []
+  # Calcular las fechas de recordatorio adicionales
+  fechaActual = fechaRecordatorioB
+  while len(lista) < recordatorios and fechaActual < fecha:
+      lista.append(fechaActual.date())
+      fechaActual += timedelta(days=periodicidad)
+      print("fechaActual < fecha", fechaActual < fecha, fechaActual, fecha)
+
+  print(lista)
    
-  if (recordatorio != None):
-    recordatorio = int(recordatorio)
   if (tipo != None):
     tipo = int(tipo)
   if (estado != None):
@@ -320,8 +343,8 @@ def modificarActividad():
   if (medio != None):
     medio = int(medio)
 
-  res = control.modificarActividad(int(id),nombre, tipo, fecha, horaInicio, horaFin, 
-                                   recordatorio, medio, enlace, estado )
+  res = control.modificarActividad(int(id),nombre, tipo, fecha.date(), horaInicio, horaFin, 
+                                   lista, medio, enlace, estado )
 
   print("ID: ", id)
   if (request.form.get('image') != "null"):
@@ -331,6 +354,7 @@ def modificarActividad():
                              SingletonSesionActual().getUsuario().idUsuario, "se modificó la actividad.")
 
   return jsonify(str(id))
+
 
 # def crearEvidencias
 @app.route('/crearEvidencias', methods=['POST'])
@@ -412,16 +436,38 @@ def crearActividad():
   fecha = request.form.get('fecha')
   horaInicio = request.form.get('horaInicio')
   horaFin = request.form.get('horaFin')
+  periodicidad = request.form.get('periodicidad')
+  fechaRecordatorioB = request.form.get('fechaRecordatorioB')
   recordatorio = request.form.get('recordatorio')
   responsables = request.form.get('responsables')
   medio = request.form.get('medio')
   enlace = request.form.get('enlace')
   estado = request.form.get('estado')
   
+  print("periodicidad", periodicidad)
+  print("fechaRec", datetime.strptime(fechaRecordatorioB, '%m/%d/%Y'))
+  print("recordatorio", recordatorio)
+
+  #creacion de recordatorios
+  fechaRecordatorioB = datetime.strptime(fechaRecordatorioB, '%m/%d/%Y')
+  fechaLimite = datetime.strptime(fecha, '%m/%d/%Y')
+  periodicidad = int(periodicidad)
+  recordatorios = int(recordatorio)
+
+  # Crear una lista vacía para almacenar las fechas de recordatorio
+  lista = []
+  # Calcular las fechas de recordatorio adicionales
+  fechaActual = fechaRecordatorioB
+  while len(lista) < recordatorios and fechaActual < fechaLimite:
+      lista.append(fechaActual.date())
+      fechaActual += timedelta(days=periodicidad)
+
+  print(lista)
+
   print("res: ", responsables)
   id = control.crearActividad(nombre, int(tipo), datetime.strptime(fecha, '%m/%d/%Y'), 
                                datetime.strptime(horaInicio, '%H:%M'), datetime.strptime(horaFin, '%H:%M'), 
-                               int(recordatorio), json.loads(responsables), int(medio), enlace, int(estado))
+                               lista, json.loads(responsables), int(medio), enlace, int(estado))
   print(id)
 
   try:
@@ -627,7 +673,7 @@ def correoRegistrado(correo):
   print(res)
   return jsonify(res)
 
-# def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol):
+# def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats):
 @app.route('/modificarUsuarioContrasenha', methods=['POST'])
 def modificarUsuarioContrasenha():
 
@@ -638,7 +684,7 @@ def modificarUsuarioContrasenha():
   print(SingletonSesionActual().getUsuario().idUsuario, " ",SingletonSesionActual().getUsuario().contrasenha)
   
   #se modifica en la BD y en los objetos 
-  id = control.modificarUsuario(SingletonSesionActual().getUsuario().idUsuario, None, contrasenha, None, None)
+  id = control.modificarUsuario(SingletonSesionActual().getUsuario().idUsuario, None, contrasenha, None, None, None, None)
   #se modifica en la sesionActual
   SingletonSesionActual().getUsuario().setContrasenha(contrasenha) 
 
@@ -647,17 +693,17 @@ def modificarUsuarioContrasenha():
   return jsonify(str(id))
 
 
-# def crearUsuario(self, correoElectronico, contrasenha, idRol):
+# def crearUsuario(self, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats):
 @app.route('/crearUsuario', methods=['POST'])
 def crearUsuario():
   #print(request.json)
 
   #borrar este y descomentar el otro con los JSON adecuados
-  # id = control.crearUsuario(request.json['correoElectronico'], request.json['contrasenha'], 
-  #                             request.json['idRol'])
+  # id = control.crearUsuario(request.json['correoElectronico'], request.json['contrasenha'],
+  #                           request.json['idRol'], request.json['idSede'])
   
   
-  id = control.crearUsuario('correoElectronico', 'contrasenha', 2)
+  id = control.crearUsuario('correoElectronico', 'contrasenha', 2, 1, True, True)
   print(id)
   return jsonify(str(id))
 
@@ -709,6 +755,103 @@ def getInfoUsuarioSesionActual():
   
   return user.__dict__
 
+# def getFechaSimulada(self):
+@app.route('/getFechaSimulada', methods=['GET'])
+def getFechaSimulada():
+  fecha = SingletonSesionActual().getFechaActual()
+  return jsonify(fecha)
+
+# def setFechaSimulada(self, newDate):
+@app.route('/setFechaSimulada/<newDate>', methods=['POST'])
+def setFechaSimulada(newDate):
+  print("....",SingletonSesionActual().getFechaActual())
+  fechaActualNueva = (datetime.strptime(newDate, '%a %b %d %Y %H:%M:%S GMT%z (hora estándar central)')).date()
+  SingletonSesionActual().setFechaActual(fechaActualNueva)
+  print("....",SingletonSesionActual().getFechaActual())
+  control.notificarActividades(fechaActualNueva) #funcion que busca las actividades que deberian notificarse
+  return str(SingletonSesionActual().getFechaActual())
+
+#Notificaciones del usuario
+# def activarNotis(self):
+@app.route('/activarNotis', methods=['POST'])
+def activarNotis():
+  
+  #se modifica en la BD y en los objetos 
+  id = control.modificarUsuario(SingletonSesionActual().getUsuario().idUsuario, None, None, None, None, True, None)
+  #se modifica en la sesionActual
+  SingletonSesionActual().getUsuario().setPermiteNotis(True) 
+
+  print(SingletonSesionActual().getUsuario().idUsuario, " ",SingletonSesionActual().getUsuario().getPermiteNotis())
+  return jsonify(str(id))
+
+# def activarChats(self):
+@app.route('/activarChats', methods=['POST'])
+def activarChats():
+  
+  #se modifica en la BD y en los objetos 
+  id = control.modificarUsuario(SingletonSesionActual().getUsuario().idUsuario, None, None, None, None, None, True)
+  #se modifica en la sesionActual
+  SingletonSesionActual().getUsuario().setPermiteChats(True) 
+
+  print(SingletonSesionActual().getUsuario().idUsuario, " ",SingletonSesionActual().getUsuario().getPermiteChats())
+  return jsonify(str(id))
+
+# def getPermiteNotis(self):
+@app.route('/getPermiteNotis', methods=['POST'])
+def getPermiteNotis():
+  permite = SingletonSesionActual().getUsuario().getPermiteNotis()
+  print(SingletonSesionActual().getUsuario().idUsuario, " ", permite)
+  return jsonify(str(permite))
+
+# def getPermiteChats(self):
+@app.route('/getPermiteChats', methods=['POST'])
+def getPermiteChats():
+  permite = SingletonSesionActual().getUsuario().getPermiteChats()
+  print(SingletonSesionActual().getUsuario().idUsuario, " ", permite)
+  return jsonify(str(permite))
+
+#funciones de las notificaciones idNotificacion, idUsuario
+# def deleteNotificacionUsuario(self, idNotificacion, idUsuario):
+#        return self.controlUsuario.deleteNotificacionUsuario(idNotificacion, idUsuario)
+@app.route('/deleteNotificacionUsuario/<idNotificacion>/<idUsuario>', methods=['POST'])
+def deleteNotificacionUsuario(idNotificacion, idUsuario):
+  res = control.deleteNotificacionUsuario(idNotificacion,idUsuario)
+  return jsonify(str(res))
+
+# def deleteNotificacionesUsuario(self, idUsuario):
+#       return self.controlUsuario.deleteNotificacionesUsuario(idUsuario)
+@app.route('/deleteNotificacionesUsuario/<idUsuario>', methods=['POST'])
+def deleteNotificacionesUsuario(idUsuario):
+  res = control.deleteNotificacionesUsuario(idUsuario)
+  return jsonify(str(res))
+
+#   def cambiarLeida(self, idNotificacion, idUsuario):
+#       return self.controlUsuario.cambiarLeida(idNotificacion, idUsuario)
+@app.route('/cambiarLeida/<idNotificacion>/<idUsuario>', methods=['POST'])
+def cambiarLeida(idNotificacion, idUsuario):
+  res = control.cambiarLeida(idNotificacion, idUsuario)
+  return jsonify(str(res))
+
+#   def todasLeidas(self, idUsuario, leidas):
+#       return self.controlUsuario.todasLeidas(idUsuario, leidas)
+@app.route('/todasLeidas/<idUsuario>/<leidas>', methods=['POST'])
+def todasLeidas(idUsuario, leidas):
+  res = control.todasLeidas(idUsuario, leidas)
+  return jsonify(str(res))
+
+#   def createNotificacion(self, idUsuarioEmisor, fechaHora, contenido):
+#       return self.controlUsuario.createNotificacion(idUsuarioEmisor, fechaHora, contenido)
+@app.route('/createNotificacion/<idUsuarioEmisor>/<fechaHora>/<contenido>', methods=['POST'])
+def createNotificacion(idUsuarioEmisor, fechaHora, contenido):
+  res = control.createNotificacion(idUsuarioEmisor, fechaHora, contenido)
+  return jsonify(str(res))
+  
+#   def notificacionUsuarios(self, idNotificacion, idUsuario):
+#       return self.controlUsuario.notificacionUsuarios(idNotificacion, idUsuario)
+@app.route('/notificacionUsuarios/<idNotificacion>/<idUsuario>', methods=['POST'])
+def notificacionUsuarios(idNotificacion, idUsuario):
+  res = control.notificacionUsuarios(idNotificacion, idUsuario)
+  return jsonify(str(res))
 
 #NUEVO CAMBIO
 # def getSedeUsuarioSesionActual(self):

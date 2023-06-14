@@ -20,16 +20,6 @@ export function Login() {
           });
         const data = await res.json(); // Esperar a que la promesa se resuelva y obtener el resultado
 
-        // console.log(data);
-
-        // if (data === true) {
-        // console.log("true");
-        // } else {
-        // console.log("false");
-        // }
-
-        // const boolValue = res === "true"; //convierte el texto a un valor booleando disponible para el frontend
-        
         console.log(correo,  contrasenha, data)
 
 

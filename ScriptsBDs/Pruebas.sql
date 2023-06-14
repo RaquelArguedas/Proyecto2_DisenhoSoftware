@@ -10,60 +10,60 @@ insert into EstadoActividad(descripcion) values ("REALIZADA");
 insert into EstadoActividad(descripcion) values ("CANCELADA");
 
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
-			 values ("Juegos1", 5, "2023-09-09", "13:00", "15:00", 
-						3, 2, "link", 1,"2023-05-09");
+						medio, enlace, estado, ultimaModificacion)
+			 values ("Juegos1", 5, "2023-06-29", "13:00", "15:00", 
+					 2, "link", 1,"2023-05-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
-			 values ("Juegos2", 5, "2023-09-08", "11:00", "13:00", 
-						3, 2, "link", 1, "2023-05-08");
+						medio, enlace, estado, ultimaModificacion)
+			 values ("Juegos2", 5, "2023-06-28", "11:00", "13:00", 
+						2, "link", 1, "2023-05-08");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Charla Autoestima", 2, "2023-09-07", "09:00", "11:00", 
-						3, 2, "link", 1, "2023-05-07");
+					2, "link", 1, "2023-05-07");
 
 
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Moderar tu tiempo", 1, "2023-07-03", "13:00", "15:00", 
-						3, 2, "link", 1,"2023-05-03");
+					2, "link", 1,"2023-05-03");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Tips de APA", 3, "2023-07-03", "11:00", "13:00", 
-						3, 2, "link", 1, "2023-5-09");
+					2, "link", 1, "2023-5-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Deseas cambiar de carrera", 2, "2023-07-01", "09:00", "11:00", 
-						3, 2, "link", 1, "2023-5-09");
+						2, "link", 1, "2023-5-09");
                         
                         
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						 medio, enlace, estado, ultimaModificacion)
 			 values ("Recursos del TEC", 1, "2023-05-09", "13:00", "15:00", 
-						3, 2, "link", 1,"2023-05-09");
+						2, "link", 1,"2023-05-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Charla Becas Estudiantiles", 1, "2023-05-08", "11:00", "13:00", 
-						3, 2, "link", 3, "2023-10-09");
+						2, "link", 3, "2023-10-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Si se puede", 2, "2023-05-01", "09:00", "11:00", 
-						3, 2, "link", 1, "2023-10-09");
+						2, "link", 1, "2023-10-09");
     
     
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Moderar tu tiempo", 1, "2023-04-09", "13:00", "15:00", 
-						3, 2, "link", 1,"2023-10-09");
+						2, "link", 1,"2023-10-09");
                         
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Block Chain", 4, "2023-10-08", "11:00", "13:00", 
-						3, 2, "link", 1, "2023-10-09");
+						2, "link", 1, "2023-10-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+					medio, enlace, estado, ultimaModificacion)
 			 values ("Charla web", 4, "2023-10-01", "09:00", "11:00", 
-						3, 2, "link", 1, "2023-10-09");
+						2, "link", 1, "2023-10-09");
 
 insert into Rol(descripcion) values("PROFESOR");
 insert into Rol(descripcion) values("PROFESOR_COORDINADOR");
@@ -98,18 +98,29 @@ insert into Sede(descripcion) values ("SC");
 insert into Sede(descripcion) values ("AL");
 insert into Sede(descripcion) values ("LI");
 
-INSERT INTO usuario (correo, contrasenha, idRol, idSede) VALUES
-('jorge.gonzalez@hotmail.com', 12345678, 2, 3),
-('lucia.lopez@yahoo.com', 23456789, 1, 4),
-('daniel.perez@outlook.com', 34567890, 2, 5),
-('isabel.rodriguez@gmail.com', 45678901, 1, 1),
-('luis.garcia@hotmail.com', 56789012, 2, 2),
-('marta.sanchez@yahoo.com', 67890123, 1, 3),
-('alejandro.fernandez@outlook.com', 78901234, 2, 4),
-('sara.gomez@gmail.com', 89012345, 1, 5),
-('juan.martinez@hotmail.com', 90123456, 2, 1),
-('carmen.lopez@yahoo.com', 01234567, 1, 2);
+INSERT INTO usuario (correo, contrasenha, idRol, idSede, permiteNotis, permiteChats) VALUES
+('jorge.gonzalez@hotmail.com', 12345678, 2, 3, true, true),
+('lucia.lopez@yahoo.com', 23456789, 1, 4, true, true),
+('daniel.perez@outlook.com', 34567890, 2, 5, true, true),
+('isabel.rodriguez@gmail.com', 45678901, 1, 1, true, true),
+('luis.garcia@hotmail.com', 56789012, 2, 2, true, true),
+('marta.sanchez@yahoo.com', 67890123, 1, 3, true, true),
+('alejandro.fernandez@outlook.com', 78901234, 2, 4, true, true),
+('sara.gomez@gmail.com', 89012345, 1, 5, true, true),
+('juan.martinez@hotmail.com', 90123456, 2, 1, true, true),
+('carmen.lopez@yahoo.com', 01234567, 1, 2, true, true),
+('ana.garcia@estudiantec.cr', 01234567, 5, 2, true, true);
 
+INSERT INTO Notificacion (emisor, fechaHora, contenido) VALUES 
+(1, '2023-06-09 10:00:00', 'Nuevo mensaje recibido');
+INSERT INTO Notificacion (emisor, fechaHora, contenido) VALUES 
+(1, '2023-06-09 10:00:00', 'Nuevo mensaje recibido2');
+
+INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 2, true);
+INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 3, true);
+INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 11, false);
+INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 5, true);
+INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (2, 5, true);
 
 INSERT INTO profesor (cedula, nombre, apellido1, apellido2, idSede, numeroCelular, correoElectronico, numeroOficina, idAutoridad, idEstado) VALUES
 (467890235, 'Jorge', 'González', 'Soto', 3, 68890123, 'jorge.gonzalez@hotmail.com', 20234567, 2, 2),
@@ -171,18 +182,23 @@ insert into BitacoraXActividades(idActividad, idBitacora) values (10, 10);
 insert into BitacoraXActividades(idActividad, idBitacora) values (11, 11);
 insert into BitacoraXActividades(idActividad, idBitacora) values (12, 12);
 
-insert into Recordatorio (idActividad, fechas) values (1, "2023-08-09");
-insert into Recordatorio (idActividad, fechas) values (2, "2023-08-08");
-insert into Recordatorio (idActividad, fechas) values (3, "2023-08-07");
-insert into Recordatorio (idActividad, fechas) values (4, "2023-06-03");
-insert into Recordatorio (idActividad, fechas) values (5, "2023-06-03");
-insert into Recordatorio (idActividad, fechas) values (6, "2023-06-01");
-insert into Recordatorio (idActividad, fechas) values (7, "2023-04-09");
-insert into Recordatorio (idActividad, fechas) values (8, "2023-04-08");
-insert into Recordatorio (idActividad, fechas) values (9, "2023-04-01");
-insert into Recordatorio (idActividad, fechas) values (10, "2023-03-09");
-insert into Recordatorio (idActividad, fechas) values (11, "2023-09-08");
-insert into Recordatorio (idActividad, fechas) values (12, "2023-09-01");
+insert into Recordatorio (idActividad, fecha) values (1, "2023-06-08");
+insert into Recordatorio (idActividad, fecha) values (1, "2023-06-15");
+insert into Recordatorio (idActividad, fecha) values (1, "2023-06-22");
+insert into Recordatorio (idActividad, fecha) values (2, "2023-06-07");
+insert into Recordatorio (idActividad, fecha) values (2, "2023-06-14");
+insert into Recordatorio (idActividad, fecha) values (2, "2023-06-21");
+
+insert into Recordatorio (idActividad, fecha) values (3, "2023-08-07");
+insert into Recordatorio (idActividad, fecha) values (4, "2023-06-03");
+insert into Recordatorio (idActividad, fecha) values (5, "2023-06-03");
+insert into Recordatorio (idActividad, fecha) values (6, "2023-06-01");
+insert into Recordatorio (idActividad, fecha) values (7, "2023-04-09");
+insert into Recordatorio (idActividad, fecha) values (8, "2023-04-08");
+insert into Recordatorio (idActividad, fecha) values (9, "2023-04-01");
+insert into Recordatorio (idActividad, fecha) values (10, "2023-03-09");
+insert into Recordatorio (idActividad, fecha) values (11, "2023-09-08");
+insert into Recordatorio (idActividad, fecha) values (12, "2023-09-01");
 				
 
 INSERT INTO AsistenteAdministrativo (cedula, nombre, apellido1, apellido2, idSede, numeroCelular, correoElectronico, numeroOficina)
@@ -195,23 +211,23 @@ VALUES
 
 
 INSERT INTO estudiante (carnet, nombre, apellido1, apellido2, idSede, numeroCelular, correoElectronico, idEstado) VALUES
-(2021000001, 'Ana', 'García', 'López', 3, 67894567, 'ana.garcia@estudiantec.cr', 1),
-(2021000002, 'Carlos', 'Pérez', 'Sánchez', 1, 68876543, 'carlos.perez@estudiantec.cr', 2),
-(2021000003, 'María', 'Rodríguez', 'Gómez', 4, 67812345, 'maria.rodriguez@estudiantec.cr', 1),
-(2021000004, 'José', 'Martínez', 'Fernández', 2, 68765432, 'jose.martinez@estudiantec.cr', 2),
-(2021000005, 'Laura', 'González', 'Ruiz', 5, 67898765, 'laura.gonzalez@estudiantec.cr', 1),
-(2022000001, 'David', 'López', 'Sánchez', 3, 68887654, 'david.lopez@estudiantec.cr', 2),
-(2022000002, 'Sofía', 'Hernández', 'García', 1, 67845678, 'sofia.hernandez@estudiantec.cr', 1),
-(2022000003, 'Daniel', 'Gómez', 'Martínez', 4, 68756789, 'daniel.gomez@estudiantec.cr', 2),
-(2022000004, 'Lucía', 'Sánchez', 'Pérez', 2, 67890876, 'lucia.sanchez@estudiantec.cr', 1),
-(2022000005, 'Juan', 'Díaz', 'Rodríguez', 5, 68878908, 'juan.diaz@estudiantec.cr', 2),
-(2023000001, 'Marta', 'Pérez', 'González', 3, 67865432, 'marta.perez@estudiantec.cr', 1),
-(2023000002, 'Alejandro', 'García', 'López', 1, 68767654, 'alejandro.garcia@estudiantec.cr', 2),
-(2023000003, 'Elena', 'Fernández', 'Díaz', 4, 67876543, 'elena.fernandez@estudiantec.cr', 1),
-(2023000004, 'Luis', 'Gómez', 'Sánchez', 2, 68865432, 'luis.gomez@estudiantec.cr', 2),
-(2023000005, 'Sara', 'Martínez', 'Rodríguez', 5, 67854321, 'sara.martinez@estudiantec.cr', 1),
-(2023000006, 'Jorge', 'López', 'Hernández', 3, 68765431, 'jorge.lopez@estudiantec.cr' ,2),
-(2023000007, 'Isabel','Rodríguez','González' ,4 ,67843210 ,'isabel.rodriguez@estudiantec.cr' ,1),
-(2023000008, 'Pedro','Sánchez','Fernández' ,1 ,68854321 ,'pedro.sanchez@estudiantec.cr' ,2),
-(2023000009, 'Carmen','García','Pérez' ,2 ,67832109 ,'carmen.garcia@estudiantec.cr' ,1),
-(2023000010, 'Alberto','Díaz','Martínez' ,5 ,68754321 ,'alberto.diaz@estudiantec.cr' ,2);
+(20195864, 'Ana', 'García', 'López', 3, 67894567, 'ana.garcia@estudiantec.cr', 1),
+(20210324,'Carlos', 'Pérez', 'Sánchez', 1, 68876543, 'carlos.perez@estudiantec.cr', 2),
+(20210323,'María', 'Rodríguez', 'Gómez', 4, 67812345, 'maria.rodriguez@estudiantec.cr', 1),
+(20210322,'José', 'Martínez', 'Fernández', 2, 68765432, 'jose.martinez@estudiantec.cr', 2),
+(20210321,'Laura', 'González', 'Ruiz', 5, 67898765, 'laura.gonzalez@estudiantec.cr', 1),
+(20210320,'David', 'López', 'Sánchez', 3, 68887654, 'david.lopez@estudiantec.cr', 2),
+(20210326,'Sofía', 'Hernández', 'García', 1, 67845678, 'sofia.hernandez@estudiantec.cr', 1),
+(20210327,'Daniel', 'Gómez', 'Martínez', 4, 68756789, 'daniel.gomez@estudiantec.cr', 2),
+(20210328,'Lucía', 'Sánchez', 'Pérez', 2, 67890876, 'lucia.sanchez@estudiantec.cr', 1),
+(20210329,'Juan', 'Díaz', 'Rodríguez', 5, 68878908, 'juan.diaz@estudiantec.cr', 2),
+(20210330,'Marta', 'Pérez', 'González', 3, 67865432, 'marta.perez@estudiantec.cr', 1),
+(20210331,'Alejandro', 'García', 'López', 1, 68767654, 'alejandro.garcia@estudiantec.cr', 2),
+(20210332,'Elena', 'Fernández', 'Díaz', 4, 67876543, 'elena.fernandez@estudiantec.cr', 1),
+(20210333,'Luis', 'Gómez', 'Sánchez', 2, 68865432, 'luis.gomez@estudiantec.cr', 2),
+(20210334,'Sara', 'Martínez', 'Rodríguez', 5, 67854321, 'sara.martinez@estudiantec.cr', 1),
+(20220325,'Jorge', 'López', 'Hernández', 3, 68765431, 'jorge.lopez@estudiantec.cr' ,2),
+(20220326,'Isabel','Rodríguez','González' ,4 ,67843210 ,'isabel.rodriguez@estudiantec.cr' ,1),
+(20220327,'Pedro','Sánchez','Fernández' ,1 ,68854321 ,'pedro.sanchez@estudiantec.cr' ,2),
+(20230325,'Carmen','García','Pérez' ,2 ,67832109 ,'carmen.garcia@estudiantec.cr' ,1),
+(20230345,'Alberto','Díaz','Martínez' ,5 ,68754321 ,'alberto.diaz@estudiantec.cr' ,2);
