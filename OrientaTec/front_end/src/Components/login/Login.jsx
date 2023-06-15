@@ -20,16 +20,6 @@ export function Login() {
           });
         const data = await res.json(); // Esperar a que la promesa se resuelva y obtener el resultado
 
-        // console.log(data);
-
-        // if (data === true) {
-        // console.log("true");
-        // } else {
-        // console.log("false");
-        // }
-
-        // const boolValue = res === "true"; //convierte el texto a un valor booleando disponible para el frontend
-        
         console.log(correo,  contrasenha, data)
 
 
@@ -54,8 +44,9 @@ export function Login() {
             console.log(usuario)
             if (usuario === 1){ usuarioVista = '/menuProfesor'; }
             else if (usuario === 2){ usuarioVista = '/menuCoordinador'; }
-            else if (usuario === 5){ Swal.fire({icon: 'info',title: 'Menu no disponible',
-                                                text: 'El menu del estudiante no se encuentra habilitado.'}); }
+           // else if (usuario === 5){ Swal.fire({icon: 'info',title: 'Menu no disponible',
+            //                                    text: 'El menu del estudiante no se encuentra habilitado.'}); }
+            else if (usuario === 5){usuarioVista = '/menuEstudiante';} //smm
             else { usuarioVista = '/menuAsistente'; } 
         }
 
