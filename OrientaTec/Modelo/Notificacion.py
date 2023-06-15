@@ -11,4 +11,4 @@ class Notificacion:
                f"fechaHora='{self.fechaHora}', contenido='{self.contenido}', leida='{self.leida})"
     
     def invertirLeida(self):
-        self.leida = not self.leida
+        self.leida = not bool(self.leida)

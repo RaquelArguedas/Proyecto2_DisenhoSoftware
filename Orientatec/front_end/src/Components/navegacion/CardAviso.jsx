@@ -3,16 +3,19 @@ import { Icon } from '@iconify/react';
 
 const API = process.env.REACT_APP_API;
 
-export function CardAviso({info}) {
-    console.log(info.contenido)
+export function CardAviso({info, user}) {
+
+    console.log(info)
+
+    //info.leida = (typeof info.leida === String && info.leida === 'True') ? true : false;
+
     const [iconVisto, setIconVisto] = useState("tabler:eye-exclamation");
     const [tipVisto, setTipVisto] = useState("Marcar como leída");
-    let estaVisto = info.leida;
     const btnVistoRef = useRef();
     const [nombreEmisor, setNombreEmisor] = useState("");
 
     const cambiarAspectoBtn = () => {
-        if (estaVisto) {
+        if (info.leida === 'True') {
             setIconVisto("tabler:eye-check");
             setTipVisto("Marcar como no leída");
             btnVistoRef.current.classList.remove('btn-warning');
@@ -42,8 +45,23 @@ export function CardAviso({info}) {
         }
     };
 
-    const handleVisto = () => {
-        estaVisto = !estaVisto;
+    const handleVisto = async () => {
+        info.leida = (info.leida === 'True') ? 'False' : 'True';
+
+        try {
+            const res = await fetch(`${API}/cambiarLeida/${info.idNotificacion}/${user}`, { //buscar por enum, 1 es el enum
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            const data = await res.json();
+
+        } catch (error) {
+            console.log("Error al realizar la solicitud:", error);
+        }
+
         cambiarAspectoBtn();
     }
 

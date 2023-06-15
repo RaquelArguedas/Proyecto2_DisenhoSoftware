@@ -970,22 +970,21 @@ class SingletonDAO(metaclass=SingletonMeta):
     #ES PARA UNA NOTIFICAION
     def cambiarLeida(self, idNotificacion, idUsuario):
         #cambia el estado en la BD
-        id = self.executeStoredProcedure('toggleLeida', [idNotificacion, idUsuario])   
-
+        id = self.executeStoredProcedure('toggleLeida', [idNotificacion, idUsuario])
         if (len(id)==1):
             #cambia el atributo en el objeto de la lista de notificaciones del usuario correspondiente
             for usuario in self.usuarios:
-                if (usuario.idUsuario == idUsuario):
+                if (usuario.idUsuario == int(idUsuario)):
                     for noti in usuario.notificaciones:
-                        if (noti.idNotificacion == idNotificacion):
+                        if (noti.idNotificacion == int(idNotificacion)):
                             noti.invertirLeida()
+                            break
 
         return id
 
     def todasLeidas(self, idUsuario, leidas):
         #cambia el estado en la BD
         id = self.executeStoredProcedure('setleidasUsuario', [idUsuario, leidas])   
-        print("id: ", id)
         if (len(id)==1):
             #cambia el atributo en el objeto de la lista de notificaciones del usuario correspondiente
             for usuario in self.usuarios:

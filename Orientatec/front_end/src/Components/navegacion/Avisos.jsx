@@ -136,7 +136,7 @@ export function Avisos() {
                                 )*/}
                             {avisos.length > 0 && avisos.map((aviso) =>
                                 (
-                                    <CardAviso info={aviso} />
+                                    <CardAviso info={aviso} user={usuario} />
                                 )
                                 )
                             }
