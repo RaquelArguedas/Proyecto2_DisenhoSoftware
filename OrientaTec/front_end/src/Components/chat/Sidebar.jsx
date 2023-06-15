@@ -35,7 +35,11 @@ export function Sidebar() {
   const handleGetDetalle = async () => {
     // Traer los datos y usar el setChats 
   };
-
+  const handleSalirDelChat = () => {
+    setChats((prevChats) => prevChats.filter((chat) => chat !== chatSeleccionado));
+    setChatSeleccionado(null);
+  };
+  
   const handleEnviarMensaje = async () => {
     const nuevoMensaje = {
       contenido: mensaje,
@@ -122,7 +126,19 @@ export function Sidebar() {
         <div className='col'>
           {chatSeleccionado ? (
             <>
-              <h2>{chatSeleccionado.nombreChat}</h2>
+             <div className='row'>
+                <div className="col-sm-8 d-flex align-items-center">
+                  <h2>{chatSeleccionado.nombreChat}</h2>
+                </div>
+                <div className="col-sm-4 d-flex justify-content-end align-items-center">
+                  <button
+                    className="btn btn-dark"
+                    onClick={handleSalirDelChat}
+                  >
+                    Salir del chat &nbsp;&nbsp;<Icons.BoxArrowLeft  />
+                  </button>
+                </div>
+              </div>
               {chatSeleccionado.mensajes.map((mensaje, index) => (
                 <Card key={index} className="mb-2">
                   <Card.Header>
@@ -170,7 +186,11 @@ export function Sidebar() {
             > Cerrar &nbsp;&nbsp;
               <Icons.X />
             </button>
+            
+            
+        <div className='overflow-auto'>
             <CrearChat agregarGrupo={agregarGrupo} chats={chats}/>
+          </div>
           </div>
         </div>
       )}

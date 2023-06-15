@@ -42,6 +42,8 @@ ul li a:hover{
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-height: 80vh; /* Establece una altura máxima del 80% de la altura de la ventana */
+  overflow-y: auto;
 }
 
 .close-button {
@@ -53,4 +55,16 @@ ul li a:hover{
   cursor: pointer;
   font-size: 20px;
   color: #000000;
+}
+
+.overflow-auto.vertical {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.overflow-scroll {
+  overflow: scroll;
+}
+
+.title-button-container {
+  margin-right: 50%; /* Ajusta el valor según tus necesidades */
 }

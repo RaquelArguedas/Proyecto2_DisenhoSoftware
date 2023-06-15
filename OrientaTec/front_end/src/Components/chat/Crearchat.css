@@ -54,3 +54,15 @@
   transform: rotate(45deg);
   border-color: white;
 }
+
+.scroll-container {
+  max-height: 200px; /* Ajusta la altura máxima según tus necesidades */
+  overflow: auto;
+}
+.overflow-auto {
+  overflow: auto;
+}
+.overflow-auto.vertical {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
