@@ -766,12 +766,20 @@ def modificarEstudianteFront():
                                   numeroTelefono,  
                                   estado)  
   print(id)
-  #print('Resultado imagen:')
-  #print(request.form.get('image'))
-  #print(type(request.files['image']))
-  #if (request.form.get('image') != None):
   if (request.files['image'] != None):
     control.registrarFotoEstudiante(carnet, request.files['image'])
+  return jsonify(str(id))
+
+# def enviarMensaje(self, idChat,autor,fechaHora, contenido):
+@app.route('/escribirMensaje', methods=['POST'])
+def escribirMensaje():
+  #print(request.form)
+  id = control.escribirMensaje(int(request.form.get('idChat')),
+                                  request.form.get('contenido'),
+                                   SingletonSesionActual().getUsuario().idUsuario, 
+                                   datetime.now())
+  #datetime.now().time().strftime('%H:%M')
+  print(id)
   return jsonify(str(id))
 
 # inicia el servidor

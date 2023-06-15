@@ -217,7 +217,8 @@ class MainController:
     
     def getUsuarioRol(self, correo, contrasenha):
         return self.controlUsuario.getUsuarioRol(correo, contrasenha)
-    
+    #---NUEVOS CAMBIOS---
+
     #Admin Estudiantes NUEVOS CAMBIOS
     def getFotoEstudiante(self,idEstudiante):
         return self.controlEstudiante.getFotoEstudiante(idEstudiante)
@@ -225,4 +226,8 @@ class MainController:
     def registrarFotoEstudiante(self,carnet,bin):
         self.controlEstudiante.registrarFotoEstudiante(carnet, bin)   
 
+    #Uso de chats 
+    def escribirMensaje(self, idChat,idAutor,fechaHora, contenido):
+        
+        return self.controlProfesor.escribirMensaje(idChat,idAutor,fechaHora, contenido)
     

@@ -14,16 +14,12 @@ import os
 from pathlib import Path
 from operator import attrgetter
 
-#from google.oauth2 import service_account
-#from googleapiclient.discovery import build
-#from googleapiclient.http import MediaFileUpload
-
 import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
 sys.path.append('./Modelo')
 
-#sys.path.append('./Modelo')
 #Importo la Clase
+from GeneralChatRoom import *
 from Usuario import *
 from Estudiante import * 
 from EquipoGuia import *
@@ -62,11 +58,6 @@ class SingletonDAO(metaclass=SingletonMeta):
     # Ruta al archivo JSON de las credenciales de Google Drive
     CREDENCIALES_JSON = 'C:/Users/Harrick Mc Lean M/Downloads/disehnosoftware-50f7c4a809ca.json'
 
-    # Crea una instancia del cliente de Google Drive
-    #credenciales = service_account.Credentials.from_service_account_file(CREDENCIALES_JSON)
-    #servicio_drive = build('drive', 'v3', credentials=credenciales)
-
-
     #Atributos para conetarse a MONGO
     MONGO_HOST="localhost"
     MONGO_PUERTO="27017"
@@ -93,6 +84,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     evidencias = []
     observaciones = []
     comentarios = []
+    mediator = GeneralChatRoom() #Nuevo cambio
 
     #Constructor que instancia los objetos necesarios del modelo
     def __init__(self):
@@ -108,7 +100,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         self.evidencias = self.setFromBD("SELECT * from ", "Evidencia")
         self.observaciones = self.setFromBD("SELECT * from ", "Observacion")
         self.comentarios = self.setFromBD("SELECT * from ", "Comentario")
-    
+
     #Auxiliar del constructor 
     def setFromBD(self, command, tablaBD):
         self.connectServer()
@@ -1156,7 +1148,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             if(prof.cedula == cedula):
                 return prof
             
-    #Nuevas funcionalidades
+    #-----NUEVAS FUNCIONALIDADES---------------#
     def getFotoEstudiante(self,idBuscado):
         try:
             self.connectMongoServer()
@@ -1187,3 +1179,25 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.closeMongoConnection()
         except Exception as ex:
             print(ex)
+
+    #Crear un nuevo mensaje 
+    # +crearMensaje(Mensaje):void
+    def escribirMensaje(self, idChat,idAutor,fechaHora, contenido):
+        
+        respuesta = self.mediator.enviarMensaje(contenido,fechaHora,idAutor)
+        if respuesta:
+            args = [idAutor,fechaHora,contenido]
+
+            #se agrega a la bd
+            id = self.executeStoredProcedure('agregarMensaje', args)
+            if(len(id)==1):
+                #se obtiene el id y se le agrega
+                salida = Comentario(idAutor,fechaHora,contenido,id)
+
+                #se agrega a la lista de Actividades
+                self.comentarios += [salida]
+            
+            return id
+        else: 
+            print("Error al enviar el mensaje")
+            return -1
