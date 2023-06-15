@@ -161,7 +161,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         elif (tablaBD == "Mensaje"):
             objeto = Mensaje(lista[0],lista[1],lista[2],lista[3],lista[4])
         elif (tablaBD == "Chat"):
-            objeto = GeneralChatRoom(lista[0],lista[1],lista[1],lista[2])#no lo c rick
+            objeto = GeneralChatRoom(lista[0],self.generarMiembros(lista[0]),lista[1],lista[2])#nuevo cambio
 
         return objeto
 
@@ -1226,3 +1226,19 @@ class SingletonDAO(metaclass=SingletonMeta):
         else: 
             print("Error al crear el chat")
             return -1
+            
+    def generarMiembros(self, idChat):
+        self.connectServer()
+
+        try:
+            self.cursor.execute("select usuario.idUsuario from UsuariosxChat inner join usuario on usuario.idUsuario = UsuariosxChat.idUsuario where idChat = " + str(idChat))
+
+            salida = self.cursor.fetchall()
+
+            lista = []
+            for row in salida:
+                lista += [self.getUsuario(row[0])]
+            return lista
+        except Exception as ex:
+            print(ex)
+        self.closeConnection()

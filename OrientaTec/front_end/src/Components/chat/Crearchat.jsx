@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Crearchat.css';
 import { Sidebar } from './Sidebar';
+import axios from 'axios'; // Para manejo de solicitudes en el backend
 
 export function CrearChat({agregarGrupo, chats}) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,7 +13,7 @@ export function CrearChat({agregarGrupo, chats}) {
     { id: 2, carnet: '002', nombre: 'Pedro' },
     { id: 3, carnet: '003', nombre: 'María' },
     // Agrega más elementos de datos aquí...
-    
+
   ];
 
   const handleSearch = (event) => {
@@ -32,7 +33,7 @@ export function CrearChat({agregarGrupo, chats}) {
     setGroupName(event.target.value);
   };
 
-  const handleCreateGroup = () => {
+  const handleCreateGroup = async () => { //cambio realizado
     // Validar que se hayan seleccionado al menos dos elementos
     if (selectedItems.length < 2) {
       alert('Debes seleccionar al menos dos integrantes');
@@ -41,19 +42,35 @@ export function CrearChat({agregarGrupo, chats}) {
 
     // Enviar los carnets seleccionados al backend
     // Aquí puedes agregar tu lógica para enviar la solicitud al backend con los carnets seleccionados
-    console.log('Carnets seleccionados:', selectedItems.map((item) => item.carnet));
+    const miembrosSeleccionados = selectedItems.map((item) => item.carnet); //cambio Sophya
+    console.log('Carnets seleccionados:', miembrosSeleccionados); //cambio Sophya
      // Crear el nuevo grupo
      const nuevoGrupo = {
       id: chats.length + 1,
       nombreChat: groupName,
       mensajes: [] // Puedes agregar mensajes iniciales si es necesario
     };
+    
+    try {
+      // Enviar la solicitud POST al backend para crear el chat
+      const response = await axios.post(`${API}/crearChat`);
+      const nuevoChat = response.data;
 
+      // Agregar el nuevo grupo a Sidebar
+      agregarGrupo(nuevoChat);
+
+      // Restablecer los valores después de crear el grupo
+      setSelectedItems([]);
+      setGroupName('');
+    } catch (error) {
+      console.log('Error al crear el chat:', error);
+    }
+    
     // Llamar a la función agregarGrupo para agregar el nuevo grupo a Sidebar
-    agregarGrupo(nuevoGrupo);
+    //agregarGrupo(nuevoGrupo);
     // Restablecer los valores después de crear el grupo
-    setSelectedItems([]);
-    setGroupName('');
+    //setSelectedItems([]);
+    //setGroupName('');
   };
 
   const filteredData = data.filter((item) => {

@@ -787,7 +787,7 @@ def escribirMensaje():
 def crearChat():
   #print(request.form)
   id = control.crearChat(request.form.get('nombreChat'),
-                         request.form.get('miembros'),
+                         request.form.get('miembrosSeleccionados'),
                          SingletonSesionActual().getUsuario().idUsuario)
   
   print(id)
