@@ -37,7 +37,6 @@ export function BarraLateral() {
             if (response.ok) {
             const data = await response.json();
             setNombreUsuario(data.nombre + " " + data.apellido1 + " " +  data.apellido2);
-            console.log("......................", data)
             } else {
             console.log("Error al obtener el nombre de usuario");
             }
@@ -56,7 +55,6 @@ export function BarraLateral() {
                 });
     
                 const data = await response.json();
-                console.log("......................", typeof(data))
                 const fecha = new Date(data)
                 console.log(fecha)
                 const month = fecha.getMonth() + 1; // Obtener el mes (se suma 1 ya que los meses se indexan desde 0)

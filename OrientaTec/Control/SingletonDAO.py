@@ -119,7 +119,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.cursor.execute(command + tablaBD)
 
             salida = self.cursor.fetchall()
-
+            
             lista = []
             objeto = []
             for row in salida:
@@ -1009,7 +1009,7 @@ class SingletonDAO(metaclass=SingletonMeta):
 
         return id #devuelve el id de la notificacion o el error
 
-    #enviar notificacion a usuarios
+    #enviar notificacion a usuariosS
     def notificacionUsuarios(self, idNotificacion, idUsuario):
         #genera el campo idNotificacionXUsuario, siempre tiene como leida false
         id = self.executeStoredProcedure('createNotificacionXUsuario', [int(idNotificacion), int(idUsuario), False])   
@@ -1301,3 +1301,4 @@ class SingletonDAO(metaclass=SingletonMeta):
         for prof in self.profesores:
             if(prof.cedula == cedula):
                 return prof
+

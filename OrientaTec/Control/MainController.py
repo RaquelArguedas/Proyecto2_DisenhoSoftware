@@ -146,6 +146,13 @@ class MainController:
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
         return self.controlActividades.quitarResponsablesActividad(idActividad, responsablesEliminados)
     
+    #Suscribir y desuscribir del Publisher Actividades
+    def suscribir(self, idUsuario):
+        self.controlActividades.getPublicador().suscribir(idUsuario)
+
+    def desuscribir(self, idUsuario):
+        self.controlActividades.getPublicador().desuscribir(idUsuario)
+    
     #Crear Observación - Parche de Alonso
     def crearObservacion(self, idActividad, fechaCancelacion, detalle):
         return self.controlActividades.crearObservacion(idActividad, fechaCancelacion, detalle)
@@ -230,15 +237,12 @@ class MainController:
 
     def todasLeidas(self, idUsuario, leidas):
         return self.controlUsuario.todasLeidas(idUsuario, leidas)
-
-    def createNotificacion(self, idUsuarioEmisor, fechaHora, contenido):
-        return self.controlUsuario.createNotificacion(idUsuarioEmisor, fechaHora, contenido)
-    
-    def notificacionUsuarios(self, idNotificacion, idUsuario):
-        return self.controlUsuario.notificacionUsuarios(idNotificacion, idUsuario)
-    
+        
     def notificarActividades(self, fechaActual):
         return self.controlActividades.notificarActividades(fechaActual)
+    
+    def createNotificacion(self, idUsuarioEmisor, fechaHora, contenido):
+        return self.controlUsuario.createNotificacion(idUsuarioEmisor, fechaHora, contenido)
     
     
     

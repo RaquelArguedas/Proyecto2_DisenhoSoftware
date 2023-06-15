@@ -7,18 +7,19 @@ ACTIVIDAD = 0 #para no hacer un enum, o dos métodos distintos
 class PublisherActividades:
     #Constructor
     def __init__(self):
+        self.dao = SingletonDAO()
         self.admUsuario = AdminUsuario()
-        self.suscriptores = []
-        #self.suscriptores = self.admUsuario.getSuscriptores(ACTIVIDAD)
+        self.suscriptores = self.admUsuario.getUsuariosPermiteNotis()
 
     #Métodos
     def suscribir(self, usuarioSub):
-        self.suscriptores.append(usuarioSub)
+        if not(usuarioSub in self.suscriptores):
+            self.suscriptores.append(usuarioSub)
     
     def desuscribir(self, usuarioSub):
-        self.suscriptores.remove(usuarioSub)
+        if (usuarioSub in self.suscriptores):
+            self.suscriptores.remove(usuarioSub)
 
-    def notificar(self, aviso):
+    def notificar(self, idNotificacion):
         for sub in self.suscriptores:
-            self.admUsuario.notificar(sub, aviso) #predispuesto
-     
+            self.admUsuario.notificacionUsuarios(idNotificacion, sub.idUsuario) #predispuesto

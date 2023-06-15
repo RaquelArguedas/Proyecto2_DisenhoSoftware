@@ -91,19 +91,18 @@ class AdminActividades:
     
     #                               fechaActual debe de ser de tipo date
     def notificarActividades(self, fechaActual):
-        print("LOL")
-        print("/...................", self.dao.actividades[0].recordatorios)
         for actividad in self.dao.actividades:
             # Verificar si la lista de recordatorios no está vacía
             if actividad.recordatorios:
                 # Verifica si debe actualizar
                 # Si alguna actividad ya debe ser notificada lo realiza, 
                 # si no se fija las actividades notificadas que salgan como planeadas
-                print("fechaActual", fechaActual, "idActividad", actividad.idActividad)
                 if actividad.recordatorios[0].fecha <= fechaActual:
-                    print("entre al if")
                     if actividad.estado==1:
+                        # se debe llamar a notificar a todos los subs
+                        id = self.dao.createNotificacion(1, fechaActual, "Se ha publicado una actividad")
                         self.cambiarEstado(actividad.idActividad,2)
+                        self.publicador.notificar(id[0])
                 else:
                     print(actividad.idActividad, "entre al else", actividad.estado)
                     if actividad.estado == 2:

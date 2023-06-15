@@ -1,16 +1,17 @@
-import React, { Fragment, useState, useRef } from 'react'
+import React, { Fragment, useState, useRef, useEffect } from 'react'
 import { Icon } from '@iconify/react';
 
 const API = process.env.REACT_APP_API;
 
-export function CardAviso() {
+export function CardAviso({info}) {
+    console.log(info.contenido)
     const [iconVisto, setIconVisto] = useState("tabler:eye-exclamation");
     const [tipVisto, setTipVisto] = useState("Marcar como leída");
-    let estaVisto = false;
+    let estaVisto = info.leida;
     const btnVistoRef = useRef();
+    const [nombreEmisor, setNombreEmisor] = useState("");
 
-    const handleVisto = () => {
-        estaVisto = !estaVisto;
+    const cambiarAspectoBtn = () => {
         if (estaVisto) {
             setIconVisto("tabler:eye-check");
             setTipVisto("Marcar como no leída");
@@ -24,15 +25,39 @@ export function CardAviso() {
         }
     }
 
+    const getNombreEmisor = async () => {
+        try {
+            const res = await fetch(`${API}/getUsuario/${info.emisor}`, { //buscar por enum, 1 es el enum
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            const data = await res.json();
+            setNombreEmisor(data.correo);
+
+        } catch (error) {
+            console.log("Error al realizar la solicitud:", error);
+        }
+    };
+
+    const handleVisto = () => {
+        estaVisto = !estaVisto;
+        cambiarAspectoBtn();
+    }
+
+    useEffect(() => {
+        cambiarAspectoBtn(); getNombreEmisor()
+    }, []);
+
     return (
         <Fragment>
             <div class="card my-3">
                 <div class="card-body">
-                    <h5 id='nombreActividad' class="card-title">Nombre de la notificación</h5>
-
                     <div className="row">
                         <div className="col">
-                            <h6 id="tipoActividad" class="py-2 card-subtitle mb-2 text-muted"> Emisor | Fecha y hora </h6>
+                            <h6 id="tipoActividad" class="py-2 card-subtitle mb-2 text-muted"> {nombreEmisor} | {info.fechaHora} </h6>
                         </div>
                         <div className="col-sm-2">
                             <button onClick={handleVisto} ref={btnVistoRef} className="btn btn-warning p-1 mx-1" 
@@ -45,11 +70,7 @@ export function CardAviso() {
                         </div>
                     </div>
 
-                    <p id="fechaActividad" class="card-text my-2">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, repudiandae eius suscipit,
-                        nobis magnam ipsum incidunt labore sequi blanditiis minus esse rem rerum vel officiis, voluptatibus
-                        exercitationem aut! Blanditiis, cumque!
-                    </p>
+                    <p id="fechaActividad" class="card-text my-2"> {info.contenido} </p>
                 </div>
             </div>
         </Fragment>

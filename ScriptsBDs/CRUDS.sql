@@ -323,6 +323,22 @@ BEGIN
 END$$
 DELIMITER ;	
 
+#Suscribir
+DELIMITER $$
+CREATE PROCEDURE `suscribirUsuario`(in _idUsuario int)
+BEGIN
+	declare _error int; declare _errmsg varchar(100);
+	if( (select count(*) from Usuario where _idUsuario = idUsuario)=0 )then 
+		set _error = 2, _errmsg = "Ese idUsuario no existe";
+	else
+		update Usuario 
+		set permiteNotis = 1
+		where _idUsuario = idUsuario; 
+	end if;
+    if (_error is not null) then select _error, _errmsg; end if;
+END$$
+DELIMITER ;	
+
 #____________________________________________________Notificaciones
 #Create
 DELIMITER $$

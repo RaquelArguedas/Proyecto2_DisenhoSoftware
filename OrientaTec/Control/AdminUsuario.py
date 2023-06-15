@@ -47,6 +47,22 @@ class AdminUsuario:
         return -1
     
     #funciones de las notificaciones
+    def getUsuariosPermiteNotis(self):
+        usuarios = self.dao.getUsuarios()
+        lista = []
+        for user in usuarios:
+            if (user.permiteNotis == True):
+                lista.append(user)
+        return lista
+    
+    def getUsuariosPermiteChats(self):
+        usuarios = self.dao.getUsuarios()
+        lista = []
+        for user in usuarios:
+            if (user.permiteChats == True):
+                lista.append(user)
+        return lista
+
     def deleteNotificacionUsuario(self, idNotificacion, idUsuario):
         return self.dao.deleteNotificacionUsuario(idNotificacion, idUsuario)
 

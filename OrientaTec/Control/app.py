@@ -52,7 +52,6 @@ def modificarEstudiante():
 def buscarEstudiante(carnet):
   print("carnet", carnet)
   est = control.buscarEstudiante(int(carnet))
-  print(est) #esto se imprime en la terminar de VS
 
   if (est == None):
      return jsonify("No existe")
@@ -286,7 +285,6 @@ def getAllProfesores():
 @app.route('/verActividad/<idActividad>', methods=['GET'])
 def verActividad(idActividad):
   ac = control.verActividad(int(idActividad))
-  print(ac.__dict__)
 
   if (ac == None):
      return jsonify("No existe")   
@@ -323,7 +321,6 @@ def modificarActividad():
   fechaRecordatorioB = datetime.strptime(fechaRecordatorioB, '%m/%d/%Y')
   periodicidad = int(periodicidad)
   recordatorios = int(recordatorio)
-  print("fechaRec", fecha, fechaRecordatorioB)
 
   # Crear una lista vacía para almacenar las fechas de recordatorio
   lista = []
@@ -334,8 +331,6 @@ def modificarActividad():
       fechaActual += timedelta(days=periodicidad)
       print("fechaActual < fecha", fechaActual < fecha, fechaActual, fecha)
 
-  print(lista)
-   
   if (tipo != None):
     tipo = int(tipo)
   if (estado != None):
@@ -584,7 +579,6 @@ def quitarResponsablesActividad():
 @app.route('/consultarProximaActividad', methods=['GET'])
 def consultarProximaActividad():
   ac = control.consultarProximaActividad()
-  print(ac)
 
   if (ac == None):
      return jsonify("No existe")       
@@ -595,7 +589,6 @@ def consultarProximaActividad():
 @app.route('/consultarActividades', methods=['GET'])
 def consultarActividades():
   actividades = control.consultarActividades()
-  print(actividades)
   listaSalida = []
 
   for ac in actividades:
@@ -724,22 +717,22 @@ def getUsuarioActualRol():
 @app.route('/iniciarSesion/<correo>', methods=['POST'])
 def iniciarSesion(correo):
   SingletonSesionActual().setUsuario(control.getUsuarioCorreo(correo))
-  print("....",SingletonSesionActual().getUsuario().idUsuario)
+  #print("....",SingletonSesionActual().getUsuario().idUsuario)
   return str(SingletonSesionActual().getUsuario().idUsuario)
 
 #Crear Observación - Parche de Alonso
 @app.route('/crearObservacion', methods=['POST'])
 def crearObservacion():
   id = control.crearObservacion(int(request.json['idActividad']), datetime.today(), request.json['detalle'])
-  print(id)
+  #print(id)
   return jsonify(str(id))
+
 # def getUsuarioSesionActual(self):
 @app.route('/getUsuarioSesionActual', methods=['GET'])
 def getUsuarioSesionActual():
   #SingletonSesionActual().setUsuario(control.getUsuarioCorreo("as@gmail.com","as"))
   user = SingletonSesionActual().getUsuario()
-  print("---", user.__dict__)
-  return jsonify(user.__dict__)
+  return actividadToJSON(user)
 
 # def getInfoUsuarioSesionActual(self):
 @app.route('/getInfoUsuarioSesionActual', methods=['GET'])
@@ -781,7 +774,21 @@ def activarNotis():
   #se modifica en la sesionActual
   SingletonSesionActual().getUsuario().setPermiteNotis(True) 
 
-  print(SingletonSesionActual().getUsuario().idUsuario, " ",SingletonSesionActual().getUsuario().getPermiteNotis())
+  control.suscribir(SingletonSesionActual().getUsuario())
+
+  return jsonify(str(id))
+
+# def desactivarNotis(self):
+@app.route('/desactivarNotis', methods=['POST'])
+def desactivarNotis():
+  
+  #se modifica en la BD y en los objetos 
+  id = control.modificarUsuario(SingletonSesionActual().getUsuario().idUsuario, None, None, None, None, False, None)
+  #se modifica en la sesionActual
+  SingletonSesionActual().getUsuario().setPermiteNotis(False) 
+
+  control.desuscribir(SingletonSesionActual().getUsuario())
+
   return jsonify(str(id))
 
 # def activarChats(self):
@@ -857,11 +864,7 @@ def notificacionUsuarios(idNotificacion, idUsuario):
 # def getSedeUsuarioSesionActual(self):
 @app.route('/getSedeUsuarioSesionActual', methods=['GET'])
 def getSedeUsuarioSesionActual():
-  print('pruebaaaaaa')
   user = SingletonSesionActual().getUsuario()
-  #print("---", user.__dict__)
-  print('INFO DICCIONARIO:')
-  print(user.__dict__['idSede'])
   return jsonify(user.__dict__['idSede'])
 
 # inicia el servidor
