@@ -104,6 +104,6 @@ class AdminActividades:
                         self.cambiarEstado(actividad.idActividad,2)
                         self.publicador.notificar(id[0])
                 else:
-                    print(actividad.idActividad, "entre al else", actividad.estado)
+                    #print(actividad.idActividad, "entre al else", actividad.estado)
                     if actividad.estado == 2:
                         self.cambiarEstado(actividad.idActividad, 1)

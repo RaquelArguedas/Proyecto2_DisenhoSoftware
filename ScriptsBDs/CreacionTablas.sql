@@ -192,3 +192,18 @@ correoElectronico varchar(200),
 idEstado int, foreign key (idEstado) references EstadoCuenta (idEstadoC)
 );
 
+-- Nuevos cambios Sophy
+create table Chat
+(idChat int primary key not null auto_increment,
+nombre varchar(200),
+idAutor int,foreign key (idAutor) references Usuario(idUsuario)
+);
+create table Mensaje
+(idMensaje int primary key not null auto_increment,
+idChat int,foreign key (idChat) references Chat (idChat),
+fechaHora datetime, 
+contenido varchar(200),
+idAutor int,foreign key (idAutor) references Usuario(idUsuario)
+);
+
+

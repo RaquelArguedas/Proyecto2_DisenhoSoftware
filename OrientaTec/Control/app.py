@@ -688,17 +688,16 @@ def modificarUsuarioContrasenha():
 
 # def crearUsuario(self, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats):
 @app.route('/crearUsuario', methods=['POST'])
-def crearUsuario():
-  #print(request.json)
+def crearUsuario():  
+  id = control.crearUsuario('correoElectronico', 'contrasenha', 2)
 
-  #borrar este y descomentar el otro con los JSON adecuados
-  # id = control.crearUsuario(request.json['correoElectronico'], request.json['contrasenha'],
-  #                           request.json['idRol'], request.json['idSede'])
-  
-  
-  id = control.crearUsuario('correoElectronico', 'contrasenha', 2, 1, True, True)
   print(id)
   return jsonify(str(id))
+
+# En App.py
+#def crearNuevoUsuarioEstudiante(carnet,correoElectronico, idRol, idSede):
+    #adapter = EstudianteAdapter(carnet,correoElectronico, idRol, idSede)
+    #control.crearUsuario(adapter)#Debería ser así pero crear usuario recibe los campos directamente
 
 # def getUsuario(self, idUsuario):
 @app.route('/getUsuario/<idUsuario>', methods=['GET'])
@@ -757,11 +756,12 @@ def getFechaSimulada():
 # def setFechaSimulada(self, newDate):
 @app.route('/setFechaSimulada/<newDate>', methods=['POST'])
 def setFechaSimulada(newDate):
-  print("....",SingletonSesionActual().getFechaActual())
+  #print("....",SingletonSesionActual().getFechaActual())
   fechaActualNueva = (datetime.strptime(newDate, '%a %b %d %Y %H:%M:%S GMT%z (hora estándar central)')).date()
   SingletonSesionActual().setFechaActual(fechaActualNueva)
-  print("....",SingletonSesionActual().getFechaActual())
+  #print("....",SingletonSesionActual().getFechaActual())
   control.notificarActividades(fechaActualNueva) #funcion que busca las actividades que deberian notificarse
+  print("QUE ESTA PASANDO")
   return str(SingletonSesionActual().getFechaActual())
 
 #Notificaciones del usuario
@@ -866,6 +866,70 @@ def notificacionUsuarios(idNotificacion, idUsuario):
 def getSedeUsuarioSesionActual():
   user = SingletonSesionActual().getUsuario()
   return jsonify(user.__dict__['idSede'])
+
+#Cambios NUEVOS
+# getFotoEstudiante
+@app.route('/getFotoEstudiante/<carnet>', methods=['GET'])
+def getFotoEstudiante(carnet):
+  print("carnet:")
+  print(carnet)
+  imagen = control.getFotoEstudiante(int(carnet))
+
+  base64_image = None
+  if (imagen != None):
+    base64_image = base64.b64encode(imagen).decode('utf-8')
+
+  if is_base64_valid(base64_image):
+    return base64_image
+  else:
+    return "None"
+
+# modificarEstudiante(self, carnet, nombre,apellido1, apellido2, sede, correoElectronico, numeroCelular, 
+# estado)
+@app.route('/modificarEstudianteFront', methods=['POST'])
+def modificarEstudianteFront():
+  #print('respuesta:',request.files)
+  carnet = request.form.get('carnet')
+  name = request.form.get('name')
+  apellido1 = request.form.get('apellido1')
+  apellido2 = request.form.get('apellido2')
+  sede = request.form.get('sede')
+  numeroTelefono = request.form.get('numeroTelefono')
+  correo = request.form.get('correo')
+  estado = request.form.get('estado')
+
+  if (sede != None):
+    sede = int(sede)
+  if (estado != None):
+    estado = int(estado)
+  if (carnet != None):
+    carnet = int(carnet) 
+  if (numeroTelefono != None):
+    numeroTelefono = int(numeroTelefono)
+  id = control.modificarEstudiante(carnet, 
+                                  name if name != '' else None, 
+                                  apellido1 if apellido1 != '' else None, 
+                                  apellido2 if apellido2 != '' else None, 
+                                  sede, 
+                                  correo if correo != '' else None, 
+                                  numeroTelefono,  
+                                  estado)  
+  print(id)
+  if (request.files['image'] != None):
+    control.registrarFotoEstudiante(carnet, request.files['image'])
+  return jsonify(str(id))
+
+# def enviarMensaje(self, idChat,autor,fechaHora, contenido):
+@app.route('/escribirMensaje', methods=['POST'])
+def escribirMensaje():
+  #print(request.form)
+  id = control.escribirMensaje(int(request.form.get('idChat')),
+                                  request.form.get('contenido'),
+                                   SingletonSesionActual().getUsuario().idUsuario, 
+                                   datetime.now())
+  #datetime.now().time().strftime('%H:%M')
+  print(id)
+  return jsonify(str(id))
 
 # inicia el servidor
 if __name__ == "__main__":
