@@ -22,12 +22,12 @@ class AdminUsuario:
                 return True
         return False
 
-    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol, idSede):
-        return self.dao.modificarUsuario(idUsuario, correoElectronico, contrasenha, idRol, idSede)
+    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats):
+        return self.dao.modificarUsuario(idUsuario, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats)
     
     
-    def crearUsuario(self, correoElectronico, contrasenha, idRol):
-        return self.dao.crearUsuario(correoElectronico, contrasenha, idRol)
+    def crearUsuario(self, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats):
+        return self.dao.crearUsuario(correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats)
     
     def getUsuario(self, idUsuario):
         return self.dao.getUsuario(idUsuario)
@@ -46,6 +46,41 @@ class AdminUsuario:
                 return user.idRol
         return -1
     
+    #funciones de las notificaciones
+    def getUsuariosPermiteNotis(self):
+        usuarios = self.dao.getUsuarios()
+        lista = []
+        for user in usuarios:
+            if (user.permiteNotis == True):
+                lista.append(user)
+        return lista
+    
+    def getUsuariosPermiteChats(self):
+        usuarios = self.dao.getUsuarios()
+        lista = []
+        for user in usuarios:
+            if (user.permiteChats == True):
+                lista.append(user)
+        return lista
+
+    def deleteNotificacionUsuario(self, idNotificacion, idUsuario):
+        return self.dao.deleteNotificacionUsuario(idNotificacion, idUsuario)
+
+    def deleteNotificacionesUsuario(self, idUsuario):
+        return self.dao.deleteNotificacionesUsuario(idUsuario)
+
+    def cambiarLeida(self, idNotificacion, idUsuario):
+        return self.dao.cambiarLeida(idNotificacion, idUsuario)
+
+    def todasLeidas(self, idUsuario, leidas):
+        return self.dao.todasLeidas(idUsuario, leidas)
+
+    def createNotificacion(self, idUsuarioEmisor, fechaHora, contenido):
+        return self.dao.createNotificacion(idUsuarioEmisor, fechaHora, contenido)
+    
+    def notificacionUsuarios(self, idNotificacion, idUsuario):
+        return self.dao.notificacionUsuarios(idNotificacion, idUsuario)
+
     
     
     

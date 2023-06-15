@@ -13,6 +13,11 @@ export function CrearActividad() {
     let navigate = useNavigate();
     const gotoMenu = () => { navigate('/menuCoordinador', {}); }
 
+    const [periodicidad, setPeriodicidad] =  useState(0);
+    const [fechaRecordatorio, setFechaRecordatorio] = useState(new Date());
+    const [fechaRecordatorioB, setFechaRecordatorioB] = useState('');
+
+
     const [startDate, setStartDate] = useState(new Date());
     const [esVirtual, setVirtual] = useState(false);
 
@@ -36,8 +41,9 @@ export function CrearActividad() {
         setHoraInicio(startDate.getHours() + ':' + (startDate.getMinutes() === 0 ? '00' : startDate.getMinutes()));
         const subHoraFin = Number(startDate.getHours()) + Number(event.target.value);
         setHoraFin(((subHoraFin < 24) ? subHoraFin : subHoraFin - 24) + ':' + (startDate.getMinutes() == 0 ? '00' : startDate.getMinutes()));
-        console.log(startDate.getMonth() + '/' + startDate.getDate() + '/' + startDate.getFullYear());
-        setFecha(startDate.getMonth() + '/' + startDate.getDate() + '/' + startDate.getFullYear())
+        console.log("FECHAAAAAAAAAA")
+        console.log((startDate.getMonth() + 1) + '/' + startDate.getDate() + '/' + startDate.getFullYear());
+        setFecha((startDate.getMonth() + 1) + '/' + startDate.getDate() + '/' + startDate.getFullYear())
     };
 
     const [recordatorio, setRecordatorios] = useState(0); const handleRecordatoriosChange = (event) => { setRecordatorios(event.target.value); };
@@ -69,6 +75,26 @@ export function CrearActividad() {
 
     };
 
+    const handlePeriodicidadChange = (event) => {
+        setPeriodicidad(event.target.value);
+    };
+      
+    const handleFechaRecordatorioChange = (date) => {
+        setFechaRecordatorio(date);
+
+        const month = date.getMonth() + 1; // Obtener el mes (se suma 1 ya que los meses se indexan desde 0)
+        const day = date.getDate(); // Obtener el día
+        const year = date.getFullYear(); // Obtener el año
+
+        // Construir la cadena en el formato deseado (mm/dd/aaaa)
+        const formattedDate = `${month}/${day}/${year}`;
+
+        //console.log("Fecha formateada:", formattedDate, typeof(formattedDate));
+
+        setFechaRecordatorioB(formattedDate);
+    };
+      
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -87,6 +113,8 @@ export function CrearActividad() {
             formData.append('fecha', fecha);
             formData.append('horaInicio', horaInicio);
             formData.append('horaFin', horaFin);
+            formData.append('periodicidad', periodicidad);
+            formData.append('fechaRecordatorioB', fechaRecordatorioB);
             formData.append('recordatorio', recordatorio);
             console.log("recordatorio", recordatorio);
             formData.append('responsables', JSON.stringify(responsables));
@@ -94,7 +122,7 @@ export function CrearActividad() {
             formData.append('estado', estado);
 
             console.log("TIPOOOOOOOOOOOO")
-            console.log(responsables)
+            console.log(periodicidad, fechaRecordatorioB)
 
             const enlace = (esVirtual) ? enlaceR : ''
             formData.append('enlace', enlace);
@@ -240,6 +268,32 @@ export function CrearActividad() {
                                     <div className="input-group w-50 my-3">
                                         <span className="input-group-text" >Duración</span>
                                         <input id="txtCarnet" type="text" className="form-control" placeholder="horas" onChange={handleHoraFinChange} />
+                                    </div>
+
+                                    <div className="input-group w-100 my-3">
+                                    <span className="input-group-text">Periodicidad</span>
+                                    <input
+                                        id="txtPeriodicidad"
+                                        type="text"
+                                        className="form-control"
+                                        onChange={handlePeriodicidadChange}
+                                    />
+                                    </div>
+
+                                    <div className="input-group w-100 my-3">
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                        <span className="input-group-text w-100">Fecha del recordatorio</span>
+                                        </div>
+                                        <div className="col-sm-5">
+                                        <DatePicker
+                                            selected={fechaRecordatorio}
+                                            onChange={handleFechaRecordatorioChange}
+                                            dateFormat="dd/MM/yyyy"
+                                            className="form-control w-100"
+                                        />
+                                        </div>
+                                    </div>
                                     </div>
 
                                     <div className="input-group w-100 my-3">
