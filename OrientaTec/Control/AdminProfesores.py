@@ -45,5 +45,8 @@ class AdminProfesores:
             if (prof.correoElectronico == correo):
                 return prof
     
-    
+    #Uso de chats 
+    def escribirMensaje(self, idChat,idAutor,fechaHora, contenido):
+        
+        return self.dao.escribirMensaje(idChat,idAutor,fechaHora, contenido)
 

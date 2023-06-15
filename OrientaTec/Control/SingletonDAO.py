@@ -14,16 +14,12 @@ import os
 from pathlib import Path
 from operator import attrgetter
 
-#from google.oauth2 import service_account
-#from googleapiclient.discovery import build
-#from googleapiclient.http import MediaFileUpload
-
 import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
 sys.path.append('./Modelo')
 
-#sys.path.append('./Modelo')
 #Importo la Clase
+from GeneralChatRoom import *
 from Usuario import *
 from Estudiante import * 
 from EquipoGuia import *
@@ -63,11 +59,6 @@ class SingletonDAO(metaclass=SingletonMeta):
     # Ruta al archivo JSON de las credenciales de Google Drive
     CREDENCIALES_JSON = 'C:/Users/Harrick Mc Lean M/Downloads/disehnosoftware-50f7c4a809ca.json'
 
-    # Crea una instancia del cliente de Google Drive
-    #credenciales = service_account.Credentials.from_service_account_file(CREDENCIALES_JSON)
-    #servicio_drive = build('drive', 'v3', credentials=credenciales)
-
-
     #Atributos para conetarse a MONGO
     MONGO_HOST="localhost"
     MONGO_PUERTO="27017"
@@ -80,6 +71,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     collecAfiche = None 
     collecEvLista = None
     collecEvFoto= None
+    collectFtEst=None #Nuevo cambio 07.06
     #Atributos del modelo
     usuarios = []
     estudiantes = []
@@ -94,6 +86,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     observaciones = []
     comentarios = []
     notificaciones = []
+    mediator = GeneralChatRoom() #Nuevo cambio
 
     #Constructor que instancia los objetos necesarios del modelo
     def __init__(self):
@@ -110,7 +103,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         self.evidencias = self.setFromBD("SELECT * from ", "Evidencia")
         self.observaciones = self.setFromBD("SELECT * from ", "Observacion")
         self.comentarios = self.setFromBD("SELECT * from ", "Comentario")
-    
+
     #Auxiliar del constructor 
     def setFromBD(self, command, tablaBD):
         self.connectServer()
@@ -868,7 +861,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         
         args = [carnet, nombre, apellido1, apellido2, sede,  numeroCelular,
                 correoElectronico, estado]
-        
+
         #se modifica en la bd
         respuesta = self.executeStoredProcedure('updateEstudiante', args)
 
@@ -1055,6 +1048,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.collecEvLista = self.MONGO_BASEDATOS["EvListaAsistencia"]
             self.collecEvFoto= self.MONGO_BASEDATOS["EvFotosParticipantes"]
             self.collecFtAs= self.MONGO_BASEDATOS["FotosAsistentes"]
+            self.collecFtEst= self.MONGO_BASEDATOS["FotosEstudiantes"] #Nuevo cambio 07.06
             print("Conexion a Mongo exitosa.")
         except Exception as ex:
             print(ex)
@@ -1301,4 +1295,57 @@ class SingletonDAO(metaclass=SingletonMeta):
         for prof in self.profesores:
             if(prof.cedula == cedula):
                 return prof
+            
+    #-----NUEVAS FUNCIONALIDADES---------------#
+    def getFotoEstudiante(self,idBuscado):
+        try:
+            self.connectMongoServer()
+            #revisar que el est exista
+            cantRegistros = self.collecFtEst.count_documents({'idEstudiante':idBuscado})
+            if cantRegistros > 0 :                
+                document = self.collecFtEst.find_one({'idEstudiante': idBuscado})
+                self.closeMongoConnection()
+                return document['foto']
+            else:
+                print("El registro que intenta obtener NO existe.")
+                return None
+        except Exception as ex:
+            print(ex)
 
+    def registrarFotoEstudiante(self,idEstudiante,image):
+        try:
+            self.connectMongoServer()
+            #revisar que no exista el registro 
+            cantRegistros = self.collecFtEst.count_documents({'idEstudiante':idEstudiante})
+            print(cantRegistros)
+            if(cantRegistros > 0): #si ya existe lo actualiza
+                self.collecFtEst.update_one({'idEstudiante':idEstudiante},{'$set':{'foto':image.read()}})
+                print("Se ha actualizado la foto exitosamente. ")
+            else:
+                self.collecFtEst.insert_one({'idEstudiante':idEstudiante, 'foto': image.read()})
+                print("Se ha insertado la foto exitosamente.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+
+    #Crear un nuevo mensaje 
+    # +crearMensaje(Mensaje):void
+    def escribirMensaje(self, idChat,idAutor,fechaHora, contenido):
+        
+        respuesta = self.mediator.enviarMensaje(contenido,fechaHora,idAutor)
+        if respuesta:
+            args = [idAutor,fechaHora,contenido]
+
+            #se agrega a la bd
+            id = self.executeStoredProcedure('agregarMensaje', args)
+            if(len(id)==1):
+                #se obtiene el id y se le agrega
+                salida = Comentario(idAutor,fechaHora,contenido,id)
+
+                #se agrega a la lista de Actividades
+                self.comentarios += [salida]
+            
+            return id
+        else: 
+            print("Error al enviar el mensaje")
+            return -1
