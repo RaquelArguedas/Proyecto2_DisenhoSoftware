@@ -30,7 +30,7 @@ export function CardAviso({info, user}) {
 
     const getNombreEmisor = async () => {
         try {
-            const res = await fetch(`${API}/getUsuario/${info.emisor}`, { //buscar por enum, 1 es el enum
+            const res = await fetch(`${API}/verActividad/${info.emisor}`, { //buscar por enum, 1 es el enum
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export function CardAviso({info, user}) {
             });
 
             const data = await res.json();
-            setNombreEmisor(data.correo);
+            setNombreEmisor(data.nombreActividad);
 
         } catch (error) {
             console.log("Error al realizar la solicitud:", error);

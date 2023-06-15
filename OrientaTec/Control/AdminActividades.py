@@ -100,8 +100,7 @@ class AdminActividades:
                 if actividad.recordatorios[0].fecha <= fechaActual:
                     if actividad.estado==1:
                         # se debe llamar a notificar a todos los subs
-                        id = self.dao.createNotificacion(actividad.idActividad, fechaActual, "Le recordamos sobre la actividad "+actividad.nombreActividad+
-                                                         " a realizarse el "+actividad.fechaActividad)
+                        id = self.dao.createNotificacion(actividad.idActividad, fechaActual, "Le recordamos sobre la actividad "+actividad.nombreActividad+'.')
                         self.cambiarEstado(actividad.idActividad,2)
                         self.publicador.notificar(id[0])
                 else:
