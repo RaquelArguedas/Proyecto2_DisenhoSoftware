@@ -782,6 +782,18 @@ def escribirMensaje():
   print(id)
   return jsonify(str(id))
 
+# def crearChat(self, nombre,idAutor):
+@app.route('/crearChat', methods=['POST'])
+def crearChat():
+  #print(request.form)
+  id = control.crearChat(request.form.get('nombreChat'),
+                         request.form.get('miembros'),
+                         SingletonSesionActual().getUsuario().idUsuario)
+  
+  print(id)
+  return jsonify(str(id))
+
+
 # inicia el servidor
 if __name__ == "__main__":
     app.run(debug=True)

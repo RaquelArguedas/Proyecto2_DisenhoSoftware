@@ -34,6 +34,8 @@ from Observacion import *
 from Comentario import *
 from Sede import *
 from Ordenamiento import *
+from Mensaje import *
+from GeneralChatRoom import *
 
 
 class SingletonMeta(type):
@@ -84,7 +86,9 @@ class SingletonDAO(metaclass=SingletonMeta):
     evidencias = []
     observaciones = []
     comentarios = []
-    mediator = GeneralChatRoom() #Nuevo cambio
+    mensajes = []
+    chats = [] 
+    mediator = GeneralChatRoom(1,[],"Sala General",1) #Nuevo cambio
 
     #Constructor que instancia los objetos necesarios del modelo
     def __init__(self):
@@ -100,7 +104,8 @@ class SingletonDAO(metaclass=SingletonMeta):
         self.evidencias = self.setFromBD("SELECT * from ", "Evidencia")
         self.observaciones = self.setFromBD("SELECT * from ", "Observacion")
         self.comentarios = self.setFromBD("SELECT * from ", "Comentario")
-
+        self.mensajes = self.setFromBD("SELECT * from ", "Mensaje")
+        self.chats = self.setFromBD("SELECT * from ", "Chat")
     #Auxiliar del constructor 
     def setFromBD(self, command, tablaBD):
         self.connectServer()
@@ -153,6 +158,10 @@ class SingletonDAO(metaclass=SingletonMeta):
             objeto = Observacion(lista[0], lista[1], lista[2])
         elif (tablaBD == "Comentario"):
             objeto = Comentario(lista[1], lista[2], lista[3], lista[4], lista[5], lista[0])
+        elif (tablaBD == "Mensaje"):
+            objeto = Mensaje(lista[0],lista[1],lista[2],lista[3],lista[4])
+        elif (tablaBD == "Chat"):
+            objeto = GeneralChatRoom(lista[0],lista[1],lista[1],lista[2])#no lo c rick
 
         return objeto
 
@@ -781,7 +790,6 @@ class SingletonDAO(metaclass=SingletonMeta):
     def buscarEstudiante(self, carnet):
         for estudiante in self.estudiantes:
             if (int(carnet) == estudiante.carnet):
-                print("llegue")
                 return estudiante
         return None
 
@@ -1183,21 +1191,38 @@ class SingletonDAO(metaclass=SingletonMeta):
     #Crear un nuevo mensaje 
     # +crearMensaje(Mensaje):void
     def escribirMensaje(self, idChat,idAutor,fechaHora, contenido):
-        
         respuesta = self.mediator.enviarMensaje(contenido,fechaHora,idAutor)
         if respuesta:
-            args = [idAutor,fechaHora,contenido]
+            args = [idChat, idAutor,fechaHora,contenido]
 
             #se agrega a la bd
             id = self.executeStoredProcedure('agregarMensaje', args)
             if(len(id)==1):
                 #se obtiene el id y se le agrega
-                salida = Comentario(idAutor,fechaHora,contenido,id)
+                salida = Mensaje(int(id),idChat,fechaHora,
+               contenido,idAutor)
 
-                #se agrega a la lista de Actividades
-                self.comentarios += [salida]
+                #se agrega a la lista de Mensajes
+                self.mensajes += [salida]
             
             return id
         else: 
             print("Error al enviar el mensaje")
+            return -1
+    #crearChat(nombre:String, idAutor:int)
+    def crearChat(self,nombre,miembros,idAutor):
+        respuesta = self.mediator.crearChat(nombre,miembros,idAutor)
+        if respuesta:
+            args = [nombre, idAutor]
+            #se agrega a la bd
+            id = self.executeStoredProcedure('crearChat', args)
+            if(len(id)==1):
+                #se obtiene el id y se le agrega
+                salida = GeneralChatRoom(int(id),miembros,nombre,idAutor)
+                #se agrega a la lista de Chats
+                self.chats += [salida]
+            
+            return id
+        else: 
+            print("Error al crear el chat")
             return -1

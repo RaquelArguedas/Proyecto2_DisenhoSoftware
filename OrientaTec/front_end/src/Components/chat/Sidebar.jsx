@@ -44,7 +44,7 @@ export function Sidebar() {
     };
     //  // Enviar el nuevo mensaje al backend
     // try {
-    //   const response = await fetch('URL_DEL_BACKEND', {
+    //   const response = await fetch(`${API}/escribirMensaje`, {
     //     method: 'POST',
     //     headers: {
     //       'Content-Type': 'application/json'

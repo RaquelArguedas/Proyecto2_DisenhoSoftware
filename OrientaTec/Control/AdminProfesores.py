@@ -47,6 +47,7 @@ class AdminProfesores:
     
     #Uso de chats 
     def escribirMensaje(self, idChat,idAutor,fechaHora, contenido):
-        
         return self.dao.escribirMensaje(idChat,idAutor,fechaHora, contenido)
+    def crearChat(self,nombre,miembros,idAutor):
+        return self.dao.crearChat(nombre,miembros,idAutor)
 

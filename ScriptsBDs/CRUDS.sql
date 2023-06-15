@@ -1681,4 +1681,44 @@ BEGIN
 END$$
 DELIMITER ;
 
+#NUEVOS CAMBIOS 
+#____________________________________________________Mensaje
+#Create
+DELIMITER $$ 
+CREATE PROCEDURE `agregarMensaje`(in _idChat int, in _idAutor int, in _fechaHora datetime, 
+									in _contenido varchar(200))
+BEGIN
+	declare _error int; declare _errmsg varchar(100);
+    if(_idChat is null or _idAutor is null or _fechaHora is null or _contenido is null) then 
+		-- si se quiere crear ningún atributo puede ser nulo, solo el id
+		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
+	elseif( (select count(*) from Chat where _idChat = idChat)=0 )then 
+		set _error = 2, _errmsg = "Ese Chat no existe";
+	else
+		insert into Mensaje(idChat, idAutor, fechaHora, contenido) 
+						values (_idChat, _idAutor, _fechaHora, _contenido);
+		select @@identity;
+	end if;
+    if (_error is not null) then select _error, _errmsg; end if;
+END$$
+DELIMITER ;	
+
+#____________________________________________________Chat
+#Create
+DELIMITER $$ 
+CREATE PROCEDURE `crearChat`(in _idAutor int, in _nombre varchar(200))
+BEGIN
+	declare _error int; declare _errmsg varchar(100);
+    if(_idAutor is null or _nombre is null) then 
+		-- si se quiere crear ningún atributo puede ser nulo, solo el id
+		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
+	else
+		insert into Chat(idAutor,nombre) 
+						values (_idAutor,_nombre);
+		select @@identity;
+	end if;
+    if (_error is not null) then select _error, _errmsg; end if;
+END$$
+DELIMITER ;	
+
 

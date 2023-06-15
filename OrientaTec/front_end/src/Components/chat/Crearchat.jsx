@@ -7,11 +7,12 @@ export function CrearChat({agregarGrupo, chats}) {
   const [selectedItems, setSelectedItems] = useState([]);
   const [groupName, setGroupName] = useState('');
 
-  const data = [
+  const data = [ //Acá se debe llamar a función que obtenga info de estudiantes 
     { id: 1, carnet: '001', nombre: 'Juan' },
     { id: 2, carnet: '002', nombre: 'Pedro' },
     { id: 3, carnet: '003', nombre: 'María' },
     // Agrega más elementos de datos aquí...
+    
   ];
 
   const handleSearch = (event) => {
