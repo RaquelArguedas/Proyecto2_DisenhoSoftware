@@ -13,6 +13,7 @@ export function OpcionesMenuPC() {
   const gotoModificarActividad = () => {navigate("/modificarActividad", {});};
   const gotoCrearActividad = () => {navigate("/crearActividad", {});};
   const gotoDefinirPlan = () => {navigate("/definirPlan", {});};
+  const gotoChat=()=>{navigate('/chat',{state: {linkMenu: "/menuCoordinador"}});};
   function handleDownloadExcelCampus() { // Define una función llamada handleDownloadExcelCampus que se ejecuta cuando se hace clic en un botón o enlace
     GenerarExel(); // Llama a una función llamada GenerarExel que probablemente genera y descarga un archivo Excel para el campus especificado
   }
@@ -111,6 +112,14 @@ export function OpcionesMenuPC() {
                             className="btn btn-success h-100 w-100"
                         >
                             Generar Excel de datos de todos los campus
+                        </button>
+                    </div>
+                    <div class="col">
+                        <button 
+                            onClick={gotoChat}
+                            className="btn btn-success h-100 w-100"
+                        >
+                            Chat
                         </button>
                     </div>
 

@@ -7,7 +7,7 @@ export default function OpcionesEstudiantes() {
     const gotoConfiguracion = () => {navigate("/configuracionEstudiante");};
     const gotoActividadesPlaneadas = () => {navigate("/actividadesPlaneadas");};
     const gotoActividadProxima = () => {navigate("/actividadProxima");};
-    const gotoChat=()=>{navigate('/chat');};
+    const gotoChat=()=>{navigate('/chats');};
   return (
     <Fragment>
         <div className="m-3 p-3 bg-light">

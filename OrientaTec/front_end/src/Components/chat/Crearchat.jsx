@@ -131,7 +131,7 @@ export function CrearChat({ agregarGrupo, chats }) {
         <div className="col">
           <div>
             <p>
-              Seleccione los"o" profesores:
+              Seleccione uno o más profesores:
             </p>
             <table className="table">
               <thead>
