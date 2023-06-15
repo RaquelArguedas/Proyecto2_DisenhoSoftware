@@ -46,23 +46,28 @@ export function BarraLateral() {
         };
 
         const obtenerFechaSimulada= async () => {
+            const response = await fetch(`${API}/getFechaSimulada`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            });
+
+            const data = await response.json();
+            const fecha = new Date(data)
+            const month = fecha.getMonth() + 1; // Obtener el mes (se suma 1 ya que los meses se indexan desde 0)
+            const day = fecha.getDate() + 1; // Obtener el día
+            const year = fecha.getFullYear(); // Obtener el año
             try {
-                const response = await fetch(`${API}/getFechaSimulada`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                });
-    
-                const data = await response.json();
-                const fecha = new Date(data)
-                console.log(fecha)
-                const month = fecha.getMonth() + 1; // Obtener el mes (se suma 1 ya que los meses se indexan desde 0)
-                const day = fecha.getDate() + 1 ; // Obtener el día
-                const year = fecha.getFullYear(); // Obtener el año
                 const formattedDate = `${month}/${day}/${year}`;
-                //setFechaRecordatorioB(formattedDate);
-                setDate(formattedDate);
+                
+                if (!isNaN(new Date(formattedDate))) {
+                    setDate(formattedDate);
+                } else {
+                    const formattedDate = `${month+1}/${1}/${year}`;
+                    setDate(formattedDate);
+                }
+
             } catch (error) {
                 console.log("Error al tomar la fecha:", error);
             }

@@ -482,14 +482,14 @@ class SingletonDAO(metaclass=SingletonMeta):
         
         args = [idActividad, nombreActividad, tipoActividad, fechaActividad, horaInicio,
                 horaFin, medio, enlace, estado, ultimaModificacion]
-        print(args)
+        #print(args)
 
         #se modifica en la bd
         respuesta = self.executeStoredProcedure('updateActividad', args)
-        print(idActividad, type(idActividad))
+        #print(idActividad, type(idActividad))
         #Si no hubo errores dentro de la BD, realiza las modificaciones correspondientes
         if (respuesta == None):
-            print("entr a res")
+            #print("entr a res")
             #se modifica en lista
             for i in range(len(self.actividades)):
                 if (self.actividades[i].idActividad == idActividad):
@@ -515,7 +515,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                         self.actividades[i].enlace = enlace
                     if (estado != None):
                         self.actividades[i].estado = estado
-                        print("estado modificado", estado)
+                        #print("estado modificado", estado)
                     if (ultimaModificacion != None):
                         self.actividades[i].ultimaModificacion = ultimaModificacion
                 
@@ -939,7 +939,6 @@ class SingletonDAO(metaclass=SingletonMeta):
 
     #getUsuarios():Collection<Usuario>
     def getUsuarios(self):
-        print('DAO, Usuarios: ', self.usuarios)
         return self.usuarios
     
     def modificarUsuarioCorreo(self, correoAnterior, correoNuevo):        

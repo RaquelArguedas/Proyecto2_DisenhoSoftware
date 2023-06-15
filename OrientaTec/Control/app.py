@@ -756,11 +756,12 @@ def getFechaSimulada():
 # def setFechaSimulada(self, newDate):
 @app.route('/setFechaSimulada/<newDate>', methods=['POST'])
 def setFechaSimulada(newDate):
-  print("....",SingletonSesionActual().getFechaActual())
+  #print("....",SingletonSesionActual().getFechaActual())
   fechaActualNueva = (datetime.strptime(newDate, '%a %b %d %Y %H:%M:%S GMT%z (hora estándar central)')).date()
   SingletonSesionActual().setFechaActual(fechaActualNueva)
-  print("....",SingletonSesionActual().getFechaActual())
+  #print("....",SingletonSesionActual().getFechaActual())
   control.notificarActividades(fechaActualNueva) #funcion que busca las actividades que deberian notificarse
+  print("QUE ESTA PASANDO")
   return str(SingletonSesionActual().getFechaActual())
 
 #Notificaciones del usuario
