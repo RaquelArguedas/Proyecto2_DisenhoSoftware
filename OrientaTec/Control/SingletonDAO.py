@@ -958,12 +958,21 @@ class SingletonDAO(metaclass=SingletonMeta):
     #Notificaciones
     #eliminar notificacion
     def deleteNotificacionUsuario(self, idNotificacion, idUsuario):
-        id = self.executeStoredProcedure('deleteNotificacionUsuario', [idNotificacion, idUsuario])        
+        id = self.executeStoredProcedure('deleteNotificacionUsuario', [idNotificacion, idUsuario])
+        for usuario in self.usuarios:
+                if (usuario.idUsuario == int(idUsuario)):
+                    for noti in usuario.notificaciones:
+                        if (noti.idNotificacion == int(idNotificacion)):
+                            usuario.notificaciones.remove(noti)
+                            break      
         return id
     
     #eliminar notificaciones de un usuario
     def deleteNotificacionesUsuario(self, idUsuario):
-        id = self.executeStoredProcedure('deleteNotificacionesUsuario', [idUsuario])        
+        id = self.executeStoredProcedure('deleteNotificacionesUsuario', [idUsuario])
+        for usuario in self.usuarios:
+                if (usuario.idUsuario == int(idUsuario)):
+                    usuario.notificaciones = []
         return id
     
     #marcar como leída o no. Si esta leida la marca como no, y si no esta leida la marca como leida

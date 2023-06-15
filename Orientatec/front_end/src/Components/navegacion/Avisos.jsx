@@ -104,6 +104,23 @@ export function Avisos() {
         cambiarAspectoBtns()
     }
 
+    const handleBorrarTodo = async () => {
+        try {
+            const res = await fetch(`${API}/deleteNotificacionesUsuario/${usuario}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            const data = await res.json();
+
+        } catch (error) {
+            console.log("Error al realizar la solicitud:", error);
+        }
+        setAvisos([])
+    }
+
     return (
         <Fragment>
             <div className="container">
@@ -115,11 +132,8 @@ export function Avisos() {
                     <div class="col-lg m-3 p-3 bg-light">
                         <h4>Buzón de avisos</h4>
                         <div>
-                            <button className="btn btn-primary mx-2" data-toggle="tooltip" data-placement="bottom" title="Limpiar leídas">
+                            <button onClick={handleBorrarTodo} className="btn btn-danger mx-2" data-toggle="tooltip" data-placement="bottom" title="Limpiar buzón">
                                 <Icon icon="ant-design:clear-outlined" width="24" height="24" />
-                            </button>
-                            <button className="btn btn-danger mx-2" data-toggle="tooltip" data-placement="bottom" title="Borrar todo">
-                                <Icon icon="uiw:delete" width="24" height="24" />
                             </button>
                             <button onClick={handleNotis} ref={btnNotisRef} className="btn btn-success mx-2" data-toggle="tooltip" data-placement="bottom" title={tipNotis}>
                                 <Icon icon={iconNotis} width="24" height="24" />
