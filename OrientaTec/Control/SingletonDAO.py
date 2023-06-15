@@ -86,7 +86,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     observaciones = []
     comentarios = []
     notificaciones = []
-    mediator = GeneralChatRoom() #Nuevo cambio
+    mediator = GeneralChatRoom([],"s") #Nuevo cambio
 
     #Constructor que instancia los objetos necesarios del modelo
     def __init__(self):
