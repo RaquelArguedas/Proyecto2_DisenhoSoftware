@@ -923,10 +923,11 @@ def modificarEstudianteFront():
 @app.route('/escribirMensaje', methods=['POST'])
 def escribirMensaje():
   #print(request.form)
-  id = control.escribirMensaje(int(request.form.get('idChat')),
-                                  request.form.get('contenido'),
-                                   SingletonSesionActual().getUsuario().idUsuario, 
-                                   datetime.now())
+  id = control.escribirMensaje(int(request.json['id']),
+                               SingletonSesionActual().getUsuario().idUsuario,
+                               request.json['fechaHora'], 
+                                request.json['contenido'])
+                                  #datetime.now())
   #datetime.now().time().strftime('%H:%M')
   print(id)
   return jsonify(str(id))
@@ -1017,6 +1018,39 @@ def getAllEstudiantesFront():
   #print(listaSalida)
   return listaSalida
 
+@app.route('/getMensajesChats', methods=['GET'])
+def getMensajesChats():
+  listaSalida = []
+  chatReparsed = {} #Estrcutrua para enviar al front
+  mensajeReparsed={}
+  idUsuario = SingletonSesionActual().getUsuario().idUsuario
+  listaChats = control.getChats(int(idUsuario))
+  print('listaChats:')
+  print(listaChats)
+  for chat in listaChats: #cada chat es una lista de idChat y nombre
+    listaMensajexChat = []
+    #obtener todos los mensajes de ese chat
+    listaMensajes = control.getMensajes(int(chat[0]))
+    print('listaMensajes APP.PY_')
+    print(listaMensajes)
+    for mensaje in listaMensajes:  
+      print('get mensajes app.py:')   
+      print('mensaje.autor:')  
+      print(mensaje.autor)
+      print('mensaje.contenido:')  
+      print(mensaje.contenido)
+      nombreUsuario = control.getUsuarioNombre(int(mensaje.autor))#el error
+      mensajeReparsed = {'contenido': mensaje.contenido,
+                      'fechaHora': mensaje.fechaHora,
+                      'nombreUsuario': nombreUsuario}
+      listaMensajexChat+=[mensajeReparsed]
+    #después de obtener todos los mensajes 
+    chatReparsed = {'id': chat[0],
+                    'nombreChat': chat[1],
+                    'mensajes': listaMensajexChat}
+    listaSalida+=[chatReparsed]
+  #print(listaSalida)
+  return listaSalida
 
 # inicia el servidor
 if __name__ == "__main__":

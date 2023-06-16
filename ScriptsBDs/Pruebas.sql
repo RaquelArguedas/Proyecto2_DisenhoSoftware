@@ -274,3 +274,11 @@ insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) v
 insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
 ('juan.diaz@estudiantec.cr',20210329,5,5,1,1);
 -- estudiantes usuarios
+
+-- MENSAJES
+insert into Mensaje(idChat,fechaHora,contenido,idAutor) values 
+(7,'2023-06-09 10:00:00','Bienvenidos a todos',1);
+insert into Mensaje(idChat,fechaHora,contenido,idAutor) values 
+(7,'2023-06-09 11:00:00','Gracias Jorge',15);
+insert into Mensaje(idChat,fechaHora,contenido,idAutor) values 
+(7,'2023-06-09 11:10:00','¿Qué es esto?',13);

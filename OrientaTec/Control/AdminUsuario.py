@@ -82,8 +82,15 @@ class AdminUsuario:
     
     def getIdUsuario(self, usuario):
         return self.dao.getIdUsuario(usuario)
-
+    
     def getChats(self,idUsuario):
         return self.dao.getChats(idUsuario)
+
+    def getMensajes(self,idChat):
+        return self.dao.getMensajes(idChat) 
     
+    
+    def getUsuarioNombre(self,idUsuario):
+        return self.dao.getUsuarioNombre(idUsuario)
+
     
