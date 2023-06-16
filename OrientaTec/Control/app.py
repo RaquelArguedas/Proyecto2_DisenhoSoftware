@@ -1002,6 +1002,34 @@ def getAllEstudiantesFront():
   #print(listaSalida)
   return listaSalida
 
+@app.route('/getMensajesChats', methods=['GET'])
+def getMensajesChats():
+  listaSalida = []
+  chatReparsed = {} #Estrcutrua para enviar al front
+  mensajeReparsed={}
+
+  listaEstudiantes = control.consultarEstudiantes(1)
+  idUsuario = SingletonSesionActual().getUsuario().idUsuario
+  listaChats = control.getChats(int(idUsuario))
+  print('listaChats:')
+  print(listaChats)
+  for chat in listaChats: #cada chat es una lista de idChat y nombre
+    listaMensajexChat = []
+    #obtener todos los mensajes de ese chat
+    listaMensajes = control.getMensajes(int(chat[0]))
+    for mensaje in listaMensajes:     
+      nombreUsuario = control.getUsuarioNombre(int(mensaje.autor))
+      mensajeReparsed = {'contenido': mensaje.contenido,
+                      'fechaHora': mensaje.fechaHora,
+                      'nombreUsuario': nombreUsuario}
+      listaMensajexChat+=[mensajeReparsed]
+    #después de obtener todos los mensajes 
+    chatReparsed = {'id': chat[0],
+                    'nombreChat': chat[1],
+                    'mensajes': listaMensajexChat}
+    listaSalida+=[chatReparsed]
+  #print(listaSalida)
+  return listaSalida
 
 # inicia el servidor
 if __name__ == "__main__":

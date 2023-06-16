@@ -80,7 +80,15 @@ class AdminUsuario:
     
     def notificacionUsuarios(self, idNotificacion, idUsuario):
         return self.dao.notificacionUsuarios(idNotificacion, idUsuario)
+    
+    def getChats(self,idUsuario):
+        return self.dao.getChats(idUsuario)
 
+    def getMensajes(self,idChat):
+        return self.dao.getMensajes(idChat) 
     
     
+    def getUsuarioNombre(self,idUsuario):
+        return self.dao.getUsuarioNombre(idUsuario)
+
     

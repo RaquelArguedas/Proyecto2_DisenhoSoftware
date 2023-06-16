@@ -6,17 +6,21 @@ import './Sidebar.css'; // Archivo CSS para estilos personalizados
 import { NavbarEstudiante } from '../menuEstudiante/navegacionEstudiante/NavbarEstudiante';
 import { useNavigate  } from "react-router-dom";
 import { CrearChat } from './Crearchat';
+import axios from 'axios'; // Para manejo de solicitudes en el backend
+const API = process.env.REACT_APP_API;
 
 export function ChatEstudiante() {
   let navigate = useNavigate();
   const [mensaje, setMensaje] = useState('');
   const [mostrarCrearChat, setMostrarCrearChat] = useState(false);
 
-  const [chats, setChats] = useState([   {id: 1,nombreChat: 'Chat 1',mensajes: [{contenido: 'Contenido del Chat 1',fechaHora: '12/03/2021 12:00 pm',nombreUsuario: 'Carlos Rodriguez'},
-  {contenido: 'Contenido del Chat 1',fechaHora: '12/03/2021 12:10 pm', nombreUsuario: 'Samantha Rodriguez'}]},
-  {id: 2,nombreChat: 'Chat 2',mensajes: [{contenido: 'Contenido del Chat 2',fechaHora: '12/03/2021 11:00 pm',nombreUsuario: 'Samantha Rodriguez'}]},
-  {id: 3, nombreChat: 'Chat 3',mensajes: [{contenido: 'Contenido del Chat 3',fechaHora: '12/03/2021 13:00 pm',nombreUsuario: 'Pedro Rodriguez'}]}
-    ]);
+  const [chats, setChats] = useState([  
+  //{id: 1,nombreChat: 'Chat 1',mensajes: [{contenido: 'Contenido del Chat 1',fechaHora: '12/03/2021 12:00 pm',nombreUsuario: 'Carlos Rodriguez'},
+  //{contenido: 'Contenido del Chat 1',fechaHora: '12/03/2021 12:10 pm', nombreUsuario: 'Samantha Rodriguez'}]},
+  //{id: 2,nombreChat: 'Chat 2',mensajes: [{contenido: 'Contenido del Chat 2',fechaHora: '12/03/2021 11:00 pm',nombreUsuario: 'Samantha Rodriguez'}]},
+  //{id: 3, nombreChat: 'Chat 3',mensajes: [{contenido: 'Contenido del Chat 3',fechaHora: '12/03/2021 13:00 pm',nombreUsuario: 'Pedro Rodriguez'}]}
+    
+]);
  
   const [chatSeleccionado, setChatSeleccionado] = useState(null);
   const seleccionarChat = (chat) => {
@@ -34,6 +38,14 @@ export function ChatEstudiante() {
   }, []);
   const handleGetDetalle = async () => {
     // Traer los datos y usar el setChats 
+    try {
+        const response = await axios.get(`${API}/getMensajesChats`);
+        const data = response.data;
+        setChats(data);
+        console.log('Data Chats:', data);  
+      } catch (error) {
+        console.error('Error:', error);
+      }    
   };
   const handleSalirDelChat = () => {
     setChats((prevChats) => prevChats.filter((chat) => chat !== chatSeleccionado));

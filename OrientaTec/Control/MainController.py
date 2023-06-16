@@ -225,6 +225,8 @@ class MainController:
     def getUsuarioRol(self, correo, contrasenha):
         return self.controlUsuario.getUsuarioRol(correo, contrasenha)
     
+    def getUsuarioNombre(self,idUsuario):
+        return self.controlUsuario.getUsuarioNombre(idUsuario)
     #funciones de las notificaciones
     def deleteNotificacionUsuario(self, idNotificacion, idUsuario):
         return self.controlUsuario.deleteNotificacionUsuario(idNotificacion, idUsuario)
@@ -262,4 +264,9 @@ class MainController:
     
     def crearChat(self,nombre,miembros,idAutor):
         return self.controlProfesor.crearChat(nombre,miembros,idAutor)
+    
+    def getChats(self,idUsuario):
+        return self.controlUsuario.getChats(idUsuario)
+    def getMensajes(self,idChat):
+        return self.controlUsuario.getMensajes(idChat) 
     

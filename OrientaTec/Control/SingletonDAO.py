@@ -943,7 +943,14 @@ class SingletonDAO(metaclass=SingletonMeta):
         for user in self.usuarios:
             if(user.idUsuario == idUsuario):
                 return user
-
+            
+    def getUsuarioNombre(self, idUsuario):
+        listaPersonas = self.profesores + self.asistentes + self.estudiantes
+        user = self.getUsuario(idUsuario)
+        for p in listaPersonas:
+            if (user.correo == p.correoElectronico):
+                return p.nombre+' '+p.apellido1+' '+p.apellido2
+    
     #getUsuarios():Collection<Usuario>
     def getUsuarios(self):
         print('DAO, Usuarios: ', self.usuarios)
@@ -1381,22 +1388,21 @@ class SingletonDAO(metaclass=SingletonMeta):
     def crearChat(self,nombre,miembros,idAutor):
         respuesta = self.mediator.crearChat(nombre,miembros,idAutor)
         if respuesta:
-            miembrosParsed = []
+            miembrosParsed = [idAutor]
             args = [idAutor,nombre]
             #se agrega a la bd
             id = self.executeStoredProcedure('crearChat', args)
             if(len(id)==1): 
                 #Si se logra crear el chat, se comienza a agregar cada usuario
+                #Agregar el usuario creador del chat
+                self.executeStoredProcedure('createusuariosxchat', [idAutor,id[0]])
+                miembrosParsed.append(idAutor)
                 for identificacion in miembros:
                     idUser = self.getIdUsuario(identificacion)
-                    if(idUser!=-1): #no hubo errores
+                    if(idUser!=-1 and idUser != idAutor): #no hubo errores y para evitar que se duplique él mismo
                         miembrosParsed.append(idUser)
-                        print("id Mysql chat: ")
-                        print(id[0])
-                        print("idUser: ")
-                        print(idUser)
                         id2 = self.executeStoredProcedure('createusuariosxchat', [idUser,id[0]])
-                        print("Agregando miembros", id2)
+                        #print("Agregando miembros", id2)
                     else:
                         print("Error al crear miembro")
                 salida = GeneralChatRoom(int(id[0]),miembrosParsed,nombre,idAutor)
@@ -1410,7 +1416,6 @@ class SingletonDAO(metaclass=SingletonMeta):
             
     def generarMiembros(self, idChat):
         self.connectServer()
-
         try:
             self.cursor.execute("select usuario.idUsuario from UsuariosxChat inner join usuario on usuario.idUsuario = UsuariosxChat.idUsuario where idChat = " + str(idChat))
 
@@ -1423,3 +1428,26 @@ class SingletonDAO(metaclass=SingletonMeta):
         except Exception as ex:
             print(ex)
         self.closeConnection()
+
+    #Obtener todos los chats a los que pertence un usuario
+    #return idChat y nombreChat
+    def getChats(self,idUsuario):
+        self.connectServer()
+        try:
+            self.cursor.execute("select UsuariosxChat.idChat,Chat.nombre from UsuariosxChat inner join usuario on usuario.idUsuario = UsuariosxChat.idUsuario inner join chat on chat.idChat = UsuariosxChat.idChat where Usuario.idUsuario =" + str(idUsuario))
+            salida = self.cursor.fetchall()
+            lista = []
+            for row in salida:
+                lista.append([row[0],row[1]]) 
+            return lista
+        except Exception as ex:
+            print(ex)
+        self.closeConnection()
+    #Obtener todos los mensajes de un chat específico
+    def getMensajes(self,idChat):
+        listaSalida = []
+        for mensaje in self.mensajes:
+            if(int(mensaje.idChatRoom) == int(idChat)):
+                listaSalida.append(mensaje)
+        return listaSalida
+            
