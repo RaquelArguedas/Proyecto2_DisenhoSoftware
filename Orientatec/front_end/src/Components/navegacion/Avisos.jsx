@@ -34,8 +34,9 @@ export function Avisos() {
                 const data = await response.json();
 
                 setUsuario(data.idUsuario)
-                permiteNotis = data.permiteNotis
-                permiteChat = data.permiteChats
+
+                permiteNotis = (data.permiteNotis === 1) || (data.permiteNotis === true) || (data.permiteNotis === "True")
+                permiteChat = (data.permiteChats === 1) || (data.permiteChats === true) || (data.permiteChats === "True")
 
                 let tempNotis = []
                 JSON.parse(data.notificaciones).forEach(element => {
@@ -95,13 +96,43 @@ export function Avisos() {
             });
         }
         
-
-        cambiarAspectoBtns()
+        if (permiteNotis) {
+            setIconNotis("streamline:interface-alert-alarm-bell-1-notification-vibrate-ring-sound-alarm-alert-bell-noise");
+            setTipNotis("Notificaciones activas");
+            btnNotisRef.current.classList.remove('btn-secondary');
+            btnNotisRef.current.classList.add('btn-success');
+        } else {
+            setIconNotis("streamline:interface-alert-alarm-bell-off-disable-silent-notification-off-silence-alarm-bell-alert");
+            setTipNotis("Notificaciones silenciadas");
+            btnNotisRef.current.classList.remove('btn-success');
+            btnNotisRef.current.classList.add('btn-secondary');
+        }
     }
 
-    const handleChat = () => {
+    const handleChat = async () => {
         permiteChat = !permiteChat;
-        cambiarAspectoBtns()
+
+        if(permiteChat){
+            await fetch(`${API}/activarChats`, {
+                method: 'POST'
+            });
+        }else{
+            await fetch(`${API}/desactivarChats`, {
+                method: 'POST'
+            });
+        }
+
+        if (permiteChat) {
+            setIconChat("pepicons-pencil:text-bubble");
+            setTipChat("Chats activos");
+            btnChatRef.current.classList.remove('btn-secondary');
+            btnChatRef.current.classList.add('btn-success');
+        } else {
+            setIconChat("pepicons-pencil:text-bubble-off");
+            setTipChat("Chats silenciados");
+            btnChatRef.current.classList.remove('btn-success');
+            btnChatRef.current.classList.add('btn-secondary');
+        }
     }
 
     const handleBorrarTodo = async () => {

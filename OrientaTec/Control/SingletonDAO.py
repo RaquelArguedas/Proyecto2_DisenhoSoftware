@@ -1015,6 +1015,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         #se crea en la bd
         id = self.executeStoredProcedure('createNotificacion', [int(idEmisor), fechaHora, contenido, tipoEmisor])
         #si se consigue crear se agrega a la lista de notificaciones del dao
+        print("CREATENOTIFICACION ID:",  id)
         if (len(id)==1):
             salida = Notificacion(id[0], int(idEmisor), fechaHora, contenido, tipoEmisor, None)
 

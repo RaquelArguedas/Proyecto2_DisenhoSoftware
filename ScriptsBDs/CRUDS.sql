@@ -342,7 +342,7 @@ DELIMITER ;
 #____________________________________________________Notificaciones
 #Create
 DELIMITER $$
-CREATE PROCEDURE `createNotificacion`(in _emisor int, in _fechaHora datetime, in _contenido varchar(50), in _tipo int)
+CREATE PROCEDURE `createNotificacion`(in _emisor int, in _fechaHora datetime, in _contenido varchar(100), in _tipo int)
 BEGIN
     declare _error int;
     declare _errmsg varchar(100);

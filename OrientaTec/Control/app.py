@@ -800,7 +800,17 @@ def activarChats():
   #se modifica en la sesionActual
   SingletonSesionActual().getUsuario().setPermiteChats(True) 
 
-  print(SingletonSesionActual().getUsuario().idUsuario, " ",SingletonSesionActual().getUsuario().getPermiteChats())
+  return jsonify(str(id))
+
+# def desactivarChats(self):
+@app.route('/desactivarChats', methods=['POST'])
+def desactivarChats():
+  
+  #se modifica en la BD y en los objetos 
+  id = control.modificarUsuario(SingletonSesionActual().getUsuario().idUsuario, None, None, None, None, None, False)
+  #se modifica en la sesionActual
+  SingletonSesionActual().getUsuario().setPermiteChats(False) 
+
   return jsonify(str(id))
 
 # def getPermiteNotis(self):
@@ -915,7 +925,7 @@ def modificarEstudianteFront():
                                   numeroTelefono,  
                                   estado)  
   print(id)
-  if (request.files['image'] != None):
+  if ('image' in request.files):
     control.registrarFotoEstudiante(carnet, request.files['image'])
   return jsonify(str(id))
 
@@ -927,8 +937,16 @@ def escribirMensaje():
                                SingletonSesionActual().getUsuario().idUsuario,
                                request.json['fechaHora'], 
                                 request.json['contenido'])
-                                  #datetime.now())
-  #datetime.now().time().strftime('%H:%M')
+  #publish enviar mensaje
+  msg = str(SingletonSesionActual().getUsuario().correo)+" ha enviado un mensaje a este chat."
+  idNoti = createNotificacion(int(request.json['id']), datetime.now(), msg, 2)
+  miembros = control.generarMiembros(int(request.json['id']))
+
+  for i in range (0, len(miembros)):
+    miembros[i] = miembros[i].idUsuario
+
+  control.publisherChats.notificar(idNoti[0], miembros)
+
   print(id)
   return jsonify(str(id))
 

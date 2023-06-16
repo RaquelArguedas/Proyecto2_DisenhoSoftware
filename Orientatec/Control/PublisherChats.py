@@ -19,6 +19,8 @@ class PublisherChats:
             self.suscriptores.remove(usuarioSub)
 
     def notificar(self, idNotificacion, miembros):
+        print("Miembros:", miembros)
         for sub in self.suscriptores:
+            print("Sub.Id:", sub.idUsuario)
             if (sub.idUsuario in miembros):
                 self.admUsuario.notificacionUsuarios(idNotificacion, sub.idUsuario)
