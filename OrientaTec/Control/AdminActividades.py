@@ -84,6 +84,8 @@ class AdminActividades:
     
     #Crear Observación
     def crearObservacion(self, idActividad, fechaCancelacion, detalle):
+        id = self.dao.createNotificacion(idActividad, fechaCancelacion, "Se ha cancelado una actividad")
+        self.publicador.notificar(id[0])
         return self.dao.crearObservacion(idActividad, fechaCancelacion, detalle)
             
     def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
@@ -97,13 +99,15 @@ class AdminActividades:
                 # Verifica si debe actualizar
                 # Si alguna actividad ya debe ser notificada lo realiza, 
                 # si no se fija las actividades notificadas que salgan como planeadas
-                if actividad.recordatorios[0].fecha <= fechaActual:
-                    if actividad.estado==1:
-                        # se debe llamar a notificar a todos los subs
-                        id = self.dao.createNotificacion(1, fechaActual, "Se ha publicado una actividad")
-                        self.cambiarEstado(actividad.idActividad,2)
-                        self.publicador.notificar(id[0])
-                else:
-                    #print(actividad.idActividad, "entre al else", actividad.estado)
-                    if actividad.estado == 2:
-                        self.cambiarEstado(actividad.idActividad, 1)
+                for recordatorio in actividad.recordatorios:
+
+                    if recordatorio.fecha <= fechaActual:
+                        if actividad.estado==1:
+                            # se debe llamar a notificar a todos los subs
+                            self.cambiarEstado(actividad.idActividad,2)
+                            id = self.dao.createNotificacion(actividad.idActividad, recordatorio.fecha, "Se ha publicado una actividad")
+                            self.publicador.notificar(id[0])
+                    else:
+                        #print(actividad.idActividad, "entre al else", actividad.estado)
+                        if actividad.estado == 2:
+                            self.cambiarEstado(actividad.idActividad, 1)
