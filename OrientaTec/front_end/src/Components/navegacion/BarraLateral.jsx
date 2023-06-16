@@ -9,7 +9,7 @@ export function BarraLateral() {
     const [nombreUsuario, setNombreUsuario] = useState('');
 
     const handleDateChange = (newDate) => {
-        fetch(`${API}/setFechaSimulada/${newDate}`, {  
+        fetch(`${API}/setFechaSimulada/${newDate}`, {
             method: "POST"
         });
         console.log("Nueva fecha seleccionada:", newDate);
@@ -26,31 +26,31 @@ export function BarraLateral() {
 
     useEffect(() => {
         const obtenerNombreUsuario = async () => {
-        try {
-            const response = await fetch(`${API}/getInfoUsuarioSesionActual`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            });
+            try {
+                const response = await fetch(`${API}/getInfoUsuarioSesionActual`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
 
-            if (response.ok) {
-            const data = await response.json();
-            setNombreUsuario(data.nombre + " " + data.apellido1 + " " +  data.apellido2);
-            } else {
-            console.log("Error al obtener el nombre de usuario");
+                if (response.ok) {
+                    const data = await response.json();
+                    setNombreUsuario(data.nombre + " " + data.apellido1 + " " + data.apellido2);
+                } else {
+                    console.log("Error al obtener el nombre de usuario");
+                }
+            } catch (error) {
+                console.log("Error al realizar la solicitud:", error);
             }
-        } catch (error) {
-            console.log("Error al realizar la solicitud:", error);
-        }
         };
 
-        const obtenerFechaSimulada= async () => {
+        const obtenerFechaSimulada = async () => {
             const response = await fetch(`${API}/getFechaSimulada`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
             });
 
             const data = await response.json();
@@ -60,18 +60,24 @@ export function BarraLateral() {
             const year = fecha.getFullYear(); // Obtener el año
             try {
                 const formattedDate = `${month}/${day}/${year}`;
-                
+
                 if (!isNaN(new Date(formattedDate))) {
                     setDate(formattedDate);
                 } else {
-                    const formattedDate = `${month+1}/${1}/${year}`;
-                    setDate(formattedDate);
+                    if (month == 12) {
+                        const formattedDate = `${1}/${day}/${year}`;
+                        setDate(formattedDate);
+                    } else {
+                        const formattedDate = `${month + 1}/${1}/${year}`;
+                        setDate(formattedDate);
+                    }
+
                 }
 
             } catch (error) {
                 console.log("Error al tomar la fecha:", error);
             }
-            };
+        };
         obtenerFechaSimulada();
         obtenerNombreUsuario();
     }, []);
@@ -82,7 +88,7 @@ export function BarraLateral() {
             <div className="m-3 p-2 bg-light">
                 <p className="text-center" >{nombreUsuario}</p>
                 <div className="text-center">
-                    <div className="my-3"><Clock/></div>
+                    <div className="my-3"><Clock /></div>
                     <div className="my-2"> <Calendar onChange={handleDateChange} value={date} /></div>
                 </div>
             </div>

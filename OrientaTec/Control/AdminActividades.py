@@ -97,10 +97,11 @@ class AdminActividades:
                 # Verifica si debe actualizar
                 # Si alguna actividad ya debe ser notificada lo realiza, 
                 # si no se fija las actividades notificadas que salgan como planeadas
+                print("ACTIVIDAD ", actividad.__dict__)
                 if actividad.recordatorios[0].fecha <= fechaActual:
                     if actividad.estado==1:
                         # se debe llamar a notificar a todos los subs
-                        id = self.dao.createNotificacion(actividad.idActividad, fechaActual, "Le recordamos sobre la actividad "+actividad.nombreActividad+'.')
+                        id = self.dao.createNotificacion(actividad.idActividad, fechaActual, "Le recordamos sobre la actividad.")
                         self.cambiarEstado(actividad.idActividad,2)
                         self.publicador.notificar(id[0])
                 else:
