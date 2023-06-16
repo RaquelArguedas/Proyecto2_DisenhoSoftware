@@ -3,16 +3,20 @@ import { Icon } from '@iconify/react';
 
 const API = process.env.REACT_APP_API;
 
-export function CardAviso({info}) {
-    console.log(info.contenido)
+export function CardAviso({ info, user }) {
+
+    console.log(info)
+
+    //info.leida = (typeof info.leida === String && info.leida === 'True') ? true : false;
+
     const [iconVisto, setIconVisto] = useState("tabler:eye-exclamation");
     const [tipVisto, setTipVisto] = useState("Marcar como leída");
-    let estaVisto = info.leida;
     const btnVistoRef = useRef();
     const [nombreEmisor, setNombreEmisor] = useState("");
+    const [showComp, setShowComp] = useState(true);
 
     const cambiarAspectoBtn = () => {
-        if (estaVisto) {
+        if (info.leida === 'True') {
             setIconVisto("tabler:eye-check");
             setTipVisto("Marcar como no leída");
             btnVistoRef.current.classList.remove('btn-warning');
@@ -27,7 +31,7 @@ export function CardAviso({info}) {
 
     const getNombreEmisor = async () => {
         try {
-            const res = await fetch(`${API}/getUsuario/${info.emisor}`, { //buscar por enum, 1 es el enum
+            const res = await fetch(`${API}/verActividad/${info.emisor}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -35,16 +39,49 @@ export function CardAviso({info}) {
             });
 
             const data = await res.json();
-            setNombreEmisor(data.correo);
+            setNombreEmisor(data.nombreActividad);
 
         } catch (error) {
             console.log("Error al realizar la solicitud:", error);
         }
     };
 
-    const handleVisto = () => {
-        estaVisto = !estaVisto;
+    const handleVisto = async () => {
+        info.leida = (info.leida === 'True') ? 'False' : 'True';
+
+        try {
+            const res = await fetch(`${API}/cambiarLeida/${info.idNotificacion}/${user}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            const data = await res.json();
+
+        } catch (error) {
+            console.log("Error al realizar la solicitud:", error);
+        }
+
         cambiarAspectoBtn();
+    }
+
+    const handleBorrar = async () => {
+        try {
+            const res = await fetch(`${API}/deleteNotificacionUsuario/${info.idNotificacion}/${user}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+
+            const data = await res.json();
+
+        } catch (error) {
+            console.log("Error al realizar la solicitud:", error);
+        }
+
+        setShowComp(false)
     }
 
     useEffect(() => {
@@ -53,26 +90,28 @@ export function CardAviso({info}) {
 
     return (
         <Fragment>
-            <div class="card my-3">
-                <div class="card-body">
-                    <div className="row">
-                        <div className="col">
-                            <h6 id="tipoActividad" class="py-2 card-subtitle mb-2 text-muted"> {nombreEmisor} | {info.fechaHora} </h6>
+            {showComp &&
+                <div class="card my-3">
+                    <div class="card-body">
+                        <div className="row">
+                            <div className="col">
+                                <h6 id="tipoActividad" class="py-2 card-subtitle mb-2 text-muted"> {nombreEmisor} | {info.fechaHora} </h6>
+                            </div>
+                            <div className="col-sm-2">
+                                <button onClick={handleVisto} ref={btnVistoRef} className="btn btn-warning p-1 mx-1"
+                                    data-toggle="tooltip" data-placement="bottom" title={tipVisto}>
+                                    <Icon icon={iconVisto} width="24" height="24" />
+                                </button>
+                                <button onClick={handleBorrar} className="btn btn-danger p-1 mx-1" data-toggle="tooltip" data-placement="bottom" title="Borrar">
+                                    <Icon icon="carbon:delete" width="24" height="24" />
+                                </button>
+                            </div>
                         </div>
-                        <div className="col-sm-2">
-                            <button onClick={handleVisto} ref={btnVistoRef} className="btn btn-warning p-1 mx-1" 
-                                data-toggle="tooltip" data-placement="bottom" title={tipVisto}>
-                                <Icon icon={iconVisto} width="24" height="24" />
-                            </button>
-                            <button className="btn btn-danger p-1 mx-1" data-toggle="tooltip" data-placement="bottom" title="Borrar">
-                                <Icon icon="carbon:delete" width="24" height="24" />
-                            </button>
-                        </div>
-                    </div>
 
-                    <p id="fechaActividad" class="card-text my-2"> {info.contenido} </p>
+                        <p id="fechaActividad" class="card-text my-2"> {info.contenido} </p>
+                    </div>
                 </div>
-            </div>
+            }
         </Fragment>
     )
 }

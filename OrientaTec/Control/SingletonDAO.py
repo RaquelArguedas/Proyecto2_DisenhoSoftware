@@ -321,7 +321,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
-                password = '123456',
+                password = 'abd00123',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
@@ -950,34 +950,42 @@ class SingletonDAO(metaclass=SingletonMeta):
     #Notificaciones
     #eliminar notificacion
     def deleteNotificacionUsuario(self, idNotificacion, idUsuario):
-        id = self.executeStoredProcedure('deleteNotificacionUsuario', [idNotificacion, idUsuario])        
+        id = self.executeStoredProcedure('deleteNotificacionUsuario', [idNotificacion, idUsuario])
+        for usuario in self.usuarios:
+                if (usuario.idUsuario == int(idUsuario)):
+                    for noti in usuario.notificaciones:
+                        if (noti.idNotificacion == int(idNotificacion)):
+                            usuario.notificaciones.remove(noti)
+                            break      
         return id
     
     #eliminar notificaciones de un usuario
     def deleteNotificacionesUsuario(self, idUsuario):
-        id = self.executeStoredProcedure('deleteNotificacionesUsuario', [idUsuario])        
+        id = self.executeStoredProcedure('deleteNotificacionesUsuario', [idUsuario])
+        for usuario in self.usuarios:
+                if (usuario.idUsuario == int(idUsuario)):
+                    usuario.notificaciones = []
         return id
     
     #marcar como leída o no. Si esta leida la marca como no, y si no esta leida la marca como leida
     #ES PARA UNA NOTIFICAION
     def cambiarLeida(self, idNotificacion, idUsuario):
         #cambia el estado en la BD
-        id = self.executeStoredProcedure('toggleLeida', [idNotificacion, idUsuario])   
-
+        id = self.executeStoredProcedure('toggleLeida', [idNotificacion, idUsuario])
         if (len(id)==1):
             #cambia el atributo en el objeto de la lista de notificaciones del usuario correspondiente
             for usuario in self.usuarios:
-                if (usuario.idUsuario == idUsuario):
+                if (usuario.idUsuario == int(idUsuario)):
                     for noti in usuario.notificaciones:
-                        if (noti.idNotificacion == idNotificacion):
+                        if (noti.idNotificacion == int(idNotificacion)):
                             noti.invertirLeida()
+                            break
 
         return id
 
     def todasLeidas(self, idUsuario, leidas):
         #cambia el estado en la BD
         id = self.executeStoredProcedure('setleidasUsuario', [idUsuario, leidas])   
-        print("id: ", id)
         if (len(id)==1):
             #cambia el atributo en el objeto de la lista de notificaciones del usuario correspondiente
             for usuario in self.usuarios:
@@ -992,7 +1000,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     def createNotificacion(self, idUsuarioEmisor, fechaHora, contenido):
         #se crea en la bd
         id = self.executeStoredProcedure('createNotificacion', [int(idUsuarioEmisor), fechaHora, contenido])   
-
+        print("ID::",id)
         #si se consigue crear se agrega a la lista de notificaciones del dao
         if (len(id)==1):
             salida = Notificacion(id[0], int(idUsuarioEmisor), fechaHora, contenido, None)

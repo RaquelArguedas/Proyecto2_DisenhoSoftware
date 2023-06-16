@@ -105,7 +105,7 @@ class AdminActividades:
                         if actividad.estado==1:
                             # se debe llamar a notificar a todos los subs
                             self.cambiarEstado(actividad.idActividad,2)
-                            id = self.dao.createNotificacion(actividad.idActividad, recordatorio.fecha, "Se ha publicado una actividad")
+                            id = self.dao.createNotificacion(actividad.idActividad, recordatorio.fecha, "Le recordamos sobre la actividad.")
                             self.publicador.notificar(id[0])
                     else:
                         #print(actividad.idActividad, "entre al else", actividad.estado)
