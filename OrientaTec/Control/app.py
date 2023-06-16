@@ -922,10 +922,12 @@ def modificarEstudianteFront():
 @app.route('/escribirMensaje', methods=['POST'])
 def escribirMensaje():
   #print(request.form)
-  id = control.escribirMensaje(int(request.form.get('idChat')),
-                                  request.form.get('contenido'),
+  print('escribir mensaje APP.PY')
+  id = control.escribirMensaje(int(request.json['id']),
+                                  request.json['contenido'],
                                    SingletonSesionActual().getUsuario().idUsuario, 
-                                   datetime.now())
+                                  request.json['fechaHora'] )
+                                  #datetime.now())
   #datetime.now().time().strftime('%H:%M')
   print(id)
   return jsonify(str(id))
@@ -1007,8 +1009,6 @@ def getMensajesChats():
   listaSalida = []
   chatReparsed = {} #Estrcutrua para enviar al front
   mensajeReparsed={}
-
-  listaEstudiantes = control.consultarEstudiantes(1)
   idUsuario = SingletonSesionActual().getUsuario().idUsuario
   listaChats = control.getChats(int(idUsuario))
   print('listaChats:')
@@ -1017,6 +1017,8 @@ def getMensajesChats():
     listaMensajexChat = []
     #obtener todos los mensajes de ese chat
     listaMensajes = control.getMensajes(int(chat[0]))
+    print('listaMensajes APP.PY_')
+    print(listaMensajes)
     for mensaje in listaMensajes:     
       nombreUsuario = control.getUsuarioNombre(int(mensaje.autor))
       mensajeReparsed = {'contenido': mensaje.contenido,

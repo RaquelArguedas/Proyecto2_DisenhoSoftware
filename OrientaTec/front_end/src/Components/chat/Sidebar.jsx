@@ -6,6 +6,8 @@ import './Sidebar.css'; // Archivo CSS para estilos personalizados
 import { Navbar } from '../navegacion/Navbar'
 import { useNavigate, useLocation  } from "react-router-dom";
 import { CrearChat } from './Crearchat';
+import axios from 'axios'; // Para manejo de solicitudes en el backend
+const API = process.env.REACT_APP_API;
 
 export function Sidebar() {
   let navigate = useNavigate();
@@ -13,11 +15,9 @@ export function Sidebar() {
   const [mensaje, setMensaje] = useState('');
   const [mostrarCrearChat, setMostrarCrearChat] = useState(false);
 
-  const [chats, setChats] = useState([   {id: 1,nombreChat: 'Chat 1',mensajes: [{contenido: 'Contenido del Chat 1',fechaHora: '12/03/2021 12:00 pm',nombreUsuario: 'Carlos Rodriguez'},
-  {contenido: 'Contenido del Chat 1',fechaHora: '12/03/2021 12:10 pm', nombreUsuario: 'Samantha Rodriguez'}]},
-  {id: 2,nombreChat: 'Chat 2',mensajes: [{contenido: 'Contenido del Chat 2',fechaHora: '12/03/2021 11:00 pm',nombreUsuario: 'Samantha Rodriguez'}]},
-  {id: 3, nombreChat: 'Chat 3',mensajes: [{contenido: 'Contenido del Chat 3',fechaHora: '12/03/2021 13:00 pm',nombreUsuario: 'Pedro Rodriguez'}]}
-    ]);
+  const [chats, setChats] = useState([
+  //{id: 1,nombreChat: 'Chat 1',mensajes: [{contenido: 'Contenido del Chat 1',fechaHora: '12/03/2021 12:00 pm',nombreUsuario: 'Carlos Rodriguez'},
+   ]);
  
   const [chatSeleccionado, setChatSeleccionado] = useState(null);
   const seleccionarChat = (chat) => {
@@ -34,38 +34,52 @@ export function Sidebar() {
     }
   }, []);
   const handleGetDetalle = async () => {
-    // Traer los datos y usar el setChats 
+    // Traer los datos y usar el setChats
+    try {
+      const response = await axios.get(`${API}/getMensajesChats`);
+      const data = response.data;
+      setChats(data);
+      console.log('Data Chats:', data);  
+    } catch (error) {
+      console.error('Error:', error);
+    }     
   };
   const handleSalirDelChat = () => {
     setChats((prevChats) => prevChats.filter((chat) => chat !== chatSeleccionado));
     setChatSeleccionado(null);
   };
-  
+
   const handleEnviarMensaje = async () => {
+    const fechaHoraActual = new Date();
+    const formattedFechaHora = `${fechaHoraActual.getFullYear()}-${('0' + (fechaHoraActual.getMonth() + 1)).slice(-2)}-${('0' + fechaHoraActual.getDate()).slice(-2)} ${('0' + fechaHoraActual.getHours()).slice(-2)}:${('0' + fechaHoraActual.getMinutes()).slice(-2)}:${('0' + fechaHoraActual.getSeconds()).slice(-2)}`;
+    
     const nuevoMensaje = {
+      id: chatSeleccionado.id,
       contenido: mensaje,
-      fechaHora: new Date().toLocaleString(),
-      nombreUsuario: 'Usuario actual' // Reemplaza esto con el nombre de usuario del usuario actual
+      fechaHora: formattedFechaHora, // Utiliza el formato 'YYYY-MM-DD HH:MM:SS'
+      nombreUsuario: 'Usuario actual'
     };
-    //  // Enviar el nuevo mensaje al backend
-    // try {
-    //   const response = await fetch('URL_DEL_BACKEND', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json'
-    //     },
-    //     body: JSON.stringify(nuevoMensaje)
-    //   });
-    //   if (response.ok) {
-    //     // El mensaje se envió correctamente al backend
-    //     console.log('Mensaje enviado al backend');
-    //   } else {
-    //     // Hubo un error al enviar el mensaje al backend
-    //     console.error('Error al enviar el mensaje al backend');
-    //   }
-    // } catch (error) {
-    //   console.error('Error al enviar el mensaje al backend', error);
-    // }
+    
+      // Enviar el nuevo mensaje al backend
+     try {
+       const response = await fetch(`${API}/escribirMensaje`, {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json'
+         },
+         body: JSON.stringify(nuevoMensaje)
+       });
+       if (response.ok) {
+         // El mensaje se envió correctamente al backend
+         console.log('Mensaje enviado al backend');
+       } else {
+         // Hubo un error al enviar el mensaje al backend
+         console.error('Error al enviar el mensaje al backend');
+       }
+     } catch (error) {
+       console.error('Error al enviar el mensaje al backend', error);
+    }
+
 
   
     setChats((prevChats) => {
