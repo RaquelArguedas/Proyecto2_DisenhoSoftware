@@ -34,6 +34,8 @@ from Observacion import *
 from Comentario import *
 from Sede import *
 from Ordenamiento import *
+from Mensaje import *
+from GeneralChatRoom import *
 from Notificacion import *
 
 
@@ -85,8 +87,9 @@ class SingletonDAO(metaclass=SingletonMeta):
     evidencias = []
     observaciones = []
     comentarios = []
-    notificaciones = []
-    mediator = GeneralChatRoom([],"s") #Nuevo cambio
+    mensajes = []
+    chats = [] 
+    mediator = GeneralChatRoom(1,[],"Sala General",1) #Nuevo cambio
 
     #Constructor que instancia los objetos necesarios del modelo
     def __init__(self):
@@ -103,7 +106,8 @@ class SingletonDAO(metaclass=SingletonMeta):
         self.evidencias = self.setFromBD("SELECT * from ", "Evidencia")
         self.observaciones = self.setFromBD("SELECT * from ", "Observacion")
         self.comentarios = self.setFromBD("SELECT * from ", "Comentario")
-
+        self.mensajes = self.setFromBD("SELECT * from ", "Mensaje")
+        self.chats = self.setFromBD("SELECT * from ", "Chat")
     #Auxiliar del constructor 
     def setFromBD(self, command, tablaBD):
         self.connectServer()
@@ -156,6 +160,10 @@ class SingletonDAO(metaclass=SingletonMeta):
             objeto = Observacion(lista[0], lista[1], lista[2])
         elif (tablaBD == "Comentario"):
             objeto = Comentario(lista[1], lista[2], lista[3], lista[4], lista[5], lista[0])
+        elif (tablaBD == "Mensaje"):
+            objeto = Mensaje(lista[0],lista[1],lista[2],lista[3],lista[4])
+        elif (tablaBD == "Chat"):
+            objeto = GeneralChatRoom(lista[0],self.generarMiembros(lista[0]),lista[1],lista[2])#nuevo cambio
         elif (tablaBD == "Notificacion"):
             objeto = Notificacion(lista[0], lista[1], lista[2], lista[3], None)
 
@@ -852,7 +860,6 @@ class SingletonDAO(metaclass=SingletonMeta):
     def buscarEstudiante(self, carnet):
         for estudiante in self.estudiantes:
             if (int(carnet) == estudiante.carnet):
-                print("llegue")
                 return estudiante
         return None
 
@@ -1304,6 +1311,27 @@ class SingletonDAO(metaclass=SingletonMeta):
                 return prof
             
     #-----NUEVAS FUNCIONALIDADES---------------#
+    #+getIdUsuario(codigo/Carnet):idUsuario
+    def getIdUsuario(self, identificacion):
+        correoPersona = ''
+        if isinstance(identificacion, str):
+            print("Buscando profesor")
+            for p in self.profesores:
+                if(identificacion == p.codigo):
+                    correoPersona = p.correoElectronico
+        elif isinstance(identificacion, int):
+            print("Buscando estudiante")
+            for e in self.estudiantes:
+                if(identificacion == e.carnet):
+                    correoPersona = e.correoElectronico 
+        if (correoPersona == ''):
+            print ("Error no se encuentra")
+            return -1
+        else:           
+            for user in self.usuarios:
+                if(user.correo == correoPersona):
+                    return user.idUsuario
+
     def getFotoEstudiante(self,idBuscado):
         try:
             self.connectMongoServer()
@@ -1338,21 +1366,67 @@ class SingletonDAO(metaclass=SingletonMeta):
     #Crear un nuevo mensaje 
     # +crearMensaje(Mensaje):void
     def escribirMensaje(self, idChat,idAutor,fechaHora, contenido):
-        
         respuesta = self.mediator.enviarMensaje(contenido,fechaHora,idAutor)
         if respuesta:
-            args = [idAutor,fechaHora,contenido]
+            args = [idChat, idAutor,fechaHora,contenido]
 
             #se agrega a la bd
             id = self.executeStoredProcedure('agregarMensaje', args)
             if(len(id)==1):
                 #se obtiene el id y se le agrega
-                salida = Comentario(idAutor,fechaHora,contenido,id)
+                salida = Mensaje(int(id),idChat,fechaHora,
+               contenido,idAutor)
 
-                #se agrega a la lista de Actividades
-                self.comentarios += [salida]
+                #se agrega a la lista de Mensajes
+                self.mensajes += [salida]
             
             return id
         else: 
             print("Error al enviar el mensaje")
             return -1
+    #crearChat(nombre:String, idAutor:int)
+    def crearChat(self,nombre,miembros,idAutor):
+        respuesta = self.mediator.crearChat(nombre,miembros,idAutor)
+        if respuesta:
+            miembrosParsed = []
+            args = [idAutor,nombre]
+            #se agrega a la bd
+            id = self.executeStoredProcedure('crearChat', args)
+            if(len(id)==1): 
+                #Si se logra crear el chat, se comienza a agregar cada usuario
+                for identificacion in miembros:
+                    idUser = self.getIdUsuario(identificacion)
+                    if(idUser!=-1): #no hubo errores
+                        miembrosParsed.append(idUser)
+                        print("id Mysql chat: ")
+                        print(id[0])
+                        print("idUser: ")
+                        print(idUser)
+                        id2 = self.executeStoredProcedure('createusuariosxchat', [idUser,id[0]])
+                        print("Agregando miembros", id2)
+                    else:
+                        print("Error al crear miembro")
+                salida = GeneralChatRoom(int(id[0]),miembrosParsed,nombre,idAutor)
+                #se agrega a la lista de Chats
+                self.chats += [salida]
+            
+            return id[0]
+        else: 
+            print("Error al crear el chat")
+            return -1
+            
+    def generarMiembros(self, idChat):
+        self.connectServer()
+
+        try:
+            self.cursor.execute("select usuario.idUsuario from UsuariosxChat inner join usuario on usuario.idUsuario = UsuariosxChat.idUsuario where idChat = " + str(idChat))
+
+            salida = self.cursor.fetchall()
+
+            lista = []
+            for row in salida:
+                lista += [self.getUsuario(row[0])]
+            return lista
+        except Exception as ex:
+            print(ex)
+        self.closeConnection()

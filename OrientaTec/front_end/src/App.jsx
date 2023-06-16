@@ -31,6 +31,7 @@ import { ConfiguracionEstudiante } from "./Components/menuEstudiante/navegacionE
 import { VerActividadesPlaneadas } from "./Components/menuEstudiante/opcionesEstudiante/verActividadesPlaneadas";
 import { VerActividadesProxima } from "./Components/menuEstudiante/opcionesEstudiante/verActividadProxima";
 import { Sidebar } from "./Components/chat/Sidebar";
+import { ChatEstudiante } from "./Components/chat/ChatEstudiante";
 export function App() {
     return (
     <Router>
@@ -70,6 +71,7 @@ export function App() {
                 <Route exact path = "/actividadProxima" element = {<VerActividadesProxima/>}/>
                 
                 <Route exact path = "/chat" element = {<Sidebar/>}/>
+                <Route exact path = "/chats" element = {<ChatEstudiante/>}/>
             </Routes>
         </div>
     </Router>

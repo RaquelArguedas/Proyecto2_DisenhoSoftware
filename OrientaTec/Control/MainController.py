@@ -258,6 +258,8 @@ class MainController:
 
     #Uso de chats 
     def escribirMensaje(self, idChat,idAutor,fechaHora, contenido):
-        
         return self.controlProfesor.escribirMensaje(idChat,idAutor,fechaHora, contenido)
+    
+    def crearChat(self,nombre,miembros,idAutor):
+        return self.controlProfesor.crearChat(nombre,miembros,idAutor)
     

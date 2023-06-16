@@ -3,13 +3,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import * as Icons from 'react-bootstrap-icons';
 import { Alert, Card } from 'react-bootstrap'; // Importar el componente Alert
 import './Sidebar.css'; // Archivo CSS para estilos personalizados
-import { Navbar } from '../navegacion/Navbar'
-import { useNavigate, useLocation  } from "react-router-dom";
+import { NavbarEstudiante } from '../menuEstudiante/navegacionEstudiante/NavbarEstudiante';
+import { useNavigate  } from "react-router-dom";
 import { CrearChat } from './Crearchat';
 
-export function Sidebar() {
+export function ChatEstudiante() {
   let navigate = useNavigate();
-  const { state } = useLocation();
   const [mensaje, setMensaje] = useState('');
   const [mostrarCrearChat, setMostrarCrearChat] = useState(false);
 
@@ -91,16 +90,9 @@ export function Sidebar() {
 
   return (
     <div className='container-fluid'>
-      <Navbar linkInicio={state.linkMenu} />
+      <NavbarEstudiante />
       <div className='row'>
         <div className='col-auto min-vh-100 bg-dark'>
-        <button
-            className="btn custom-button"
-            onClick={() => setMostrarCrearChat(true)}
-          >
-            Crear nuevo chat &nbsp;&nbsp;<Icons.PlusCircle />
-          </button>
-
           <ul>
             {chats.length > 0 ? (
               chats.map((chat, index) => (
@@ -178,23 +170,7 @@ export function Sidebar() {
           )}
         </div>
       </div>
-            {mostrarCrearChat && (
-        <div className="crear-chat-overlay">
-          <div className="crear-chat-container">
-            <button
-              className="close-button"
-              onClick={() => setMostrarCrearChat(false)}
-            > Cerrar &nbsp;&nbsp;
-              <Icons.X />
-            </button>
-            
-            
-        <div className='overflow-auto'>
-            <CrearChat agregarGrupo={agregarGrupo} chats={chats}/>
-          </div>
-          </div>
-        </div>
-      )}
+           
     </div>
   );
 }

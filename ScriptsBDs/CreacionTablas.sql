@@ -206,4 +206,9 @@ contenido varchar(200),
 idAutor int,foreign key (idAutor) references Usuario(idUsuario)
 );
 
+create table UsuariosxChat
+(idUsuariosxChat int primary key not null auto_increment,
+idUsuario int,foreign key (idUsuario) references Usuario(idUsuario),
+idChat int,foreign key (idChat) references Chat (idChat)
+);
 
