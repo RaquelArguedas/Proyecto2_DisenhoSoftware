@@ -58,6 +58,7 @@ class AdminUsuario:
         usuarios = self.dao.getUsuarios()
         lista = []
         for user in usuarios:
+            
             if (user.permiteChats == True):
                 lista.append(user)
         return lista

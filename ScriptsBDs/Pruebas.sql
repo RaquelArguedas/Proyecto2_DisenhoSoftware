@@ -111,17 +111,6 @@ INSERT INTO usuario (correo, contrasenha, idRol, idSede, permiteNotis, permiteCh
 ('carmen.lopez@yahoo.com', 01234567, 1, 2, true, true),
 ('ana.garcia@estudiantec.cr', 01234567, 5, 2, true, true);
 
-INSERT INTO Notificacion (emisor, fechaHora, contenido) VALUES 
-(1, '2023-06-09 10:00:00', 'Nuevo mensaje recibido');
-INSERT INTO Notificacion (emisor, fechaHora, contenido) VALUES 
-(1, '2023-06-09 10:00:00', 'Nuevo mensaje recibido2');
-
-INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 2, true);
-INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 3, true);
-INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 11, false);
-INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (1, 5, true);
-INSERT INTO NotificacionXUsuario (idNotificacion, idUsuario, leida) VALUES (2, 5, true);
-
 INSERT INTO profesor (cedula, nombre, apellido1, apellido2, idSede, numeroCelular, correoElectronico, numeroOficina, idAutoridad, idEstado) VALUES
 (467890235, 'Jorge', 'González', 'Soto', 3, 68890123, 'jorge.gonzalez@hotmail.com', 20234567, 2, 2),
 (578901346, 'Lucía', 'López', 'Martínez', 4, 67889012, 'lucia.lopez@yahoo.com', 20345678, 1, 1),
@@ -274,11 +263,3 @@ insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) v
 insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
 ('juan.diaz@estudiantec.cr',20210329,5,5,1,1);
 -- estudiantes usuarios
-
--- MENSAJES
-insert into Mensaje(idChat,fechaHora,contenido,idAutor) values 
-(7,'2023-06-09 10:00:00','Bienvenidos a todos',1);
-insert into Mensaje(idChat,fechaHora,contenido,idAutor) values 
-(7,'2023-06-09 11:00:00','Gracias Jorge',15);
-insert into Mensaje(idChat,fechaHora,contenido,idAutor) values 
-(7,'2023-06-09 11:10:00','¿Qué es esto?',13);
