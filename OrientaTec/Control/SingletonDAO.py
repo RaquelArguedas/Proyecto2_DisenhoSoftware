@@ -329,7 +329,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
-                password = 'abd00123',
+                password = 'Moralesjfi123456',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
@@ -1461,4 +1461,19 @@ class SingletonDAO(metaclass=SingletonMeta):
         print('lista mensajes SINGLETON_')
         print(listaSalida)
         return listaSalida
+            
+    def salirChat(self, idChat,idUsuario):
+        #eliminarlo de la base de datos usuariosxchat
+        chatBuscado = None
+        #se obtiene el chat
+        for chat in self.chats:
+            if (chat.id == idChat):
+                chatBuscado = chat
+
+        #quitar en tabla usuariosxcgat
+        self.executeStoredProcedure("deleteUsuariosxChat", [idChat,idUsuario])
+
+        #quita a la actividad el responsable
+        chatBuscado.quitarMiembro(self.getUsuario(idUsuario))
+
             

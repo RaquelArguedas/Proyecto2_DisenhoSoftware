@@ -92,7 +92,9 @@ class AdminUsuario:
     
     def getUsuarioNombre(self,idUsuario):
         return self.dao.getUsuarioNombre(idUsuario)
-
-    def generarMiembros(self, idChat):
-        return self.dao.generarMiembros(idChat)
     
+    def generarMiembros(self, idChat):
+        return self.dao.generarMiembros(idChat) 
+
+    def salirChat(self, idChat,idUsuario):
+        return self.dao.salirChat(idChat,idUsuario)

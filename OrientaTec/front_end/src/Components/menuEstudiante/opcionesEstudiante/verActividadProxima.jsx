@@ -3,7 +3,7 @@ import { NavbarEstudiante } from "../navegacionEstudiante/NavbarEstudiante";
 import { BarraLateral } from "../../navegacion/BarraLateral";
 import { ActividadEstudiante } from "./actividadEstudiante";
 
-const API = "http://localhost:5000"; //process.env.REACT_APP_API;
+const API = "http://localhost:5000/"; //process.env.REACT_APP_API;
 
 export function VerActividadesProxima() {
   const [actividades, setActividades] = useState(null);

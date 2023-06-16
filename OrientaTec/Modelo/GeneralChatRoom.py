@@ -30,3 +30,8 @@ class GeneralChatRoom(ChatRoom):
             return True
         else:
             return False
+        
+    def quitarMiembro(self, usuario):
+        self.miembros.remove(usuario) 
+        
+    
