@@ -2,8 +2,6 @@ from SingletonDAO import *
 from SingletonSesionActual import *
 from AdminUsuario import *
 
-ACTIVIDAD = 0 #para no hacer un enum, o dos métodos distintos
-
 class PublisherActividades:
     #Constructor
     def __init__(self):

@@ -4,6 +4,7 @@ from AdminPlanActividades import *
 from AdminEstudiantes import *
 from AdminProfesores import *
 from AdminUsuario import *
+from PublisherChats import *
 
 class MainController:
     def __init__(self):
@@ -13,6 +14,7 @@ class MainController:
         self.controlEstudiante = AdminEstudiantes()
         self.controlEquipoGuia = AdminEquipoGuia()
         self.controlUsuario = AdminUsuario()
+        self.publisherChats = PublisherChats()
 
     
     #AdminProfesores
@@ -241,8 +243,8 @@ class MainController:
     def notificarActividades(self, fechaActual):
         return self.controlActividades.notificarActividades(fechaActual)
     
-    def createNotificacion(self, idUsuarioEmisor, fechaHora, contenido):
-        return self.controlUsuario.createNotificacion(idUsuarioEmisor, fechaHora, contenido)
+    def createNotificacion(self, idEmisor, fechaHora, contenido, tipoEmisor):
+        return self.controlUsuario.createNotificacion(idEmisor, fechaHora, contenido, tipoEmisor)
     
     
     
@@ -263,3 +265,11 @@ class MainController:
     def crearChat(self,nombre,miembros,idAutor):
         return self.controlProfesor.crearChat(nombre,miembros,idAutor)
     
+    def getIdUsuario(self, usuario):
+        return self.controlUsuario.getIdUsuario(usuario)
+    
+    def notificarCreacion(self, idNotificacion, chat):
+        return self.publisherChats.notificar(idNotificacion, chat)
+    
+    def getChats(self,idUsuario):
+        return self.controlUsuario.getChats(idUsuario)

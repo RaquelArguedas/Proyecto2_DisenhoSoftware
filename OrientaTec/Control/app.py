@@ -848,10 +848,10 @@ def todasLeidas(idUsuario, leidas):
 
 #   def createNotificacion(self, idUsuarioEmisor, fechaHora, contenido):
 #       return self.controlUsuario.createNotificacion(idUsuarioEmisor, fechaHora, contenido)
-@app.route('/createNotificacion/<idUsuarioEmisor>/<fechaHora>/<contenido>', methods=['POST'])
-def createNotificacion(idUsuarioEmisor, fechaHora, contenido):
-  res = control.createNotificacion(idUsuarioEmisor, fechaHora, contenido)
-  return jsonify(str(res))
+@app.route('/createNotificacion/<idUsuarioEmisor>/<fechaHora>/<contenido>/<tipoEmisor>', methods=['POST'])
+def createNotificacion(idEmisor, fechaHora, contenido, tipoEmisor):
+  res = control.createNotificacion(idEmisor, fechaHora, contenido, tipoEmisor)
+  return res
   
 #   def notificacionUsuarios(self, idNotificacion, idUsuario):
 #       return self.controlUsuario.notificacionUsuarios(idNotificacion, idUsuario)
@@ -933,15 +933,29 @@ def escribirMensaje():
 
 @app.route('/crearChat', methods=['POST'])
 def crearChat():
-  print('Nombre chat:', request.json['nombreChat'])
+  #print('Nombre chat:', request.json['nombreChat'])
   miembrosSeleccionados = request.json['estudiantes'] + request.json['profesores']
-  print('Miembros:', miembrosSeleccionados)
+  #print('Miembros:', miembrosSeleccionados)
   id = control.crearChat(request.json['nombreChat'],
                          miembrosSeleccionados,
                          SingletonSesionActual().getUsuario().idUsuario)
   
-  print(id)
+  for i in range(0, len(miembrosSeleccionados)):
+    miembrosSeleccionados[i] = control.getIdUsuario(miembrosSeleccionados[i])
+
+  idNoti = createNotificacion(id, datetime.now(), "Ha sido agregado a este chat.", 2)
+  control.publisherChats.notificar(idNoti[0], miembrosSeleccionados)
+
   return jsonify(str(id))
+
+@app.route('/getNombreChat/<idChat>', methods=['GET'])
+def getNombreChat(idChat):
+  idUsuario = SingletonSesionActual().getUsuario().idUsuario
+  listaChats = control.getChats(int(idUsuario))
+  for chat in listaChats: #cada chat es una lista de idChat y nombre
+    if (chat[0] == int(idChat)):
+      return chat
+  return []
 
 
 # def getInfoUsuarioSesionActual(self):

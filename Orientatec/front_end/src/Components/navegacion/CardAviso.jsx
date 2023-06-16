@@ -6,9 +6,6 @@ const API = process.env.REACT_APP_API;
 export function CardAviso({ info, user }) {
 
     console.log(info)
-
-    //info.leida = (typeof info.leida === String && info.leida === 'True') ? true : false;
-
     const [iconVisto, setIconVisto] = useState("tabler:eye-exclamation");
     const [tipVisto, setTipVisto] = useState("Marcar como leída");
     const btnVistoRef = useRef();
@@ -30,20 +27,38 @@ export function CardAviso({ info, user }) {
     }
 
     const getNombreEmisor = async () => {
-        try {
-            const res = await fetch(`${API}/verActividad/${info.emisor}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            });
-
-            const data = await res.json();
-            setNombreEmisor(data.nombreActividad);
-
-        } catch (error) {
-            console.log("Error al realizar la solicitud:", error);
+        if (info.tipoEmisor === 1){
+            try {
+                const res = await fetch(`${API}/verActividad/${info.emisor}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                });
+    
+                const data = await res.json();
+                setNombreEmisor(data.nombreActividad);
+    
+            } catch (error) {
+                console.log("Error al realizar la solicitud:", error);
+            }
+        } else{
+            try {
+                const res = await fetch(`${API}/getNombreChat/${info.emisor}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                });
+    
+                const data = await res.json();
+                setNombreEmisor(data[1]);
+    
+            } catch (error) {
+                console.log("Error al realizar la solicitud:", error);
+            }
         }
+        
     };
 
     const handleVisto = async () => {

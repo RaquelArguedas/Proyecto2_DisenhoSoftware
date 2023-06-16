@@ -9,7 +9,6 @@ class AdminUsuario:
     #Métodos
     def exists(self, correo, contrasenha):
         usuarios = self.dao.getUsuarios()
-        print('AdmUsuario, Usuarios: ', usuarios)
         for user in usuarios:
             if (user.correo == correo and user.contrasenha == contrasenha):
                 return True
@@ -75,12 +74,16 @@ class AdminUsuario:
     def todasLeidas(self, idUsuario, leidas):
         return self.dao.todasLeidas(idUsuario, leidas)
 
-    def createNotificacion(self, idUsuarioEmisor, fechaHora, contenido):
-        return self.dao.createNotificacion(idUsuarioEmisor, fechaHora, contenido)
+    def createNotificacion(self, idEmisor, fechaHora, contenido, tipoEmisor):
+        return self.dao.createNotificacion(idEmisor, fechaHora, contenido, tipoEmisor)
     
     def notificacionUsuarios(self, idNotificacion, idUsuario):
         return self.dao.notificacionUsuarios(idNotificacion, idUsuario)
-
     
+    def getIdUsuario(self, usuario):
+        return self.dao.getIdUsuario(usuario)
+
+    def getChats(self,idUsuario):
+        return self.dao.getChats(idUsuario)
     
     

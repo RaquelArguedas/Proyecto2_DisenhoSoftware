@@ -165,7 +165,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         elif (tablaBD == "Chat"):
             objeto = GeneralChatRoom(lista[0],self.generarMiembros(lista[0]),lista[1],lista[2])#nuevo cambio
         elif (tablaBD == "Notificacion"):
-            objeto = Notificacion(lista[0], lista[1], lista[2], lista[3], None)
+            objeto = Notificacion(lista[0], lista[1], lista[2], lista[3], lista[4], None)
 
         return objeto
 
@@ -192,7 +192,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         for noti in self.notificaciones:
             if(int(noti.idNotificacion) == int(idNotificacion)):
                 #devuelve una nueva instancia para cada notificacion del usuario
-                return Notificacion(noti.idNotificacion, noti.emisor, noti.fechaHora, noti.contenido, self.getLeida(idNotificacion, idUsuario))
+                return Notificacion(noti.idNotificacion, noti.emisor, noti.fechaHora, noti.contenido, noti.tipoEmisor, self.getLeida(idNotificacion, idUsuario))
 
     def getLeida(self, idNotificacion, idUsuario):
         res = self.executeStoredProcedure('getLeida', [idNotificacion, idUsuario])
@@ -1004,13 +1004,12 @@ class SingletonDAO(metaclass=SingletonMeta):
             
     #crear notificacion
     #createNotificacion`(in _emisor int, in _fechaHora datetime, in _contenido varchar(50))
-    def createNotificacion(self, idUsuarioEmisor, fechaHora, contenido):
+    def createNotificacion(self, idEmisor, fechaHora, contenido, tipoEmisor):
         #se crea en la bd
-        id = self.executeStoredProcedure('createNotificacion', [int(idUsuarioEmisor), fechaHora, contenido])   
-        print("ID::",id)
+        id = self.executeStoredProcedure('createNotificacion', [int(idEmisor), fechaHora, contenido, tipoEmisor])
         #si se consigue crear se agrega a la lista de notificaciones del dao
         if (len(id)==1):
-            salida = Notificacion(id[0], int(idUsuarioEmisor), fechaHora, contenido, None)
+            salida = Notificacion(id[0], int(idEmisor), fechaHora, contenido, tipoEmisor, None)
 
             self.notificaciones += [salida]
 
@@ -1031,7 +1030,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             for user in self.usuarios:
                 if(user.idUsuario == int(idUsuario)):
                     print("se inserto la noti ", notificacion.idNotificacion)
-                    user.notificaciones += [Notificacion(notificacion.idNotificacion, notificacion.emisor, notificacion.fechaHora, notificacion.contenido, False)]
+                    user.notificaciones += [Notificacion(notificacion.idNotificacion, notificacion.emisor, notificacion.fechaHora, notificacion.contenido, notificacion.tipoEmisor, False)]
 
         return id
     
@@ -1384,6 +1383,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         else: 
             print("Error al enviar el mensaje")
             return -1
+        
     #crearChat(nombre:String, idAutor:int)
     def crearChat(self,nombre,miembros,idAutor):
         respuesta = self.mediator.crearChat(nombre,miembros,idAutor)
@@ -1426,6 +1426,19 @@ class SingletonDAO(metaclass=SingletonMeta):
             lista = []
             for row in salida:
                 lista += [self.getUsuario(row[0])]
+            return lista
+        except Exception as ex:
+            print(ex)
+        self.closeConnection()
+
+    def getChats(self,idUsuario):
+        self.connectServer()
+        try:
+            self.cursor.execute("select UsuariosxChat.idChat,Chat.nombre from UsuariosxChat inner join usuario on usuario.idUsuario = UsuariosxChat.idUsuario inner join chat on chat.idChat = UsuariosxChat.idChat where Usuario.idUsuario =" + str(idUsuario))
+            salida = self.cursor.fetchall()
+            lista = []
+            for row in salida:
+                lista.append([row[0],row[1]]) 
             return lista
         except Exception as ex:
             print(ex)

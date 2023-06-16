@@ -56,7 +56,8 @@ create table Notificacion
 (idNotificacion int primary key not null auto_increment,
 emisor int, foreign key (emisor) references Usuario (idUsuario),
 fechaHora datetime,
-contenido varchar(50)
+contenido varchar(50),
+tipoEmisor int
 );
 
 create table NotificacionXUsuario

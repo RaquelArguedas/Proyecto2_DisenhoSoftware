@@ -342,7 +342,7 @@ DELIMITER ;
 #____________________________________________________Notificaciones
 #Create
 DELIMITER $$
-CREATE PROCEDURE `createNotificacion`(in _emisor int, in _fechaHora datetime, in _contenido varchar(50))
+CREATE PROCEDURE `createNotificacion`(in _emisor int, in _fechaHora datetime, in _contenido varchar(50), in _tipo int)
 BEGIN
     declare _error int;
     declare _errmsg varchar(100);
@@ -354,7 +354,7 @@ BEGIN
         set _error = 2;
         set _errmsg = "El emisor especificado no existe en la tabla Usuario.";
     else
-        insert into Notificacion(emisor, fechaHora, contenido) values (_emisor, _fechaHora, _contenido);
+        insert into Notificacion(emisor, fechaHora, contenido, tipoEmisor) values (_emisor, _fechaHora, _contenido, _tipo);
         select @@identity;
     end if;
     
