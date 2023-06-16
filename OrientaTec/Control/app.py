@@ -915,7 +915,7 @@ def modificarEstudianteFront():
                                   numeroTelefono,  
                                   estado)  
   print(id)
-  if (request.files['image'] != None):
+  if ('image' in request.files):
     control.registrarFotoEstudiante(carnet, request.files['image'])
   return jsonify(str(id))
 
@@ -1051,6 +1051,17 @@ def getMensajesChats():
     listaSalida+=[chatReparsed]
   #print(listaSalida)
   return listaSalida
+
+@app.route('/salirChat', methods=['POST'])
+def salirChat():
+  #pedir el idChat al frontend 
+  idChat =  request.json['id']
+  # el id usuario se obtiene de sesion actual
+  id = control.salirChat(idChat,
+                         SingletonSesionActual().getUsuario().idUsuario)
+  
+  return jsonify(str(id))
+
 
 # inicia el servidor
 if __name__ == "__main__":

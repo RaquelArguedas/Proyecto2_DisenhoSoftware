@@ -278,4 +278,8 @@ class MainController:
 
     def getMensajes(self,idChat):
         return self.controlUsuario.getMensajes(idChat) 
+    def generarMiembros(self, idChat):
+        return self.controlUsuario.generarMiembros(idChat) 
     
+    def salirChat(self, idChat,idUsuario):
+        return self.controlUsuario.salirChat(idChat,idUsuario)

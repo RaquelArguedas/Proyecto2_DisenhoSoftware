@@ -1942,3 +1942,22 @@ BEGIN
     if (_error is not null) then select _error, _errmsg; end if;
 END$$
 DELIMITER ;	
+
+
+#Delete
+DELIMITER $$
+CREATE PROCEDURE `deleteUsuariosxChat`(in _idChat int, _idUsuario int)
+BEGIN
+    declare _error int;
+    declare _errmsg varchar(100);
+    
+    if((select count(*) from UsuariosxChat where _idChat = idChat and _idUsuario = idUsuario) = 0) then
+        set _error = 2;
+        set _errmsg = "La relación UsuariosxChat con el ID especificado no existe.";
+    else
+        delete from UsuariosxChat where _idUsuario= idUsuario and _idChat = idChat;
+    end if;
+    
+    if (_error is not null) then select _error, _errmsg; end if;
+END$$
+DELIMITER ;

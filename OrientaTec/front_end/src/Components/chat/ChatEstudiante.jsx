@@ -43,11 +43,24 @@ export function ChatEstudiante() {
         console.error('Error:', error);
       }    
   };
-  const handleSalirDelChat = () => {
-    //codigo para salir del chat
-    setChats((prevChats) => prevChats.filter((chat) => chat !== chatSeleccionado));
-    setChatSeleccionado(null);
+  const handleSalirDelChat = async () => {
+    if (chatSeleccionado) {
+      const idChat = chatSeleccionado.id;
+      try {
+        const response = await axios.post(`${API}/salirChat`, {
+          id: idChat
+        });
+        const data = response.data;
+        console.log('Respuesta del backend:', data);
+        // Aquí puedes realizar cualquier acción adicional después de salir del chat, si es necesario.
+      } catch (error) {
+        console.error('Error al llamar a la función salirChat:', error);
+      }
+      setChats((prevChats) => prevChats.filter((chat) => chat !== chatSeleccionado));
+      setChatSeleccionado(null);
+    }
   };
+  
   
   const handleEnviarMensaje = async () => {
     const fechaHoraActual = new Date();
