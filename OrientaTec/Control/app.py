@@ -922,11 +922,10 @@ def modificarEstudianteFront():
 @app.route('/escribirMensaje', methods=['POST'])
 def escribirMensaje():
   #print(request.form)
-  print('escribir mensaje APP.PY')
   id = control.escribirMensaje(int(request.json['id']),
-                                  request.json['contenido'],
-                                   SingletonSesionActual().getUsuario().idUsuario, 
-                                  request.json['fechaHora'] )
+                               SingletonSesionActual().getUsuario().idUsuario,
+                               request.json['fechaHora'], 
+                                request.json['contenido'])
                                   #datetime.now())
   #datetime.now().time().strftime('%H:%M')
   print(id)
@@ -1019,8 +1018,13 @@ def getMensajesChats():
     listaMensajes = control.getMensajes(int(chat[0]))
     print('listaMensajes APP.PY_')
     print(listaMensajes)
-    for mensaje in listaMensajes:     
-      nombreUsuario = control.getUsuarioNombre(int(mensaje.autor))
+    for mensaje in listaMensajes:  
+      print('get mensajes app.py:')   
+      print('mensaje.autor:')  
+      print(mensaje.autor)
+      print('mensaje.contenido:')  
+      print(mensaje.contenido)
+      nombreUsuario = control.getUsuarioNombre(int(mensaje.autor))#el error
       mensajeReparsed = {'contenido': mensaje.contenido,
                       'fechaHora': mensaje.fechaHora,
                       'nombreUsuario': nombreUsuario}

@@ -1369,17 +1369,14 @@ class SingletonDAO(metaclass=SingletonMeta):
         respuesta = self.mediator.enviarMensaje(contenido,fechaHora,idAutor)
         if respuesta:
             #print('guardando mensaje en database')
-            args = [idChat,fechaHora,contenido,idAutor]
-
+            args = [idChat,idAutor,fechaHora,contenido]
             #se agrega a la bd
             id = self.executeStoredProcedure('agregarMensaje', args)
             #print('Resultado mysql:')
             #print(id)
-            if(len(id)==1):
-                #se obtiene el id y se le agrega
+            if(len(id)==1):              
                 salida = Mensaje(int(id[0]),idChat,fechaHora,
                contenido,idAutor)
-
                 #se agrega a la lista de Mensajes
                 self.mensajes += [salida]
             
