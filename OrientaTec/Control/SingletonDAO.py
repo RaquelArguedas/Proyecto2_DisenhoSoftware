@@ -329,7 +329,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
-                password = '123456',
+                password = 'Moralesjfi123456',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
@@ -1304,6 +1304,27 @@ class SingletonDAO(metaclass=SingletonMeta):
                 return prof
             
     #-----NUEVAS FUNCIONALIDADES---------------#
+    #+getIdUsuario(codigo/Carnet):idUsuario
+    def getIdUsuario(self, identificacion):
+        correoPersona = ''
+        if isinstance(identificacion, str):
+            print("Buscando profesor")
+            for p in self.profesores:
+                if(identificacion == p.codigo):
+                    correoPersona = p.correoElectronico
+        elif isinstance(identificacion, int):
+            print("Buscando estudiante")
+            for e in self.estudiantes:
+                if(identificacion == e.carnet):
+                    correoPersona = e.correoElectronico 
+        if (correoPersona == ''):
+            print ("Error no se encuentra")
+            return -1
+        else:           
+            for user in self.usuarios:
+                if(user.correo == correoPersona):
+                    return user.idUsuario
+
     def getFotoEstudiante(self,idBuscado):
         try:
             self.connectMongoServer()
@@ -1360,16 +1381,29 @@ class SingletonDAO(metaclass=SingletonMeta):
     def crearChat(self,nombre,miembros,idAutor):
         respuesta = self.mediator.crearChat(nombre,miembros,idAutor)
         if respuesta:
-            args = [nombre, idAutor]
+            miembrosParsed = []
+            args = [idAutor,nombre]
             #se agrega a la bd
             id = self.executeStoredProcedure('crearChat', args)
-            if(len(id)==1):
-                #se obtiene el id y se le agrega
-                salida = GeneralChatRoom(int(id),miembros,nombre,idAutor)
+            if(len(id)==1): 
+                #Si se logra crear el chat, se comienza a agregar cada usuario
+                for identificacion in miembros:
+                    idUser = self.getIdUsuario(identificacion)
+                    if(idUser!=-1): #no hubo errores
+                        miembrosParsed.append(idUser)
+                        print("id Mysql chat: ")
+                        print(id[0])
+                        print("idUser: ")
+                        print(idUser)
+                        id2 = self.executeStoredProcedure('createusuariosxchat', [idUser,id[0]])
+                        print("Agregando miembros", id2)
+                    else:
+                        print("Error al crear miembro")
+                salida = GeneralChatRoom(int(id[0]),miembrosParsed,nombre,idAutor)
                 #se agrega a la lista de Chats
                 self.chats += [salida]
             
-            return id
+            return id[0]
         else: 
             print("Error al crear el chat")
             return -1

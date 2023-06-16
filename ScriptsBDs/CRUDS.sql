@@ -1923,3 +1923,22 @@ END$$
 DELIMITER ;	
 
 
+DELIMITER $$ 
+CREATE PROCEDURE `createUsuariosxChat`(in _idUsuario int, in _idChat int)
+BEGIN
+	declare _error int; declare _errmsg varchar(100);
+    if(_idChat is null or _idUsuario is null) then 
+		-- si se quiere crear ningún atributo puede ser nulo, solo el id
+		set _error = 1, _errmsg = "Para crear uno nuevo ningún atributo puede ser nulo";
+	elseif( (select count(*) from Chat where _idChat = idChat)=0 )then 
+		set _error = 2, _errmsg = "Ese Chat no existe";
+	elseif( (select count(*) from Usuario where _idUsuario = idUsuario)=0 )then 
+		set _error = 3, _errmsg = "Ese Usuario no existe";
+	else
+		insert into UsuariosxChat(idChat, idUsuario) 
+						values (_idChat, _idUsuario);
+		select @@identity;
+	end if;
+    if (_error is not null) then select _error, _errmsg; end if;
+END$$
+DELIMITER ;	

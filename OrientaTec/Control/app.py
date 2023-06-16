@@ -930,16 +930,77 @@ def escribirMensaje():
   print(id)
   return jsonify(str(id))
 
-# def crearChat(self, nombre,idAutor):
 @app.route('/crearChat', methods=['POST'])
 def crearChat():
-  #print(request.form)
-  id = control.crearChat(request.form.get('nombreChat'),
-                         request.form.get('miembrosSeleccionados'),
+  print('Nombre chat:', request.json['nombreChat'])
+  miembrosSeleccionados = request.json['estudiantes'] + request.json['profesores']
+  print('Miembros:', miembrosSeleccionados)
+  id = control.crearChat(request.json['nombreChat'],
+                         miembrosSeleccionados,
                          SingletonSesionActual().getUsuario().idUsuario)
   
   print(id)
   return jsonify(str(id))
+
+
+# def getInfoUsuarioSesionActual(self):
+@app.route('/getProfesoresEstudiantes', methods=['GET'])
+def getProfesoresEstudiantes():
+  listaPersonas = []
+  listaProfesores = control.getAllProfesores() 
+  listaEstudiantes = control.consultarEstudiantes(1)
+  listaPersonas.append(listaProfesores)
+  listaPersonas.append(listaEstudiantes)
+  #print('listaPersonas: ',listaPersonas)
+  listaSalida = []
+  if (listaPersonas == None):
+     return jsonify("No hay información") 
+     
+  profesorReparsed = {} #Estrcutrua para enviar al front
+  estudianteReparsed = {} #Estrcutrua para enviar al front
+  for profesor in listaPersonas[0]:
+    profesorReparsed = {'id': profesor.codigo,
+                       'nombre': profesor.nombre+' '
+                       +profesor.apellido1+' '
+                       +profesor.apellido2}
+    listaSalida += [profesorReparsed] 
+  for estudiante in listaPersonas[1]:
+    estudianteReparsed = {'id': estudiante.carnet,
+                       'nombre': estudiante.nombre+' '
+                       +estudiante.apellido1+' '
+                       +estudiante.apellido2}
+    listaSalida += [estudianteReparsed] 
+  #print(listaSalida)
+  return listaSalida
+
+@app.route('/getAllProfesoresFront', methods=['GET'])
+def getAllProfesoresFront():
+  #print('GET ALL PROFESORES')
+  listaSalida = []
+  listaProfesores = control.getAllProfesores()
+  profesorReparsed = {} #Estrcutrua para enviar al front
+  for profesor in listaProfesores:
+    profesorReparsed = {'codigo': profesor.codigo,
+                       'nombre': profesor.nombre+' '
+                       +profesor.apellido1+' '
+                       +profesor.apellido2}
+    listaSalida += [profesorReparsed] 
+  #print(listaSalida)
+  return listaSalida
+
+@app.route('/getAllEstudiantesFront', methods=['GET'])
+def getAllEstudiantesFront():
+  listaSalida = []
+  listaEstudiantes = control.consultarEstudiantes(1)
+  estudianteReparsed = {} #Estrcutrua para enviar al front
+  for estudiante in listaEstudiantes:
+    estudianteReparsed = {'carnet': estudiante.carnet,
+                       'nombre': estudiante.nombre+' '
+                       +estudiante.apellido1+' '
+                       +estudiante.apellido2}
+    listaSalida += [estudianteReparsed] 
+  #print(listaSalida)
+  return listaSalida
 
 
 # inicia el servidor

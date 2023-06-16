@@ -231,3 +231,46 @@ INSERT INTO estudiante (carnet, nombre, apellido1, apellido2, idSede, numeroCelu
 (20220327,'Pedro','Sánchez','Fernández' ,1 ,68854321 ,'pedro.sanchez@estudiantec.cr' ,2),
 (20230325,'Carmen','García','Pérez' ,2 ,67832109 ,'carmen.garcia@estudiantec.cr' ,1),
 (20230345,'Alberto','Díaz','Martínez' ,5 ,68754321 ,'alberto.diaz@estudiantec.cr' ,2);
+-- AGREGAR USUARIOS DE ESTUDIANTES 
+-- estudiantes usuarios
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('carlos.perez@estudiantec.cr',20210324,5,1,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('sofia.hernandez@estudiantec.cr',20210326,5,1,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('alejandro.garcia@estudiantec.cr',20210331,5,1,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('pedro.sanchez@estudiantec.cr',20220327,5,1,1,1);
+-- sede 2
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('jose.martinez@estudiantec.cr',20210322,5,2,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('lucia.sanchez@estudiantec.cr',20210328,5,2,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('luis.gomez@estudiantec.cr',20210333,5,2,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('carmen.garcia@estudiantec.cr',20230325,5,2,1,1);
+-- sede 3
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('ana.garcia@estudiantec.cr',20195864,5,3,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('david.lopez@estudiantec.cr',20210320,5,3,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('marta.perez@estudiantec.cr',20210330,5,3,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('jorge.lopez@estudiantec.cr',20220325,5,3,1,1);
+-- sede 4
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('maria.rodriguez@estudiantec.cr',20210323,5,4,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('daniel.gomez@estudiantec.cr',20210327,5,4,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('elena.fernandez@estudiantec.cr',20210332,5,4,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('isabel.rodriguez@estudiantec.cr',20220326,5,4,1,1);
+-- sede 5
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('laura.gonzalez@estudiantec.cr',20210321,5,5,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('juan.diaz@estudiantec.cr',20210329,5,5,1,1);
+-- estudiantes usuarios
