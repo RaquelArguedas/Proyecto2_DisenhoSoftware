@@ -23,10 +23,7 @@ export function Navbar({ linkInicio }) {
               <Link className="nav-link" to={linkInicio} >Inicio</Link>
               <Link className="nav-link" to='/configuracionAsistente' state={{ configLinkInicio: linkInicio }}>Configuracion</Link>
               <Link className="nav-link" to="https://www.canva.com/design/DAFh5LOvdPk/zkChmy2wVH-aPhOo6BXqcA/view?utm_content=DAFh5LOvdPk&utm_campaign=designshare&utm_medium=link&utm_source=homepage_design_menu">Ayuda</Link>
-              <Link className="nav-link mx-1" to='/avisos' state={{ configLinkInicio: linkInicio }}>
-                Avisos
-                <span class="position-absolute badge rounded-pill bg-success mx-1">!</span>
-              </Link>
+              <Link className="nav-link mx-1" to='/avisos' state={{ configLinkInicio: linkInicio }}>Avisos</Link>
               <Link className="nav-link mx-3" to='/'>Cerrar sesion</Link>
             </div>
           </div>
