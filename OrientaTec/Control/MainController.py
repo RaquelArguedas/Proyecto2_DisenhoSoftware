@@ -4,6 +4,7 @@ from AdminPlanActividades import *
 from AdminEstudiantes import *
 from AdminProfesores import *
 from AdminUsuario import *
+from PublisherChats import *
 
 class MainController:
     def __init__(self):
@@ -13,6 +14,7 @@ class MainController:
         self.controlEstudiante = AdminEstudiantes()
         self.controlEquipoGuia = AdminEquipoGuia()
         self.controlUsuario = AdminUsuario()
+        self.publisherChats = PublisherChats()
 
     
     #AdminProfesores
@@ -146,6 +148,13 @@ class MainController:
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
         return self.controlActividades.quitarResponsablesActividad(idActividad, responsablesEliminados)
     
+    #Suscribir y desuscribir del Publisher Actividades
+    def suscribir(self, idUsuario):
+        self.controlActividades.getPublicador().suscribir(idUsuario)
+
+    def desuscribir(self, idUsuario):
+        self.controlActividades.getPublicador().desuscribir(idUsuario)
+    
     #Crear Observación - Parche de Alonso
     def crearObservacion(self, idActividad, fechaCancelacion, detalle):
         return self.controlActividades.crearObservacion(idActividad, fechaCancelacion, detalle)
@@ -202,12 +211,12 @@ class MainController:
     def correoRegistrado(self, correo):
         return self.controlUsuario.correoRegistrado(correo)
 
-    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol, idSede):
-        return self.controlUsuario.modificarUsuario(idUsuario, correoElectronico, contrasenha, idRol, idSede)
+    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats):
+        return self.controlUsuario.modificarUsuario(idUsuario, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats)
     
     
-    def crearUsuario(self, correoElectronico, contrasenha, idRol):
-        return self.controlUsuario.crearUsuario(correoElectronico, contrasenha, idRol)
+    def crearUsuario(self, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats):
+        return self.controlUsuario.crearUsuario(correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats)
     
     def getUsuario(self, idUsuario):
         return self.controlUsuario.getUsuario(idUsuario)
@@ -218,8 +227,60 @@ class MainController:
     def getUsuarioRol(self, correo, contrasenha):
         return self.controlUsuario.getUsuarioRol(correo, contrasenha)
     
-    
-    
-    
+    def getUsuarioNombre(self,idUsuario):
+        return self.controlUsuario.getUsuarioNombre(idUsuario)
+    #funciones de las notificaciones
+    def deleteNotificacionUsuario(self, idNotificacion, idUsuario):
+        return self.controlUsuario.deleteNotificacionUsuario(idNotificacion, idUsuario)
 
+    def deleteNotificacionesUsuario(self, idUsuario):
+        return self.controlUsuario.deleteNotificacionesUsuario(idUsuario)
+
+    def cambiarLeida(self, idNotificacion, idUsuario):
+        return self.controlUsuario.cambiarLeida(idNotificacion, idUsuario)
+
+    def todasLeidas(self, idUsuario, leidas):
+        return self.controlUsuario.todasLeidas(idUsuario, leidas)
+        
+    def notificarActividades(self, fechaActual):
+        return self.controlActividades.notificarActividades(fechaActual)
     
+    def createNotificacion(self, idEmisor, fechaHora, contenido, tipoEmisor):
+        return self.controlUsuario.createNotificacion(idEmisor, fechaHora, contenido, tipoEmisor)
+    
+    
+    
+    
+    #---NUEVOS CAMBIOS---
+
+    #Admin Estudiantes NUEVOS CAMBIOS
+    def getFotoEstudiante(self,idEstudiante):
+        return self.controlEstudiante.getFotoEstudiante(idEstudiante)
+    
+    def registrarFotoEstudiante(self,carnet,bin):
+        self.controlEstudiante.registrarFotoEstudiante(carnet, bin)   
+
+    #Uso de chats 
+    def escribirMensaje(self, idChat,idAutor,fechaHora, contenido):
+        return self.controlProfesor.escribirMensaje(idChat,idAutor,fechaHora, contenido)
+    
+    def crearChat(self,nombre,miembros,idAutor):
+        return self.controlProfesor.crearChat(nombre,miembros,idAutor)
+    
+    def getIdUsuario(self, usuario):
+        return self.controlUsuario.getIdUsuario(usuario)
+    
+    def notificarCreacion(self, idNotificacion, chat):
+        return self.publisherChats.notificar(idNotificacion, chat)
+    
+    def getChats(self,idUsuario):
+        return self.controlUsuario.getChats(idUsuario)
+
+    def getMensajes(self,idChat):
+        return self.controlUsuario.getMensajes(idChat) 
+    
+    def generarMiembros(self, idChat):
+        return self.controlUsuario.generarMiembros(idChat) 
+    
+    def salirChat(self, idChat,idUsuario):
+        return self.controlUsuario.salirChat(idChat,idUsuario)

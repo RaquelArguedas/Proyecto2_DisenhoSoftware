@@ -14,16 +14,12 @@ import os
 from pathlib import Path
 from operator import attrgetter
 
-#from google.oauth2 import service_account
-#from googleapiclient.discovery import build
-#from googleapiclient.http import MediaFileUpload
-
 import sys
 #Anexo el Directorio en donde se encuentra la clase a llamar
 sys.path.append('./Modelo')
 
-#sys.path.append('./Modelo')
 #Importo la Clase
+from GeneralChatRoom import *
 from Usuario import *
 from Estudiante import * 
 from EquipoGuia import *
@@ -38,6 +34,9 @@ from Observacion import *
 from Comentario import *
 from Sede import *
 from Ordenamiento import *
+from Mensaje import *
+from GeneralChatRoom import *
+from Notificacion import *
 
 
 class SingletonMeta(type):
@@ -62,11 +61,6 @@ class SingletonDAO(metaclass=SingletonMeta):
     # Ruta al archivo JSON de las credenciales de Google Drive
     CREDENCIALES_JSON = 'C:/Users/Harrick Mc Lean M/Downloads/disehnosoftware-50f7c4a809ca.json'
 
-    # Crea una instancia del cliente de Google Drive
-    #credenciales = service_account.Credentials.from_service_account_file(CREDENCIALES_JSON)
-    #servicio_drive = build('drive', 'v3', credentials=credenciales)
-
-
     #Atributos para conetarse a MONGO
     MONGO_HOST="localhost"
     MONGO_PUERTO="27017"
@@ -79,6 +73,7 @@ class SingletonDAO(metaclass=SingletonMeta):
     collecAfiche = None 
     collecEvLista = None
     collecEvFoto= None
+    collectFtEst=None #Nuevo cambio 07.06
     #Atributos del modelo
     usuarios = []
     estudiantes = []
@@ -92,22 +87,27 @@ class SingletonDAO(metaclass=SingletonMeta):
     evidencias = []
     observaciones = []
     comentarios = []
+    mensajes = []
+    chats = [] 
+    mediator = GeneralChatRoom(1,[],"Sala General",1) #Nuevo cambio
 
     #Constructor que instancia los objetos necesarios del modelo
     def __init__(self):
+        self.notificaciones = self.setFromBD("SELECT * from ", "Notificacion")
         self.usuarios = self.setFromBD("SELECT * from ", "Usuario")
         self.estudiantes = self.setFromBD("SELECT * from ", "Estudiante")
         self.bitacoras = self.setFromBD("SELECT * from ", "Bitacora")
         self.profesores = self.setFromBD("SELECT * from ", "Profesor")
         self.equiposGuia = self.setFromBD("SELECT * from ", "EquipoGuia")
+        self.recordatorios = self.setFromBD("SELECT * from ", "Recordatorio")
         self.actividades = self.setFromBD("SELECT * from ", "Actividad")
         self.asistentes = self.setFromBD("SELECT * from ", "AsistenteAdministrativo")
         self.planesTrabajo = self.setFromBD("SELECT * from ", "PlanTrabajo")
-        self.recordatorios = self.setFromBD("SELECT * from ", "Recordatorio")
         self.evidencias = self.setFromBD("SELECT * from ", "Evidencia")
         self.observaciones = self.setFromBD("SELECT * from ", "Observacion")
         self.comentarios = self.setFromBD("SELECT * from ", "Comentario")
-    
+        self.mensajes = self.setFromBD("SELECT * from ", "Mensaje")
+        self.chats = self.setFromBD("SELECT * from ", "Chat")
     #Auxiliar del constructor 
     def setFromBD(self, command, tablaBD):
         self.connectServer()
@@ -116,7 +116,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.cursor.execute(command + tablaBD)
 
             salida = self.cursor.fetchall()
-
+            
             lista = []
             objeto = []
             for row in salida:
@@ -137,13 +137,13 @@ class SingletonDAO(metaclass=SingletonMeta):
         objeto = None
         
         if (tablaBD == "Usuario"):
-            objeto = Usuario(lista[0], lista[1], lista[2], lista[3], lista[4])
+            objeto = Usuario(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], self.getNotificaciones(lista[0]))
         elif (tablaBD == "Estudiante"):
             objeto = Estudiante(lista[0], lista[1], lista[2], lista[3], lista[4], lista[5], lista[6], lista[7])
         elif (tablaBD == "EquipoGuia"):
             objeto = EquipoGuia(lista[1], self.generarBitacorasEquipoGuia(lista[0]), self.generarProfesores(str(lista[0])), lista[2])
-        elif (tablaBD == "Actividad"):    
-            objeto = Actividad.Actividad(lista[0], lista[1],lista[2], lista[3], lista[4],lista[5], lista[6],self.generarResposables(lista[0]), lista[7], lista[8],lista[9], lista[10],self.generarBitacorasActividades(lista[0]))
+        elif (tablaBD == "Actividad"):
+            objeto = Actividad.Actividad(lista[0], lista[1],lista[2], lista[3], lista[4],lista[5], self.generarResposables(lista[0]), self.generarRecordatorios(lista[0]), lista[6], lista[7], lista[8],lista[9], self.generarBitacorasActividades(lista[0]))
         elif (tablaBD == "Profesor"):
             objeto = Profesor(self.generarCodigoProfesor(lista[5],lista[0]), lista[0],lista[1],lista[2],lista[3], lista[4], lista[5], lista[6],lista[7], lista[8], lista[9], lista[10])
         elif (tablaBD == "AsistenteAdministrativo"):
@@ -153,15 +153,50 @@ class SingletonDAO(metaclass=SingletonMeta):
         elif (tablaBD == "PlanTrabajo"):
             objeto = PlanTrabajo(lista[0], lista[1], self.obtenerActividadesPlan(lista[0]))
         elif (tablaBD == "Recordatorio"):
-            objeto = Recordatorio(lista[0], lista[1])
+            objeto = Recordatorio(lista[1], lista[2])
         elif (tablaBD == "Evidencia"):
             objeto = Evidencia(lista[1], lista[2])
         elif (tablaBD == "Observacion"):
             objeto = Observacion(lista[0], lista[1], lista[2])
         elif (tablaBD == "Comentario"):
             objeto = Comentario(lista[1], lista[2], lista[3], lista[4], lista[5], lista[0])
+        elif (tablaBD == "Mensaje"):
+            objeto = Mensaje(lista[0],lista[1],lista[2],lista[3],lista[4])
+        elif (tablaBD == "Chat"):
+            objeto = GeneralChatRoom(lista[0],self.generarMiembros(lista[0]),lista[1],lista[2])#nuevo cambio
+        elif (tablaBD == "Notificacion"):
+            objeto = Notificacion(lista[0], lista[1], lista[2], lista[3], lista[4], None)
 
         return objeto
+
+    def getNotificaciones(self, idUsuario):
+        self.connectServer()
+
+        try:
+            self.cursor.execute("select * from NotificacionXUsuario where idUsuario = " + str(idUsuario))
+
+            salida = self.cursor.fetchall()
+
+            lista = []
+            for row in salida:
+                lista += [self.getNotificacion(row[1], idUsuario)]
+            return lista
+            
+            
+        except Exception as ex:
+            print(ex)
+
+        self.closeConnection()
+        
+    def getNotificacion(self, idNotificacion, idUsuario):
+        for noti in self.notificaciones:
+            if(int(noti.idNotificacion) == int(idNotificacion)):
+                #devuelve una nueva instancia para cada notificacion del usuario
+                return Notificacion(noti.idNotificacion, noti.emisor, noti.fechaHora, noti.contenido, noti.tipoEmisor, self.getLeida(idNotificacion, idUsuario))
+
+    def getLeida(self, idNotificacion, idUsuario):
+        res = self.executeStoredProcedure('getLeida', [idNotificacion, idUsuario])
+        return bool(res[0])
 
     def generarProfesores(self, idEquipoGuia):
         self.connectServer()
@@ -212,6 +247,13 @@ class SingletonDAO(metaclass=SingletonMeta):
             print(ex)
 
         self.closeConnection()
+
+    def generarRecordatorios(self, idActividad):
+        lista = []
+        for recordatorio in self.recordatorios:
+            if (recordatorio.idActividad == idActividad):
+                lista += [recordatorio]
+        return lista
 
     def obtenerActividadesPlan(self, idPlan):
         self.connectServer()
@@ -287,7 +329,7 @@ class SingletonDAO(metaclass=SingletonMeta):
                 host = '127.0.0.1',
                 port = 3306,
                 user = 'root',
-                password = 'Michelle.18',
+                password = 'abd00123',
                 db = 'orientatec'
             )
             if self.connection.is_connected():
@@ -447,15 +489,15 @@ class SingletonDAO(metaclass=SingletonMeta):
         ultimaModificacion = date.today()
         
         args = [idActividad, nombreActividad, tipoActividad, fechaActividad, horaInicio,
-                horaFin, recordatorio, medio, enlace, estado, ultimaModificacion]
-        print(args)
+                horaFin, medio, enlace, estado, ultimaModificacion]
+        #print(args)
 
         #se modifica en la bd
         respuesta = self.executeStoredProcedure('updateActividad', args)
-        print(idActividad, type(idActividad))
+        #print(idActividad, type(idActividad))
         #Si no hubo errores dentro de la BD, realiza las modificaciones correspondientes
         if (respuesta == None):
-            print("entr a res")
+            #print("entr a res")
             #se modifica en lista
             for i in range(len(self.actividades)):
                 if (self.actividades[i].idActividad == idActividad):
@@ -470,19 +512,39 @@ class SingletonDAO(metaclass=SingletonMeta):
                     if (horaFin != None):
                         self.actividades[i].horaFin = horaFin
                     if (recordatorio != None):
-                        self.actividades[i].recordatorio = recordatorio
+                        listaRecordatorios = []
+                        for fecha in recordatorio:
+                            listaRecordatorios.append(Recordatorio(idActividad, fecha))
+                        self.updateRecordatorios(idActividad, listaRecordatorios) #actualiza la lista de recordatorios y la bd
+                        self.actividades[i].recordatorios = listaRecordatorios #actualiza el objeto
                     if (medio != None):
                         self.actividades[i].medio = medio
                     if (enlace != None):
                         self.actividades[i].enlace = enlace
                     if (estado != None):
                         self.actividades[i].estado = estado
-                        print("estado modificado", estado)
+                        #print("estado modificado", estado)
                     if (ultimaModificacion != None):
                         self.actividades[i].ultimaModificacion = ultimaModificacion
                 
         return respuesta
     
+    def updateRecordatorios(self, idActividad, recordatorios):
+        #eliminar todos los recordatorios con ese idActividad
+        self.executeStoredProcedure('deleteRecordatorioActividad', [int(idActividad)])
+        #Crear los recordatorios
+        for rec in recordatorios:
+            print("cree")
+            self.executeStoredProcedure('createRecordatorio', [int(idActividad), rec.fecha])
+        #actualizar la lista
+        for rec in self.recordatorios:
+            if rec.idActividad == idActividad:
+                print("quite")
+                self.recordatorios.remove(rec)
+        self.recordatorios += recordatorios
+
+        
+
     def agregarResponsablesActividad(self, idActividad, responsablesNuevos):
         actividad = None
         #se obtiene la actividad
@@ -495,6 +557,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.executeStoredProcedure("createResponsableXActividad", [int(responsable['id']), int(idActividad)])
 
             #agregar a la actividad el responsable
+            print("DESDE AGREGAR RESPONSABLE", actividad.nombreActividad, actividad.responsables, type(actividad.responsables))
             actividad.agregarResponsable(self.getProfesor(int(responsable['id'])))
 
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
@@ -591,7 +654,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         ultimaModificacion = date.today()
 
         args = [nombreActividad, tipoActividad, fechaActividad,
-                horaInicio, horaFin, recordatorio, medio,  
+                horaInicio, horaFin, medio,  
                 enlace, estado, ultimaModificacion]
 
         #se agrega a la bd
@@ -600,8 +663,15 @@ class SingletonDAO(metaclass=SingletonMeta):
         if(len(id)==1):
             print("entro a crearla")
             #se obtiene el id y se le agrega
+
+            listaRecordatorios = []
+            for fecha in recordatorio:
+                listaRecordatorios.append(Recordatorio(id[0], fecha))
+
+            print(listaRecordatorios)
+
             salida = Actividad.Actividad(id[0], nombreActividad, tipoActividad, fechaActividad.date(),
-                    horaInicio.time(), horaFin.time(), recordatorio, [], medio,  
+                    horaInicio.time(), horaFin.time(),  [], listaRecordatorios, medio,  
                     enlace, estado, ultimaModificacion, [])
 
             #se agrega a la lista de Actividades
@@ -612,6 +682,8 @@ class SingletonDAO(metaclass=SingletonMeta):
 
             print("responsables: ", responsables)
             self.agregarResponsablesActividad(id[0], responsables)
+            print("recordatorios: ", recordatorio)
+            self.updateRecordatorios(id[0], listaRecordatorios)
         
         return id
 
@@ -638,7 +710,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         rol = 1
         if (autoridad == 1) :
             rol = 2
-        self.crearUsuario(correoElectronico, str(con), rol, sede)
+        self.crearUsuario(correoElectronico, str(con), rol, sede, True, True)
         
         return id
 
@@ -788,7 +860,6 @@ class SingletonDAO(metaclass=SingletonMeta):
     def buscarEstudiante(self, carnet):
         for estudiante in self.estudiantes:
             if (int(carnet) == estudiante.carnet):
-                print("llegue")
                 return estudiante
         return None
 
@@ -797,7 +868,7 @@ class SingletonDAO(metaclass=SingletonMeta):
         
         args = [carnet, nombre, apellido1, apellido2, sede,  numeroCelular,
                 correoElectronico, estado]
-        
+
         #se modifica en la bd
         respuesta = self.executeStoredProcedure('updateEstudiante', args)
 
@@ -825,9 +896,9 @@ class SingletonDAO(metaclass=SingletonMeta):
         return respuesta
 
     #modificarUsuario(data):id
-    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol, idSede):
+    def modificarUsuario(self, idUsuario, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats):
         
-        args = [idUsuario, correoElectronico, contrasenha, idRol, idSede]
+        args = [idUsuario, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats]
         
         #se modifica en la bd
         respuesta = self.executeStoredProcedure('updateUsuario', args)
@@ -846,17 +917,21 @@ class SingletonDAO(metaclass=SingletonMeta):
                         self.usuarios[i].idRol = idRol
                     if (idSede != None):
                         self.usuarios[i].idSede = idSede
+                    if (permiteNotis != None):
+                        self.usuarios[i].permiteNotis = permiteNotis
+                    if (permiteChats != None):
+                        self.usuarios[i].permiteChats = permiteChats
         return respuesta
 
     #+crearUsuario(data):id
-    def crearUsuario(self, correoElectronico, contrasenha, idRol, idSede):
-        args = [correoElectronico, contrasenha, idRol, idSede]
+    def crearUsuario(self, correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats):
+        args = [correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats]
 
         #se agrega a la bd
         id = self.executeStoredProcedure('createUsuario', args)
         
         if(len(id)==1):
-            salida = Usuario(id[0], correoElectronico, contrasenha, idRol, idSede)
+            salida = Usuario(id[0], correoElectronico, contrasenha, idRol, idSede, permiteNotis, permiteChats)
 
             #se agrega a la lista de Actividades
             self.usuarios += [salida]
@@ -868,18 +943,105 @@ class SingletonDAO(metaclass=SingletonMeta):
         for user in self.usuarios:
             if(user.idUsuario == idUsuario):
                 return user
-
+            
+    def getUsuarioNombre(self, idUsuario):
+        listaPersonas = self.profesores + self.asistentes + self.estudiantes
+        user = self.getUsuario(idUsuario)
+        for p in listaPersonas:
+            if (user.correo == p.correoElectronico):
+                return p.nombre+' '+p.apellido1+' '+p.apellido2
+    
     #getUsuarios():Collection<Usuario>
     def getUsuarios(self):
-        print('DAO, Usuarios: ', self.usuarios)
         return self.usuarios
     
     def modificarUsuarioCorreo(self, correoAnterior, correoNuevo):        
         for user in self.usuarios:
             if (user.correo == correoAnterior):
-                self.modificarUsuario(user.idUsuario, correoNuevo, None, None, None)
+                self.modificarUsuario(user.idUsuario, correoNuevo, None, None, None, None, None)
 
 
+    #Notificaciones
+    #eliminar notificacion
+    def deleteNotificacionUsuario(self, idNotificacion, idUsuario):
+        id = self.executeStoredProcedure('deleteNotificacionUsuario', [idNotificacion, idUsuario])
+        for usuario in self.usuarios:
+                if (usuario.idUsuario == int(idUsuario)):
+                    for noti in usuario.notificaciones:
+                        if (noti.idNotificacion == int(idNotificacion)):
+                            usuario.notificaciones.remove(noti)
+                            break      
+        return id
+    
+    #eliminar notificaciones de un usuario
+    def deleteNotificacionesUsuario(self, idUsuario):
+        id = self.executeStoredProcedure('deleteNotificacionesUsuario', [idUsuario])
+        for usuario in self.usuarios:
+                if (usuario.idUsuario == int(idUsuario)):
+                    usuario.notificaciones = []
+        return id
+    
+    #marcar como leída o no. Si esta leida la marca como no, y si no esta leida la marca como leida
+    #ES PARA UNA NOTIFICAION
+    def cambiarLeida(self, idNotificacion, idUsuario):
+        #cambia el estado en la BD
+        id = self.executeStoredProcedure('toggleLeida', [idNotificacion, idUsuario])
+        if (len(id)==1):
+            #cambia el atributo en el objeto de la lista de notificaciones del usuario correspondiente
+            for usuario in self.usuarios:
+                if (usuario.idUsuario == int(idUsuario)):
+                    for noti in usuario.notificaciones:
+                        if (noti.idNotificacion == int(idNotificacion)):
+                            noti.invertirLeida()
+                            break
+
+        return id
+
+    def todasLeidas(self, idUsuario, leidas):
+        #cambia el estado en la BD
+        id = self.executeStoredProcedure('setleidasUsuario', [idUsuario, leidas])   
+        if (len(id)==1):
+            #cambia el atributo en el objeto de la lista de notificaciones del usuario correspondiente
+            for usuario in self.usuarios:
+                if (usuario.idUsuario == idUsuario):
+                    for noti in usuario.notificaciones:
+                        noti.leida = leidas
+
+        return id
+            
+    #crear notificacion
+    #createNotificacion`(in _emisor int, in _fechaHora datetime, in _contenido varchar(50))
+    def createNotificacion(self, idEmisor, fechaHora, contenido, tipoEmisor):
+        #se crea en la bd
+        id = self.executeStoredProcedure('createNotificacion', [int(idEmisor), fechaHora, contenido, tipoEmisor])
+        #si se consigue crear se agrega a la lista de notificaciones del dao
+        print("CREATENOTIFICACION ID:",  id)
+        if (len(id)==1):
+            salida = Notificacion(id[0], int(idEmisor), fechaHora, contenido, tipoEmisor, None)
+
+            self.notificaciones += [salida]
+
+        return id #devuelve el id de la notificacion o el error
+
+    #enviar notificacion a usuariosS
+    def notificacionUsuarios(self, idNotificacion, idUsuario):
+        #genera el campo idNotificacionXUsuario, siempre tiene como leida false
+        id = self.executeStoredProcedure('createNotificacionXUsuario', [int(idNotificacion), int(idUsuario), False])   
+
+        #le ingresa la notificacion al usuario correspondiente
+        notificacion = None
+        if (len(id) == 1):
+            for noti in self.notificaciones:
+                if (noti.idNotificacion == int(idNotificacion)):
+                    notificacion = noti
+
+            for user in self.usuarios:
+                if(user.idUsuario == int(idUsuario)):
+                    print("se inserto la noti ", notificacion.idNotificacion)
+                    user.notificaciones += [Notificacion(notificacion.idNotificacion, notificacion.emisor, notificacion.fechaHora, notificacion.contenido, notificacion.tipoEmisor, False)]
+
+        return id
+    
     #ejecuta un procedimiento almacenado y devuelve una lista con resultados
     def executeStoredProcedure(self, storedProcName, args):
         self.connectServer()
@@ -907,6 +1069,7 @@ class SingletonDAO(metaclass=SingletonMeta):
             self.collecEvLista = self.MONGO_BASEDATOS["EvListaAsistencia"]
             self.collecEvFoto= self.MONGO_BASEDATOS["EvFotosParticipantes"]
             self.collecFtAs= self.MONGO_BASEDATOS["FotosAsistentes"]
+            self.collecFtEst= self.MONGO_BASEDATOS["FotosEstudiantes"] #Nuevo cambio 07.06
             print("Conexion a Mongo exitosa.")
         except Exception as ex:
             print(ex)
@@ -1153,3 +1316,164 @@ class SingletonDAO(metaclass=SingletonMeta):
         for prof in self.profesores:
             if(prof.cedula == cedula):
                 return prof
+            
+    #-----NUEVAS FUNCIONALIDADES---------------#
+    #+getIdUsuario(codigo/Carnet):idUsuario
+    def getIdUsuario(self, identificacion):
+        correoPersona = ''
+        if isinstance(identificacion, str):
+            print("Buscando profesor")
+            for p in self.profesores:
+                if(identificacion == p.codigo):
+                    correoPersona = p.correoElectronico
+        elif isinstance(identificacion, int):
+            print("Buscando estudiante")
+            for e in self.estudiantes:
+                if(identificacion == e.carnet):
+                    correoPersona = e.correoElectronico 
+        if (correoPersona == ''):
+            print ("Error no se encuentra")
+            return -1
+        else:           
+            for user in self.usuarios:
+                if(user.correo == correoPersona):
+                    return user.idUsuario
+
+    def getFotoEstudiante(self,idBuscado):
+        try:
+            self.connectMongoServer()
+            #revisar que el est exista
+            cantRegistros = self.collecFtEst.count_documents({'idEstudiante':idBuscado})
+            if cantRegistros > 0 :                
+                document = self.collecFtEst.find_one({'idEstudiante': idBuscado})
+                self.closeMongoConnection()
+                return document['foto']
+            else:
+                print("El registro que intenta obtener NO existe.")
+                return None
+        except Exception as ex:
+            print(ex)
+
+    def registrarFotoEstudiante(self,idEstudiante,image):
+        try:
+            self.connectMongoServer()
+            #revisar que no exista el registro 
+            cantRegistros = self.collecFtEst.count_documents({'idEstudiante':idEstudiante})
+            print(cantRegistros)
+            if(cantRegistros > 0): #si ya existe lo actualiza
+                self.collecFtEst.update_one({'idEstudiante':idEstudiante},{'$set':{'foto':image.read()}})
+                print("Se ha actualizado la foto exitosamente. ")
+            else:
+                self.collecFtEst.insert_one({'idEstudiante':idEstudiante, 'foto': image.read()})
+                print("Se ha insertado la foto exitosamente.")
+            self.closeMongoConnection()
+        except Exception as ex:
+            print(ex)
+
+    #Crear un nuevo mensaje 
+    # +crearMensaje(Mensaje):void
+    def escribirMensaje(self, idChat,idAutor,fechaHora, contenido):
+        respuesta = self.mediator.enviarMensaje(contenido,fechaHora,idAutor)
+        if respuesta:
+            #print('guardando mensaje en database')
+            args = [idChat,idAutor,fechaHora,contenido]
+            #se agrega a la bd
+            id = self.executeStoredProcedure('agregarMensaje', args)
+            #print('Resultado mysql:')
+            #print(id)
+            if(len(id)==1):              
+                salida = Mensaje(int(id[0]),idChat,fechaHora,
+               contenido,idAutor)
+                #se agrega a la lista de Mensajes
+                self.mensajes += [salida]
+            
+            return id
+        else: 
+            print("Error al enviar el mensaje")
+            return -1
+        
+    #crearChat(nombre:String, idAutor:int)
+    def crearChat(self,nombre,miembros,idAutor):
+        respuesta = self.mediator.crearChat(nombre,miembros,idAutor)
+        if respuesta:
+            miembrosParsed = [idAutor]
+            args = [idAutor,nombre]
+            #se agrega a la bd
+            id = self.executeStoredProcedure('crearChat', args)
+            if(len(id)==1): 
+                #Si se logra crear el chat, se comienza a agregar cada usuario
+                #Agregar el usuario creador del chat
+                self.executeStoredProcedure('createusuariosxchat', [idAutor,id[0]])
+                miembrosParsed.append(idAutor)
+                for identificacion in miembros:
+                    idUser = self.getIdUsuario(identificacion)
+                    if(idUser!=-1 and idUser != idAutor): #no hubo errores y para evitar que se duplique él mismo
+                        miembrosParsed.append(idUser)
+                        id2 = self.executeStoredProcedure('createusuariosxchat', [idUser,id[0]])
+                        #print("Agregando miembros", id2)
+                    else:
+                        print("Error al crear miembro")
+                salida = GeneralChatRoom(int(id[0]),miembrosParsed,nombre,idAutor)
+                #se agrega a la lista de Chats
+                self.chats += [salida]
+            
+            return id[0]
+        else: 
+            print("Error al crear el chat")
+            return -1
+            
+    def generarMiembros(self, idChat):
+        self.connectServer()
+        try:
+            self.cursor.execute("select usuario.idUsuario from UsuariosxChat inner join usuario on usuario.idUsuario = UsuariosxChat.idUsuario where idChat = " + str(idChat))
+
+            salida = self.cursor.fetchall()
+
+            lista = []
+            for row in salida:
+                lista += [self.getUsuario(row[0])]
+            return lista
+        except Exception as ex:
+            print(ex)
+        self.closeConnection()
+
+    #Obtener todos los chats a los que pertence un usuario
+    #return idChat y nombreChat
+    def getChats(self,idUsuario):
+        self.connectServer()
+        try:
+            self.cursor.execute("select UsuariosxChat.idChat,Chat.nombre from UsuariosxChat inner join usuario on usuario.idUsuario = UsuariosxChat.idUsuario inner join chat on chat.idChat = UsuariosxChat.idChat where Usuario.idUsuario =" + str(idUsuario))
+            salida = self.cursor.fetchall()
+            lista = []
+            for row in salida:
+                lista.append([row[0],row[1]]) 
+            return lista
+        except Exception as ex:
+            print(ex)
+        self.closeConnection()
+        
+    #Obtener todos los mensajes de un chat específico
+    def getMensajes(self,idChat):
+        listaSalida = []
+        for mensaje in self.mensajes:
+            if(int(mensaje.idChatRoom) == int(idChat)):
+                listaSalida.append(mensaje)
+        print('lista mensajes SINGLETON_')
+        print(listaSalida)
+        return listaSalida
+            
+    def salirChat(self, idChat,idUsuario):
+        #eliminarlo de la base de datos usuariosxchat
+        chatBuscado = None
+        #se obtiene el chat
+        for chat in self.chats:
+            if (chat.id == idChat):
+                chatBuscado = chat
+
+        #quitar en tabla usuariosxcgat
+        self.executeStoredProcedure("deleteUsuariosxChat", [idChat,idUsuario])
+
+        #quita a la actividad el responsable
+        chatBuscado.quitarMiembro(self.getUsuario(idUsuario))
+
+            

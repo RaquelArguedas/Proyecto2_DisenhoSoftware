@@ -1,4 +1,5 @@
 /* Estilos para el input de búsqueda */
+
 .form-control {
     width: 100%;
     padding: 0.5rem;
@@ -6,28 +7,28 @@
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-  
-  /* Estilos para la tabla */
+
+  /*Estilos para la tabla */
   .table {
     width: 100%;
     border-collapse: collapse;
   }
-  
+
   .table th,
   .table td {
     padding: 0.5rem;
     border: 1px solid #ccc;
   }
-  
+
   .table th {
     font-weight: bold;
     background-color: #f2f2f2;
   }
-  
+
   .table tr:hover {
     background-color: #f9f9f9;
   }
-  
+
 
 /* Estilos para el checkbox */
 .form-check {

@@ -9,12 +9,13 @@ import { VerActividades } from "./Components/menuAsistentes/AsistenteOpciones/ve
 import { DetalleActividad } from "./Components/menuAsistentes/AsistenteOpciones/verActividades/DetalleActividad";
 import { ConsultarEstudiantes } from "./Components/menuAsistentes/AsistenteOpciones/ConsultarEstudiantes";
 import { ConsultarProfesores } from "./Components/menuAsistentes/AsistenteOpciones/ConsultarProfesores";
-import  { ConsultarEquipo } from "./Components/menuAsistentes/AsistenteOpciones/ConsultarEquipo"
+import { ConsultarEquipo } from "./Components/menuAsistentes/AsistenteOpciones/ConsultarEquipo"
 import { AsignarCoordinador } from "./Components/menuAsistentes/AsistenteOpciones/AsignarCoordinador";
 import { DarBajaProfesor } from "./Components/menuAsistentes/AsistenteOpciones/DarBajaProfesor";
 import { AgregarProfesor } from "./Components/menuAsistentes/AsistenteOpciones/AgregarProfesor";
 import { ModificarProfesor} from "./Components/menuAsistentes/AsistenteOpciones/ModificarProfesor";
 import { Configuracion } from "./Components/navegacion/Configuracion";
+import { Avisos } from "./Components/navegacion/Avisos";
 import { MenuProfesor } from "./Components/menuProfesor/MenuProfesor";
 import { ConsultarEstudiantesP } from "./Components/menuProfesor/ProfesorOpciones/ConsultarEstudiantesP";
 import { ModificarEstudiante } from "./Components/menuProfesor/ProfesorOpciones/ModificarEstudiante";
@@ -49,7 +50,9 @@ export function App() {
                 <Route exact path="/darbajaprofesor" element={<DarBajaProfesor/>}/>
                 <Route exact path="/agregarprofesor" element={<AgregarProfesor/>}/>
                 <Route exact path="/modificarProfesor" element={<ModificarProfesor/>}/>
+
                 <Route exact path="/configuracionAsistente" element={<Configuracion/>}/>
+                <Route exact path="/avisos" element={<Avisos/>}/>
 
                 <Route exact path = "/menuProfesor" element = {<MenuProfesor/>}/>
                 <Route exact path = "/consultarestudiantesp" element = {<ConsultarEstudiantesP/>}/>

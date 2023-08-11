@@ -16,10 +16,10 @@ export  function ConfiguracionEstudiante() {
     const [id, setId] = useState('');
     const [numeroTelefono, setNumeroTelefono] = useState('');
     const [correo, setCorreo] = useState('');
+    const [sede, setSede]=useState('');
+    const [estado, setEstado]=useState('');
     const [image, setImage] = useState(null);
     const [imagenData, setImagenData] = useState(null);
-    const [sede, setSede]=useState('')
-    const [estado, setEstado]=useState('')
 
     function isBase64Valid(base64String) {
         const regex = /^[A-Za-z0-9+/=]+$/;
@@ -28,12 +28,16 @@ export  function ConfiguracionEstudiante() {
         return isLengthValid && isValidCharacters;
       }
 
-    const obtenerImagen = async (codigo) => {
-        //Obetener imagen de estudiante
-      };
-
-    const obtenerImagenAsistente = async (id) => {
-        //Obtener Imagen estudiante
+    const obtenerImagen = async (carnet) => {
+        //Obtener imagen de estudiante
+        try {
+            const response = await axios.get(`${API}/getFotoEstudiante/${carnet}`); 
+            const imageBase64 = response.data;
+            console.log(isBase64Valid(imageBase64));
+            setImagenData(imageBase64);
+          } catch (error) {
+            console.error('Error al obtener la imagen:');
+        }
       };
 
     useEffect(() => {
@@ -55,34 +59,38 @@ export  function ConfiguracionEstudiante() {
             formData.append('numeroTelefono', numeroTelefono);
             formData.append('correo', correo);
             formData.append('estado', estado);   
-                
-            
-            await fetch(`${API}//modificarEstudiante`, {
+            console.log(image)    
+            console.log(carnet)
+            await fetch(`${API}/modificarEstudianteFront`, {
                 method: 'POST',
-                body: formData
+                body:formData
+                //headers: {
+                //  'Content-Type': 'application/json',
+                //},
+                //body: JSON.stringify(formData),
             });
              
             alert("Se ha modificado la información correctamente")
-            }
-
         }
+
+    }
         
     const handleSearch = async () => {
         //Buscar los datos del estudiante actual y mostar la informacion
+        const res = await fetch(`${API}/getInfoUsuarioSesionActual`); 
+        const data = await res.json();//resultado de la consulta
+        console.log(data) // imprime en consola web 
 
-        
-        setName('Camilo')
-        setCarnet(202102234)
-        setApellido1('Perez')
-        setApellido2('Camacho')
-        setSede(1)
-        setNumeroTelefono(87236123)
-        setCorreo('camilo@estudiante.cr')
-        setEstado(1)
-        
-
-
-       
+        setName(data['nombre'])
+        setApellido1(data['apellido1'])
+        setApellido2(data['apellido2'])
+        setSede(data['sede'])
+        setNumeroTelefono(data['numeroCelular'])
+        setCorreo(data['correoElectronico'])
+        setEstado(data['estado'])
+        obtenerImagen(data['carnet']);
+        setCarnet(data['carnet']);
+   
     };
     
     const handleNameChange = (event) => {
@@ -120,7 +128,7 @@ export  function ConfiguracionEstudiante() {
                     <div class="col-lg m-3 p-3 bg-light">
                         <h4>Datos Personales</h4>
                         <div>
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit} encType="multipart/form-data"> 
                                 <div class="mb-3">
                                     <div class="mb-3">
                                         <label htmlFor="labelDisableControl" class="form-label"></label>
@@ -160,7 +168,7 @@ export  function ConfiguracionEstudiante() {
                                                 placeholder="Ingrese su correo" value={correo} onChange={handleCorreoChange}
                                                 disabled/>
                                     <div className="mb-3">
-                                        <label htmlFor="formGroupInputCodigo" className="form-label">
+                                        <label htmlFor="formGroupInputCarnet" className="form-label">
                                         Foto
                                         {imagenData && <img src={`data:image/jpeg;base64,${imagenData}`} style={{ width: '300px', height: 'auto' }}/>}
                                         </label>

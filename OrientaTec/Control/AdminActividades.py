@@ -1,8 +1,11 @@
 from SingletonDAO import *
+from PublisherActividades import * #servicio del publicador
+
 class AdminActividades:
     #Constructor
     def __init__(self):
         self.dao = SingletonDAO()
+        self.publicador = PublisherActividades()
 
     #Metodos
     #Devuelve una Actividad
@@ -61,6 +64,9 @@ class AdminActividades:
         lista += [self.dao.verEvidenciasActividad(idActividad)]
         return lista
             
+    def getPublicador(self):
+        return self.publicador #getPublicador para suscribir o desuscribir, si es que aplica aquí
+
     def escribirComentario(self, idActividad,autor,fechaHora, contenido, idComentarioPadre):
         return self.dao.crearComentario(idActividad,autor,fechaHora, contenido, idComentarioPadre)
 
@@ -76,9 +82,32 @@ class AdminActividades:
     def quitarResponsablesActividad(self, idActividad, responsablesEliminados):
         return self.dao.quitarResponsablesActividad(idActividad, responsablesEliminados)
     
-    #Crear Observación - Parche de Alonso
+    #Crear Observación
     def crearObservacion(self, idActividad, fechaCancelacion, detalle):
+        id = self.dao.createNotificacion(idActividad, fechaCancelacion, "Se ha cancelado una actividad")
+        self.publicador.notificar(id[0])
         return self.dao.crearObservacion(idActividad, fechaCancelacion, detalle)
             
     def bitacoraActividad(self, idActividad, fecha, hora, idAutor, descripcion):
         return self.dao.bitacoraActividad(idActividad, fecha, hora, idAutor, descripcion)
+    
+    #                               fechaActual debe de ser de tipo date
+    def notificarActividades(self, fechaActual):
+        for actividad in self.dao.actividades:
+            # Verificar si la lista de recordatorios no está vacía
+            if actividad.recordatorios:
+                # Verifica si debe actualizar
+                # Si alguna actividad ya debe ser notificada lo realiza, 
+                # si no se fija las actividades notificadas que salgan como planeadas
+                print("ACTIVIDAD ", actividad.__dict__)
+                for recordatorio in actividad.recordatorios:
+                    if recordatorio.fecha <= fechaActual:
+                        if actividad.estado==1:
+                            # se debe llamar a notificar a todos los subs
+                            self.cambiarEstado(actividad.idActividad,2)
+                        id = self.dao.createNotificacion(actividad.idActividad, recordatorio.fecha, "Le recordamos sobre la actividad.", 1)
+                        self.publicador.notificar(id[0])
+                    else:
+                        #print(actividad.idActividad, "entre al else", actividad.estado)
+                        if actividad.estado == 2:
+                            self.cambiarEstado(actividad.idActividad, 1)

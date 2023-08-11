@@ -10,60 +10,60 @@ insert into EstadoActividad(descripcion) values ("REALIZADA");
 insert into EstadoActividad(descripcion) values ("CANCELADA");
 
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
-			 values ("Juegos1", 5, "2023-09-09", "13:00", "15:00", 
-						3, 2, "link", 1,"2023-05-09");
+						medio, enlace, estado, ultimaModificacion)
+			 values ("Juegos1", 5, "2023-06-29", "13:00", "15:00", 
+					 2, "link", 1,"2023-05-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
-			 values ("Juegos2", 5, "2023-09-08", "11:00", "13:00", 
-						3, 2, "link", 1, "2023-05-08");
+						medio, enlace, estado, ultimaModificacion)
+			 values ("Juegos2", 5, "2023-06-28", "11:00", "13:00", 
+						2, "link", 1, "2023-05-08");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Charla Autoestima", 2, "2023-09-07", "09:00", "11:00", 
-						3, 2, "link", 1, "2023-05-07");
+					2, "link", 1, "2023-05-07");
 
 
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Moderar tu tiempo", 1, "2023-07-03", "13:00", "15:00", 
-						3, 2, "link", 1,"2023-05-03");
+					2, "link", 1,"2023-05-03");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Tips de APA", 3, "2023-07-03", "11:00", "13:00", 
-						3, 2, "link", 1, "2023-5-09");
+					2, "link", 1, "2023-5-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Deseas cambiar de carrera", 2, "2023-07-01", "09:00", "11:00", 
-						3, 2, "link", 1, "2023-5-09");
+						2, "link", 1, "2023-5-09");
                         
                         
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						 medio, enlace, estado, ultimaModificacion)
 			 values ("Recursos del TEC", 1, "2023-05-09", "13:00", "15:00", 
-						3, 2, "link", 1,"2023-05-09");
+						2, "link", 1,"2023-05-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Charla Becas Estudiantiles", 1, "2023-05-08", "11:00", "13:00", 
-						3, 2, "link", 3, "2023-10-09");
+						2, "link", 3, "2023-10-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Si se puede", 2, "2023-05-01", "09:00", "11:00", 
-						3, 2, "link", 1, "2023-10-09");
+						2, "link", 1, "2023-10-09");
     
     
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Moderar tu tiempo", 1, "2023-04-09", "13:00", "15:00", 
-						3, 2, "link", 1,"2023-10-09");
+						2, "link", 1,"2023-10-09");
                         
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+						medio, enlace, estado, ultimaModificacion)
 			 values ("Block Chain", 4, "2023-10-08", "11:00", "13:00", 
-						3, 2, "link", 1, "2023-10-09");
+						2, "link", 1, "2023-10-09");
 insert into Actividad(nombreActividad, tipoActividad, fechaActividad, horaInicio, horaFin, 
-						recordatorio, medio, enlace, estado, ultimaModificacion)
+					medio, enlace, estado, ultimaModificacion)
 			 values ("Charla web", 4, "2023-10-01", "09:00", "11:00", 
-						3, 2, "link", 1, "2023-10-09");
+						2, "link", 1, "2023-10-09");
 
 insert into Rol(descripcion) values("PROFESOR");
 insert into Rol(descripcion) values("PROFESOR_COORDINADOR");
@@ -98,18 +98,18 @@ insert into Sede(descripcion) values ("SC");
 insert into Sede(descripcion) values ("AL");
 insert into Sede(descripcion) values ("LI");
 
-INSERT INTO usuario (correo, contrasenha, idRol, idSede) VALUES
-('jorge.gonzalez@hotmail.com', 12345678, 2, 3),
-('lucia.lopez@yahoo.com', 23456789, 1, 4),
-('daniel.perez@outlook.com', 34567890, 2, 5),
-('isabel.rodriguez@gmail.com', 45678901, 1, 1),
-('luis.garcia@hotmail.com', 56789012, 2, 2),
-('marta.sanchez@yahoo.com', 67890123, 1, 3),
-('alejandro.fernandez@outlook.com', 78901234, 2, 4),
-('sara.gomez@gmail.com', 89012345, 1, 5),
-('juan.martinez@hotmail.com', 90123456, 2, 1),
-('carmen.lopez@yahoo.com', 01234567, 1, 2);
-
+INSERT INTO usuario (correo, contrasenha, idRol, idSede, permiteNotis, permiteChats) VALUES
+('jorge.gonzalez@hotmail.com', 12345678, 2, 3, true, true),
+('lucia.lopez@yahoo.com', 23456789, 1, 4, true, true),
+('daniel.perez@outlook.com', 34567890, 2, 5, true, true),
+('isabel.rodriguez@gmail.com', 45678901, 1, 1, true, true),
+('luis.garcia@hotmail.com', 56789012, 2, 2, true, true),
+('marta.sanchez@yahoo.com', 67890123, 1, 3, true, true),
+('alejandro.fernandez@outlook.com', 78901234, 2, 4, true, true),
+('sara.gomez@gmail.com', 89012345, 1, 5, true, true),
+('juan.martinez@hotmail.com', 90123456, 2, 1, true, true),
+('carmen.lopez@yahoo.com', 01234567, 1, 2, true, true),
+('ana.garcia@estudiantec.cr', 01234567, 5, 2, true, true);
 
 INSERT INTO profesor (cedula, nombre, apellido1, apellido2, idSede, numeroCelular, correoElectronico, numeroOficina, idAutoridad, idEstado) VALUES
 (467890235, 'Jorge', 'González', 'Soto', 3, 68890123, 'jorge.gonzalez@hotmail.com', 20234567, 2, 2),
@@ -171,18 +171,23 @@ insert into BitacoraXActividades(idActividad, idBitacora) values (10, 10);
 insert into BitacoraXActividades(idActividad, idBitacora) values (11, 11);
 insert into BitacoraXActividades(idActividad, idBitacora) values (12, 12);
 
-insert into Recordatorio (idActividad, fechas) values (1, "2023-08-09");
-insert into Recordatorio (idActividad, fechas) values (2, "2023-08-08");
-insert into Recordatorio (idActividad, fechas) values (3, "2023-08-07");
-insert into Recordatorio (idActividad, fechas) values (4, "2023-06-03");
-insert into Recordatorio (idActividad, fechas) values (5, "2023-06-03");
-insert into Recordatorio (idActividad, fechas) values (6, "2023-06-01");
-insert into Recordatorio (idActividad, fechas) values (7, "2023-04-09");
-insert into Recordatorio (idActividad, fechas) values (8, "2023-04-08");
-insert into Recordatorio (idActividad, fechas) values (9, "2023-04-01");
-insert into Recordatorio (idActividad, fechas) values (10, "2023-03-09");
-insert into Recordatorio (idActividad, fechas) values (11, "2023-09-08");
-insert into Recordatorio (idActividad, fechas) values (12, "2023-09-01");
+insert into Recordatorio (idActividad, fecha) values (1, "2023-06-08");
+insert into Recordatorio (idActividad, fecha) values (1, "2023-06-15");
+insert into Recordatorio (idActividad, fecha) values (1, "2023-06-22");
+insert into Recordatorio (idActividad, fecha) values (2, "2023-06-07");
+insert into Recordatorio (idActividad, fecha) values (2, "2023-06-14");
+insert into Recordatorio (idActividad, fecha) values (2, "2023-06-21");
+
+insert into Recordatorio (idActividad, fecha) values (3, "2023-08-07");
+insert into Recordatorio (idActividad, fecha) values (4, "2023-06-03");
+insert into Recordatorio (idActividad, fecha) values (5, "2023-06-03");
+insert into Recordatorio (idActividad, fecha) values (6, "2023-06-01");
+insert into Recordatorio (idActividad, fecha) values (7, "2023-04-09");
+insert into Recordatorio (idActividad, fecha) values (8, "2023-04-08");
+insert into Recordatorio (idActividad, fecha) values (9, "2023-04-01");
+insert into Recordatorio (idActividad, fecha) values (10, "2023-03-09");
+insert into Recordatorio (idActividad, fecha) values (11, "2023-09-08");
+insert into Recordatorio (idActividad, fecha) values (12, "2023-09-01");
 				
 
 INSERT INTO AsistenteAdministrativo (cedula, nombre, apellido1, apellido2, idSede, numeroCelular, correoElectronico, numeroOficina)
@@ -192,6 +197,7 @@ VALUES
   (345678901, 'Maria', 'Perez', 'Martinez', 3, 34567890, 'mariperez009@gmail.com', 34567890),
   (456789012, 'Bernardo', 'Rodriguez', 'Sanchez', 4, 45678901, 'bernardoRS55@gmail.com', 45678901),
   (567890123, 'Rodolfo', 'Lopez', 'Hernandez', 5, 56789012, 'rodolfolopezzz@gmail.com', 56789012);
+
 
 INSERT INTO estudiante (carnet, nombre, apellido1, apellido2, idSede, numeroCelular, correoElectronico, idEstado) VALUES
 (20195864, 'Ana', 'García', 'López', 3, 67894567, 'ana.garcia@estudiantec.cr', 1),
@@ -214,3 +220,46 @@ INSERT INTO estudiante (carnet, nombre, apellido1, apellido2, idSede, numeroCelu
 (20220327,'Pedro','Sánchez','Fernández' ,1 ,68854321 ,'pedro.sanchez@estudiantec.cr' ,2),
 (20230325,'Carmen','García','Pérez' ,2 ,67832109 ,'carmen.garcia@estudiantec.cr' ,1),
 (20230345,'Alberto','Díaz','Martínez' ,5 ,68754321 ,'alberto.diaz@estudiantec.cr' ,2);
+-- AGREGAR USUARIOS DE ESTUDIANTES 
+-- estudiantes usuarios
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('carlos.perez@estudiantec.cr',20210324,5,1,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('sofia.hernandez@estudiantec.cr',20210326,5,1,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('alejandro.garcia@estudiantec.cr',20210331,5,1,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('pedro.sanchez@estudiantec.cr',20220327,5,1,1,1);
+-- sede 2
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('jose.martinez@estudiantec.cr',20210322,5,2,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('lucia.sanchez@estudiantec.cr',20210328,5,2,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('luis.gomez@estudiantec.cr',20210333,5,2,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('carmen.garcia@estudiantec.cr',20230325,5,2,1,1);
+-- sede 3
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('ana.garcia@estudiantec.cr',20195864,5,3,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('david.lopez@estudiantec.cr',20210320,5,3,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('marta.perez@estudiantec.cr',20210330,5,3,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('jorge.lopez@estudiantec.cr',20220325,5,3,1,1);
+-- sede 4
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('maria.rodriguez@estudiantec.cr',20210323,5,4,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('daniel.gomez@estudiantec.cr',20210327,5,4,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('elena.fernandez@estudiantec.cr',20210332,5,4,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('isabel.rodriguez@estudiantec.cr',20220326,5,4,1,1);
+-- sede 5
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('laura.gonzalez@estudiantec.cr',20210321,5,5,1,1);
+insert into Usuario(correo,contrasenha,idRol,idSede,permiteNotis,permiteChats) values 
+('juan.diaz@estudiantec.cr',20210329,5,5,1,1);
+-- estudiantes usuarios

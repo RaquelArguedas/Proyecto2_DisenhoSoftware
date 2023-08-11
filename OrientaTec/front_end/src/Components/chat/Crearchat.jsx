@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './Crearchat.css';
 import { Sidebar } from './Sidebar';
+import axios from 'axios'; // Para manejo de solicitudes en el backend
+const API = process.env.REACT_APP_API;
 
 export function CrearChat({ agregarGrupo, chats }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -9,23 +11,29 @@ export function CrearChat({ agregarGrupo, chats }) {
   const [groupName, setGroupName] = useState('');
 
   const [dataEstudiante, setDataEstudiante] = useState([
-    { carnet: '001', nombre: 'Juan' },
-    { carnet: '002', nombre: 'Pedro' },
-    { carnet: '003', nombre: 'María' }
-    // Agrega más elementos de datos aquí...
+    //{ carnet: '001', nombre: 'Juan' },
   ]);
   const [dataProfesor, setDataProfesores] = useState([
-    { codigo: '2021', nombre: 'Juan' },
-    { codigo: '2324', nombre: 'Pedro' },
-    { codigo: '3231', nombre: 'María' },
-    { codigo: '2026', nombre: 'Juan' },
-    { codigo: '2354', nombre: 'Pedro' },
-    // Agrega más elementos de datos aquí...
+   //  { codigo: '2021', nombre: 'Juan' },
   ]);
-  const handleSearch = (event) => {
+  const handleSearch = async (event) => {
     setSearchTerm(event.target.value);
-  };
+    try {
+      const response = await axios.get(`${API}/getAllProfesoresFront`);
+      const data = response.data;
+      setDataProfesores(data);
+      console.log('Data Profesores:', data);
 
+      const responseE = await axios.get(`${API}/getAllEstudiantesFront`);
+      const dataE = responseE.data;
+      setDataEstudiante(dataE);
+      console.log('Data Estudiantes:', dataE);
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
   const handleCheckboxChange = (item) => {
     const isSelected = selectEstudiantesI.find((selectedItem) => selectedItem.carnet === item.carnet);
     if (isSelected) {
@@ -34,6 +42,7 @@ export function CrearChat({ agregarGrupo, chats }) {
       setselectEstudiantesI([...selectEstudiantesI, item]);
     }
   };
+  
   const handleCheckbox = (item) => {
     const isSelected = selectProfesorI.find((selectedItem) => selectedItem.codigo === item.codigo);
     if (isSelected) {
@@ -42,12 +51,13 @@ export function CrearChat({ agregarGrupo, chats }) {
       setselectProfesorI([...selectProfesorI, item]);
     }
   };
+  
 
   const handleGroupNameChange = (event) => {
     setGroupName(event.target.value);
   };
 
-  const handleCreateGroup = () => {
+  const handleCreateGroup = async () => {
     // Validar que se hayan seleccionado al menos dos elementos
     if (selectProfesorI.length < 1) {
       alert('Debes seleccionar al menos un profesor como integrante');
@@ -66,14 +76,26 @@ export function CrearChat({ agregarGrupo, chats }) {
 
     // Llamar a la función agregarGrupo para agregar el nuevo grupo a Sidebar
     agregarGrupo(nuevoGrupo);
+    // Enviar la solicitud POST al backend para crear el chat
+    try {
+      await axios.post(`${API}/crearChat`, {
+        nombreChat: groupName,
+        estudiantes: selectEstudiantesI.map((item) => item.carnet),
+        profesores: selectProfesorI.map((item) => item.codigo)
+      });
+    } catch (error) {
+      console.error('Error al llamar a la función crearChat:', error);
+    }
     // Restablecer los valores después de crear el grupo
     setselectEstudiantesI([]);
+    setselectProfesorI([]);
     setGroupName('');
   };
 
   const filteredData = dataEstudiante.filter((item) => {
     const searchTermLowerCase = searchTerm.toLowerCase();
-    const carnetLowerCase = item.carnet.toLowerCase();
+    //const carnetLowerCase = item.carnet.toLowerCase(); 
+    const carnetLowerCase = typeof item.carnet === 'string' ? item.carnet.toLowerCase() : '';
     const nombreLowerCase = item.nombre.toLowerCase();
 
     return carnetLowerCase.includes(searchTermLowerCase) || nombreLowerCase.includes(searchTermLowerCase);

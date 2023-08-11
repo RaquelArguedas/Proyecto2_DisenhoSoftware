@@ -1,14 +1,12 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { NavbarEstudiante } from "../navegacionEstudiante/NavbarEstudiante";
 import { BarraLateral } from "../../navegacion/BarraLateral";
 import { ActividadEstudiante } from "./actividadEstudiante";
-import { useNavigate } from "react-router-dom";
 
-const API = "http://localhost:5000"; //process.env.REACT_APP_API;
+const API = "http://localhost:5000/"; //process.env.REACT_APP_API;
 
 export function VerActividadesProxima() {
-  const [actividades, setActividades] = useState([]);
+  const [actividades, setActividades] = useState(null);
   useEffect(() => {
     handleVerActividadesEstado(2)
   }, []);
@@ -21,15 +19,12 @@ export function VerActividadesProxima() {
         "Content-Type": "application/json",
       }
     });
+
     const data = await res.json() //resultado de la consulta
     if (Array.isArray(data) && data.length > 0) {
-        console.log(data[0]); //ejemplo
-        setActividades(data);
-      }
-    console.log(data) // imprime en consola web
-    console.log(data[0])//ejemplo
-    const obj = JSON.parse(data[0]); //aca toma la actividad en la posicion x y lo convierte en un JSON
-    console.log(obj.tipoActividad)
+        console.log(JSON.parse(data[0]));
+        setActividades(JSON.parse(data[0]));
+    }
   };
 
 
@@ -54,12 +49,9 @@ export function VerActividadesProxima() {
 
             {/* Lista de actividades */}
             <div className="overflow-auto" id="listaActividades">
-                {console.log("Aquí en el bajo mundo")}
-                {actividades.length > 0 ? (
+                {actividades != null ? (
                     <>
-                    {console.log("A punto de mostrar la información")}
-                    {console.log(JSON.parse(actividades[0][0]))}
-                    <ActividadEstudiante datos={JSON.parse(actividades[0])} />
+                    <ActividadEstudiante datos={actividades} />
                     </>
                 ) : (
                     <p>No hay actividades próximas en este momento.</p>

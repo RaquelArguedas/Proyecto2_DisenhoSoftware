@@ -1,6 +1,7 @@
 from SingletonDAO import *
 from MainController import *
-from datetime import time, datetime, date
+#from datetime import time, datetime, date
+import datetime
 from SingletonSesionActual import *
 
 if __name__ == "__main__":
@@ -16,20 +17,35 @@ if __name__ == "__main__":
 
     dao = SingletonDAO()
 
-    ac = dao.verActividad(13)
-    dic = {}
-    for i in range(3):
-        dic[str(i)] = "hola"
+    # for ac in dao.actividades:
+    #     print("____________________________")
+    #     print(ac.idActividad)
+    #     for r in ac.recordatorios:
+    #         print(r.idActividad, type(r.fecha))
 
-    print(dic)
+    ac = dao.verActividad(12)
+    #print(ac)
+    # Crear una nueva instancia de la clase Recordatorio
+    #control.crearUsuario("correo", "contra", 1, 1, True, True)
+    # for user in dao.usuarios:
+    #     print(user)
+
+    print("__________________________")
+    print(control.notificacionUsuarios(5, 78))
+    # for noti in dao.usuarios[0].notificaciones:
+    #     print(noti)
+
+    # id = dao.createNotificacion(1, datetime.now(), "contenido")
+    # dao.notificacionUsuarios(id, 1)
+
+    # print("__________________________")
+    # for noti in dao.usuarios[0].notificaciones:
+    #     print(noti)
 
 
 
     
-    #for e in control.consultarEstudiantes(3):
-     #   print(e.sede)
 
-    print('Pruebas de excel')
-    print('Respuesta de la funcion:')
-    print(dao.generarExcelSede(1))
+
+
     

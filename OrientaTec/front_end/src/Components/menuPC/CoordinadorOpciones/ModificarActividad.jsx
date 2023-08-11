@@ -16,6 +16,10 @@ export function ModificarActividad() {
     const gotoCancelada = () => { navigate('/cancelarActividad', {state: {idActividad: idActRef.current.value}}); }
     const gotoEvidencias = () => { navigate('/insertarEvidencias', {state: {idActividad: idActRef.current.value}}); }
 
+    const [periodicidad, setPeriodicidad] =  useState('');
+    const [fechaRecordatorio, setFechaRecordatorio] = useState(new Date());
+    const [fechaRecordatorioB, setFechaRecordatorioB] = useState('');
+
     const [startDate, setStartDate] = useState(new Date());
     const [esVirtual, setVirtual] = useState(false);
 
@@ -69,12 +73,32 @@ export function ModificarActividad() {
           }
       };
 
+    const handlePeriodicidadChange = (event) => {
+        setPeriodicidad(event.target.value);
+    };
+      
+    const handleFechaRecordatorioChange = (date) => {
+        setFechaRecordatorio(date);
+
+        const month = date.getMonth() + 1; // Obtener el mes (se suma 1 ya que los meses se indexan desde 0)
+        const day = date.getDate(); // Obtener el día
+        const year = date.getFullYear(); // Obtener el año
+
+        // Construir la cadena en el formato deseado (mm/dd/aaaa)
+        const formattedDate = `${month}/${day}/${year}`;
+
+        //console.log("Fecha formateada:", formattedDate, typeof(formattedDate));
+
+        setFechaRecordatorioB(formattedDate);
+    };
+
 
     const handleSearch = async () => {
         obtenerImagen();
         console.log('En handleSearch')
         const res = await fetch(`${API}/verActividad/${idActRef.current.value}`); //PENDIENTE : debe de darle el codigo
         const data = await res.json();//resultado de la consulta
+        console.log("DATA", data)
         if (data === 'No existe') {
             alert("No existe una actividad con el ID ingresado.")
         } else {
@@ -88,14 +112,34 @@ export function ModificarActividad() {
             setDuracion(Number(data.horaFin[1] === ':' ? data.horaFin[0] : data.horaFin.slice(0, 2)) -
                 Number(data.horaInicio[1] === ':' ? data.horaInicio[0] : data.horaInicio.slice(0, 2)));
             setHoraFin(data.horaFin);
-            setRecordatorios(data.recordatorio);
-
-            const subResponsables = JSON.parse(data.responsables).map(responsable => JSON.parse(responsable))
-
-            console.log(subResponsables)
-
             setStartDate(new Date(data.fechaActividad + 'T' + (data.horaInicio[1] === ':' ? '0' + data.horaInicio : data.horaInicio)));
+            
+            const subResponsables = JSON.parse(data.responsables).map(responsable => JSON.parse(responsable))
+            console.log(subResponsables)
             setResponsables(JSON.parse(data.responsables).map(responsable => JSON.parse(responsable)));
+
+            const subRecordatorios = JSON.parse(data.recordatorios).map(recordatorio => JSON.parse(recordatorio))
+            console.log("Reeeec",subRecordatorios)
+            
+            const fechaInit = new Date(subRecordatorios[0].fecha)
+            if (subRecordatorios.length > 1){
+                const fechaDos= new Date(subRecordatorios[1].fecha);
+                const per = Math.floor((fechaDos-fechaInit)/(1000*60*60*24));
+                console.log("Calculando", per)
+                setPeriodicidad(per)
+            }else{
+                setPeriodicidad(0)
+            }
+            
+            setFechaRecordatorio(fechaInit.setDate(fechaInit.getDate()+1));
+
+            const month = fechaInit.getMonth() + 1; // Obtener el mes (se suma 1 ya que los meses se indexan desde 0)
+            const day = fechaInit.getDate(); // Obtener el día
+            const year = fechaInit.getFullYear(); // Obtener el año
+            const formattedDate = `${month}/${day}/${year}`;
+            setFechaRecordatorioB(formattedDate);
+            
+            setRecordatorios(subRecordatorios.length);
         }
     };
 
@@ -155,10 +199,15 @@ export function ModificarActividad() {
             formData.append('fecha', fecha);
             formData.append('horaInicio', horaInicio);
             formData.append('horaFin', horaFin);
+            formData.append('periodicidad', periodicidad);
+            formData.append('fechaRecordatorioB', fechaRecordatorioB);
             formData.append('recordatorio', recordatorio);
             formData.append('medio', medio);
             formData.append('estado', estado);
             formData.append('enlace', enlace);
+
+            console.log("TIPOOOOOOOOOOOO")
+            console.log(periodicidad, fechaRecordatorioB, recordatorio)
 
             console.log("id", id)
             
@@ -326,6 +375,33 @@ export function ModificarActividad() {
                                     <div className="input-group w-100 my-3">
                                         <span className="input-group-text" >Duración</span>
                                         <input id="txtCarnet" type="text" className="form-control" placeholder="horas" value={duracion} onChange={handleHoraFinChange} />
+                                    </div>
+
+                                    <div className="input-group w-100 my-3">
+                                    <span className="input-group-text">Periodicidad</span>
+                                    <input
+                                        id="txtPeriodicidad"
+                                        type="text"
+                                        className="form-control"
+                                        onChange={handlePeriodicidadChange}
+                                        value={periodicidad}
+                                    />
+                                    </div>
+
+                                    <div className="input-group w-100 my-3">
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                        <span className="input-group-text w-100">Fecha del recordatorio</span>
+                                        </div>
+                                        <div className="col-sm-5">
+                                        <DatePicker
+                                            selected={fechaRecordatorio}
+                                            onChange={handleFechaRecordatorioChange}
+                                            dateFormat="dd/MM/yyyy"
+                                            className="form-control w-100"
+                                        />
+                                        </div>
+                                    </div>
                                     </div>
 
                                     <div className="input-group w-100 my-3">

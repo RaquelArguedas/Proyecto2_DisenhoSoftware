@@ -31,7 +31,6 @@ tipoActividad int, foreign key (tipoActividad) references TipoActividad (idTActi
 fechaActividad date,
 horaInicio time,
 horaFin time, 
-recordatorio int, 
 medio int, 
 enlace varchar(100),
 estado int, foreign key (estado) references EstadoActividad (idEstadoA),
@@ -48,7 +47,24 @@ create table Usuario
 correo varchar(100),
 contrasenha varchar(50),
 idRol int, foreign key (idRol) references Rol (idRol),
-idSede int, foreign key (idSede) references Sede (idSede)
+idSede int, foreign key (idSede) references Sede (idSede),
+permiteNotis bool, 
+permiteChats bool
+);
+
+create table Notificacion
+(idNotificacion int primary key not null auto_increment,
+emisor int, foreign key (emisor) references Usuario (idUsuario),
+fechaHora datetime,
+contenido varchar(100),
+tipoEmisor int
+);
+
+create table NotificacionXUsuario
+(idNotificacionXUsuario int primary key not null auto_increment,
+idNotificacion int, foreign key (idNotificacion) references Notificacion (idNotificacion),
+idUsuario int, foreign key (idUsuario) references Usuario (idUsuario),
+leida bool
 );
 
 create table PlanTrabajo
@@ -58,7 +74,7 @@ anno int
 
 create table ActividadesxPlan
 (idActividadesxPlan int primary key not null auto_increment,
-idActividad int,foreign key (idActividad) references Actividad(idActividad),
+idActividad int,foreign key (idActividad) references Actividad (idActividad),
 idPlan int, foreign key (idPlan) references PlanTrabajo (idPlan)
 );
 
@@ -150,7 +166,7 @@ idComentarioPadre int -- si es 0, es un comentario nuevo, no una respuesta
 create table Recordatorio
 (idRecordatorio int primary key not null auto_increment,
 idActividad int,foreign key (idActividad) references Actividad (idActividad),
-fechas varchar(500)
+fecha date
 );
 
 
@@ -175,5 +191,25 @@ idSede int,foreign key (idSede) references Sede (idSede),
 numeroCelular int,
 correoElectronico varchar(200),
 idEstado int, foreign key (idEstado) references EstadoCuenta (idEstadoC)
+);
+
+-- Nuevos cambios Sophy
+create table Chat
+(idChat int primary key not null auto_increment,
+nombre varchar(200),
+idAutor int,foreign key (idAutor) references Usuario(idUsuario)
+);
+create table Mensaje
+(idMensaje int primary key not null auto_increment,
+idChat int,foreign key (idChat) references Chat (idChat),
+fechaHora datetime, 
+contenido varchar(200),
+idAutor int,foreign key (idAutor) references Usuario(idUsuario)
+);
+
+create table UsuariosxChat
+(idUsuariosxChat int primary key not null auto_increment,
+idUsuario int,foreign key (idUsuario) references Usuario(idUsuario),
+idChat int,foreign key (idChat) references Chat (idChat)
 );
 

@@ -14,8 +14,7 @@ export function OpcionesMenuProfesor() {
     const gotoInformacionEquipo = () => { navigate("/infoequipo", {state: {linkMenu: "/menuProfesor"}}); };
     const gotoModificarEstudiante = () => { navigate("/modificarEstudiante", {state: {linkMenu: "/menuProfesor"}}); };
     const gotoModificarProfesor = () => { navigate("/modificarProfesor", {}); };
-    
-  const gotoChat=()=>{navigate('/chat',{state: {linkMenu: "/menuProfesor"}});};
+    const gotoChat=()=>{navigate('/chat',{state: {linkMenu: "/menuProfesor"}});};
     function handleDownloadExcelCampus() { // Define una función llamada handleDownloadExcelCampus que se ejecuta cuando se hace clic en un botón o enlace
         GenerarExel(); // Llama a una función llamada GenerarExel que probablemente genera y descarga un archivo Excel para el campus especificado
       }
@@ -96,7 +95,6 @@ export function OpcionesMenuProfesor() {
                             Chat
                         </button>
                     </div>
-
                 </div>
             </div>
         </Fragment>

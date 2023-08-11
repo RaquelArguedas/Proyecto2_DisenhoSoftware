@@ -122,7 +122,6 @@ export function OpcionesMenuPC() {
                             Chat
                         </button>
                     </div>
-
                 </div>
         </div>
     </Fragment>

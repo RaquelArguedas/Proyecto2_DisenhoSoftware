@@ -20,6 +20,7 @@ export function NavbarEstudiante( { linkInicio } ) {
                     <div className="navbar-nav">
                         <Link className="nav-link" to= '/menuEstudiante'>Inicio</Link>
                         <Link className="nav-link" to="https://www.canva.com/design/DAFh5LOvdPk/zkChmy2wVH-aPhOo6BXqcA/view?utm_content=DAFh5LOvdPk&utm_campaign=designshare&utm_medium=link&utm_source=homepage_design_menu">Ayuda</Link>
+                        <Link className="nav-link mx-1" to='/avisos' state={{ configLinkInicio: '/menuEstudiante' }}>Avisos</Link>
                         <Link className="nav-link" to = '/'>Cerrar sesion</Link>
                     </div>
                 </div>
