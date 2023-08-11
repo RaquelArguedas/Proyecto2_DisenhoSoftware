@@ -1,0 +1,5 @@
+Para correr el proyecto se necesita 
+python Control\app.py
+
+En el front-end 
+npm start
